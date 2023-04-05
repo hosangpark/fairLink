@@ -1,9 +1,11 @@
 import React from 'react';
-import {SafeAreaView,View,Text, TouchableOpacity} from 'react-native';
+import {SafeAreaView,View,Text, TouchableOpacity, ScrollView} from 'react-native';
 import cusToast from '../../util/toast/CusToast';
 import { AlertClearType } from '../../modal/modalType';
 import { AlertModal ,initialAlert} from '../../modal/AlertModal';
 import { LoadingModal } from '../../modal/LoadingModal';
+import { UserInfoCard } from '../../component/card/UserInfoCard';
+import { styles } from '../../style/style';
 
 
 export const Home = () => {
@@ -36,30 +38,51 @@ export const Home = () => {
 
 
     return(
-        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-            <View style={{marginBottom:20}}>
-                <Text>Home</Text>
-            </View>
-            <View style={{width:100,height:100,justifyContent:'center',alignItems:'center',backgroundColor:'#fff'}}>
-                <TouchableOpacity onPress={()=>toastOn('사용할 메시지 출력')}>
-                    <Text>토스트 출력</Text>
-                </TouchableOpacity>
-            </View>
+        <ScrollView contentContainerStyle={[styles.ScreenContainer]}>
+                <View style={{marginBottom:20}}>
+                    <Text>Home</Text>
+                </View>
 
-            <View style={{width:100,height:100,justifyContent:'center',alignItems:'center',backgroundColor:'#fff'}}>
-                <TouchableOpacity onPress={()=>{setIsLoading(true); alertModalOn('테스트'); }}>
-                    <Text>알림창 표시 (태스트)</Text>
-                </TouchableOpacity>
-            </View>
-            <LoadingModal 
-                isLoading={isLoading}
-            />
-            <AlertModal 
-                show={alertModal.alert}
-                msg={alertModal.msg}
-                hide={alertModalOff}
-            />
-            
-        </View>
+                <UserInfoCard 
+                    empName='힘찬중기'
+                    jobType='1'
+                    location='[경남]'
+                    rating={23}
+                    score={5}
+                    recEmpCount={64}
+                    userName='김경태'
+                    userProfileUrl=''
+                />
+                <UserInfoCard 
+                    empName='힘찬중기'
+                    jobType='2'
+                    location='[경남]'
+                    rating={23}
+                    score={5}
+                    recEmpCount={64}
+                    userName='김경태'
+                    userProfileUrl=''
+                />
+
+                <View style={{width:100,height:100,justifyContent:'center',alignItems:'center',backgroundColor:'#fff', marginTop:40}}>
+                    <TouchableOpacity onPress={()=>toastOn('사용할 메시지 출력')}>
+                        <Text>토스트 출력</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={{width:100,height:100,justifyContent:'center',alignItems:'center',backgroundColor:'#fff'}}>
+                    <TouchableOpacity onPress={()=>{alertModalOn('테스트'); }}>
+                        <Text>알림창 표시 (태스트)</Text>
+                    </TouchableOpacity>
+                </View>
+                <LoadingModal 
+                    isLoading={isLoading}
+                />
+                <AlertModal 
+                    show={alertModal.alert}
+                    msg={alertModal.msg}
+                    hide={alertModalOff}
+                />
+        </ScrollView>
     )
 }

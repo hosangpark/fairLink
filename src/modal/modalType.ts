@@ -13,6 +13,7 @@ export type AlertModalType = { //alertModal props type
     type? : string,
     title? : string,
     action? : () => void;
+    btnLabel? : string,
 }
 
 export type LoadingModalType = { //loading modal props type
