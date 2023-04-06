@@ -8,13 +8,10 @@
  * @format
  */
 
-import { NavigationContainer } from '@react-navigation/native';
-import React, {type PropsWithChildren} from 'react';
-import {
-
-
-} from 'react-native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import React from 'react';
 import { Router } from './Router';
+import SplashScreen from 'react-native-splash-screen';
 
 
 /**
@@ -37,6 +34,10 @@ import { Router } from './Router';
  * 스타일링 하실때 가급적이면 inline으로 하지마시고, src - style에 스타일 객체 만드셔서 사용해주세요.
  * 
  */
+
+  
+
+  
 
 
 const App = () => {

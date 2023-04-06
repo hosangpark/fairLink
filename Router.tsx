@@ -5,6 +5,7 @@ import { RouterNavigatorParams } from './type/routerType';
 import { toastConfig } from './src/util/toast/toastConfig';
 import Toast from 'react-native-toast-message';
 import { MyPageIndex } from './src/screen/mypage/MyPageIndex';
+import SplashScreen from 'react-native-splash-screen';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -15,6 +16,17 @@ export const Router = () => {
         router stack이 추가될때 넘겨야할 params가 있으면 RouterNavigatorParams에 타입을 선언해주세요.
     */
     const Stack = createStackNavigator<RouterNavigatorParams>(); 
+
+    React.useEffect(()=>{
+        setTimeout(()=>{
+          try{
+            SplashScreen.hide();
+          }
+          catch(err){
+            console.log(err)
+          }
+        },2000)
+      },[])
     
     
 
