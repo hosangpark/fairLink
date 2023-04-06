@@ -3,30 +3,37 @@ import {ScrollView, TouchableOpacity, View,Image} from 'react-native';
 import {Text} from 'react-native';
 import { styles, fontStyle, colors, swiperStyles } from '../../style/style';
 import { TextBox } from '../../component/TextBox';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import Swiper from 'react-native-swiper';
 import AutoHeightImage from 'react-native-auto-height-image';
 import {Dimensions} from 'react-native';
+import { HomeIndexType } from '../screenType';
 
 
-export const HomeIndex = () => {
+export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
-	const swiperPagination = (index : number,total:number) => {
-		// await setSwiperState({
-		// 	...swiperState,
-		// 	page : index+1,
-		// })
 
+
+
+	const swiperPagination = (index : number,total:number) => { //스와이퍼 indexing
 		return(
 			<View style={[swiperStyles.swiperIndexArea]}>
 				<Text style={[fontStyle.f_regular,{color:colors.MAIN_COLOR,fontSize:18}]}>{index+1} / {total}</Text>
 			</View>
 		)
 	}
+
+	React.useEffect(()=>{
+		if(isFocused && setTabIndex){
+			setTabIndex(1);
+		}
+	},[isFocused])
+
 
 	return (
 		<ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
@@ -58,7 +65,7 @@ export const HomeIndex = () => {
 					</TouchableOpacity>
 				</View>
 				<View style={{flexDirection:'row',flex:1}}>
-					<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.DEPP_SKY_BLUE}]} onPress={() => navigation.navigate('Release') }>
+					<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.DEPP_SKY_BLUE}]} onPress={()=>{if(setTabIndex)setTabIndex(4); navigation.navigate('MyPage')}}>
 						<View>
 							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>마이페이지</Text>
 							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}></Text>
