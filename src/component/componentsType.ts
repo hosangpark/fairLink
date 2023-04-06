@@ -16,3 +16,10 @@ export interface UserInfoCardType {
     recEmpCount:number,
     location:string,
 }
+
+export interface TextBoxType {
+    boldText: string,
+    subText: string,
+    rightText: string,
+    type: number,
+}
