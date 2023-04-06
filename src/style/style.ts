@@ -1,20 +1,28 @@
 import { StyleSheet } from 'react-native';
+import {Dimensions} from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 export const colors = { //색상 리스트;
     MAIN_COLOR : '#0E969F',
     SUB_COLOR : '',
 
     BACKGROUND_COLOR_GRAY1 : '#F5F5F5',
+    BACKGROUND_COLOR_GRAY2 : '#F1F9F9',
 
     FONT_COLOR_BLACK : '#000000',
     FONT_COLOR_BLACK2 : '#374748',
     WHITE_COLOR : '#FFF',
     BLUE_COLOR : '#355AD9',
+    SKY_BLUE_COLOR : '#6ECEFF',
+    DEPP_SKY_BLUE : '#19D2DB',
+    MINT_COLOR : '#1BCBAF',
     YELLOW_COLOR : '#F58300',
     GRAY_COLOR : '#A4A4A4',
     LIGHT_BLUE_COLOR : '#4EB0E9',
     
     BORDER_GRAY_COLOR : '#E1E1E1',
+    BORDER_GRAY_COLOR1 : '#EFEFEF',
     BORDER_BLUE_COLOR : '#DAF3F5',
     
 }
@@ -22,6 +30,33 @@ export const colors = { //색상 리스트;
 export const flexStyle = {
     
 }
+
+export const swiperStyles = StyleSheet.create({
+    swiperWrapper : {
+        width:width,
+        position:'relative',
+    },
+    swiperSlide : {
+        justifyContent:'center',
+        backgroundColor:'blue'
+    },
+    swiperImageWrapper : {
+        resizeMode: 'cover',
+    },
+    swiperIndexArea : {
+        position:'absolute',
+        top:10,
+        left:25,
+        // width:60,
+        paddingHorizontal:10,
+        paddingVertical:3,
+        height:31,
+        backgroundColor:'rgba(255,255,255,0.5)',
+        borderRadius:16,
+        zIndex:2,
+    }
+
+});
 
 export const styles = StyleSheet.create({
 
@@ -87,31 +122,45 @@ export const styles = StyleSheet.create({
     },
     mainMenuWrapper: {
         flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'center',
-        flexWrap: 'wrap',
-        marginBottom: 30,
-        padding: 0 ,
+        padding:20
     },
     mainMenu: {
         flex: 1,
-		width: 167,
-		height: 167,
 		margin: 8,
         borderRadius: 8,
-        backgroundColor: '#00000017'
+        paddingTop:20,
+        paddingLeft:20,
+    },
+    mainMenuImg:{
+        width:110,
+        height:100,
+    },
+
+    bottomBorder : {
+        borderColor:colors.BORDER_GRAY_COLOR1,  
+        borderBottomWidth:1,
     },
     textBox: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 12,
-        margin: 4,
+        paddingHorizontal:20,
+        paddingVertical:15,
+        marginBottom:10,
         borderWidth: 1,
         borderRadius: 8, 
     }
 });
 
 export const fontStyle = StyleSheet.create({
+    k_bold : {
+        fontFamily:'Kimm_bold'
+    },
+    s_regular : {
+        fontFamily : 'SEBANG-Gothic-Regular'
+    },
+    s_bold : {
+        fontFamily : 'SEBANG-Gothic-Bold'
+    },
     f_light : {
         fontFamily:'Pretendard-Light'
     },
