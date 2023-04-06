@@ -11,8 +11,11 @@ export const colors = { //색상 리스트;
     WHITE_COLOR : '#FFF',
     BLUE_COLOR : '#355AD9',
     YELLOW_COLOR : '#F58300',
-
+    GRAY_COLOR : '#A4A4A4',
+    LIGHT_BLUE_COLOR : '#4EB0E9',
+    
     BORDER_GRAY_COLOR : '#E1E1E1',
+    BORDER_BLUE_COLOR : '#DAF3F5',
     
 }
 
@@ -82,7 +85,30 @@ export const styles = StyleSheet.create({
         width:'100%',
         marginTop:15,
     },
-
+    mainMenuWrapper: {
+        flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+        flexWrap: 'wrap',
+        marginBottom: 30,
+        padding: 0 ,
+    },
+    mainMenu: {
+        flex: 1,
+		width: 167,
+		height: 167,
+		margin: 8,
+        borderRadius: 8,
+        backgroundColor: '#00000017'
+    },
+    textBox: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 12,
+        margin: 4,
+        borderWidth: 1,
+        borderRadius: 8, 
+    }
 });
 
 export const fontStyle = StyleSheet.create({

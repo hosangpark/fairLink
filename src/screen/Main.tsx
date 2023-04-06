@@ -10,6 +10,7 @@ import { Video } from './testPage/Video';
 import { Board } from './testPage/Board';
 import { Release } from './testPage/Release';
 import { MyPage } from './testPage/MyPage';
+import { HomeIndex } from './home/HomeIndex';
 
 export const Main = () => {
 
@@ -55,7 +56,7 @@ export const Main = () => {
                     {headerShown:false}
                 }
             >
-                <Tab.Screen name="Home" component={Home} />
+                <Tab.Screen name="Home" component={HomeIndex} />
                 <Tab.Screen name="Video" component={Video} />
                 <Tab.Screen name="Board" component={Board} />
                 <Tab.Screen name="Release" component={Release} />
