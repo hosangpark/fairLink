@@ -12,6 +12,8 @@ export const colors = { //색상 리스트;
 
     FONT_COLOR_BLACK : '#000000',
     FONT_COLOR_BLACK2 : '#374748',
+    FONT_COLOR_GRAY : '#A4A4A4',
+
     WHITE_COLOR : '#FFF',
     BLUE_COLOR : '#355AD9',
     SKY_BLUE_COLOR : '#6ECEFF',
@@ -59,6 +61,12 @@ export const swiperStyles = StyleSheet.create({
 });
 
 export const styles = StyleSheet.create({
+    header_ : {
+        height: 50,
+        alignItems : 'center',
+        flexDirection : 'row',
+        justifyContent : 'center'
+    },
 
     buttonStyle : {
         backgroundColor:colors.MAIN_COLOR,
@@ -135,7 +143,18 @@ export const styles = StyleSheet.create({
         width:110,
         height:100,
     },
-
+    topBorder : {
+        borderColor:colors.BORDER_GRAY_COLOR,
+        borderTopWidth:1,
+    },
+    deepTopBorder : {
+        borderColor:colors.BORDER_GRAY_COLOR,
+        borderTopWidth:1,
+    },
+    deepBottomBorder : {
+        borderColor:colors.BORDER_GRAY_COLOR1,  
+        borderBottomWidth:1,
+    },
     bottomBorder : {
         borderColor:colors.BORDER_GRAY_COLOR1,  
         borderBottomWidth:1,

@@ -1,4 +1,9 @@
 
+export interface BackHeaderType {
+    backAction? : () => void;
+    title : string;
+}
+
 export interface CustomButtonType {
     style? : object,
     label : string,

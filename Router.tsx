@@ -4,6 +4,7 @@ import { Main } from './src/screen/Main';
 import { RouterNavigatorParams } from './type/routerType';
 import { toastConfig } from './src/util/toast/toastConfig';
 import Toast from 'react-native-toast-message';
+import { MyPageIndex } from './src/screen/mypage/MyPageIndex';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -24,6 +25,11 @@ export const Router = () => {
                 <Stack.Screen 
                     name={'Main'}
                     component={Main}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'MyPage'}
+                    component={MyPageIndex}
                     options={{headerShown:false}}
                 />
             </Stack.Navigator>
