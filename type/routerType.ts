@@ -4,5 +4,5 @@ export type RouterNavigatorParams = {
     Board:undefined;
     Release:undefined;
     MyPage:undefined;
-    
+    Agreements:undefined;
 }

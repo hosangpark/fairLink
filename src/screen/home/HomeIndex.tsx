@@ -11,6 +11,10 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import {Dimensions} from 'react-native';
 import { HomeIndexType } from '../screenType';
 
+type tempItem = {
+	type : number, //리스트타입
+	subText : string, //이벤트이름
+}
 
 export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
@@ -18,9 +22,16 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
 
+	const tempListDate = [
+		{type : 1, subText : '굴삭기' },
+		{type : 2, subText : '크레인' },
+		{type : 3, subText : '굴삭기 2' },
+		{type : 1, subText : '굴삭기' },
+	]
 
 
-	const swiperPagination = (index : number,total:number) => { //스와이퍼 indexing
+
+	const swiperPagination = (index : number,total : number) => { //스와이퍼 indexing
 		return(
 			<View style={[swiperStyles.swiperIndexArea]}>
 				<Text style={[fontStyle.f_regular,{color:colors.MAIN_COLOR,fontSize:18}]}>{index+1} / {total}</Text>
@@ -85,11 +96,23 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 			</View>
 			<View style={[{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY2,padding:20}]}>
 				<Text style={[fontStyle.k_bold, { color: colors.MAIN_COLOR, fontSize: 20, marginBottom: 10 }]}>주요 이벤트</Text>
-				<TextBox 
+				{tempListDate.map((item:tempItem,index:number) => {
+					return(
+						<>
+							<TextBox 
+								type={item.type}
+								subText={item.subText}
+								rightText={item.type === 1 ? 'dfd' : item.type === 2 ? 'afdasdf' : '121321'}
+							/>
+						</>
+					)
+				})}
+				{/* <TextBox 
 					type={2}
 					boldText = '03.03'
 					subText = '굴삭기'
-					rightText = '[모집완료]'
+					// rightText = '[모집완료]'
+					rightText = {type ===1 ? 'dfd' : }
 				/>
 				<TextBox 
 					type={1}
@@ -102,7 +125,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 					boldText = '02.28'
 					subText = '크레인 작업'
 					rightText = '[작업완료]'
-				/>
+				/> */}
 			</View>
 			
 			
