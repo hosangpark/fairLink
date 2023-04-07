@@ -6,6 +6,7 @@ import { toastConfig } from './src/util/toast/toastConfig';
 import Toast from 'react-native-toast-message';
 import { MyPageIndex } from './src/screen/mypage/MyPageIndex';
 import SplashScreen from 'react-native-splash-screen';
+import { Agreements } from './src/screen/signUp/Agreements';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -19,14 +20,14 @@ export const Router = () => {
 
     React.useEffect(()=>{
         setTimeout(()=>{
-          try{
-            SplashScreen.hide();
-          }
-          catch(err){
-            console.log(err)
-          }
+            try{
+                SplashScreen.hide();
+            }
+            catch(err){
+                console.log(err)
+            }
         },2000)
-      },[])
+    },[])
     
     
 
@@ -42,6 +43,11 @@ export const Router = () => {
                 <Stack.Screen 
                     name={'MyPage'}
                     component={MyPageIndex}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'Agreements'}
+                    component={Agreements}
                     options={{headerShown:false}}
                 />
             </Stack.Navigator>

@@ -23,7 +23,7 @@ export interface UserInfoCardType {
 }
 
 export interface TextBoxType {
-    boldText: string,
+    boldText?: string,
     subText: string,
     rightText: string,
     type: number,

@@ -5,7 +5,7 @@ import { TextBoxType } from './componentsType';
 
 export const TextBox = ({
     type = 1, // 진행상황
-    boldText = '03.03',
+    boldText,
     subText = '굴삭기',
     rightText = '[모집완료]',
     
@@ -15,7 +15,7 @@ export const TextBox = ({
         <View>
             <View style={[styles.textBox, {borderColor: colors.BORDER_BLUE_COLOR, backgroundColor: colors.WHITE_COLOR}]}>
                 <View style={{ flexDirection: 'row', alignItems:'center'}}>
-                    <Text style={[fontStyle.f_medium,{ color: colors.FONT_COLOR_BLACK, fontSize: 16}]}>{boldText}</Text>
+                    <Text style={[fontStyle.f_medium,{ color: colors.FONT_COLOR_BLACK, fontSize: 16}]}>{boldText ? boldText: '0'}</Text>
                     <Text style={[fontStyle.f_regular,{ color: colors.FONT_COLOR_BLACK, fontSize: 16, marginLeft:10}]}>{subText}</Text>
                 </View>
                 <Text style={[fontStyle.f_medium,{ 
