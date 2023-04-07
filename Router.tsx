@@ -8,6 +8,7 @@ import { MyPageIndex } from './src/screen/mypage/MyPageIndex';
 import SplashScreen from 'react-native-splash-screen';
 import { Agreements } from './src/screen/signUp/Agreements';
 import { SignIn } from './src/screen/SignIn';
+import { MemberLine } from './src/screen/signUp/MemberLine';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -54,6 +55,11 @@ export const Router = () => {
                 <Stack.Screen 
                     name={'SignIn'}
                     component={SignIn}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'MemberLine'}
+                    component={MemberLine}
                     options={{headerShown:false}}
                 />
             </Stack.Navigator>

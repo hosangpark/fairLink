@@ -6,4 +6,5 @@ export type RouterNavigatorParams = {
     MyPage:undefined;
     Agreements:undefined;
     SignIn:undefined;
+    MemberLine:undefined;
 }
