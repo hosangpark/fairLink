@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View ,Image } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
 import { UserInfoCardType } from '../componentsType';
 
@@ -41,7 +41,7 @@ export const UserInfoCard = ({
                             </View>
                         </View>
                         <TouchableOpacity>
-                            <Text>휴지통</Text>
+                            <Image source={require('../../assets/img/ic_trash1.png')} style={{width:25,height:25}} />
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.cardInfoArea]}>
