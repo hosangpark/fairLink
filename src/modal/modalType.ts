@@ -18,6 +18,24 @@ export type AlertModalType = { //alertModal props type
     btnLabel? : string,
 }
 
+interface ObjectArrayType {
+    [key:string ] : string
+}
+
+export type SelectModalType = {
+    show : boolean,
+    hide : () =>void;
+    action : (opt : string) => void;
+    strSetOption : (opt : string) => void;
+    objSetOption : (opt : ObjectArrayType) => void;
+    bigTitle? : string,
+    smallTitle? : string,
+    date? : string,
+    strOptList? : string[],
+    objOptList ? :ObjectArrayType[],
+    defaultText ? :string,
+}
+
 export interface LoginIntroModalType {
     show : boolean;
     hide : () => void;

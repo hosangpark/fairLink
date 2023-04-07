@@ -11,6 +11,7 @@ export const CustomSelectBox = ({
     strSetOption,
     objSetOption,
     selOption,
+    defaultText,
 }:CustomSelectBoxType) =>{
     const citiesDropdownRef = React.useRef<any>();
 
@@ -37,10 +38,10 @@ export const CustomSelectBox = ({
                 <SelectDropdown
                     ref={citiesDropdownRef}
                     data={strOptionList}
-                    onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index);
+                    onSelect={(selectedItem:string, index) => {
+                        if(strSetOption)strSetOption(selectedItem);
                     }}
-                    defaultButtonText={'Select city'}
+                    defaultButtonText={defaultText}
                     buttonTextAfterSelection={(selectedItem, index) => {
                     return selectedItem;
                     }}

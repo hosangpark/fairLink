@@ -81,6 +81,7 @@ export const Home = () => {
                     strOptionList={tempOptionList}
                     selOption={strOption}
                     strSetOption={setStrOption}
+                    defaultText='선택하세요.'
                 />
 
                 <View style={{width:100,height:100,justifyContent:'center',alignItems:'center',backgroundColor:'#fff', marginTop:40}}>
