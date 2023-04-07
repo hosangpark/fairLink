@@ -6,8 +6,20 @@ export interface BackHeaderType {
 
 export interface CustomButtonType {
     style? : object,
+    labelStyle ? : object,
     label : string,
     action : ()=>void,
+}
+
+export interface ObjectArrayType {
+    [key:string ] : string
+}
+export type CustomSelectBoxType = {
+    strOptionList? : string[],
+    objOptionList? : ObjectArrayType[], 
+    strSetOption? : (opt : string) => void;
+    objSetOption? : (opt : ObjectArrayType) => void;
+    selOption : string | ObjectArrayType;
 }
 
 

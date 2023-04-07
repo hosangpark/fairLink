@@ -6,6 +6,7 @@ import { fontStyle, styles } from '../style/style';
 
 export const CustomButton = ({
     style,
+    labelStyle,
     label,
     action,
 }:CustomButtonType) => {
@@ -16,7 +17,7 @@ export const CustomButton = ({
                 if(action)action();
             }}
         >
-            <Text style={[styles.buttonLabelStyle,fontStyle.f_medium]}>{label}</Text>
+            <Text style={[styles.buttonLabelStyle,fontStyle.f_medium,labelStyle]}>{label}</Text>
         </TouchableOpacity>
     )
 }
