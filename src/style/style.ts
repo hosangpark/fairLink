@@ -12,6 +12,7 @@ export const colors = { //색상 리스트;
 
     FONT_COLOR_BLACK : '#000000',
     FONT_COLOR_BLACK2 : '#374748',
+    FONT_COLOR_BLACK3 : '#191919',
     FONT_COLOR_GRAY : '#A4A4A4',
 
     WHITE_COLOR : '#FFF',
@@ -22,6 +23,7 @@ export const colors = { //색상 리스트;
     YELLOW_COLOR : '#F58300',
     GRAY_COLOR : '#A4A4A4',
     LIGHT_BLUE_COLOR : '#4EB0E9',
+    KAKAO_YELLOW : '#FEE500',
     
     BORDER_GRAY_COLOR : '#E1E1E1',
     BORDER_GRAY_COLOR1 : '#EFEFEF',

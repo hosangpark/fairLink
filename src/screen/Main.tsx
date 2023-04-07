@@ -14,6 +14,7 @@ import { HomeIndex } from './home/HomeIndex';
 import { colors, fontStyle } from '../style/style';
 import { MyPageIndex } from './mypage/MyPageIndex';
 import { Agreements } from './signUp/Agreements';
+import { SignIn } from './SignIn';
 
 export const Main = () => {
 
@@ -92,7 +93,8 @@ export const Main = () => {
                 <Tab.Screen 
                     name="Vedio" 
                     // component={Video}
-                    component={Agreements}
+                    // component={Agreements}
+                    component={SignIn}
                     
                     listeners={{
                         tabPress : (e)=>{
