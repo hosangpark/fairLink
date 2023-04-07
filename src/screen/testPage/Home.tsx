@@ -6,6 +6,7 @@ import { AlertModal ,initialAlert} from '../../modal/AlertModal';
 import { LoadingModal } from '../../modal/LoadingModal';
 import { UserInfoCard } from '../../component/card/UserInfoCard';
 import { styles } from '../../style/style';
+import { CustomSelectBox } from '../../component/CustomSelectBox';
 
 
 export const Home = () => {
@@ -13,11 +14,23 @@ export const Home = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false); //modal 로딩 on off
 
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
+
+    const [strOption , setStrOption] = React.useState<string>('aa');
+
+    const tempOptionList = [
+        'aa',
+        'bb',
+        'cc',
+        'dd',
+        'gg',
+    ] 
+
     const alertModalOn = (msg : string, type? : string) => { //alert 켜기
         setAlertModal({
             alert:true,
+            strongMsg:'ddd',
             msg:msg,
-            type:type ? type : '' ,
+            type:type ? type : 'confirm' ,
         })
     }
 
@@ -64,6 +77,12 @@ export const Home = () => {
                     userProfileUrl=''
                 />
 
+                <CustomSelectBox 
+                    strOptionList={tempOptionList}
+                    selOption={strOption}
+                    strSetOption={setStrOption}
+                />
+
                 <View style={{width:100,height:100,justifyContent:'center',alignItems:'center',backgroundColor:'#fff', marginTop:40}}>
                     <TouchableOpacity onPress={()=>toastOn('사용할 메시지 출력')}>
                         <Text>토스트 출력</Text>
@@ -80,8 +99,10 @@ export const Home = () => {
                 />
                 <AlertModal 
                     show={alertModal.alert}
+                    strongMsg={alertModal.strongMsg}
                     msg={alertModal.msg}
                     hide={alertModalOff}
+                    type={alertModal.type}
                 />
         </ScrollView>
     )

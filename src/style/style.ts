@@ -76,10 +76,25 @@ export const styles = StyleSheet.create({
         alignItems:'center',
         padding:10,
         borderRadius:4,
+        borderWidth:1,
+        borderColor:colors.MAIN_COLOR,
     },
     buttonLabelStyle : {
         color:colors.WHITE_COLOR,
         fontSize:18,
+    },
+    whiteButtonStyle : {
+        backgroundColor : colors.WHITE_COLOR,
+        width:'100%',
+        alignItems:'center',
+        padding:10,
+        borderRadius:4,
+        borderWidth:1,
+        borderColor:colors.MAIN_COLOR,
+    },
+    whiteButtonLabelStyle : {
+        color : colors.MAIN_COLOR,
+        fontSize:18
     },
     ScreenContainer: {
         justifyContent:'center',
@@ -200,16 +215,28 @@ export const fontStyle = StyleSheet.create({
 })
 
 export const modalStyle = StyleSheet.create({
+    loginIntroModal : {
+        backgroundColor:colors.WHITE_COLOR,
+        borderRadius:8,
+        bordercolor:colors.BORDER_GRAY_COLOR,
+        width:'100%',
+        alignItems:'center',
+        justifyContent:'center',
+        paddingTop:30,
+        paddingBottom:20,
+        paddingHorizontal:30,
+    },
+
     modalWrapper : {
         backgroundColor:colors.WHITE_COLOR,
         borderRadius:8,
         bordercolor:colors.BORDER_GRAY_COLOR,
-        width:'90%',
+        width:'100%',
         alignItems:'center',
         justifyContent:'center',
         paddingTop:40,
         paddingBottom:30,
-        paddingHorizontal:30,
+        paddingHorizontal:20,
     },
     title : {
         fontSize:18,

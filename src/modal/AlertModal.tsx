@@ -3,11 +3,12 @@ import { AlertModalType } from './modalType';
 
 import Modal from 'react-native-modal';
 import { Pressable, Text, View } from 'react-native';
-import { fontStyle, modalStyle } from '../style/style';
+import { fontStyle, modalStyle, styles } from '../style/style';
 import { CustomButton } from '../component/CustomButton';
 
 export const initialAlert = { //alertModal 초기 state 값
     alert : false,
+    strongMsg: '',
     msg : '',
     type :'',
 }
@@ -15,6 +16,7 @@ export const initialAlert = { //alertModal 초기 state 값
 export const AlertModal = ({
     show,
     hide,
+    strongMsg,
     msg,
     type,
     title,
@@ -31,16 +33,13 @@ export const AlertModal = ({
             isVisible={show}
             useNativeDriver={true}
             style={[{justifyContent:'center',alignItems:'center',flex:1,flexDirection : 'column', zIndex:999999999}]}
-            onRequestClose={() => {                                                                                          
-                hide();
-                if(action)action();
-            }}
         >
             <Pressable style={{
                 width:'100%',
+                height:'100%',
                 justifyContent:'center',
                 alignItems:'center',
-                // backgroundColor:'transparent',
+                backgroundColor:'transparent',
                 // backgroundColor:'black',
 
                 }}
@@ -54,14 +53,29 @@ export const AlertModal = ({
                         </Text>
                         }
                         <Text style={[modalStyle.contents,fontStyle.f_medium]}>
-                            {msg}
+                            <Text style={fontStyle.f_bold}>[{strongMsg}] </Text>{msg}
                         </Text>
                     </View>
-
-                    <CustomButton
-                        action={()=>{if(action)action(); hide();}}
-                        label={btnLabel ? btnLabel : '확인'}
-                    />
+                    {type?.includes('confirm') ? 
+                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                            <CustomButton
+                                style={{flex:1,marginRight:10}}
+                                action={()=>{if(action)action(); hide();}}
+                                label={'예'}
+                            />
+                            <CustomButton
+                                action={()=>{hide();}}
+                                label={'아니오'}
+                                style={{...styles.whiteButtonStyle,flex:1}}
+                                labelStyle={styles.whiteButtonLabelStyle}
+                            />
+                        </View>
+                    :
+                        <CustomButton
+                            action={()=>{if(action)action(); hide();}}
+                            label={btnLabel ? btnLabel : '확인'}
+                        />
+                    }
                 </View>
             </Pressable>
         </Modal>
