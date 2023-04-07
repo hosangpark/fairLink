@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle } from '../../style/style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Button } from 'react-native';
 
 export const Agreements = () => {
 
@@ -65,12 +64,11 @@ export const Agreements = () => {
                                     onValueChange={(e) => handleSingleCheck(e, data.id)}
                                     tintColors={{ true: colors.MAIN_COLOR }}
                                     style={{ width: 24, height: 24 }}
-                                    // name={`checkbox-${data.id}`}
                                 />
                                 <Text style={[fontStyle.f_semibold, {  fontSize: 16, color: colors.FONT_COLOR_BLACK, marginHorizontal: 10 }]}>{data.content}</Text>
                             </View>
                             <TouchableOpacity>
-                                <Text style={{ width: 10, height: 10, borderTopWidth: 2, borderRightWidth: 2, transform: [{rotate: '45deg'}], borderColor: colors.FONT_COLOR_GRAY}}></Text>
+                                <Image style={{ width: 8, height: 13, marginRight: 2 }} source={require('../../assets/img/ic_right_lg.png')}/>
                             </TouchableOpacity>
                         </View>
                     ))}
