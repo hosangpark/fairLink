@@ -54,7 +54,9 @@ export const AlertModal = ({ //알림창
                         </Text>
                         }
                         <Text style={[modalStyle.contents,fontStyle.f_medium]}>
-                            <Text style={fontStyle.f_bold}>[{strongMsg}] </Text>{msg}
+                            {strongMsg &&
+                            <Text style={fontStyle.f_bold}> [{strongMsg}] </Text>
+                            }{msg}
                         </Text>
                     </View>
                     {type?.includes('confirm') ? 

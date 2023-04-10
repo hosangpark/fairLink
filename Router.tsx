@@ -8,6 +8,7 @@ import { MyPageIndex } from './src/screen/mypage/MyPageIndex';
 import SplashScreen from 'react-native-splash-screen';
 import { Agreements } from './src/screen/signUp/Agreements';
 import { SignIn } from './src/screen/SignIn';
+import { OpenConstruction } from './src/screen/mypage/OpenConstruction';
 import { MemberLine } from './src/screen/signUp/MemberLine';
 import { MyInfo } from './src/screen/mypage/MyInfo';
 import { ApplicantStatus } from './src/screen/construction/ApplicantStatus';
@@ -57,6 +58,11 @@ export const Router = () => {
                 <Stack.Screen 
                     name={'SignIn'}
                     component={SignIn}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'OpenConstruction'}
+                    component={OpenConstruction}
                     options={{headerShown:false}}
                 />
                 <Stack.Screen 
