@@ -11,6 +11,7 @@ import AutoHeightImage from 'react-native-auto-height-image';
 import {Dimensions} from 'react-native';
 import { HomeIndexType } from '../screenType';
 import { LoginIntroModal } from '../../modal/LoginIntroModal';
+import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
 
 type tempItem = {
 	type : number, //리스트타입
@@ -59,7 +60,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
 	return (
 		<View style={{flex:1}}>
-			<LoginIntroModal 
+			<ReqDispatchModal 
 				show={tempModal}
 				hide={tempModalHide}
 				action={tempAction}
