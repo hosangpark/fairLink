@@ -2,7 +2,7 @@ import React from 'react';
 
 import Modal from 'react-native-modal';
 import { Pressable, Text, View } from 'react-native';
-import { colors, fontStyle, modalStyle } from '../style/style';
+import { colors, fontStyle, modalStyle, selectBoxStyle } from '../style/style';
 import { CustomButton } from '../component/CustomButton';
 import { SelectModalType } from './modalType';
 import { CustomSelectBox } from '../component/CustomSelectBox';
@@ -56,7 +56,10 @@ export const SelectModal = ({
                     objSetOption={objOptList && objSetOption}
                     strOptionList={strOptList}
                     strSetOption={strOptList && strSetOption}
-
+                    buttonStyle={selectBoxStyle.btnStyle}
+                    buttonTextStyle={selectBoxStyle.btnTextStyle}
+                    rowStyle={selectBoxStyle.rowStyle}
+                    rowTextStyle={selectBoxStyle.rowTextStyle}
                 />
 
             <CustomButton

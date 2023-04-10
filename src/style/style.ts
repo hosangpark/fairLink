@@ -90,6 +90,44 @@ export const swiperStyles = StyleSheet.create({
 
 });
 
+export const selectBoxStyle = StyleSheet.create({
+    btnStyle : {
+        backgroundColor:colors.WHITE_COLOR,
+        borderRadius:4,
+        borderWidth:1,
+        borderColor:colors.BORDER_GRAY_COLOR1,
+        flex:1,
+        alignItems:'center',
+        ...fontStyle.f_regular,
+    },
+    btnTextStyle : {
+        ...fontStyle.f_regular,
+        color:colors.FONT_COLOR_BLACK,
+        textAlign:'left',
+    },
+    rowStyle: {backgroundColor:colors.WHITE_COLOR, borderBottomColor:colors.BORDER_GRAY_COLOR},
+    rowTextStyle: {color:colors.FONT_COLOR_BLACK, textAlign: 'left',...fontStyle.f_regular},
+})
+export const selectBoxStyle2 = StyleSheet.create({
+    btnStyle : {
+        backgroundColor:colors.WHITE_COLOR,
+        borderBottomWidth:1,
+        borderColor:colors.BORDER_GRAY_COLOR1,
+        flex:1,
+        alignItems:'center',
+        height:30,
+        ...fontStyle.f_regular,
+    },
+    btnTextStyle : {
+        ...fontStyle.f_regular,
+        fontSize:16,
+        color:colors.FONT_COLOR_BLACK,
+        textAlign:'left',
+    },
+    rowStyle: {backgroundColor:colors.WHITE_COLOR, borderBottomColor:colors.BORDER_GRAY_COLOR},
+    rowTextStyle: {color:colors.FONT_COLOR_BLACK, textAlign: 'left',...fontStyle.f_regular},
+})
+
 export const styles = StyleSheet.create({
     header_ : {
         height: 50,
