@@ -3,25 +3,31 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
 import { BackHeader } from '../../component/header/BackHeader';
 import { MyPageIndexType } from '../screenType';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { AlertModal ,initialAlert} from '../../modal/AlertModal';
 import { AlertClearType } from '../../modal/modalType';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouterNavigatorParams } from '../../../type/routerType';
 
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
 
     const isFocused = useIsFocused();
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
 
     const alertModalOn = (msg : string, type? : string) => { //alert 켜기
         setAlertModal({
             alert:true,
-            strongMsg:'ddd',
-            msg:msg,
-            type:type ? type : 'confirm' ,
+            strongMsg:'',
+            msg:` 개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`,
+            type:type ? type : '' ,
         })
     }
+    /**TODO */
     const alertModalOff = () =>{ //modal 종료
-        setAlertModal(initialAlert)
+        // if(현장정보없으면){navigation.navigate('OpenConstruction')}
+        navigation.navigate('OpenConstruction')
+        // setAlertModal(initialAlert)
     }
 
     React.useEffect(()=>{
@@ -54,6 +60,13 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>  
                     </View>
                 </View>
+                <AlertModal 
+                    show={alertModal.alert}
+                    msg={alertModal.msg}
+                    hide={alertModalOff}
+                    type={alertModal.type}
+                    btnLabel={'현장개설하기'}
+                />
             </ScrollView>
         </View>
     )

@@ -1,4 +1,4 @@
-
+import { ImageSourcePropType } from "react-native";
 export interface BackHeaderType {
     backAction? : () => void;
     title : string;
@@ -40,4 +40,19 @@ export interface TextBoxType {
     subText: string,
     rightText: string,
     type: number,
+}
+
+export interface CustomInputTextBoxType{
+    style? : object,
+    imgfile:ImageSourcePropType,
+    placeholder:string,
+    button:string,
+    action:()=>void
+}
+export interface CustomWaveBoxType{
+    style? : object,
+    imgfile:ImageSourcePropType,
+    placeholder:string,
+    button:string,
+    action:()=>void
 }

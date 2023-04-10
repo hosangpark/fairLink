@@ -184,6 +184,27 @@ export const styles = StyleSheet.create({
         marginBottom:10,
         borderWidth: 1,
         borderRadius: 8, 
+    },
+    TitleText:{
+        flexDirection: 'row',
+        justifyContent:'space-between',
+        alignItems:'flex-end',
+        marginBottom:30,
+    },
+    SubTitleText:{
+        marginBottom:26,
+    },
+    OrengeStart:{
+        fontSize:16,
+        color:'#F58300',
+        letterSpacing:7
+    },
+    TextInputBox:{
+        flexDirection:'row',
+        borderWidth:1,
+        borderColor:colors.BORDER_GRAY_COLOR,
+        borderRadius:4,
+        justifyContent:'space-between',
     }
 });
 
