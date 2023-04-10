@@ -1,14 +1,16 @@
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
 import { BackHeader } from '../../component/header/BackHeader';
 import { MyPageIndexType } from '../screenType';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouterNavigatorParams } from '../../../type/routerType';
 
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
 
     const isFocused = useIsFocused();
-
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     React.useEffect(()=>{
         if(isFocused && setTabIndex){
@@ -34,9 +36,11 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>즐겨찾기 장비 관리</Text>  
                     </View>
-                    <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
-                        <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>  
-                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate('MyInfo') }>
+                        <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
+                            <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </View>

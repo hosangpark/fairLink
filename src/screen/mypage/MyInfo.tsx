@@ -1,0 +1,116 @@
+import React, { useRef, useState } from "react"
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { BackHeader } from "../../component/header/BackHeader"
+import { colors, fontStyle, styles } from '../../style/style';
+
+export const MyInfo= () => {
+    const [isEditable, setIsEditable] = useState(false);
+    const [name, setName] = useState('')
+    console.log(name)
+
+    const scrollViewRef = useRef<ScrollView>(null);
+
+    const handleButtonClick = () => {
+        setIsEditable(true)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true});
+    };
+
+    return (
+        <ScrollView ref={scrollViewRef}>
+            <BackHeader title="나의 정보" />
+            <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
+                <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>프로필 정보</Text>
+                <View style={{ paddingVertical: 10 }}>
+                    <View>
+                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>이름</Text>
+                        <TextInput 
+                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            editable={isEditable}
+                            value={name}
+                            onChange={(e) => setName(e.nativeEvent.text)}
+                        />
+                    </View>
+                    <View>
+                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>직책</Text>
+                        <TextInput 
+                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            editable={isEditable}
+                            value={''}
+                            onChange={(e) => console.log(e.nativeEvent.text)}
+                        />
+                    </View>
+                </View>
+            </View>
+            <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
+                <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>회사 정보</Text>
+                <View style={{ paddingVertical: 10 }}>
+                    <View>
+                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>회사명</Text>
+                        <TextInput 
+                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            editable={isEditable}
+                            value={''}
+                            onChange={(e) => console.log(e.nativeEvent.text)}
+                        />
+                    </View>
+                    <View>
+                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>대표자</Text>
+                        <TextInput 
+                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            editable={isEditable}
+                            value={''}
+                            onChange={(e) => console.log(e.nativeEvent.text)}
+                        />
+                    </View>
+                    <View>
+                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>사업자번호</Text>
+                        <TextInput 
+                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            editable={isEditable}
+                            value={''}
+                            onChange={(e) => console.log(e.nativeEvent.text)}
+                        />
+                    </View>
+                </View>
+            </View>
+            <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR,}}>
+                <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>연락처</Text>
+                <View style={{ paddingTop: 10 }}>
+                    <View>
+                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>핸드폰 번호</Text>
+                        <TextInput 
+                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            editable={isEditable}
+                            value={''}
+                            onChange={(e) => console.log(e.nativeEvent.text)}
+                        />
+                    </View>
+                    <View>
+                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>이메일</Text>
+                        <TextInput 
+                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            editable={isEditable}
+                            value={''}
+                            onChange={(e) => console.log(e.nativeEvent.text)}
+                        />
+                    </View>
+                </View>
+            </View>
+            <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR,}}>
+                {
+                    isEditable
+                    ?   <TouchableOpacity>
+                            <View style={[ styles.buttonStyle ]}>
+                                <Text style={ [styles.buttonLabelStyle] }>수정완료</Text>
+                            </View>
+                        </TouchableOpacity>
+                    :   <TouchableOpacity onPress={handleButtonClick}>
+                            <View style={[ styles.whiteButtonStyle ]}>
+                                <Text style={ [styles.whiteButtonLabelStyle] }>수정하기</Text>
+                            </View>
+                        </TouchableOpacity>
+                }
+            </View>
+        </ScrollView>
+    )
+}
