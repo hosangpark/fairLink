@@ -21,6 +21,7 @@ export type CustomSelectBoxType = {
     objSetOption? : (opt : ObjectArrayType) => void;
     selOption? : string | ObjectArrayType;
     defaultText : string;
+    style? : object;
 }
 
 

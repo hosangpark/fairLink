@@ -70,16 +70,16 @@ export const Main = () => {
                 <Tab.Screen
                     name="Home" 
                     children={()=>
-                        // <HomeIndex 
-                        //     setTabIndex={setTabIndex}
-                        // />
-                        <Home />
+                        <HomeIndex 
+                            setTabIndex={setTabIndex}
+                        />
+                        // <Home />
                     }
                     listeners={{
                         tabPress : (e)=>{
-                          setTabIndex(1);
+                            setTabIndex(1);
                         }
-                      }}
+                    }}
                     options={{
                         headerShown:false,
                         tabBarShowLabel:false,
@@ -99,9 +99,9 @@ export const Main = () => {
                     
                     listeners={{
                         tabPress : (e)=>{
-                          setTabIndex(2);
+                            setTabIndex(2);
                         }
-                      }}
+                    }}
                     options={{
                         headerShown:false,
                         tabBarShowLabel:false,
@@ -119,9 +119,9 @@ export const Main = () => {
                     
                     listeners={{
                         tabPress : (e)=>{
-                          setTabIndex(3);
+                            setTabIndex(3);
                         }
-                      }}
+                    }}
                     options={{
                         headerShown:false,
                         tabBarShowLabel:false,
@@ -143,9 +143,9 @@ export const Main = () => {
                     }
                     listeners={{
                         tabPress : (e)=>{
-                          setTabIndex(4);
+                            setTabIndex(4);
                         }
-                      }}
+                    }}
                     options={{
                         headerShown:false,
                         tabBarShowLabel:false,
@@ -163,9 +163,9 @@ export const Main = () => {
                     
                     listeners={{
                         tabPress : (e)=>{
-                          setTabIndex(5);
+                            setTabIndex(5);
                         }
-                      }}
+                    }}
                     options={{
                         headerShown:false,
                         tabBarShowLabel:false,

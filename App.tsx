@@ -12,6 +12,9 @@ import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 import { Router } from './Router';
 import SplashScreen from 'react-native-splash-screen';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
 
 
 /**
@@ -35,16 +38,19 @@ import SplashScreen from 'react-native-splash-screen';
  * 
  */
 
-  
-
-  
-
 
 const App = () => {
+
+  const [queryClient] = React.useState(()=>new QueryClient);
+
   return (
-    <NavigationContainer>
-        <Router />
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <NavigationContainer>
+            <Router />
+        </NavigationContainer>
+      </Provider>
+    </QueryClientProvider>
   );
 };
 
