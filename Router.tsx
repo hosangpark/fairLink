@@ -12,6 +12,8 @@ import { OpenConstruction } from './src/screen/mypage/OpenConstruction';
 import { MemberLine } from './src/screen/signUp/MemberLine';
 import { MyInfo } from './src/screen/mypage/MyInfo';
 import { ApplicantStatus } from './src/screen/construction/ApplicantStatus';
+import { FavoriteListIndex } from './src/screen/mypage/favorite/FavoriteListIndex';
+import { FavoriteAdd } from './src/screen/mypage/favorite/FavoriteAdd';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -40,16 +42,16 @@ export const Router = () => {
         <>
             <Stack.Navigator initialRouteName='Main'>
                 {/** page가 추가되면 페이지에 여기에 stack을 추가해주세요. */}
+
+                {/** MAIN */}
                 <Stack.Screen 
                     name={'Main'}
                     component={Main}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen 
-                    name={'MyPage'}
-                    component={MyPageIndex}
-                    options={{headerShown:false}}
-                />
+
+
+                {/** USER  */}
                 <Stack.Screen 
                     name={'Agreements'}
                     component={Agreements}
@@ -60,6 +62,9 @@ export const Router = () => {
                     component={SignIn}
                     options={{headerShown:false}}
                 />
+
+
+
                 <Stack.Screen 
                     name={'OpenConstruction'}
                     component={OpenConstruction}
@@ -70,16 +75,36 @@ export const Router = () => {
                     component={MemberLine}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen 
-                    name={'MyInfo'}
-                    component={MyInfo}
-                    options={{headerShown:false}}
-                />
+                
                 <Stack.Screen 
                     name={'ApplicantStatus'}
                     component={ApplicantStatus}
                     options={{headerShown:false}}
                 />
+
+
+                {/** mypage */}
+                <Stack.Screen  //마이페이지 ROOT
+                    name={'MyPage'}
+                    component={MyPageIndex}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen //나의 정보
+                    name={'MyInfo'}
+                    component={MyInfo}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen //나의 즐겨찾기
+                    name={'FavoriteList'}
+                    component={FavoriteListIndex}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen //나의 즐겨찾기 추가
+                    name={'FavoriteAdd'}
+                    component={FavoriteAdd}
+                    options={{headerShown:false}}
+                />
+
             </Stack.Navigator>
             <Toast config={toastConfig}/>
         </>

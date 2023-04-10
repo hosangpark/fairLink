@@ -75,6 +75,7 @@ export const Home = () => {
                     recEmpCount={64}
                     userName='김경태'
                     userProfileUrl=''
+                    index="2"
                 />
                 <UserInfoCard 
                     empName='힘찬중기'
@@ -85,6 +86,7 @@ export const Home = () => {
                     recEmpCount={64}
                     userName='김경태'
                     userProfileUrl=''
+                    index="3"
                 />
 
                 <CustomSelectBox 

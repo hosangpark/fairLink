@@ -5,6 +5,7 @@ import { UserInfoCardType } from '../componentsType';
 
 
 export const UserInfoCard = ({
+    index = '0',
     jobType = '차주 겸 조종사',
     userProfileUrl = '',
     empName = '힘찬중기',
@@ -18,7 +19,7 @@ export const UserInfoCard = ({
 
 
     return(
-        <View style={{width:'100%',position:'relative',marginBottom:30}}>
+        <View style={{width:'100%',position:'relative',marginTop:30}}>
                 <View style={[styles.cardJobArea,{borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>
                     <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
                 </View>
