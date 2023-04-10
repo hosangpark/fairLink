@@ -29,7 +29,7 @@ export const CustomInputTextBox = ({
         }} style={{justifyContent:'center',alignItems:'center',marginHorizontal:10}}>
           {button? <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.MAIN_COLOR}]}>{button}</Text>
           :
-            <Image style={{width:20,height:20,backgroundColor:'aqua'}} source={imgfile}/>
+            <Image style={{width:20,height:20}} source={imgfile}/>
           }
         </TouchableOpacity>
         :null

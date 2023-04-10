@@ -12,29 +12,13 @@ export const CustomSelectBox = ({
     objSetOption,
     selOption,
     defaultText,
-    style
+    style,
+    buttonStyle,
+    buttonTextStyle,
+    rowStyle,
+    rowTextStyle
 }:CustomSelectBoxType) =>{
     const citiesDropdownRef = React.useRef<any>();
-
-    const selectBoxStyle = StyleSheet.create({
-        btnStyle : {
-            backgroundColor:colors.WHITE_COLOR,
-            borderRadius:4,
-            borderWidth:1,
-            borderColor:colors.BORDER_GRAY_COLOR1,
-            flex:1,
-            alignItems:'center',
-            ...fontStyle.f_regular,
-        },
-        btnTextStyle : {
-            ...fontStyle.f_regular,
-            color:colors.FONT_COLOR_BLACK,
-            textAlign:'left',
-        },
-        rowStyle: {backgroundColor:colors.WHITE_COLOR, borderBottomColor:colors.BORDER_GRAY_COLOR},
-        rowTextStyle: {color:colors.FONT_COLOR_BLACK, textAlign: 'left',...fontStyle.f_regular},
-    })
-
     return(
         <View style={{flexDirection:'row',...style}}>
             {strOptionList &&
@@ -51,10 +35,10 @@ export const CustomSelectBox = ({
                     rowTextForSelection={(item, index) => {
                     return item;
                     }}
-                    buttonStyle={selectBoxStyle.btnStyle}
-                    buttonTextStyle={selectBoxStyle.btnTextStyle}
-                    rowStyle={selectBoxStyle.rowStyle}
-                    rowTextStyle={selectBoxStyle.rowTextStyle}
+                    buttonStyle={buttonStyle}
+                    buttonTextStyle={buttonTextStyle}
+                    rowStyle={rowStyle}
+                    rowTextStyle={rowTextStyle}
                     dropdownIconPosition={'right'}
                     renderDropdownIcon={isOpened => {
                         return <Image source={require('../assets/img/ic_dropdown.png')} style={{width:25, height:20,marginRight:10}} />

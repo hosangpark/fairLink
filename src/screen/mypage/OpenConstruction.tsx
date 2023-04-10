@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { colors, fontStyle, styles } from '../../style/style';
+import { FlatList, Image, ImageBackground, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../style/style';
 import { BackHeader } from '../../component/header/BackHeader';
 import { MyPageIndexType } from '../screenType';
 import { useIsFocused } from '@react-navigation/native';
@@ -14,6 +14,7 @@ import { CustomWaveBox } from '../../component/CustomWaveBox';
 export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
 
     const [strOption,setStrOption] = useState<string>('')
+    const [guaranteeImage,setguaranteeImage] = useState<undefined>()
 
     return (
         <View style={{flex:1}}>
@@ -34,7 +35,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <CustomInputTextBox
                         style={{}}
                         placeholder={'계약서에 명시된 현장명을 기입하세요.'}
-                        imgfile={{}}
+                        imgfile={undefined}
                         button={''}
                         action={()=>{}}
                     />
@@ -46,7 +47,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <CustomInputTextBox
                         style={{}}
                         placeholder={''}
-                        imgfile={{}}
+                        imgfile={undefined}
                         button={''}
                         action={()=>{}}
                     />
@@ -58,7 +59,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <CustomInputTextBox
                         style={{}}
                         placeholder={''}
-                        imgfile={{}}
+                        imgfile={undefined}
                         button={'변경'}
                         action={()=>{}}
                     />
@@ -108,18 +109,37 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         strOptionList={['가','나','다','라',]}
                         selOption={strOption}
                         strSetOption={setStrOption}
+                        buttonStyle={selectBoxStyle.btnStyle}
+                        buttonTextStyle={selectBoxStyle.btnTextStyle}
+                        rowStyle={selectBoxStyle.rowStyle}
+                        rowTextStyle={selectBoxStyle.rowTextStyle}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>대금지급시기
                     <Text style={styles.OrengeStart}>*</Text>
                     </Text>
-                    <CustomSelectBox 
-                        defaultText='선택하세요.'
-                        strOptionList={[]}
-                        selOption={strOption}
-                        strSetOption={setStrOption}
-                    />
+                    <View style={{flexDirection:'row'}}>
+                        <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>{}}>
+                            <Image style={{width:20,height:20}} source={require('../../assets/img/ic_check_off_sm.png')}/>
+                            <Text style={[fontStyle.f_medium, {fontSize:16,marginHorizontal:5}]}>당일</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>{}}>
+                            <Image style={{width:20,height:20}} source={require('../../assets/img/ic_check_off_sm.png')}/>
+                            <Text style={{marginHorizontal:5}}>매월</Text>
+                            <CustomSelectBox 
+                                style={{flex:1}}
+                                defaultText='10일'
+                                strOptionList={['1일','2일','3일','4일']}
+                                selOption={strOption}
+                                strSetOption={setStrOption}
+                                buttonStyle={selectBoxStyle2.btnStyle}
+                                buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                                rowStyle={selectBoxStyle2.rowStyle}
+                                rowTextStyle={selectBoxStyle2.rowTextStyle}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>대금지급산출기간
@@ -128,7 +148,89 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <CustomWaveBox
                         style={{}}
                         placeholder={''}
-                        imgfile={{}}
+                        imgfile={require('../../assets/img/ic_dropdown.png')}
+                        button={''}
+                        action={()=>{}}
+                    />
+                </View>
+                <View style={[styles.SubTitleText]}>
+                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>건설기계지급보증서
+                    </Text>
+                    <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR,marginBottom:10}]}>건설기계 대금 200만원 이상인 경우 의무가입 대상입니다.
+                    </Text>
+                    <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
+                        <ImageBackground
+                        style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
+                        source={guaranteeImage}
+                        resizeMode="cover"
+                        imageStyle={{ borderRadius: 10 }}>
+                        <Image 
+                        style={{ width: 15, height: 15}}
+                        source={require('../../assets/img/ic_add.png')}
+                        />
+                        <TouchableOpacity
+                            style={{ position:'absolute', right: 10, top: 10 }}
+                            onPress={() =>{setguaranteeImage}}>
+                            <Image
+                            style={{ width: 25, height: 25 }}
+                            source={require('../../assets/img/ic_modify.png')}
+                            />
+                        </TouchableOpacity>
+                        </ImageBackground>
+                    </TouchableOpacity>
+                {/* <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    data={undefined}
+                    renderItem={({ item, index }) => (
+                    <View style={{ marginRight: 8, width: 100, height: 100 }}>
+                        <ImageBackground
+                        style={{ flex: 1 }}
+                        source={{ uri: item.uri }}
+                        resizeMode="cover"
+                        imageStyle={{ borderRadius: 10 }}>
+                        <TouchableOpacity
+                            style={{ alignItems: 'flex-end', right: 10, top: 10 }}
+                            onPress={() => Delete(index)}>
+                            <Image
+                            style={{ width: 25, height: 25 }}
+                            source={require('../../../assets/img/ico_close1.png')}
+                            />
+                        </TouchableOpacity>
+                        </ImageBackground>
+                        {index == 0 && (
+                        <View
+                            style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            backgroundColor: colors.GREEN_COLOR_2,
+                            width: '100%',
+                            alignItems: 'center',
+                            height: 25,
+                            justifyContent: 'center',
+                            borderBottomLeftRadius: 10,
+                            borderBottomRightRadius: 10,
+                            }}>
+                            <Text
+                            style={[
+                                style.text_sb,
+                                { fontSize: 13, color: colors.WHITE_COLOR },
+                            ]}>
+                            {t('대표사진')}
+                            </Text>
+                        </View>
+                        )}
+                    </View>
+                    )}
+                    horizontal={true}
+                /> */}
+                </View>
+                <View style={[styles.SubTitleText]}>
+                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>원도급사명
+                    </Text>
+                    <CustomInputTextBox
+                        style={{}}
+                        placeholder={'하도급사만 작성'}
+                        imgfile={undefined}
                         button={''}
                         action={()=>{}}
                     />
