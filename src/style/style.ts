@@ -32,6 +32,33 @@ export const colors = { //색상 리스트;
     
 }
 
+export const fontStyle = StyleSheet.create({
+    k_bold : {
+        fontFamily:'Kimm_bold'
+    },
+    s_regular : {
+        fontFamily : 'SEBANG-Gothic-Regular'
+    },
+    s_bold : {
+        fontFamily : 'SEBANG-Gothic-Bold'
+    },
+    f_light : {
+        fontFamily:'Pretendard-Light'
+    },
+    f_regular : {
+        fontFamily:'Pretendard-Regular'
+    },
+    f_medium : {
+        fontFamily:'Pretendard-Medium'
+    },
+    f_semibold: {
+        fontFamily:'Pretendard-SemiBold'
+    },
+    f_bold : {
+        fontFamily:'Pretendard-Bold'
+    },
+})
+
 export const flexStyle = {
     
 }
@@ -193,35 +220,24 @@ export const styles = StyleSheet.create({
         marginBottom:10,
         borderWidth: 1,
         borderRadius: 8, 
+    },
+    textLabel: {
+        color: colors.FONT_COLOR_BLACK,
+        fontSize: 16,
+        marginVertical: 10
+    },
+    textInput: {
+        color: colors.FONT_COLOR_BLACK,
+        backgroundColor: colors.BACKGROUND_COLOR_GRAY1,
+        fontSize: 16,
+        marginVertical: 10,
+        borderWidth: 1, 
+        borderColor: colors.BORDER_GRAY_COLOR, 
+        height: 46, 
+        paddingHorizontal: 20, 
+        borderRadius: 4
     }
 });
-
-export const fontStyle = StyleSheet.create({
-    k_bold : {
-        fontFamily:'Kimm_bold'
-    },
-    s_regular : {
-        fontFamily : 'SEBANG-Gothic-Regular'
-    },
-    s_bold : {
-        fontFamily : 'SEBANG-Gothic-Bold'
-    },
-    f_light : {
-        fontFamily:'Pretendard-Light'
-    },
-    f_regular : {
-        fontFamily:'Pretendard-Regular'
-    },
-    f_medium : {
-        fontFamily:'Pretendard-Medium'
-    },
-    f_semibold: {
-        fontFamily:'Pretendard-SemiBold'
-    },
-    f_bold : {
-        fontFamily:'Pretendard-Bold'
-    },
-})
 
 export const modalStyle = StyleSheet.create({
 

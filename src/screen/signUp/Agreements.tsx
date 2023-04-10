@@ -4,10 +4,15 @@ import CheckBox from '@react-native-community/checkbox';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle } from '../../style/style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouterNavigatorParams } from '../../../type/routerType';
 
 export const Agreements = () => {
 
     const [checkItems, setCheckItems] = useState<number[]>([]);
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    
     const agreementsData = [
         {id: 0, content: '[필수] 개인정보 수집 및 이용 동의'},
         {id: 1, content: '[필수] 서비스 이용약관 동의'},
@@ -74,7 +79,8 @@ export const Agreements = () => {
                     ))}
                 </View>
                 <View style={{ margin: 20 }}>
-                    <TouchableOpacity style={{ backgroundColor: colors.MAIN_COLOR, borderRadius: 4, padding: 12, }}>
+                    <TouchableOpacity style={{ backgroundColor: colors.MAIN_COLOR, borderRadius: 4, padding: 12, }}
+                        onPress={() => navigation.navigate('MemberLine')}>
                         <Text style={[ fontStyle.f_semibold, { color: colors.WHITE_COLOR, fontSize: 18, textAlign: 'center', }]}>동의하고 계속하기</Text>
                     </TouchableOpacity>
                 </View>
