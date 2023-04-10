@@ -70,10 +70,10 @@ export const Main = () => {
                 <Tab.Screen
                     name="Home" 
                     children={()=>
-                        // <HomeIndex 
-                        //     setTabIndex={setTabIndex}
-                        // />
-                        <Home />
+                        <HomeIndex 
+                            setTabIndex={setTabIndex}
+                        />
+                        // <Home />
                     }
                     listeners={{
                         tabPress : (e)=>{

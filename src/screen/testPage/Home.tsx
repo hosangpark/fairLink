@@ -7,9 +7,19 @@ import { LoadingModal } from '../../modal/LoadingModal';
 import { UserInfoCard } from '../../component/card/UserInfoCard';
 import { styles } from '../../style/style';
 import { CustomSelectBox } from '../../component/CustomSelectBox';
+import { SelectModal } from '../../modal/SelectModal';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { useSelector } from 'react-redux';
+import { LastDispatchInfoModal } from '../../modal/LastDispatchInfoModal';
+import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
+import { RecEmpModal } from '../../modal/RecEmpModal';
+import { CancleReasonModal } from '../../modal/CancleReasonModal';
 
 
 export const Home = () => {
+
+    const dispatch = useAppDispatch();
+    const loading = useAppSelector(state => state.isLoading);
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false); //modal 로딩 on off
 
@@ -83,6 +93,7 @@ export const Home = () => {
                     strSetOption={setStrOption}
                     defaultText='선택하세요.'
                 />
+                
 
                 <View style={{width:100,height:100,justifyContent:'center',alignItems:'center',backgroundColor:'#fff', marginTop:40}}>
                     <TouchableOpacity onPress={()=>toastOn('사용할 메시지 출력')}>
@@ -98,13 +109,29 @@ export const Home = () => {
                 <LoadingModal 
                     isLoading={isLoading}
                 />
-                <AlertModal 
+                <CancleReasonModal 
+                    show={alertModal.alert}
+                    hide={alertModalOff}
+                    action={(reason)=>{console.log(reason)}}
+                />
+                {/* <SelectModal
+                    bigTitle='담당자를 변경해주세요.'
+                    // smallTitle='ㅇㅇㅇㅇ' 
+                    defaultText='선택하세요.'
+                    strOptList={tempOptionList}
+                    strSetOption={setStrOption}
+                    btnLabel="변경완료"
+                    action={()=>{}}
+                    show={alertModal.alert}
+                    hide={alertModalOff}
+                /> */}
+                {/* <AlertModal 
                     show={alertModal.alert}
                     strongMsg={alertModal.strongMsg}
                     msg={alertModal.msg}
                     hide={alertModalOff}
                     type={alertModal.type}
-                />
+                /> */}
         </ScrollView>
     )
 }

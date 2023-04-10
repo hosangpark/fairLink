@@ -21,6 +21,7 @@ export const colors = { //색상 리스트;
     DEPP_SKY_BLUE : '#19D2DB',
     MINT_COLOR : '#1BCBAF',
     YELLOW_COLOR : '#F58300',
+    ORANGE_COLOR : '#F58300',
     GRAY_COLOR : '#A4A4A4',
     LIGHT_BLUE_COLOR : '#4EB0E9',
     KAKAO_YELLOW : '#FEE500',
@@ -160,20 +161,28 @@ export const styles = StyleSheet.create({
         width:110,
         height:100,
     },
+    border : {
+        borderColor:colors.BORDER_GRAY_COLOR,
+        borderWidth:1,
+    },
+    deepBorder : {
+        borderColor:colors.BORDER_GRAY_COLOR1,
+        borderWidth:1,
+    },
     topBorder : {
         borderColor:colors.BORDER_GRAY_COLOR,
         borderTopWidth:1,
     },
     deepTopBorder : {
-        borderColor:colors.BORDER_GRAY_COLOR,
+        borderColor:colors.BORDER_GRAY_COLOR1,
         borderTopWidth:1,
-    },
-    deepBottomBorder : {
-        borderColor:colors.BORDER_GRAY_COLOR1,  
-        borderBottomWidth:1,
     },
     bottomBorder : {
         borderColor:colors.BORDER_GRAY_COLOR1,  
+        borderBottomWidth:1,
+    },
+    deepBottomBorder : {
+        borderColor:colors.BORDER_GRAY_COLOR,  
         borderBottomWidth:1,
     },
     textBox: {
@@ -215,17 +224,6 @@ export const fontStyle = StyleSheet.create({
 })
 
 export const modalStyle = StyleSheet.create({
-    loginIntroModal : {
-        backgroundColor:colors.WHITE_COLOR,
-        borderRadius:8,
-        bordercolor:colors.BORDER_GRAY_COLOR,
-        width:'100%',
-        alignItems:'center',
-        justifyContent:'center',
-        paddingTop:30,
-        paddingBottom:20,
-        paddingHorizontal:30,
-    },
 
     modalWrapper : {
         backgroundColor:colors.WHITE_COLOR,
@@ -234,9 +232,21 @@ export const modalStyle = StyleSheet.create({
         width:'100%',
         alignItems:'center',
         justifyContent:'center',
+    },
+
+    loginIntroModal : {
+        paddingTop:30,
+        paddingBottom:20,
+        paddingHorizontal:30,
+    },
+    alertModal : {
         paddingTop:40,
         paddingBottom:30,
         paddingHorizontal:20,
+    },
+    lastDispatchModal : {
+        paddingHorizontal:20,
+        paddingVertical:30,
     },
     title : {
         fontSize:18,
