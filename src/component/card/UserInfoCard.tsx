@@ -5,6 +5,7 @@ import { UserInfoCardType } from '../componentsType';
 
 
 export const UserInfoCard = ({
+    index = '0',
     jobType = '차주 겸 조종사',
     userProfileUrl = '',
     empName = '힘찬중기',

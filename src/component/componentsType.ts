@@ -35,6 +35,7 @@ export interface UserInfoCardType {
     recEmpCount:number,
     location:string,
     isDelete: boolean,
+    index : string,
 }
 
 export interface TextBoxType {

@@ -8,6 +8,11 @@ export type RouterNavigatorParams = {
     SignIn:undefined;
     OpenConstruction:undefined;
     MemberLine:undefined;
-    MyInfo:undefined;
     ApplicantStatus:undefined;
+
+
+    /** mypage */
+    MyInfo:undefined;
+    FavoriteList : undefined;
+    FavoriteAdd : undefined;
 }
