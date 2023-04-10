@@ -13,12 +13,12 @@ export const initialAlert = { //alertModal 초기 state 값
     type :'',
 }
 
-export const AlertModal = ({
+export const AlertModal = ({ //알림창
     show,
     hide,
     strongMsg,
     msg,
-    type,
+    type, //type에 confirm 문자가 있으면 confirm창으로
     title,
     action,
     btnLabel,
@@ -32,9 +32,10 @@ export const AlertModal = ({
             animationOutTiming = {300}
             isVisible={show}
             useNativeDriver={true}
+            onBackButtonPress={hide}
             style={[{justifyContent:'center',alignItems:'center',flex:1,flexDirection : 'column', zIndex:999999999}]}
         >
-            <Pressable style={{
+            {/* <Pressable style={{
                 width:'100%',
                 height:'100%',
                 justifyContent:'center',
@@ -44,8 +45,8 @@ export const AlertModal = ({
 
                 }}
                 onPress={hide}
-            >
-                <View style={[modalStyle.modalWrapper]}>
+            > */}
+                <View style={[modalStyle.modalWrapper,modalStyle.alertModal]}>
                     <View style={{marginBottom:20}}>
                         {title &&
                         <Text style={[modalStyle.title,fontStyle.f_bold]}>
@@ -79,7 +80,7 @@ export const AlertModal = ({
                         />
                     }
                 </View>
-            </Pressable>
+            {/* </Pressable> */}
         </Modal>
     )
 }

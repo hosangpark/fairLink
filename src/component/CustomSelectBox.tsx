@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import { CustomSelectBoxType } from './componentsType';
 import { StyleSheet ,Image} from 'react-native';
-import { colors } from '../style/style';
+import { colors, fontStyle } from '../style/style';
 
 export const CustomSelectBox = ({
     strOptionList,
@@ -12,6 +12,7 @@ export const CustomSelectBox = ({
     objSetOption,
     selOption,
     defaultText,
+    style
 }:CustomSelectBoxType) =>{
     const citiesDropdownRef = React.useRef<any>();
 
@@ -23,17 +24,19 @@ export const CustomSelectBox = ({
             borderColor:colors.BORDER_GRAY_COLOR1,
             flex:1,
             alignItems:'center',
+            ...fontStyle.f_regular,
         },
         btnTextStyle : {
+            ...fontStyle.f_regular,
             color:colors.FONT_COLOR_BLACK,
             textAlign:'left',
         },
         rowStyle: {backgroundColor:colors.WHITE_COLOR, borderBottomColor:colors.BORDER_GRAY_COLOR},
-        rowTextStyle: {color:colors.FONT_COLOR_BLACK, textAlign: 'left'},
+        rowTextStyle: {color:colors.FONT_COLOR_BLACK, textAlign: 'left',...fontStyle.f_regular},
     })
 
     return(
-        <View style={{flexDirection:'row'}}>
+        <View style={{flexDirection:'row',...style}}>
             {strOptionList &&
                 <SelectDropdown
                     ref={citiesDropdownRef}

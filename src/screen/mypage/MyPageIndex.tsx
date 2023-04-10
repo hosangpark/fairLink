@@ -56,9 +56,11 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>즐겨찾기 장비 관리</Text>  
                     </View>
-                    <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
-                        <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>  
-                    </View>
+                    <TouchableOpacity onPress={() => navigation.navigate('MyInfo') }>
+                        <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
+                            <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <AlertModal 
                     show={alertModal.alert}
