@@ -2,11 +2,14 @@ import React, { useRef, useState } from "react"
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { BackHeader } from "../../component/header/BackHeader"
 import { colors, fontStyle, styles } from '../../style/style';
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouterNavigatorParams } from "../../../type/routerType";
 
-export const MyInfo= () => {
+export const MyInfo = () => {
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [isEditable, setIsEditable] = useState(false);
     const [name, setName] = useState('')
-    console.log(name)
 
     const scrollViewRef = useRef<ScrollView>(null);
 
@@ -35,7 +38,7 @@ export const MyInfo= () => {
                         <TextInput 
                             style={[ styles.textInput, fontStyle.f_regular ]}
                             editable={isEditable}
-                            value={''}
+                            // value={''}
                             onChange={(e) => console.log(e.nativeEvent.text)}
                         />
                     </View>
@@ -49,7 +52,7 @@ export const MyInfo= () => {
                         <TextInput 
                             style={[ styles.textInput, fontStyle.f_regular ]}
                             editable={isEditable}
-                            value={''}
+                            // value={''}
                             onChange={(e) => console.log(e.nativeEvent.text)}
                         />
                     </View>
@@ -58,7 +61,7 @@ export const MyInfo= () => {
                         <TextInput 
                             style={[ styles.textInput, fontStyle.f_regular ]}
                             editable={isEditable}
-                            value={''}
+                            // value={''}
                             onChange={(e) => console.log(e.nativeEvent.text)}
                         />
                     </View>
@@ -67,7 +70,7 @@ export const MyInfo= () => {
                         <TextInput 
                             style={[ styles.textInput, fontStyle.f_regular ]}
                             editable={isEditable}
-                            value={''}
+                            // value={''}
                             onChange={(e) => console.log(e.nativeEvent.text)}
                         />
                     </View>
@@ -81,7 +84,7 @@ export const MyInfo= () => {
                         <TextInput 
                             style={[ styles.textInput, fontStyle.f_regular ]}
                             editable={isEditable}
-                            value={''}
+                            // value={''}
                             onChange={(e) => console.log(e.nativeEvent.text)}
                         />
                     </View>
@@ -90,7 +93,7 @@ export const MyInfo= () => {
                         <TextInput 
                             style={[ styles.textInput, fontStyle.f_regular ]}
                             editable={isEditable}
-                            value={''}
+                            // value={''}
                             onChange={(e) => console.log(e.nativeEvent.text)}
                         />
                     </View>
@@ -99,7 +102,7 @@ export const MyInfo= () => {
             <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR,}}>
                 {
                     isEditable
-                    ?   <TouchableOpacity>
+                    ?   <TouchableOpacity onPress={() => navigation.navigate('ApplicantStatus')}> {/* 임시 */}
                             <View style={[ styles.buttonStyle ]}>
                                 <Text style={ [styles.buttonLabelStyle] }>수정완료</Text>
                             </View>

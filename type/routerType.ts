@@ -8,4 +8,5 @@ export type RouterNavigatorParams = {
     SignIn:undefined;
     MemberLine:undefined;
     MyInfo:undefined;
+    ApplicantStatus:undefined;
 }

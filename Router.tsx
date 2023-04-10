@@ -10,6 +10,7 @@ import { Agreements } from './src/screen/signUp/Agreements';
 import { SignIn } from './src/screen/SignIn';
 import { MemberLine } from './src/screen/signUp/MemberLine';
 import { MyInfo } from './src/screen/mypage/MyInfo';
+import { ApplicantStatus } from './src/screen/construction/ApplicantStatus';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -66,6 +67,11 @@ export const Router = () => {
                 <Stack.Screen 
                     name={'MyInfo'}
                     component={MyInfo}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'ApplicantStatus'}
+                    component={ApplicantStatus}
                     options={{headerShown:false}}
                 />
             </Stack.Navigator>
