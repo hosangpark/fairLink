@@ -34,6 +34,7 @@ export interface UserInfoCardType {
     rating:number,
     recEmpCount:number,
     location:string,
+    index : string,
 }
 
 export interface TextBoxType {
