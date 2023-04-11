@@ -3,8 +3,13 @@ import { ScrollView, View, Text } from "react-native";
 import { BackHeader } from "../../component/header/BackHeader";
 import { colors, fontStyle } from "../../style/style";
 import { UserInfoCard } from "../../component/card/UserInfoCard";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouterNavigatorParams } from "../../../type/routerType";
 
 export const ApplicantStatus = () => {
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     return (
         <ScrollView>
@@ -24,20 +29,22 @@ export const ApplicantStatus = () => {
                 <View style={{ marginBottom: 25 }}>
                     <Text style={[ fontStyle.f_semibold, {fontSize: 18, color: colors.FONT_COLOR_BLACK}]}>현재까지 지원자 <Text style={{ color: colors.MAIN_COLOR}}>4</Text>명</Text>
                 </View>
-                <View style={{ marginVertical: 5 }}>                
-                    <UserInfoCard 
-                        index="1"
-                        empName='힘찬중기'
-                        jobType='1'
-                        location='[경남]'
-                        rating={23}
-                        score={5}
-                        recEmpCount={64}
-                        userName='김경태'
-                        userProfileUrl=''
-                        isDelete={false}
-                    />
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('CompanyProfile')}>
+                    <View style={{ marginTop: 10, marginBottom: 5 }}>                
+                        <UserInfoCard 
+                            index="1"
+                            empName='힘찬중기'
+                            jobType='1'
+                            location='[경남]'
+                            rating={23}
+                            score={5}
+                            recEmpCount={64}
+                            userName='김경태'
+                            userProfileUrl=''
+                            isDelete={false}
+                        />
+                    </View>
+                </TouchableOpacity>
                 <View style={{ marginVertical: 5 }}>                
                     <UserInfoCard 
                         index="2"
