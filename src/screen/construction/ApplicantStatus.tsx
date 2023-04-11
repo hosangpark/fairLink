@@ -26,6 +26,7 @@ export const ApplicantStatus = () => {
                 </View>
                 <View style={{ marginVertical: 5 }}>                
                     <UserInfoCard 
+                        index="1"
                         empName='힘찬중기'
                         jobType='1'
                         location='[경남]'
@@ -39,6 +40,7 @@ export const ApplicantStatus = () => {
                 </View>
                 <View style={{ marginVertical: 5 }}>                
                     <UserInfoCard 
+                        index="2"
                         empName='힘찬중기'
                         jobType='1'
                         location='[경남]'
