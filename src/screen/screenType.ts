@@ -6,3 +6,6 @@ export interface HomeIndexType {
 export interface MyPageIndexType {
     setTabIndex? : (tab:number) => void;
 }
+export interface BoardIndexType {
+    setTabIndex? : (tab:number) => void;
+}
