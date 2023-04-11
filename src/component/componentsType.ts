@@ -56,6 +56,20 @@ export interface UserInfoCard2Type {
     workType:number
 }
 
+export interface ProfileCardType {
+    jobType : string,
+    userProfileUrl : string,
+    userName:string,
+    score:number,
+    rating:number,
+    recEmpCount:number,
+    location:string,
+    age : string,
+    gender : string,
+    phone : string,
+    index : string,
+}
+
 export interface TextBoxType {
     boldText?: string,
     subText: string,

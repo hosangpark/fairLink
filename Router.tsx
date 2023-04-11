@@ -14,6 +14,7 @@ import { MyInfo } from './src/screen/mypage/MyInfo';
 import { ApplicantStatus } from './src/screen/construction/ApplicantStatus';
 import { FavoriteListIndex } from './src/screen/mypage/favorite/FavoriteListIndex';
 import { FavoriteAdd } from './src/screen/mypage/favorite/FavoriteAdd';
+import { CompanyProfile } from './src/screen/construction/CompanyProfile';
 import { DetailField } from './src/screen/Board/DetailField';
 import { DetailWork } from './src/screen/Board/DetailWork';
 
@@ -54,12 +55,12 @@ export const Router = () => {
 
 
                 {/** USER  */}
-                <Stack.Screen 
+                <Stack.Screen // 이용약관
                     name={'Agreements'}
                     component={Agreements}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen 
+                <Stack.Screen // 로그인
                     name={'SignIn'}
                     component={SignIn}
                     options={{headerShown:false}}
@@ -77,19 +78,22 @@ export const Router = () => {
                     component={DetailWork}
                     options={{headerShown:false}}
                 />
-
-                <Stack.Screen 
+                <Stack.Screen // 회원 구분
                     name={'MemberLine'}
                     component={MemberLine}
                     options={{headerShown:false}}
                 />
                 
-                <Stack.Screen 
+                <Stack.Screen // 지원자 현황
                     name={'ApplicantStatus'}
                     component={ApplicantStatus}
                     options={{headerShown:false}}
                 />
-
+                <Stack.Screen
+                    name={'CompanyProfile'}
+                    component={CompanyProfile}
+                    options={{headerShown:false}}
+                />
 
                 {/** mypage */}
                 <Stack.Screen  //마이페이지 ROOT

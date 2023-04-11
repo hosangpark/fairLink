@@ -9,6 +9,7 @@ export type RouterNavigatorParams = {
     OpenConstruction:undefined;
     MemberLine:undefined;
     ApplicantStatus:undefined;
+    CompanyProfile:undefined;
 
 
     /** mypage */
