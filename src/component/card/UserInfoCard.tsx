@@ -5,6 +5,7 @@ import { UserInfoCardType } from '../componentsType';
 
 
 export const UserInfoCard = ({
+    index = '0',
     jobType = '차주 겸 조종사',
     userProfileUrl = '',
     empName = '힘찬중기',
@@ -13,11 +14,12 @@ export const UserInfoCard = ({
     rating = 41,
     recEmpCount = 6,
     location = '[경남] 진주시, 사천시, 창원시',
+    isDelete = true,
 }:UserInfoCardType) => {
 
 
 
-    return(
+    return (
         <View style={{width:'100%',position:'relative',marginBottom:30}}>
                 <View style={[styles.cardJobArea,{borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>
                     <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
@@ -41,7 +43,7 @@ export const UserInfoCard = ({
                             </View>
                         </View>
                         <TouchableOpacity>
-                            <Image source={require('../../assets/img/ic_trash1.png')} style={{width:25,height:25}} />
+                            { isDelete ? <Image source={require('../../assets/img/ic_trash1.png')} style={{width:25,height:25}} /> : null }
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.cardInfoArea]}>
