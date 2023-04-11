@@ -66,7 +66,7 @@ export const Home = () => {
                     <Text>Home</Text>
                 </View>
 
-                <UserInfoCard 
+                {/* <UserInfoCard 
                     empName='힘찬중기'
                     jobType='1'
                     location='[경남]'
@@ -87,7 +87,7 @@ export const Home = () => {
                     userName='김경태'
                     userProfileUrl=''
                     index="3"
-                />
+                /> */}
 
                 <CustomSelectBox 
                     strOptionList={tempOptionList}
