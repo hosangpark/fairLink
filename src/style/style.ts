@@ -268,7 +268,7 @@ export const styles = StyleSheet.create({
     SubTitleText:{
         marginBottom:26,
     },
-    OrengeStart:{
+    OrengeStar:{
         fontSize:16,
         color:'#F58300',
         letterSpacing:7

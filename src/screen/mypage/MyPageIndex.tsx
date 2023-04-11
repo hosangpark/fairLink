@@ -25,9 +25,8 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     }
     /**TODO */
     const alertModalOff = () =>{ //modal 종료
-        // if(현장정보없으면){navigation.navigate('OpenConstruction')}
         navigation.navigate('OpenConstruction')
-        // setAlertModal(initialAlert)
+        setAlertModal(initialAlert)
     }
 
     React.useEffect(()=>{

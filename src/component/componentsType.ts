@@ -10,6 +10,11 @@ export interface CustomButtonType {
     label : string,
     action : ()=>void,
 }
+export interface CustomAccordionType {
+    title:string,
+    total:number,
+    action : ()=>void,
+}
 
 export interface ObjectArrayType {
     [key:string ] : string
