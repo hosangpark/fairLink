@@ -14,9 +14,14 @@ export const colors = { //색상 리스트;
     FONT_COLOR_BLACK2 : '#374748',
     FONT_COLOR_BLACK3 : '#191919',
     FONT_COLOR_GRAY : '#A4A4A4',
+    FONT_COLOR_RED : '#F51900',
 
     WHITE_COLOR : '#FFF',
     BLUE_COLOR : '#355AD9',
+    BLUE_COLOR2 : '#E6F7F8',
+    BLUE_COLOR3 : '#E3F5F6',
+    RED_COLOR : '#FFEAE8',
+    
     SKY_BLUE_COLOR : '#6ECEFF',
     DEPP_SKY_BLUE : '#19D2DB',
     MINT_COLOR : '#1BCBAF',
@@ -29,6 +34,9 @@ export const colors = { //색상 리스트;
     BORDER_GRAY_COLOR : '#E1E1E1',
     BORDER_GRAY_COLOR1 : '#EFEFEF',
     BORDER_BLUE_COLOR : '#DAF3F5',
+    BORDER_BLUE_COLOR2 : '#D5EFF1',
+    BORDER_BLUE_COLOR3 : '#A1D5D8',
+    BORDER_RED_COLOR : '#FCC8C1',
     
 }
 
@@ -176,6 +184,18 @@ export const styles = StyleSheet.create({
         borderColor:colors.BORDER_GRAY_COLOR,
         borderRadius:8,
     },
+    card2Wrapper : {
+        padding:20,
+        backgroundColor:colors.WHITE_COLOR,
+        borderColor:colors.BORDER_GRAY_COLOR,
+        borderRadius:8,
+    },
+    card2Location:{
+        flexDirection:'row',borderBottomWidth:1,borderBottomColor:colors.BORDER_GRAY_COLOR,marginBottom:12,paddingBottom:12
+    },
+    card2Profile:{
+        backgroundColor:colors.BLUE_COLOR2,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR2,paddingVertical:10,paddingHorizontal:15,borderRadius:8,width:110
+    },
     cardJobArea:{
         position:'absolute',
         top:-10,
@@ -268,7 +288,7 @@ export const styles = StyleSheet.create({
     SubTitleText:{
         marginBottom:26,
     },
-    OrengeStart:{
+    OrengeStar:{
         fontSize:16,
         color:'#F58300',
         letterSpacing:7
@@ -295,7 +315,17 @@ export const styles = StyleSheet.create({
         height: 46, 
         paddingHorizontal: 20, 
         borderRadius: 4
-    }
+    },
+    DetailFieldBox:{
+        flexDirection:'row',paddingVertical:10
+    },
+    DetailFieldTitle:{
+        fontSize:16,width:85,color:colors.FONT_COLOR_BLACK
+    },
+    DetailFieldText:{
+        fontSize:16,color:colors.FONT_COLOR_BLACK,flexShrink:1
+    },
+    
 });
 
 export const modalStyle = StyleSheet.create({

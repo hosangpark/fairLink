@@ -16,4 +16,8 @@ export type RouterNavigatorParams = {
     MyInfo:undefined;
     FavoriteList : undefined;
     FavoriteAdd : undefined;
+
+    /** board */
+    DetailField:undefined
+    DetailWork:undefined
 }

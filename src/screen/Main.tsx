@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import { RouterNavigatorParams } from '../../type/routerType';
 import { Home } from './testPage/Home';
 import { Video } from './testPage/Video';
-import { Board } from './testPage/Board';
+import { Board } from './Board/Board';
 import { Release } from './testPage/Release';
 import { MyPage } from './testPage/MyPage';
 import { HomeIndex } from './home/HomeIndex';
@@ -15,6 +15,7 @@ import { colors, fontStyle } from '../style/style';
 import { MyPageIndex } from './mypage/MyPageIndex';
 import { Agreements } from './signUp/Agreements';
 import { SignIn } from './SignIn';
+
 
 export const Main = () => {
 
@@ -115,8 +116,11 @@ export const Main = () => {
                 />
                 <Tab.Screen 
                     name="Board" 
-                    component={Board}
-                    
+                    children={()=>
+                        <Board 
+                            setTabIndex={setTabIndex}
+                        />
+                    }
                     listeners={{
                         tabPress : (e)=>{
                             setTabIndex(3);

@@ -24,13 +24,13 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 <View style={[styles.TitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>현장정보 기입</Text>
                     <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.FONT_COLOR_BLACK}]}>
-                        <Text style={styles.OrengeStart}>*</Text>
+                        <Text style={styles.OrengeStar}>*</Text>
                         필수항목
                         </Text>
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>현장명
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomInputTextBox
                         style={{}}
@@ -42,7 +42,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>현장소장명
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomInputTextBox
                         style={{}}
@@ -54,7 +54,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>담당자
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomInputTextBox
                         style={{}}
@@ -66,7 +66,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>담당자 연락처
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomInputTextBox
                         style={{}}
@@ -78,7 +78,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>담당자 이메일
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomInputTextBox
                         style={{}}
@@ -90,7 +90,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>공사기간
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomWaveBox
                         style={{}}
@@ -102,7 +102,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>현장 주소
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomSelectBox 
                         defaultText='선택하세요.'
@@ -117,7 +117,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>대금지급시기
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <View style={{flexDirection:'row'}}>
                         <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>{}}>
@@ -143,7 +143,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>대금지급산출기간
-                    <Text style={styles.OrengeStart}>*</Text>
+                    <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomWaveBox
                         style={{}}
