@@ -22,6 +22,10 @@ export type CustomSelectBoxType = {
     selOption? : string | ObjectArrayType;
     defaultText : string;
     style? : object;
+    buttonStyle: object;
+    buttonTextStyle: object;
+    rowStyle: object;
+    rowTextStyle: object;
 }
 
 
@@ -47,14 +51,14 @@ export interface TextBoxType {
 
 export interface CustomInputTextBoxType{
     style? : object,
-    imgfile:ImageSourcePropType,
+    imgfile:ImageSourcePropType | undefined,
     placeholder:string,
     button:string,
     action:()=>void
 }
 export interface CustomWaveBoxType{
     style? : object,
-    imgfile:ImageSourcePropType,
+    imgfile:ImageSourcePropType | undefined,
     placeholder:string,
     button:string,
     action:()=>void

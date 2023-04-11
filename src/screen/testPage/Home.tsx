@@ -5,7 +5,7 @@ import { AlertClearType } from '../../modal/modalType';
 import { AlertModal ,initialAlert} from '../../modal/AlertModal';
 import { LoadingModal } from '../../modal/LoadingModal';
 import { UserInfoCard } from '../../component/card/UserInfoCard';
-import { styles } from '../../style/style';
+import { selectBoxStyle, styles } from '../../style/style';
 import { CustomSelectBox } from '../../component/CustomSelectBox';
 import { SelectModal } from '../../modal/SelectModal';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
@@ -66,7 +66,7 @@ export const Home = () => {
                     <Text>Home</Text>
                 </View>
 
-                <UserInfoCard 
+                {/* <UserInfoCard 
                     empName='힘찬중기'
                     jobType='1'
                     location='[경남]'
@@ -87,13 +87,17 @@ export const Home = () => {
                     userName='김경태'
                     userProfileUrl=''
                     index="3"
-                />
+                /> */}
 
                 <CustomSelectBox 
                     strOptionList={tempOptionList}
                     selOption={strOption}
                     strSetOption={setStrOption}
                     defaultText='선택하세요.'
+                    buttonStyle={selectBoxStyle.btnStyle}
+                    buttonTextStyle={selectBoxStyle.btnTextStyle}
+                    rowStyle={selectBoxStyle.rowStyle}
+                    rowTextStyle={selectBoxStyle.rowTextStyle}
                 />
                 
 
