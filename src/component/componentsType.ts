@@ -12,7 +12,7 @@ export interface CustomButtonType {
 }
 export interface CustomAccordionType {
     title:string,
-    total:number,
+    data:object[],
     action : ()=>void,
 }
 
@@ -45,6 +45,15 @@ export interface UserInfoCardType {
     location:string,
     isDelete: boolean,
     index : string,
+}
+export interface UserInfoCard2Type {
+    jobType:string,
+    userName:string,
+    score:number,
+    location:string,
+    index : number,
+    complete:string
+    workType:number
 }
 
 export interface TextBoxType {

@@ -1,55 +1,61 @@
 import React from 'react';
 import { Text, TouchableOpacity, View ,Image } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
-import { UserInfoCardType } from '../componentsType';
+import { UserInfoCard2Type } from '../componentsType';
+import { CustomButton } from '../CustomButton';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouterNavigatorParams } from '../../../type/routerType';
 
+export const UserInfoCard2 = ({
+    jobType = '',
+    userName = '',
+    score = 0,
+    location = '',
+    index=0,
+    complete='',
+    workType=0,
+}:UserInfoCard2Type) => {
 
-export const UserInfoCard = ({
-    jobType = '차주 겸 조종사',
-    userProfileUrl = '',
-    empName = '힘찬중기',
-    userName = '정우성',
-    score = 5,
-    rating = 41,
-    recEmpCount = 6,
-    location = '[경남] 진주시, 사천시, 창원시',
-}:UserInfoCardType) => {
-
-
-
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     return(
-        <View style={{width:'100%',position:'relative',marginBottom:30}}>
-                <View style={[styles.cardJobArea,{borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>
-                    <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
+        <TouchableOpacity style={{margin:20}} key={index} onPress={()=>
+            {if(workType==0){
+                navigation.navigate('DetailField')
+            } else {navigation.navigate('DetailWork')}
+        }}
+        >
+            <View style={[styles.card2Wrapper]}>
+                <View style={[styles.card2Location]}>
+                    <Text style={[fontStyle.f_regular,{fontSize:16,marginRight:12,color:colors.FONT_COLOR_BLACK}]}>
+                        23.03.07
+                    </Text>
+                    <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK2}]}>
+                        {location}
+                    </Text>
                 </View>
-                <View style={[styles.cardWrapper]}>
-                    <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <View style={[styles.cardProfileSize]}>
-                                <Text>프로필 영역</Text>
-                            </View>
-                            <View style={{marginLeft:10,}}>
-                                <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.MAIN_COLOR}]}>{empName}</Text>
-                                <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>{userName} 님</Text>
-                                <View style={{flexDirection:'row',marginTop:5}}>
-                                    <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK}]}>{score.toFixed(1)}</Text>
-                                    <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK2,marginLeft:5}]}>평가수 {rating}</Text>
-                                </View>
-                                <TouchableOpacity style={[styles.cardReqEmpBtn]}>
-                                    <Text style={[fontStyle.f_semibold,{fontSize:15,color:colors.WHITE_COLOR}]}>추천기업 {recEmpCount}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <TouchableOpacity>
-                            <Image source={require('../../assets/img/ic_trash1.png')} style={{width:25,height:25}} />
-                        </TouchableOpacity>
+                <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:16}}>
+                    <View style={{flex:1,paddingRight:30}}>
+                        <Text style={[fontStyle.f_bold,{fontSize:18,color:colors.FONT_COLOR_BLACK,marginBottom:8,}]} numberOfLines={1}>길동고등학교 창호보수</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>창호 철거 및 교체</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>스카이 43m</Text>
                     </View>
-                    <View style={[styles.cardInfoArea]}>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>6W 굴착기</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>경력 15년+</Text>
+                    <View style={[styles.card2Profile]}>
+                        <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
+                            {jobType=='1'? '조종사':'사종조'}</Text>
+                        <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>{userName}</Text>
+                        <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {score}년+</Text>
                     </View>
-                    <Text style={[fontStyle.f_light,{fontSize:15,color:colors.FONT_COLOR_BLACK2,marginTop:10}]}>{location}</Text>
                 </View>
-        </View>
+                {complete&&
+                    <CustomButton 
+                        style={{}}
+                        labelStyle={{fontSize:16}}
+                        label={'작업일보 승인대기'}
+                        action={()=>{}}
+                    />
+                }
+            </View>
+        </TouchableOpacity>
     )
 }
