@@ -10,13 +10,14 @@ import { Agreements } from './src/screen/signUp/Agreements';
 import { SignIn } from './src/screen/SignIn';
 import { OpenConstruction } from './src/screen/mypage/OpenConstruction';
 import { MemberLine } from './src/screen/signUp/MemberLine';
-import { MyInfo } from './src/screen/mypage/MyInfo';
-import { ApplicantStatus } from './src/screen/construction/ApplicantStatus';
+import { MyInfo } from './src/screen/mypage/myInfo/MyInfo';
+import { ApplicantStatus } from './src/screen/Board/ApplicantStatus';
 import { FavoriteListIndex } from './src/screen/mypage/favorite/FavoriteListIndex';
 import { FavoriteAdd } from './src/screen/mypage/favorite/FavoriteAdd';
-import { CompanyProfile } from './src/screen/construction/CompanyProfile';
+import { CompanyProfile } from './src/screen/Board/CompanyProfile';
 import { DetailField } from './src/screen/Board/DetailField';
 import { DetailWork } from './src/screen/Board/DetailWork';
+import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -89,7 +90,7 @@ export const Router = () => {
                     component={ApplicantStatus}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen
+                <Stack.Screen // 지원자 현황 > (건설) 장비회사 프로필
                     name={'CompanyProfile'}
                     component={CompanyProfile}
                     options={{headerShown:false}}
@@ -106,11 +107,6 @@ export const Router = () => {
                     component={OpenConstruction}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen //나의 정보
-                    name={'MyInfo'}
-                    component={MyInfo}
-                    options={{headerShown:false}}
-                />
                 <Stack.Screen //나의 즐겨찾기
                     name={'FavoriteList'}
                     component={FavoriteListIndex}
@@ -121,7 +117,16 @@ export const Router = () => {
                     component={FavoriteAdd}
                     options={{headerShown:false}}
                 />
-
+                <Stack.Screen // (건설) 나의 정보
+                    name={'MyInfo'}
+                    component={MyInfo}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // (장비) 프로필 설정하기
+                    name={'SettingProfile'}
+                    component={SettingProfile}
+                    options={{headerShown:false}}
+                />
             </Stack.Navigator>
             <Toast config={toastConfig}/>
         </>

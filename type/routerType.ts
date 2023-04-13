@@ -10,12 +10,13 @@ export type RouterNavigatorParams = {
     MemberLine:undefined;
     ApplicantStatus:undefined;
     CompanyProfile:undefined;
-
-
+    
+    
     /** mypage */
     MyInfo:undefined;
     FavoriteList : undefined;
     FavoriteAdd : undefined;
+    SettingProfile:undefined;
 
     /** board */
     DetailField:undefined
