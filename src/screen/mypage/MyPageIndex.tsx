@@ -58,7 +58,8 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>즐겨찾기 장비 관리</Text>  
                     </TouchableOpacity>
                     {/* <TouchableOpacity onPress={() => navigation.navigate('MyInfo') }> */}
-                    <TouchableOpacity onPress={() => navigation.navigate('SettingProfile') }>
+                    {/* <TouchableOpacity onPress={() => navigation.navigate('SettingProfile') }> */}
+                    <TouchableOpacity onPress={() => navigation.navigate('FavoriteFilotIndex') }>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>

@@ -13,9 +13,10 @@ export type RouterNavigatorParams = {
     
     /** mypage */
     MyInfo:undefined;
-    FavoriteList : undefined;
-    FavoriteAdd : undefined;
+    FavoriteList:undefined;
+    FavoriteAdd:undefined;
     SettingProfile:undefined;
+    FavoriteFilotIndex:undefined;
 
     /** board */
     DetailField:undefined //현장세부내용

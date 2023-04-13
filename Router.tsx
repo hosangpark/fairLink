@@ -20,6 +20,7 @@ import { DetailWork } from './src/screen/Board/DetailWork';
 import { Volunteer } from './src/screen/Board/Volunteer';
 import { ElectronicContract } from './src/screen/Board/ElectronicContract';
 import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
+import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -128,6 +129,11 @@ export const Router = () => {
                 <Stack.Screen //나의 즐겨찾기 추가
                     name={'FavoriteAdd'}
                     component={FavoriteAdd}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // (장비) 나의 조종사 관리
+                    name={'FavoriteFilotIndex'}
+                    component={FavoriteFilotIndex}
                     options={{headerShown:false}}
                 />
                 <Stack.Screen // (건설) 나의 정보
