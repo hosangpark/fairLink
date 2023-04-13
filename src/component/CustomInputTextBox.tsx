@@ -17,7 +17,7 @@ export const CustomInputTextBox = ({
     return(
       <View style={[styles.TextInputBox,style]}>
         <TextInput 
-            style={{flexShrink:1,paddingHorizontal:10,flex:1}}
+            style={{flexShrink:1,paddingHorizontal:10,flex:1,}}
             value={text}
             onChangeText={e=>{setText(e)}}
             placeholder={placeholder}

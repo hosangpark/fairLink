@@ -64,6 +64,7 @@ export type SelectModalType = { //select box있는 modal type
     objOptList ? :ObjectArrayType[],
     defaultText ? :string,
     btnLabel : string,
+    style:object
 }
 
 interface ModalType { //default modal type

@@ -45,6 +45,7 @@ export interface UserInfoCardType {
     location:string,
     isDelete: boolean,
     index : string,
+    action:()=>void
 }
 export interface UserInfoCard2Type {
     jobType:string,

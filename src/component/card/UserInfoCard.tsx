@@ -15,12 +15,13 @@ export const UserInfoCard = ({
     recEmpCount = 6,
     location = '[경남] 진주시, 사천시, 창원시',
     isDelete = true,
+    action
 }:UserInfoCardType) => {
 
 
 
     return (
-        <View style={{width:'100%',position:'relative',marginBottom:30}}>
+        <TouchableOpacity style={{width:'100%',position:'relative',marginBottom:30}} onPress={()=>action()}>
                 <View style={[styles.cardJobArea,{borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>
                     <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
                 </View>
@@ -52,6 +53,6 @@ export const UserInfoCard = ({
                     </View>
                     <Text style={[fontStyle.f_light,{fontSize:15,color:colors.FONT_COLOR_BLACK2,marginTop:10}]}>{location}</Text>
                 </View>
-        </View>
+        </TouchableOpacity>
     )
 }

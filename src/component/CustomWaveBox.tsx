@@ -17,7 +17,7 @@ export const CustomWaveBox = ({
     return(
       <View style={{flexDirection:'row'}}>
           <CustomInputTextBox
-              style={{flex:1}}
+              style={[{flex:1},style]}
               placeholder={placeholder}
               imgfile={imgfile}
               button={button}
@@ -27,7 +27,7 @@ export const CustomWaveBox = ({
               <Text style={[fontStyle.f_semibold,{fontSize:18}]}>~</Text>
           </View>
           <CustomInputTextBox
-              style={{flex:1}}
+              style={[{flex:1},style]}
               placeholder={placeholder}
               imgfile={imgfile}
               button={button}

@@ -20,6 +20,7 @@ export const SelectModal = ({
     objSetOption,
     defaultText = '',
     btnLabel = '확인',
+    style,
 }:SelectModalType) =>{
     return(
         <Modal 
@@ -32,7 +33,7 @@ export const SelectModal = ({
             style={[{justifyContent:'center',alignItems:'center',flex:1,flexDirection : 'column', zIndex:999999999}]}
             onBackdropPress={hide}
         >
-            <View style={[modalStyle.loginIntroModal]}>
+            <View style={[modalStyle.loginIntroModal,style]}>
                 {date &&
                     <View style={{width:'100%'}}>
                         <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK2}]}>{date}</Text>

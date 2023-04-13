@@ -97,6 +97,7 @@ export const FavoriteListIndex = () => {
                                 userName={item.userName}
                                 userProfileUrl={item.userProfileUrl}
                                 isDelete={true}
+                                action={()=>{}}
                             />
                         )
                     }}

@@ -36,6 +36,7 @@ export const ApplicantStatus = () => {
                         userName='김경태'
                         userProfileUrl=''
                         isDelete={false}
+                        action={()=>{}}
                     />
                 </View>
                 <View style={{ marginVertical: 5 }}>                
@@ -50,6 +51,7 @@ export const ApplicantStatus = () => {
                         userName='김경태'
                         userProfileUrl=''
                         isDelete={false}
+                        action={()=>{}}
                     />
                 </View>
             </View>

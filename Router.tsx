@@ -16,6 +16,9 @@ import { FavoriteListIndex } from './src/screen/mypage/favorite/FavoriteListInde
 import { FavoriteAdd } from './src/screen/mypage/favorite/FavoriteAdd';
 import { DetailField } from './src/screen/Board/DetailField';
 import { DetailWork } from './src/screen/Board/DetailWork';
+import { Volunteer } from './src/screen/Board/Volunteer';
+import { CompanyProfile } from './src/screen/Board/CompanyProfile';
+import { ElectronicContract } from './src/screen/Board/ElectronicContract';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -75,6 +78,21 @@ export const Router = () => {
                 <Stack.Screen // 이력 및 현황 - 작업세부내용
                     name={'DetailWork'}
                     component={DetailWork}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // 이력 및 현황 - 지원자현황
+                    name={'Volunteer'}
+                    component={Volunteer}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // 이력 및 현황 - 지원자현황 - 장비회사 프로필
+                    name={'CompanyProfile'}
+                    component={CompanyProfile}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // 이력 및 현황 - 지원자현황 - 장비회사 프로필 - 전자계약
+                    name={'ElectronicContract'}
+                    component={ElectronicContract}
                     options={{headerShown:false}}
                 />
 

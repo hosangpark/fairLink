@@ -40,12 +40,12 @@ export const UserInfoCard2 = ({
                         <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>창호 철거 및 교체</Text>
                         <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>스카이 43m</Text>
                     </View>
-                    <View style={[styles.card2Profile]}>
+                    <TouchableOpacity style={[styles.card2Profile]} onPress={()=>navigation.navigate('Volunteer')}>
                         <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
                             {jobType=='1'? '조종사':'사종조'}</Text>
                         <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>{userName}</Text>
                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {score}년+</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 {complete&&
                     <CustomButton 
