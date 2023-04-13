@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { ScrollView, View, Text, TextInput, Image, TouchableOpacity } from "react-native";
-import { BackHeader } from "../../component/header/BackHeader";
-import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from "../../style/style";
-import { CustomSelectBox } from "../../component/CustomSelectBox";
-import { AlertClearType } from "../../modal/modalType";
-import { AlertModal, initialAlert } from "../../modal/AlertModal";
+import { BackHeader } from "../../../component/header/BackHeader";
+import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from "../../../style/style";
+import { CustomSelectBox } from "../../../component/CustomSelectBox";
+import { AlertClearType } from "../../../modal/modalType";
+import { AlertModal, initialAlert } from "../../../modal/AlertModal";
 
+// 마이페이지 -> 프로필 설정하기 -> 해당 페이지로 이동해야함
 export const SettingProfile = () => {
     const [isEditable, setIsEditable] = useState(false);
     const [strOption,setStrOption] = useState<string>('')

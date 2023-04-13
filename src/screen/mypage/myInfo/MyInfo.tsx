@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react"
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
-import { BackHeader } from "../../component/header/BackHeader"
-import { colors, fontStyle, styles } from '../../style/style';
+import { BackHeader } from "../../../component/header/BackHeader"
+import { colors, fontStyle, styles } from '../../../style/style';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RouterNavigatorParams } from "../../../type/routerType";
-import { CustomInputTextBox } from "../../component/CustomInputTextBox";
+import { RouterNavigatorParams } from "../../../../type/routerType";
+import { CustomInputTextBox } from "../../../component/CustomInputTextBox";
 
 export const MyInfo = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();

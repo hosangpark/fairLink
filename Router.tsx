@@ -10,14 +10,14 @@ import { Agreements } from './src/screen/signUp/Agreements';
 import { SignIn } from './src/screen/SignIn';
 import { OpenConstruction } from './src/screen/mypage/OpenConstruction';
 import { MemberLine } from './src/screen/signUp/MemberLine';
-import { MyInfo } from './src/screen/mypage/MyInfo';
-import { ApplicantStatus } from './src/screen/constructionCompany/ApplicantStatus';
+import { MyInfo } from './src/screen/mypage/myInfo/MyInfo';
+import { ApplicantStatus } from './src/screen/Board/ApplicantStatus';
 import { FavoriteListIndex } from './src/screen/mypage/favorite/FavoriteListIndex';
 import { FavoriteAdd } from './src/screen/mypage/favorite/FavoriteAdd';
-import { CompanyProfile } from './src/screen/constructionCompany/CompanyProfile';
+import { CompanyProfile } from './src/screen/Board/CompanyProfile';
 import { DetailField } from './src/screen/Board/DetailField';
 import { DetailWork } from './src/screen/Board/DetailWork';
-import { SettingProfile } from './src/screen/equipmentCompany/SettingProfile';
+import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -117,12 +117,12 @@ export const Router = () => {
                     component={FavoriteAdd}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen // 나의 정보 > (건설) 나의 정보
+                <Stack.Screen // (건설) 나의 정보
                     name={'MyInfo'}
                     component={MyInfo}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen // 나의 정보 > (장비) 프로필 설정하기
+                <Stack.Screen // (장비) 프로필 설정하기
                     name={'SettingProfile'}
                     component={SettingProfile}
                     options={{headerShown:false}}
