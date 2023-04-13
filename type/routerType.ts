@@ -9,12 +9,13 @@ export type RouterNavigatorParams = {
     OpenConstruction:undefined;
     MemberLine:undefined;
     ApplicantStatus:undefined;
-
-
+    
+    
     /** mypage */
     MyInfo:undefined;
     FavoriteList : undefined;
     FavoriteAdd : undefined;
+    SettingProfile:undefined;
 
     /** board */
     DetailField:undefined //현장세부내용

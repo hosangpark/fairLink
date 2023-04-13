@@ -14,6 +14,7 @@ export interface CustomAccordionType {
     title:string,
     data:object[],
     action : ()=>void,
+    Accordionkey:number
 }
 
 export interface ObjectArrayType {
@@ -52,9 +53,23 @@ export interface UserInfoCard2Type {
     userName:string,
     score:number,
     location:string,
-    index : number,
+    key : number,
     complete:string
     workType:number
+}
+
+export interface ProfileCardType {
+    jobType : string,
+    userProfileUrl : string,
+    userName:string,
+    score:number,
+    rating:number,
+    recEmpCount:number,
+    location:string,
+    age : string,
+    gender : string,
+    phone : string,
+    index : string,
 }
 
 export interface TextBoxType {

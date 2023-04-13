@@ -10,15 +10,16 @@ import { Agreements } from './src/screen/signUp/Agreements';
 import { SignIn } from './src/screen/SignIn';
 import { OpenConstruction } from './src/screen/mypage/OpenConstruction';
 import { MemberLine } from './src/screen/signUp/MemberLine';
-import { MyInfo } from './src/screen/mypage/MyInfo';
-import { ApplicantStatus } from './src/screen/construction/ApplicantStatus';
+import { MyInfo } from './src/screen/mypage/myInfo/MyInfo';
+import { ApplicantStatus } from './src/screen/Board/ApplicantStatus';
 import { FavoriteListIndex } from './src/screen/mypage/favorite/FavoriteListIndex';
 import { FavoriteAdd } from './src/screen/mypage/favorite/FavoriteAdd';
+import { CompanyProfile } from './src/screen/Board/CompanyProfile';
 import { DetailField } from './src/screen/Board/DetailField';
 import { DetailWork } from './src/screen/Board/DetailWork';
 import { Volunteer } from './src/screen/Board/Volunteer';
-import { CompanyProfile } from './src/screen/Board/CompanyProfile';
 import { ElectronicContract } from './src/screen/Board/ElectronicContract';
+import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -57,12 +58,12 @@ export const Router = () => {
 
 
                 {/** USER  */}
-                <Stack.Screen 
+                <Stack.Screen // 이용약관
                     name={'Agreements'}
                     component={Agreements}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen 
+                <Stack.Screen // 로그인
                     name={'SignIn'}
                     component={SignIn}
                     options={{headerShown:false}}
@@ -96,18 +97,17 @@ export const Router = () => {
                     options={{headerShown:false}}
                 />
 
-                <Stack.Screen 
+                <Stack.Screen // 회원 구분
                     name={'MemberLine'}
                     component={MemberLine}
                     options={{headerShown:false}}
                 />
                 
-                <Stack.Screen 
+                <Stack.Screen // 지원자 현황
                     name={'ApplicantStatus'}
                     component={ApplicantStatus}
                     options={{headerShown:false}}
                 />
-
 
                 {/** mypage */}
                 <Stack.Screen  //마이페이지 ROOT
@@ -120,11 +120,6 @@ export const Router = () => {
                     component={OpenConstruction}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen //나의 정보
-                    name={'MyInfo'}
-                    component={MyInfo}
-                    options={{headerShown:false}}
-                />
                 <Stack.Screen //나의 즐겨찾기
                     name={'FavoriteList'}
                     component={FavoriteListIndex}
@@ -135,7 +130,16 @@ export const Router = () => {
                     component={FavoriteAdd}
                     options={{headerShown:false}}
                 />
-
+                <Stack.Screen // (건설) 나의 정보
+                    name={'MyInfo'}
+                    component={MyInfo}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // (장비) 프로필 설정하기
+                    name={'SettingProfile'}
+                    component={SettingProfile}
+                    options={{headerShown:false}}
+                />
             </Stack.Navigator>
             <Toast config={toastConfig}/>
         </>

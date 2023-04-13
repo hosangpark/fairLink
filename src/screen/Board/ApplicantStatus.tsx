@@ -3,8 +3,13 @@ import { ScrollView, View, Text } from "react-native";
 import { BackHeader } from "../../component/header/BackHeader";
 import { colors, fontStyle } from "../../style/style";
 import { UserInfoCard } from "../../component/card/UserInfoCard";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouterNavigatorParams } from "../../../type/routerType";
 
 export const ApplicantStatus = () => {
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     return (
         <ScrollView>

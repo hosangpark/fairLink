@@ -25,7 +25,6 @@ export const colors = { //색상 리스트;
     SKY_BLUE_COLOR : '#6ECEFF',
     DEPP_SKY_BLUE : '#19D2DB',
     MINT_COLOR : '#1BCBAF',
-    YELLOW_COLOR : '#F58300',
     ORANGE_COLOR : '#F58300',
     GRAY_COLOR : '#A4A4A4',
     LIGHT_BLUE_COLOR : '#4EB0E9',
@@ -33,6 +32,8 @@ export const colors = { //색상 리스트;
     
     BORDER_GRAY_COLOR : '#E1E1E1',
     BORDER_GRAY_COLOR1 : '#EFEFEF',
+    BORDER_GRAY_COLOR2 : '#D2D2D2',
+    BORDER_GRAY_COLOR3 : '#ACACAC',
     BORDER_BLUE_COLOR : '#DAF3F5',
     BORDER_BLUE_COLOR2 : '#D5EFF1',
     BORDER_BLUE_COLOR3 : '#A1D5D8',
@@ -211,7 +212,7 @@ export const styles = StyleSheet.create({
         width:90,
         height:90,
         alignItems:'center',
-        justifiContent:'center',
+        justifyContent:'center',
         backgroundColor:'black',
     },
     cardReqEmpBtn : {
@@ -325,7 +326,18 @@ export const styles = StyleSheet.create({
     DetailFieldText:{
         fontSize:16,color:colors.FONT_COLOR_BLACK,flexShrink:1
     },
-    
+    // docImage: {
+        
+    // }
+    docImage: {
+        width: 92, 
+        height: 92, 
+        backgroundColor: colors.BACKGROUND_COLOR_GRAY1, 
+        borderRadius: 4, 
+        
+        alignItems: 'center', 
+        justifyContent: 'center'
+    }
 });
 
 export const modalStyle = StyleSheet.create({

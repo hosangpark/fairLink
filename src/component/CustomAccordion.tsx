@@ -11,12 +11,13 @@ export const CustomAccordion = ({
     title,
     data,
     action,
+    Accordionkey
 }:CustomAccordionType) => {
   const [open,setOpen] = useState(false)
   
 
     return(
-      <View style={{}}>
+      <View style={{}} key={Accordionkey}>
         <TouchableOpacity 
             style={{flexDirection:'row',justifyContent:'space-between',height:60,backgroundColor:colors.WHITE_COLOR,alignItems:'center',paddingHorizontal:20}}
             onPress={()=>{
@@ -36,7 +37,7 @@ export const CustomAccordion = ({
           {data.map((item:any,index)=>{
             return(
               <UserInfoCard2
-              index={item.userName+index}
+              key={index}
               jobType={item.jobType}
               location={item.location}
               score={item.score}

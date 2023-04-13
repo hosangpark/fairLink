@@ -21,9 +21,9 @@ export const UserInfoCard = ({
 
 
     return (
-        <TouchableOpacity style={{width:'100%',position:'relative',marginBottom:30}} onPress={()=>action()}>
-                <View style={[styles.cardJobArea,{borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>
-                    <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
+        <TouchableOpacity style={{width:'100%',position:'relative',marginBottom:30}} onPress={action}>
+                <View style={[styles.cardJobArea,{borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
+                    <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
                 </View>
                 <View style={[styles.cardWrapper]}>
                     <View style={{flexDirection:'row',justifyContent:'space-between'}}>

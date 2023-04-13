@@ -117,21 +117,25 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                 title={'배차 모집중'}
                 data={items}
                 action={()=>{}}
+                Accordionkey={1}
             />
             <CustomAccordion
                 title={'계약 진행중'}
                 data={items}
                 action={()=>{}}
+                Accordionkey={2}
             />
             <CustomAccordion
                 title={'작업중'}
                 data={items}
                 action={()=>{}}
+                Accordionkey={3}
             />
             <CustomAccordion
                 title={'작업완료'}
                 data={items}
                 action={()=>{}}
+                Accordionkey={4}
             />
             
         </ScrollView>
