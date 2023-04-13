@@ -56,8 +56,8 @@ export const ProfileInfoCard = ({
                             <View style={{ marginBottom: 7}}>
                                 <Text style={[fontStyle.f_regular,{fontSize:16, color:colors.FONT_COLOR_BLACK}]}>6W 굴착기, 2021년식</Text>
                             </View>
-                            <View style={{ backgroundColor:colors.WHITE_COLOR, borderWidth:1, borderRadius:16, paddingHorizontal:10, paddingVertical:2, borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR }}>
-                                <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.YELLOW_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
+                            <View style={{ backgroundColor:colors.WHITE_COLOR, borderWidth:1, borderRadius:16, paddingHorizontal:10, paddingVertical:2, borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR }}>
+                                <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
                             </View>
                         </View>
                     </View>
