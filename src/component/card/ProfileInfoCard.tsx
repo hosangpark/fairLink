@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, TouchableOpacity, View ,Image } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
 import { ProfileCardType } from '../componentsType';
 import { StarRating } from '../StarRating';
+import { AlertClearType } from '../../modal/modalType';
+import { AlertModal, initialAlert } from '../../modal/AlertModal';
 
 
 export const ProfileInfoCard = ({
@@ -18,6 +20,21 @@ export const ProfileInfoCard = ({
     gender = '남',
     phone = '010-1123-1111'
 }:ProfileCardType) => {
+
+    const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
+
+    const alertModalOn = ( msg : string, type? : string) => {
+        setAlertModal({
+            alert: true,
+            strongMsg: '',
+            msg: "'조종사 전화번호'로 전화연결하시겠습니까?",
+            type: 'confirm',
+        })
+    }
+
+    const alertModalOff = () => {
+        setAlertModal(initialAlert)
+    }
 
     return (
         <>
@@ -46,12 +63,19 @@ export const ProfileInfoCard = ({
                     </View>
                 </View>
                 <View style={{ marginTop: 20, }}>
-                    <TouchableOpacity style={[styles.whiteButtonStyle]}>
+                    <TouchableOpacity style={[styles.whiteButtonStyle]} onPress={() => alertModalOn('test')}>
                         <View style={{ flexDirection: 'row' , alignItems: 'center'}}>
                             <Image style={{ width: 21, height: 21 }} source={ require('../../assets/img/ic_phone.png') }/>
                             <Text style={[fontStyle.f_medium, {fontSize:18, color:colors.MAIN_COLOR, paddingLeft: 6}]}>{phone}</Text>
                         </View>
                     </TouchableOpacity>
+                    <AlertModal 
+                        show={alertModal.alert}
+                        msg={alertModal.msg}
+                        // action={} // 전화번호 연결
+                        hide={alertModalOff}
+                        type={alertModal.type}
+                    />
                 </View>
             </View>
         </View>
@@ -69,9 +93,9 @@ export const ProfileInfoCard = ({
         </View>
     </View>
     <View style={{ margin: 20, position:'relative',}}>
-        <TouchableOpacity style={[styles.buttonStyle]}>
+        <View style={[styles.buttonStyle]}>
             <Text style={[fontStyle.f_medium, {fontSize:16,color:colors.WHITE_COLOR,}]}>총 <Text style={[fontStyle.f_bold, {fontSize: 18, }]}>{recEmpCount}</Text> 업체가 추천을 해주었어요!</Text>
-        </TouchableOpacity>
+        </View>
     </View>
     </>
     )

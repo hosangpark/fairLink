@@ -33,13 +33,6 @@ export const MyInfo = () => {
                             value={name}
                             onChange={(e) => setName(e.nativeEvent.text)}
                         />
-                        {/* <CustomInputTextBox
-                        style={{backgroundColor: colors.BACKGROUND_COLOR_GRAY1}}
-                        // placeholder={''}
-                        // imgfile={{}}
-                        // button={''}
-                        action={()=>{}}
-                        /> */}
                     </View>
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>직책</Text>
