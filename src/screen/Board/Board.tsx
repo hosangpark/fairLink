@@ -46,8 +46,9 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
     },[])
 
     return(
+        <View style={{flex:1,}}>
+        <BackHeader title="배차이력 및 현황" />
          <ScrollView style={{flex:1}}>
-            <BackHeader title="배차이력 및 현황" />
             <View style={{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,padding:20}}>
                 <View style={{flexDirection:'row'}}>
                 <View style={{flex:1,marginRight:10,marginBottom:20}}>
@@ -139,5 +140,6 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
             />
             
         </ScrollView>
+    </View>
     )
 }

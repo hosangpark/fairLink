@@ -104,9 +104,13 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main3.png')} />
 							</View>
 						</TouchableOpacity>
-						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() => navigation.navigate('MyPage') }>
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text>
+						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() => 
+							// navigation.navigate('MyPage') }>
+							navigation.navigate('Board') }>
+							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작업일보</Text>
+							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작성</Text>
+							{/* <Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
+							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text> */}
 							<View style={{alignItems:'flex-end'}}>
 								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main4.png')} />
 							</View>
