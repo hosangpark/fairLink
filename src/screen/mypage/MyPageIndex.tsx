@@ -60,7 +60,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     {/* <TouchableOpacity onPress={() => navigation.navigate('MyInfo') }> */}
                     {/* <TouchableOpacity onPress={() => navigation.navigate('SettingProfile') }> */}
                     {/* <TouchableOpacity onPress={() => navigation.navigate('FavoriteFilotIndex') }> */}
-                    <TouchableOpacity onPress={() => navigation.navigate('CompanyProfile') }>
+                    <TouchableOpacity onPress={() => navigation.navigate('Matching') }>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>

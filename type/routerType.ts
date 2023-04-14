@@ -24,4 +24,5 @@ export type RouterNavigatorParams = {
     Volunteer:undefined //지원자현황
     CompanyProfile:undefined //장비회사프로필
     ElectronicContract:undefined //전자계약
+    Matching:undefined
 }

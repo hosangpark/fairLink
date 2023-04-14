@@ -21,6 +21,7 @@ import { Volunteer } from './src/screen/Board/Volunteer';
 import { ElectronicContract } from './src/screen/Board/ElectronicContract';
 import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';
+import { Matching } from './src/screen/Board/Matching';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -77,6 +78,11 @@ export const Router = () => {
                     component={DetailField}
                     options={{headerShown:false}}
                 />
+                <Stack.Screen // 현장지원하기 - 현장세부내용 - 장비 및 조종사 매칭
+                    name={'Matching'}
+                    component={Matching}
+                    options={{headerShown:false}}
+                />
                 <Stack.Screen // 이력 및 현황 - 작업세부내용
                     name={'DetailWork'}
                     component={DetailWork}
@@ -109,7 +115,7 @@ export const Router = () => {
                     component={ApplicantStatus}
                     options={{headerShown:false}}
                 />
-
+                
                 {/** mypage */}
                 <Stack.Screen  //마이페이지 ROOT
                     name={'MyPage'}
