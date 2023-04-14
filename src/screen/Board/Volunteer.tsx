@@ -12,8 +12,9 @@ import { RouterNavigatorParams } from '../../../type/routerType';
 export const Volunteer = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     return(
+        <View style={{flex:1}}>
+        <BackHeader title="지원자 현황" />
         <ScrollView style={{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}>
-            <BackHeader title="지원자 현황" />
             <View style={{backgroundColor:colors.MAIN_COLOR,padding:20}}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.WHITE_COLOR,marginBottom:10}]}>본사 사옥 신축공사</Text>
                 <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3}]}>요구장비</Text>
@@ -64,6 +65,7 @@ export const Volunteer = () => {
             </View>
             
         </ScrollView>
+        </View>
     )
 }
 

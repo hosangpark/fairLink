@@ -62,7 +62,7 @@ export const CompanyProfile = () => {
             alert: true,
             strongMsg: '',
             msg: '장비업체를 선정 하시겠습니까?',
-            type: 'confirm',
+            type:'confirm',
         })
     }
 
@@ -121,7 +121,7 @@ export const CompanyProfile = () => {
                     )}
                 />
                 {/* </View> */}
-                <TouchableOpacity onPress={() => alertModalOn('test')}>
+                <TouchableOpacity onPress={() => alertModalOn('','test')}>
                     <View style={[styles.buttonStyle, {}]}>
                         <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>장비회사 선정</Text>
                     </View>

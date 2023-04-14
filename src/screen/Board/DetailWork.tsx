@@ -40,8 +40,10 @@ export const DetailWork = () => {
 
     
     return(
+        <View style={{flex:1}}>
+        <BackHeader title="작업세부내용" />
          <ScrollView style={{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}>
-            <BackHeader title="작업세부내용" />
+            
             <View style={{padding:20,backgroundColor:colors.WHITE_COLOR,marginBottom:10}}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:24}]}>작업현황</Text>
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>작업개요</Text>
@@ -325,6 +327,7 @@ export const DetailWork = () => {
             </View>
             
         </ScrollView>
+    </View>
     )
 }
 

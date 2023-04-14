@@ -5,7 +5,6 @@ import { colors, fontStyle, styles } from '../../../style/style';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
-import { CustomInputTextBox } from "../../../component/CustomInputTextBox";
 
 export const MyInfo = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();

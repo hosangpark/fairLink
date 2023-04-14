@@ -10,8 +10,9 @@ export const DetailField = () => {
 
     
     return(
+        <View style={{flex:1,}}>
+        <BackHeader title="현장세부내용" />
         <ScrollView style={{flex:1,backgroundColor:colors.WHITE_COLOR}}>
-            <BackHeader title="현장세부내용" />
             <View style={{backgroundColor:colors.MAIN_COLOR,padding:20}}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.WHITE_COLOR,marginBottom:3}]}>본사 사옥 신축공사</Text>
                 <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:8}]}>GS건설</Text>
@@ -82,5 +83,6 @@ export const DetailField = () => {
             </View>
             
         </ScrollView>
+    </View>
     )
 }
