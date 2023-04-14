@@ -45,6 +45,7 @@ export interface UserInfoCardType {
     recEmpCount:number,
     location:string,
     isDelete: boolean,
+    isFavorite?:string,
     index : string,
     action:()=>void
 }

@@ -10,11 +10,14 @@ export const MyInfo = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [isEditable, setIsEditable] = useState(false);
     const [name, setName] = useState('')
+    const [text,setText] = useState<string>('')
+    const [bgColor, setBgColor] = useState(colors.BACKGROUND_COLOR_GRAY1)
 
     const scrollViewRef = useRef<ScrollView>(null);
 
     const handleButtonClick = () => {
         setIsEditable(true)
+        setBgColor(colors.WHITE_COLOR)
         scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true});
     };
 
@@ -27,19 +30,19 @@ export const MyInfo = () => {
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>이름</Text>
                         <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
-                            value={name}
-                            onChange={(e) => setName(e.nativeEvent.text)}
+                            value={text}
+                            onChange={() => setText(text)}
                         />
                     </View>
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>직책</Text>
                         <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
-                            // value={''}
-                            onChange={(e) => console.log(e.nativeEvent.text)}
+                            value={text}
+                            onChange={() => setText(text)}
                         />
                     </View>
                 </View>
@@ -50,28 +53,28 @@ export const MyInfo = () => {
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>회사명</Text>
                         <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
-                            // value={''}
-                            onChange={(e) => console.log(e.nativeEvent.text)}
+                            value={text}
+                            onChange={() => setText(text)}
                         />
                     </View>
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>대표자</Text>
                         <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
-                            // value={''}
-                            onChange={(e) => console.log(e.nativeEvent.text)}
+                            value={text}
+                            onChange={() => setText(text)}
                         />
                     </View>
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>사업자번호</Text>
                         <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
-                            // value={''}
-                            onChange={(e) => console.log(e.nativeEvent.text)}
+                            value={text}
+                            onChange={() => setText(text)}
                         />
                     </View>
                 </View>
@@ -82,19 +85,19 @@ export const MyInfo = () => {
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>핸드폰 번호</Text>
                         <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
-                            // value={''}
-                            onChange={(e) => console.log(e.nativeEvent.text)}
+                            value={text}
+                            onChange={() => setText(text)}
                         />
                     </View>
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>이메일</Text>
                         <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular ]}
+                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
-                            // value={''}
-                            onChange={(e) => console.log(e.nativeEvent.text)}
+                            value={text}
+                            onChange={() => setText(text)}
                         />
                     </View>
                 </View>
