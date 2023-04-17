@@ -301,6 +301,14 @@ export const styles = StyleSheet.create({
         borderRadius:4,
         justifyContent:'space-between',
     },
+    TextInputFalseBox:{
+        flexDirection:'row',
+        borderWidth:1,
+        borderColor:colors.BORDER_GRAY_COLOR,
+        borderRadius:4,
+        justifyContent:'space-between',
+        backgroundColor:colors.BACKGROUND_COLOR_GRAY1
+        },
     textLabel: {
         color: colors.FONT_COLOR_BLACK,
         fontSize: 16,

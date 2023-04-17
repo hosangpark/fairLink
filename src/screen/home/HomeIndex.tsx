@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {ScrollView, TouchableOpacity, View,Image} from 'react-native';
 import {Text} from 'react-native';
 import { styles, fontStyle, colors, swiperStyles } from '../../style/style';
@@ -12,6 +12,7 @@ import {Dimensions} from 'react-native';
 import { HomeIndexType } from '../screenType';
 import { LoginIntroModal } from '../../modal/LoginIntroModal';
 import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
+import { CustomButton } from '../../component/CustomButton';
 
 type tempItem = {
 	type : number, //리스트타입
@@ -19,7 +20,7 @@ type tempItem = {
 }
 
 export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
-
+	const [userType,setUserType] = useState('1')
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
@@ -84,7 +85,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main1.png')} />
 							</View>
 						</TouchableOpacity>
-						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.SKY_BLUE_COLOR}]} onPress={() => navigation.navigate('Board') }>
+						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.SKY_BLUE_COLOR}]} onPress={() => {if(setTabIndex)setTabIndex(3),navigation.navigate('Board',{type:'default'})} }>
 							<View>
 								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>배차이력 및</Text>
 								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>현황</Text>
@@ -104,17 +105,29 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main3.png')} />
 							</View>
 						</TouchableOpacity>
+					{userType == '1'? 
 						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() => 
 							// navigation.navigate('MyPage') }>
-							navigation.navigate('Board') }>
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작업일보</Text>
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작성</Text>
-							{/* <Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text> */}
+							{if(setTabIndex)setTabIndex(3),navigation.navigate('Board',{type:'workreport'}) }}>
+							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
+							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text>
 							<View style={{alignItems:'flex-end'}}>
 								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main4.png')} />
 							</View>
 						</TouchableOpacity>
+						:
+						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() => 
+						// navigation.navigate('MyPage') }>
+						{if(setTabIndex)setTabIndex(3),navigation.navigate('Board',{type:'workreport'}) }}>
+						<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작업일보</Text>
+						<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작성</Text>
+						{/* <Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
+						<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text> */}
+						<View style={{alignItems:'flex-end'}}>
+							<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main4.png')} />
+						</View>
+					</TouchableOpacity>
+					}
 					</View>
 				</View>
 				<View style={[{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY2,padding:20}]}>
@@ -166,6 +179,19 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 					</Swiper>
 				</View>
 			</ScrollView>
+			{/* <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+			<CustomButton
+					action={()=>{setUserType('1')}}
+					label={'건설회사'}
+					style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
+					labelStyle={styles.whiteButtonLabelStyle}
+			/>
+			<CustomButton
+					action={()=>{setUserType('2')}}
+					label={'조종사'}
+					style={{flex:1}}
+			/>
+			</View> */}
 		</View>
 	);
 };

@@ -8,4 +8,5 @@ export interface MyPageIndexType {
 }
 export interface BoardIndexType {
     setTabIndex? : (tab:number) => void;
+    type : string
 }

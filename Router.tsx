@@ -21,6 +21,7 @@ import { Volunteer } from './src/screen/Board/Volunteer';
 import { ElectronicContract } from './src/screen/Board/ElectronicContract';
 import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';
+import { WorkReport } from './src/screen/Board/WorkReport';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -95,6 +96,11 @@ export const Router = () => {
                 <Stack.Screen // 이력 및 현황 - 지원자현황 - 장비회사 프로필 - 전자계약
                     name={'ElectronicContract'}
                     component={ElectronicContract}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // 이력 및 현황 - 작업중 - 작업일보
+                    name={'WorkReport'}
+                    component={WorkReport}
                     options={{headerShown:false}}
                 />
 

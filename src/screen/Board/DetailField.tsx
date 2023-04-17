@@ -8,7 +8,7 @@ import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../.
 
 export const DetailField = () => {
 
-    
+    useEffect(()=>{console.log('route')},[])
     return(
         <View style={{flex:1,}}>
         <BackHeader title="현장세부내용" />

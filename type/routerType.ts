@@ -1,7 +1,9 @@
 export type RouterNavigatorParams = {
     Main:undefined;
     Video:undefined;
-    Board:undefined;
+    Board:{
+        type:string
+    };
     Release:undefined;
     MyPage:undefined;
     Agreements:undefined;
@@ -24,4 +26,5 @@ export type RouterNavigatorParams = {
     Volunteer:undefined //지원자현황
     CompanyProfile:undefined //장비회사프로필
     ElectronicContract:undefined //전자계약
+    WorkReport:undefined //작업일보작성
 }
