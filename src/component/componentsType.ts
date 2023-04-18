@@ -63,8 +63,10 @@ export interface UserInfoCard2Type {
     userName:string,
     score:number,
     location:string,
-    complete:string
+    complete:boolean
     workType:number
+    userType:string
+    total:number
 }
 
 export interface ProfileCardType {

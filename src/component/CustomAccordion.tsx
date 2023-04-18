@@ -36,13 +36,15 @@ export const CustomAccordion = ({
           {data.map((item:any,index)=>{
             return(
               <UserInfoCard2
-              key={index}
-              jobType={item.jobType}
-              location={item.location}
-              score={item.score}
-              userName={item.userName}
-              workType={item.workType}
-              complete={item.complete}
+                key={index}
+                jobType={item.jobType}
+                location={item.location}
+                score={item.score}
+                userName={item.userName}
+                workType={item.workType}
+                complete={item.complete}
+                userType={item.userType}
+                total={item.total}
               />
             )
           })}

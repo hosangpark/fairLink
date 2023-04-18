@@ -9,8 +9,11 @@ import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
 
 export const Board = ({route}:any) => {
+    const [userType,setUserType] = useState('2')
     const [strOption,setStrOption] = useState<string>('')
-    const accordionList = ['배차 모집중','계약 진행중','작업중','작업완료']
+    const accordionList = userType =='1'?
+    ['배차 모집중','계약 진행중','작업중','작업완료']:
+    ['조종사 모집중','현장지원 완료','계약진행중','작업중/작업예정','작업완료']
 
     const [items,setItems] = useState([
     {
@@ -21,14 +24,15 @@ export const Board = ({route}:any) => {
       recEmpCount:64,
       userName:'홍길동',
       score:5,
-      complete:'완료',
+      complete:true,
       userProfileUrl:'',
       workType:0,
+      userType:'1'
     },
     {
       empName:'힘찬중기',
       jobType:'1',
-      location:'[경남]',
+      location:'경남',
       rating:23,
       score:5,
       recEmpCount:64,
@@ -36,6 +40,35 @@ export const Board = ({route}:any) => {
       complete:'',
       userProfileUrl:'',
       workType:1,
+      userType:'1'
+    },
+    {
+      empName:'SKT T1',
+      jobType:'2',
+      location:'서울',
+      rating:2900,
+      score:5,
+      recEmpCount:64,
+      userName:'이상혁',
+      complete:'',
+      userProfileUrl:'',
+      workType:1,
+      userType:'3',
+      total:8
+    },
+    {
+      empName:'SKT T1',
+      jobType:'2',
+      location:'서울',
+      rating:2900,
+      score:5,
+      recEmpCount:64,
+      userName:'이상혁',
+      complete:'',
+      userProfileUrl:'',
+      workType:1,
+      userType:'2',
+      total:8
     },
   ])
 
@@ -88,7 +121,9 @@ export const Board = ({route}:any) => {
                     </Text>
                     <CustomSelectBox 
                         defaultText='전체'
-                        strOptionList={['전체','배차 모집중','계약 진행중','작업중','작업완료']}
+                        strOptionList={userType =='1'?
+                        ['전체','배차 모집중','계약 진행중','작업중','작업완료']:
+                        ['전체','조종사 모집중','현장지원 완료','계약진행중','작업중/작업예정','작업완료']}
                         selOption={strOption}
                         strSetOption={setStrOption}
                         buttonStyle={selectBoxStyle.btnStyle}
