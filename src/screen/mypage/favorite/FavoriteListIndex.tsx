@@ -63,7 +63,7 @@ export const FavoriteListIndex = ({route}:any) => {
         setAlertModal(initialAlert)
     }
 
-    useEffect(()=>{console.log(route)},[])
+    // useEffect(()=>{console.log(route)},[])
     
 
     const tempList = [

@@ -214,11 +214,12 @@ export const styles = StyleSheet.create({
         paddingVertical:2,
     },
     cardProfileSize:{
-        width:90,
-        height:90,
+        width:100,
+        height:100,
         alignItems:'center',
         justifyContent:'center',
         backgroundColor:'black',
+        borderRadius:50
     },
     cardReqEmpBtn : {
         backgroundColor:colors.MAIN_COLOR,

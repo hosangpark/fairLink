@@ -30,6 +30,8 @@ export type RouterNavigatorParams = {
     DetailWork:undefined //작업세부내용
     Volunteer:undefined //지원자현황
     CompanyProfile:undefined //장비회사프로필
+    PilotProfile:undefined //조종사프로필
     ElectronicContract:undefined //전자계약
     WorkReport:undefined //작업일보작성
+    Matching:undefined //
 }

@@ -12,11 +12,24 @@ export const UserInfoCard2 = ({
     userName = '',
     score = 0,
     location = '',
-    complete='',
+    complete=false,
     workType=0,
+    userType='',
+    total=0
 }:UserInfoCard2Type) => {
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+
+    const FlowEvent = () =>{
+        if(userType=='1'){
+            navigation.navigate('Volunteer')
+        } else if(userType=='3') {
+            navigation.navigate('PilotProfile')
+        } else {
+            navigation.navigate('Volunteer')
+        }
+    }
+    
     return(
         <TouchableOpacity style={{margin:20}} onPress={()=>
             {if(workType==0){
@@ -39,10 +52,12 @@ export const UserInfoCard2 = ({
                         <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>창호 철거 및 교체</Text>
                         <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>스카이 43m</Text>
                     </View>
-                    <TouchableOpacity style={[styles.card2Profile]} onPress={()=>navigation.navigate('Volunteer')}>
+                    <TouchableOpacity style={[styles.card2Profile]} onPress={FlowEvent}>
                         <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
-                            {jobType=='1'? '조종사':'사종조'}</Text>
-                        <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>{userName}</Text>
+                            {userType=='1'? '조종사':'지원자'}</Text>
+                        <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>
+                            {userType=='1'? userName:[total]+'명'}
+                        </Text>
                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {score}년+</Text>
                     </TouchableOpacity>
                 </View>
@@ -51,6 +66,14 @@ export const UserInfoCard2 = ({
                         style={{}}
                         labelStyle={{fontSize:16}}
                         label={'작업일보 승인대기'}
+                        action={()=>{navigation.navigate('WorkReport')}}
+                    />
+                }
+                {userType=='2' &&
+                    <CustomButton 
+                        style={{}}
+                        labelStyle={{fontSize:16}}
+                        label={'모집취소'}
                         action={()=>{navigation.navigate('WorkReport')}}
                     />
                 }

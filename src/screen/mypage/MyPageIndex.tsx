@@ -20,7 +20,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
         setAlertModal({
             alert:true,
             strongMsg:'',
-            msg:` 개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`,
+            msg:`개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`,
             type:type ? type : '' ,
         })
     }

@@ -168,15 +168,15 @@ export const WorkReport = () => {
                 </View>
                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                     <CustomButton
-                        action={()=>{console.log('반려')}}
-                        label={'반려'}
-                        style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
-                        labelStyle={styles.whiteButtonLabelStyle}
-                    />
-                    <CustomButton
                         action={()=>{console.log('승인'),navigation.goBack()}}
                         label={'승인'}
-                        style={{flex:1}}
+                        style={{flex:1,marginRight:10}}
+                    />
+                    <CustomButton
+                        action={()=>{console.log('반려')}}
+                        label={'반려'}
+                        style={{...styles.whiteButtonStyle,flex:1}}
+                        labelStyle={styles.whiteButtonLabelStyle}
                     />
                 </View>
             </View>

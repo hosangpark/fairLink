@@ -63,8 +63,10 @@ export interface UserInfoCard2Type {
     userName:string,
     score:number,
     location:string,
-    complete:string
+    complete:boolean
     workType:number
+    userType:string
+    total:number
 }
 
 export interface ProfileCardType {
@@ -104,6 +106,8 @@ export interface CustomWaveBoxType {
     placeholder2:string,
     button:string,
     action:()=>void
+    editable:boolean
+    placeholderTextColor:string
 }
 export interface PilotInfoCardType {
     index: string,

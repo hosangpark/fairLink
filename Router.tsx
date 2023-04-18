@@ -17,9 +17,11 @@ import { FavoriteAdd } from './src/screen/mypage/favorite/FavoriteAdd';
 import { EquimentsAdd } from './src/screen/mypage/favorite/EquimentsAdd';
 import { EquimentsDetail } from './src/screen/mypage/favorite/EquimentsDetail';
 import { CompanyProfile } from './src/screen/Board/CompanyProfile';
+import { PilotProfile } from './src/screen/Board/PilotProfile';
 import { DetailField } from './src/screen/Board/DetailField';
 import { DetailWork } from './src/screen/Board/DetailWork';
 import { Volunteer } from './src/screen/Board/Volunteer';
+import { WorkReport } from './src/screen/Board/WorkReport';
 import { ElectronicContract } from './src/screen/Board/ElectronicContract';
 import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';
@@ -99,6 +101,11 @@ export const Router = () => {
                 <Stack.Screen // 이력 및 현황 - 지원자현황 - 장비회사 프로필
                     name={'CompanyProfile'}
                     component={CompanyProfile}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // 이력 및 현황 - 지원자현황 - 조종사 프로필
+                    name={'PilotProfile'}
+                    component={PilotProfile}
                     options={{headerShown:false}}
                 />
                 <Stack.Screen // 이력 및 현황 - 지원자현황 - 장비회사 프로필 - 전자계약
