@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import {SafeAreaView,View,Text, Image} from 'react-native';
+import {SafeAreaView,View,Text, Image, BackHandler} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import { RouterNavigatorParams } from '../../type/routerType';
 import { Home } from './testPage/Home';
 import { Video } from './testPage/Video';
@@ -15,9 +15,13 @@ import { colors, fontStyle } from '../style/style';
 import { MyPageIndex } from './mypage/MyPageIndex';
 import { Agreements } from './signUp/Agreements';
 import { SignIn } from './SignIn';
+import cusToast from '../util/toast/CusToast';
 
 
 export const Main = () => {
+
+    const isFocused = useIsFocused();
+    const [exitApp , setExitApp] = React.useState(false);
 
     /**
      * 
@@ -35,21 +39,56 @@ export const Main = () => {
 
     const [tabIndex, setTabIndex] = useState(1);
 
-    function testNavi(path:keyof RouterNavigatorParams){ //이동해야할 path가 존재한다면 RouterNavigatorParams에 추가해주세요.
-        
-        navigation.navigate(path); //지정한 이름을가진 스택으로 이동
-        //navigation.push('Home'); 
-        //navigation.reset('Home'); 스택초기화후 이동
-        //navigation.goBack(); 뒤로가기
-        //navigation.popToTop() 최상위 스택으로 이동
-        
-        /* 
-
-        그외 navigation 옵션은  
-            https://reactnavigation.org/docs/navigation-prop/
-        참고
-        */
+    const backAction = () => {
+  
+        var timeout;
+        let tmp = 0;
+           if(tmp==0){
+           
+              if ((exitApp == undefined || !exitApp) && isFocused) {
+                 
+                 cusToast("한번 더 누르시면 종료됩니다");
+                 setExitApp(true);
+                 timeout = setTimeout(
+                       () => {
+                       setExitApp(false);
+                       },
+                       4000
+                 );
+              } else {
+                // appTimeSave();
+                clearTimeout(timeout);
+                BackHandler.exitApp();  // 앱 종료
+              }
+              return true;
+           }
     }
+
+    React.useEffect(()=>{
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+        if(!isFocused){
+            backHandler.remove();
+        }
+    },[isFocused,exitApp])
+
+    // function testNavi(path:keyof RouterNavigatorParams){ //이동해야할 path가 존재한다면 RouterNavigatorParams에 추가해주세요.
+        
+    //     navigation.navigate(path); //지정한 이름을가진 스택으로 이동
+    //     //navigation.push('Home'); 
+    //     //navigation.reset('Home'); 스택초기화후 이동
+    //     //navigation.goBack(); 뒤로가기
+    //     //navigation.popToTop() 최상위 스택으로 이동
+        
+    //     /* 
+
+    //     그외 navigation 옵션은  
+    //         https://reactnavigation.org/docs/navigation-prop/
+    //     참고
+    //     */
+    // }
 
     return (
         <SafeAreaView

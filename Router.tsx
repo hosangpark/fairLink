@@ -25,7 +25,8 @@ import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfil
 import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';
 import { Matching } from './src/screen/Board/Matching';
 import { MyProfile } from './src/screen/mypage/settingProfile/MyProfile';
-
+import {WorkReport} from './src/screen/Board/WorkReport';
+import { Auth } from './src/screen/Auth';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -51,9 +52,15 @@ export const Router = () => {
 
     return(
         <>
-            <Stack.Navigator initialRouteName='Main'>
+            <Stack.Navigator initialRouteName='Auth'>
                 {/** page가 추가되면 페이지에 여기에 stack을 추가해주세요. */}
 
+                {/** Auth */}
+                <Stack.Screen 
+                    name={"Auth"}
+                    component={Auth}
+                    options={{headerShown:false}}
+                />
                 {/** MAIN */}
                 <Stack.Screen 
                     name={'Main'}
