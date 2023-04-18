@@ -27,7 +27,6 @@ import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfil
 import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';
 import { Matching } from './src/screen/Board/Matching';
 import { MyProfile } from './src/screen/mypage/settingProfile/MyProfile';
-import {WorkReport} from './src/screen/Board/WorkReport';
 import { Auth } from './src/screen/Auth';
 //navigator router ;;
 // type ToastRef = Toast | null;
