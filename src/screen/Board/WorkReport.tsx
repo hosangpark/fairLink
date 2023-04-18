@@ -190,5 +190,4 @@ const WorkReportstyle = StyleSheet.create({
     DefaultBlackText:{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10},
     cardInbox:{flexDirection:'row',justifyContent:'space-between',marginBottom:14},
     boxText1:{fontSize:16,color:colors.FONT_COLOR_BLACK},
-    
 })

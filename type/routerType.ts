@@ -15,8 +15,12 @@ export type RouterNavigatorParams = {
     
     /** mypage */
     MyInfo:undefined;
-    FavoriteList:undefined;
+    FavoriteList:{
+        userType:string
+    };
     FavoriteAdd:undefined;
+    EquimentsAdd:undefined;
+    EquimentsDetail:undefined;
     SettingProfile:undefined;
     FavoriteFilotIndex:undefined;
 

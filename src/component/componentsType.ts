@@ -48,6 +48,16 @@ export interface UserInfoCardType {
     index : string,
     action:()=>void
 }
+export interface HeavyEquipmentCardType {
+    EquiName : string,
+    EquiFacturing : string,
+    EquiUrl : string,
+    EquiNumber:string,
+    Device : string,
+    Documents:string,
+    action:()=>void
+    action2:()=>void
+}
 export interface UserInfoCard2Type {
     jobType:string,
     userName:string,
