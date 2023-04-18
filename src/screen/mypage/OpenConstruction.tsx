@@ -38,6 +38,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -50,6 +52,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -62,6 +66,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         imgfile={undefined}
                         button={'변경'}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -74,6 +80,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         imgfile={require('../../assets/img/ic_modify2.png')}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -86,6 +94,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         imgfile={require('../../assets/img/ic_modify2.png')}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -94,10 +104,13 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     </Text>
                     <CustomWaveBox
                         style={{}}
-                        placeholder={''}
+                        placeholder1={''}
+                        placeholder2={''}
                         imgfile={require('../../assets/img/ic_calendar.png')}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -147,10 +160,13 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     </Text>
                     <CustomWaveBox
                         style={{}}
-                        placeholder={''}
+                        placeholder1={''}
+                        placeholder2={''}
                         imgfile={require('../../assets/img/ic_dropdown.png')}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -233,6 +249,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <CustomButton

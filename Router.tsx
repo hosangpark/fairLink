@@ -14,6 +14,8 @@ import { MyInfo } from './src/screen/mypage/myInfo/MyInfo';
 import { ApplicantStatus } from './src/screen/Board/ApplicantStatus';
 import { FavoriteListIndex } from './src/screen/mypage/favorite/FavoriteListIndex';
 import { FavoriteAdd } from './src/screen/mypage/favorite/FavoriteAdd';
+import { EquimentsAdd } from './src/screen/mypage/favorite/EquimentsAdd';
+import { EquimentsDetail } from './src/screen/mypage/favorite/EquimentsDetail';
 import { CompanyProfile } from './src/screen/Board/CompanyProfile';
 import { DetailField } from './src/screen/Board/DetailField';
 import { DetailWork } from './src/screen/Board/DetailWork';
@@ -21,6 +23,7 @@ import { Volunteer } from './src/screen/Board/Volunteer';
 import { ElectronicContract } from './src/screen/Board/ElectronicContract';
 import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';
+import { WorkReport } from './src/screen/Board/WorkReport';
 
 //navigator router ;;
 // type ToastRef = Toast | null;
@@ -97,6 +100,11 @@ export const Router = () => {
                     component={ElectronicContract}
                     options={{headerShown:false}}
                 />
+                <Stack.Screen // 이력 및 현황 - 작업중 - 작업일보
+                    name={'WorkReport'}
+                    component={WorkReport}
+                    options={{headerShown:false}}
+                />
 
                 <Stack.Screen // 회원 구분
                     name={'MemberLine'}
@@ -129,6 +137,16 @@ export const Router = () => {
                 <Stack.Screen //나의 즐겨찾기 추가
                     name={'FavoriteAdd'}
                     component={FavoriteAdd}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen //장비회사 - 장비현황 - 장비추가
+                    name={'EquimentsAdd'}
+                    component={EquimentsAdd}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen //장비회사 - 장비현황 - 장비추가
+                    name={'EquimentsDetail'}
+                    component={EquimentsDetail}
                     options={{headerShown:false}}
                 />
                 <Stack.Screen // (장비) 나의 조종사 관리

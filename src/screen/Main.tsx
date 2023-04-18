@@ -116,14 +116,10 @@ export const Main = () => {
                 />
                 <Tab.Screen 
                     name="Board" 
-                    children={()=>
-                        <Board 
-                            setTabIndex={setTabIndex}
-                        />
-                    }
+                    component={Board}
                     listeners={{
                         tabPress : (e)=>{
-                            setTabIndex(3);
+                            setTabIndex(3);navigation.navigate('Board',{type:'default'})
                         }
                     }}
                     options={{
@@ -164,7 +160,6 @@ export const Main = () => {
                 <Tab.Screen 
                     name="document" 
                     component={MyPage}
-                    
                     listeners={{
                         tabPress : (e)=>{
                             setTabIndex(5);

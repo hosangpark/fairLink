@@ -12,15 +12,19 @@ export const CustomInputTextBox = ({
     imgfile,
     button,
     action,
+    editable,
+    placeholderTextColor
 }:CustomInputTextBoxType) => {
   const [text,setText] = useState<string>('')
     return(
-      <View style={[styles.TextInputBox,style]}>
+      <View style={[editable?styles.TextInputBox:styles.TextInputFalseBox,style]}>
         <TextInput 
-            style={{flexShrink:1,paddingHorizontal:10,flex:1}}
+            style={{flexShrink:1,paddingHorizontal:10,flex:1,}}
             value={text}
             onChangeText={e=>{setText(e)}}
             placeholder={placeholder}
+            placeholderTextColor={placeholderTextColor}
+            editable={editable}
             >
         </TextInput>
         {button || imgfile ?
