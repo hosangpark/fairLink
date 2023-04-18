@@ -35,7 +35,7 @@ export const AlertModal = ({ //알림창
             onBackButtonPress={hide}
             style={[{justifyContent:'center',alignItems:'center',flex:1,flexDirection : 'column', zIndex:999999999}]}
         >
-            {/* <Pressable style={{
+            <Pressable style={{
                 width:'100%',
                 height:'100%',
                 justifyContent:'center',
@@ -44,8 +44,8 @@ export const AlertModal = ({ //알림창
                 // backgroundColor:'black',
 
                 }}
-                onPress={hide}
-            > */}
+                onPress={()=>hide()}
+            >
                 <View style={[modalStyle.modalWrapper,modalStyle.alertModal]}>
                     <View style={{marginBottom:20}}>
                         {title &&
@@ -80,7 +80,7 @@ export const AlertModal = ({ //알림창
                         />
                     }
                 </View>
-            {/* </Pressable> */}
+            </Pressable>
         </Modal>
     )
 }

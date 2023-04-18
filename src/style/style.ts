@@ -20,7 +20,10 @@ export const colors = { //색상 리스트;
     BLUE_COLOR : '#355AD9',
     BLUE_COLOR2 : '#E6F7F8',
     BLUE_COLOR3 : '#E3F5F6',
+    BLUE_COLOR4 : '#DDF2F3',
     RED_COLOR : '#FFEAE8',
+    RED_COLOR2 : '#FFEEEC',
+    RED_COLOR3 : '#F51900',
     
     SKY_BLUE_COLOR : '#6ECEFF',
     DEPP_SKY_BLUE : '#19D2DB',
@@ -37,7 +40,9 @@ export const colors = { //색상 리스트;
     BORDER_BLUE_COLOR : '#DAF3F5',
     BORDER_BLUE_COLOR2 : '#D5EFF1',
     BORDER_BLUE_COLOR3 : '#A1D5D8',
+    BORDER_BLUE_COLOR4 : '#C6E0E2',
     BORDER_RED_COLOR : '#FCC8C1',
+    BORDER_RED_COLOR2 : '#F6A197',
     
 }
 
@@ -104,7 +109,7 @@ export const selectBoxStyle = StyleSheet.create({
         backgroundColor:colors.WHITE_COLOR,
         borderRadius:4,
         borderWidth:1,
-        borderColor:colors.BORDER_GRAY_COLOR1,
+        borderColor:colors.BORDER_GRAY_COLOR,
         flex:1,
         alignItems:'center',
         ...fontStyle.f_regular,
@@ -301,6 +306,14 @@ export const styles = StyleSheet.create({
         borderRadius:4,
         justifyContent:'space-between',
     },
+    TextInputFalseBox:{
+        flexDirection:'row',
+        borderWidth:1,
+        borderColor:colors.BORDER_GRAY_COLOR,
+        borderRadius:4,
+        justifyContent:'space-between',
+        backgroundColor:colors.BACKGROUND_COLOR_GRAY1
+        },
     textLabel: {
         color: colors.FONT_COLOR_BLACK,
         fontSize: 16,
@@ -316,15 +329,6 @@ export const styles = StyleSheet.create({
         height: 46, 
         paddingHorizontal: 20, 
         borderRadius: 4
-    },
-    DetailFieldBox:{
-        flexDirection:'row',paddingVertical:10
-    },
-    DetailFieldTitle:{
-        fontSize:16,width:85,color:colors.FONT_COLOR_BLACK
-    },
-    DetailFieldText:{
-        fontSize:16,color:colors.FONT_COLOR_BLACK,flexShrink:1
     },
     // docImage: {
         

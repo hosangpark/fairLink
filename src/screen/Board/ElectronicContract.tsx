@@ -61,6 +61,8 @@ export const ElectronicContract = () => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -72,6 +74,8 @@ export const ElectronicContract = () => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -83,6 +87,8 @@ export const ElectronicContract = () => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -90,10 +96,13 @@ export const ElectronicContract = () => {
                     </Text>
                     <CustomWaveBox
                         style={{height:46}}
-                        placeholder={''}
+                        placeholder1={''}
+                        placeholder2={''}
                         imgfile={require('../../assets/img/ic_calendar.png')}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -105,6 +114,8 @@ export const ElectronicContract = () => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 </View>
@@ -122,6 +133,8 @@ export const ElectronicContract = () => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -133,6 +146,8 @@ export const ElectronicContract = () => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -144,6 +159,8 @@ export const ElectronicContract = () => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -155,6 +172,8 @@ export const ElectronicContract = () => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -177,10 +196,13 @@ export const ElectronicContract = () => {
                     </Text>
                     <CustomWaveBox
                         style={{height:46}}
-                        placeholder={''}
+                        placeholder1={''}
+                        placeholder2={''}
                         imgfile={require('../../assets/img/ic_calendar.png')}
                         button={''}
                         action={()=>{}}
+                        editable={true}
+                        placeholderTextColor=''
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -332,7 +354,7 @@ export const ElectronicContract = () => {
             msg={alertModal.msg}
             hide={alertModalOff}
             type={alertModal.type}
-            action={()=>navigation.navigate('Board')}
+            action={()=>navigation.navigate('Board',{type:'default'})}
         />
         </View>
     )

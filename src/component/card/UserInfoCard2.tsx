@@ -12,14 +12,13 @@ export const UserInfoCard2 = ({
     userName = '',
     score = 0,
     location = '',
-    key=0,
     complete='',
     workType=0,
 }:UserInfoCard2Type) => {
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     return(
-        <TouchableOpacity style={{margin:20}} key={key} onPress={()=>
+        <TouchableOpacity style={{margin:20}} onPress={()=>
             {if(workType==0){
                 navigation.navigate('DetailField')
             } else {navigation.navigate('DetailWork')}
@@ -52,7 +51,7 @@ export const UserInfoCard2 = ({
                         style={{}}
                         labelStyle={{fontSize:16}}
                         label={'작업일보 승인대기'}
-                        action={()=>{}}
+                        action={()=>{navigation.navigate('WorkReport')}}
                     />
                 }
             </View>

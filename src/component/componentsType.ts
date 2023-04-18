@@ -14,7 +14,6 @@ export interface CustomAccordionType {
     title:string,
     data:object[],
     action : ()=>void,
-    Accordionkey:number
 }
 
 export interface ObjectArrayType {
@@ -49,12 +48,21 @@ export interface UserInfoCardType {
     index : string,
     action:()=>void
 }
+export interface HeavyEquipmentCardType {
+    EquiName : string,
+    EquiFacturing : string,
+    EquiUrl : string,
+    EquiNumber:string,
+    Device : string,
+    Documents:string,
+    action:()=>void
+    action2:()=>void
+}
 export interface UserInfoCard2Type {
     jobType:string,
     userName:string,
     score:number,
     location:string,
-    key : number,
     complete:string
     workType:number
 }
@@ -85,12 +93,15 @@ export interface CustomInputTextBoxType {
     imgfile:ImageSourcePropType | undefined,
     placeholder:string,
     button:string,
-    action:()=>void
+    action:()=>void,
+    editable:boolean
+    placeholderTextColor:string
 }
 export interface CustomWaveBoxType {
     style? : object,
     imgfile:ImageSourcePropType | undefined,
-    placeholder:string,
+    placeholder1:string,
+    placeholder2:string,
     button:string,
     action:()=>void
 }
@@ -103,4 +114,6 @@ export interface PilotInfoCardType {
     score: number,
     recommendation: number,
     action: ()=>void
+    editable:boolean
+    placeholderTextColor:string
 }

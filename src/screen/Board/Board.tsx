@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect, SetStateAction} from 'react';
 import {SafeAreaView,View,Text,FlatList, ScrollView} from 'react-native';
 import { BoardIndexType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
@@ -8,8 +8,9 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
 
-export const Board = ({setTabIndex}:BoardIndexType) => {
+export const Board = ({route}:any) => {
     const [strOption,setStrOption] = useState<string>('')
+    const accordionList = ['배차 모집중','계약 진행중','작업중','작업완료']
 
     const [items,setItems] = useState([
     {
@@ -38,10 +39,12 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
     },
   ])
 
-    const isFocused = useIsFocused();
+
     useEffect(()=>{
-        if(isFocused && setTabIndex){
-            setTabIndex(3);
+        if(route.params.type=='default'){
+            setStrOption('전체')
+        } else {
+            setStrOption('작업중')
         }
     },[])
 
@@ -85,7 +88,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                     </Text>
                     <CustomSelectBox 
                         defaultText='전체'
-                        strOptionList={['배차 모집중','계약 진행중','작업중','작업완료',]}
+                        strOptionList={['전체','배차 모집중','계약 진행중','작업중','작업완료']}
                         selOption={strOption}
                         strSetOption={setStrOption}
                         buttonStyle={selectBoxStyle.btnStyle}
@@ -95,49 +98,43 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                     />
                 </View>
             </View>
-          {/* <FlatList
-            style={{ paddingHorizontal: 20 }}
-            data={items}
+        {
+            accordionList.map((data, i) => (
+                <View key={i}>
+                {strOption == '전체'?
+                <CustomAccordion
+                    key={i}
+                    title={data}
+                    data={items}
+                    action={()=>{console.log(i)}}
+                />
+                :
+                strOption == data &&
+                <CustomAccordion
+                    key={i}
+                    title={data}
+                    data={items}
+                    action={()=>{console.log(i)}}
+                />
+                }
+                </View>
+            ))
+        }
+        {/* <FlatList
+            data={accordionList}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<NodataView />}
             // ListFooterComponent={isListLoading ? <LoadingIndicator /> : null}
-            renderItem={({ item }) => (
-              <UserInfoCard2
-                  empName={item.empName}
-                  jobType={item.jobType}
-                  location={item.location}
-                  rating={item.rating}
-                  score={item.score}
-                  recEmpCount={item.recEmpCount}
-                  userName={item.userName}
-                  userProfileUrl={item.userProfileUrl}
-              />
+            renderItem={({ item,index} ) => (
+              <CustomAccordion
+                title={item}
+                data={items}
+                action={()=>{}}
+                Accordionkey={index}
+            />
             )}
           /> */}
-            <CustomAccordion
-                title={'배차 모집중'}
-                data={items}
-                action={()=>{}}
-                Accordionkey={1}
-            />
-            <CustomAccordion
-                title={'계약 진행중'}
-                data={items}
-                action={()=>{}}
-                Accordionkey={2}
-            />
-            <CustomAccordion
-                title={'작업중'}
-                data={items}
-                action={()=>{}}
-                Accordionkey={3}
-            />
-            <CustomAccordion
-                title={'작업완료'}
-                data={items}
-                action={()=>{}}
-                Accordionkey={4}
-            />
+            
             
         </ScrollView>
     </View>
