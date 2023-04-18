@@ -13,7 +13,9 @@ export const CustomInputTextBox = ({
     button,
     action,
     editable,
-    placeholderTextColor
+    placeholderTextColor,
+    setInput,
+    input,
 }:CustomInputTextBoxType) => {
   const [text,setText] = useState<string>('')
     return(

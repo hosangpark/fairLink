@@ -1,4 +1,5 @@
 export type RouterNavigatorParams = {
+    Auth:undefined;
     Main:undefined;
     Video:undefined;
     Board:{
@@ -12,6 +13,7 @@ export type RouterNavigatorParams = {
     MemberLine:undefined;
     ApplicantStatus:undefined;
     
+    Matching:undefined;
     
     /** mypage */
     MyInfo:{

@@ -95,7 +95,9 @@ export interface CustomInputTextBoxType {
     button:string,
     action:()=>void,
     editable:boolean
-    placeholderTextColor:string
+    placeholderTextColor:string,
+    input? : string,
+    setInput? : (text:string) => void;
 }
 export interface CustomWaveBoxType {
     style? : object,
@@ -103,7 +105,9 @@ export interface CustomWaveBoxType {
     placeholder1:string,
     placeholder2:string,
     button:string,
-    action:()=>void
+    action:()=>void,
+    editable:boolean,
+    placeholderTextColor:string
 }
 export interface PilotInfoCardType {
     index: string,

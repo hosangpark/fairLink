@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "61305979231",
+    "project_id": "fairlink-37e60",
+    "storage_bucket": "fairlink-37e60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61305979231:android:2160c10167507910f176ea",
+        "android_client_info": {
+          "package_name": "com.fairlink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61305979231-1lll8bkso1dp3gjp6466gfv0i52hfk27.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV6R-_FbsTggY5lu9i2hREpw2hAwAuizM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61305979231-1lll8bkso1dp3gjp6466gfv0i52hfk27.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
