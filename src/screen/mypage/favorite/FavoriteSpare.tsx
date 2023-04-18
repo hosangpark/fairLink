@@ -40,7 +40,7 @@ export const FavoriteSpare = () => {
                     recEmpCount = {6}
                     location = '[경남] 진주시, 사천시, 창원시'
                     isDelete = {true}
-                    action = {()=>{}}
+                    action={()=>{}}
                 />
             </View>
             <View>

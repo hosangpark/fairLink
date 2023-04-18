@@ -36,7 +36,18 @@ export const MyInfo = () => {
                             onChange={() => setText(text)}
                         />
                     </View>
+                    {/* 조종사 */}
                     <View>
+                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>생년월일</Text>
+                        <TextInput 
+                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
+                            editable={isEditable}
+                            value={text}
+                            onChange={() => setText(text)}
+                        />
+                    </View>
+                    {/* 건설 */}
+                    <View> 
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>직책</Text>
                         <TextInput 
                             style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
@@ -47,6 +58,7 @@ export const MyInfo = () => {
                     </View>
                 </View>
             </View>
+            {/* 건설 */}
             <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                 <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>회사 정보</Text>
                 <View style={{ paddingVertical: 10 }}>

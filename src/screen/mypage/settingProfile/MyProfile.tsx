@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ScrollView, View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import { BackHeader } from "../../../component/header/BackHeader";
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from "../../../style/style";
@@ -12,13 +12,15 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
 
 // 마이페이지 -> 프로필 설정하기 -> 해당 페이지로 이동해야함
-export const SettingProfile = () => {
+export const MyProfile = () => {
     const [isEditable, setIsEditable] = useState(false);
     const [strOption,setStrOption] = useState<string>('')
     const [statusType, setstatusType] = useState<number>(0) // 0: 미등록, 1: 승인중, 2: 승인완료
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
     const [isChecked, setIsChecked] = useState(false);
     const [isPressed, setIsPressed] = useState(false);
+    const [bgColor, setBgColor] = useState(colors.BACKGROUND_COLOR_GRAY1)
+
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     const documentData = [
@@ -30,6 +32,14 @@ export const SettingProfile = () => {
         {id: 5, name: '기중기 운전기능사'},
         {id: 6, name: '통장사본'},
     ]
+
+    const scrollViewRef = useRef<ScrollView>(null);
+
+    const handleButtonClick = () => {
+        setIsEditable(true)
+        setBgColor(colors.WHITE_COLOR)
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true});
+    };
 
     const handlePressIn = () => setIsPressed(true);
     const handlePressOut = () => setIsPressed(false);
@@ -61,8 +71,8 @@ export const SettingProfile = () => {
     }
 
     return (
-        <ScrollView>
-            <BackHeader title="프로필 설정하기"/>
+        <ScrollView ref={scrollViewRef}>
+            <BackHeader title="나의 프로필"/>
             <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                 <View style={{ paddingVertical: 10 }}>
                     <View>
@@ -86,16 +96,25 @@ export const SettingProfile = () => {
                     <View style={{ paddingVertical: 10 }}>
                         <View style={{ marginBottom: 15 }}>
                             <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>지역<Text style={[ styles.OrengeStar]}>*</Text></Text>
-                            <CustomSelectBox 
-                                defaultText='선택하세요.'
-                                strOptionList={['영흥', '삼천포', '본사', '여수',]}
-                                selOption={strOption}
-                                strSetOption={setStrOption}
-                                buttonStyle={selectBoxStyle.btnStyle}
-                                buttonTextStyle={selectBoxStyle2.btnTextStyle}
-                                rowStyle={selectBoxStyle.rowStyle}
-                                rowTextStyle={selectBoxStyle.rowTextStyle}
-                            />
+                            {
+                                isEditable
+                                ?
+                                    <CustomSelectBox 
+                                        defaultText='선택하세요.'
+                                        strOptionList={['영흥', '삼천포', '본사', '여수',]}
+                                        selOption={strOption}
+                                        strSetOption={setStrOption}
+                                        buttonStyle={selectBoxStyle.btnStyle}
+                                        buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                                        rowStyle={selectBoxStyle.rowStyle}
+                                        rowTextStyle={selectBoxStyle.rowTextStyle}
+                                    />
+                                :
+                                    <TextInput 
+                                        style={[fontStyle.f_light, { fontSize: 16 , borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingLeft: 15, paddingRight: 45, backgroundColor:bgColor}]}
+                                        editable={isEditable}
+                                    />
+                            }
                         </View>
                     </View>
                 </View>
@@ -105,64 +124,93 @@ export const SettingProfile = () => {
                 <View style={{ paddingVertical: 10 }}>
                     <View style={{ marginBottom: 15 }}>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>경력<Text style={[ styles.OrengeStar]}>*</Text></Text>
-                        <CustomSelectBox 
-                            defaultText='선택하세요.'
-                            strOptionList={['해당없음', '1년이상', '2년이상', '3년이상', '5년이상', '7년이상', '10년이상',]}
-                            selOption={strOption}
-                            strSetOption={setStrOption}
-                            buttonStyle={selectBoxStyle.btnStyle}
-                            buttonTextStyle={selectBoxStyle2.btnTextStyle}
-                            rowStyle={selectBoxStyle.rowStyle}
-                            rowTextStyle={selectBoxStyle.rowTextStyle}
-                        />
+                        {
+                            isEditable
+                            ?
+                                <CustomSelectBox 
+                                    defaultText='선택하세요.'
+                                    strOptionList={['해당없음', '1년이상', '2년이상', '3년이상', '5년이상', '7년이상', '10년이상',]}
+                                    selOption={strOption}
+                                    strSetOption={setStrOption}
+                                    buttonStyle={selectBoxStyle.btnStyle}
+                                    buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                                    rowStyle={selectBoxStyle.rowStyle}
+                                    rowTextStyle={selectBoxStyle.rowTextStyle}
+                                />
+                            :
+                                <TextInput 
+                                    style={[fontStyle.f_light, { fontSize: 16 , borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingLeft: 15, paddingRight: 45, backgroundColor:bgColor}]}
+                                    editable={isEditable}
+                                />
+                        }
                     </View>
                     <View>
                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>주특기 장비<Text style={[ styles.OrengeStar]}>*</Text></Text>
-                        <View style={{ flexDirection: 'row',}}>
-                            <View style={{ flex: 1, marginRight: 10 }}>
-                                <CustomSelectBox 
-                                    defaultText='주특기 장비'
-                                    strOptionList={['지게차', '하이랜더', '고소작업대']}
-                                    selOption={strOption}
-                                    strSetOption={setStrOption}
-                                    buttonStyle={selectBoxStyle.btnStyle}
-                                    buttonTextStyle={selectBoxStyle2.btnTextStyle}
-                                    rowStyle={selectBoxStyle.rowStyle}
-                                    rowTextStyle={selectBoxStyle.rowTextStyle}
-                                />
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <CustomSelectBox 
-                                    defaultText='세부 규격'
-                                    strOptionList={['3톤미만','3톤이상~5톤이하','7톤이상','없음',]}
-                                    selOption={strOption}
-                                    strSetOption={setStrOption}
-                                    buttonStyle={selectBoxStyle.btnStyle}
-                                    buttonTextStyle={selectBoxStyle2.btnTextStyle}
-                                    rowStyle={selectBoxStyle.rowStyle}
-                                    rowTextStyle={selectBoxStyle.rowTextStyle}
-                                />
-                            </View>
-                        </View>
-                        <TouchableOpacity>
-                            <View style={[ styles.whiteButtonStyle,{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
-                                <Image style={{ width: 14, height: 14, marginRight: 6 }} source={ require('../../../assets/img/ic_add.png')}/>
-                                <Text style={[fontStyle.f_semibold, { fontSize: 18, color: colors.MAIN_COLOR}]}>장비 추가</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <View style={{ marginVertical: 10}}>
-                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>세부경력정보 직접기입<Text style={[ styles.OrengeStar]}>*</Text></Text>
-                            <TextInput 
-                                style={{ borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, padding: 10, minHeight: 150, }}
-                                textAlignVertical="top"
-                                placeholder="ex) - 흙막이 작업 : 3년"
-                                placeholderTextColor={colors.BORDER_GRAY_COLOR3}
-                                multiline={true}
-                                numberOfLines={4}
-                                onChange={(e) => console.log(e.nativeEvent.text)}
-                                // value={}
-                            />
-                        </View>
+                        {
+                            isEditable
+                            ?
+                                <View style={{ flexDirection: 'row',}}>
+                                    <View style={{ flex: 1, marginRight: 10 }}>
+                                        <CustomSelectBox 
+                                            defaultText='주특기 장비'
+                                            strOptionList={['지게차', '하이랜더', '고소작업대']}
+                                            selOption={strOption}
+                                            strSetOption={setStrOption}
+                                            buttonStyle={selectBoxStyle.btnStyle}
+                                            buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                                            rowStyle={selectBoxStyle.rowStyle}
+                                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                                        />
+                                    </View>
+                                    <View style={{ flex: 1 }}>
+                                        <CustomSelectBox 
+                                            defaultText='세부 규격'
+                                            strOptionList={['3톤미만','3톤이상~5톤이하','7톤이상','없음',]}
+                                            selOption={strOption}
+                                            strSetOption={setStrOption}
+                                            buttonStyle={selectBoxStyle.btnStyle}
+                                            buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                                            rowStyle={selectBoxStyle.rowStyle}
+                                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                                        />
+                                    </View>
+                                    <TouchableOpacity>
+                                        <View style={[ styles.whiteButtonStyle,{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+                                            <Image style={{ width: 14, height: 14, marginRight: 6 }} source={ require('../../../assets/img/ic_add.png')}/>
+                                            <Text style={[fontStyle.f_semibold, { fontSize: 18, color: colors.MAIN_COLOR}]}>장비 추가</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            :
+                                <View style={{ flexDirection: 'row',}}>
+                                    <View style={{ flex: 1, marginRight: 10 }}>
+                                        <TextInput 
+                                            style={[fontStyle.f_light, { fontSize: 16 , borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingLeft: 15, paddingRight: 45, backgroundColor:bgColor}]}
+                                            editable={isEditable}
+                                        />
+                                    </View>
+                                    <View style={{ flex: 1 }}>
+                                        <TextInput 
+                                            style={[fontStyle.f_light, { fontSize: 16 , borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingLeft: 15, paddingRight: 45, backgroundColor:bgColor}]}
+                                            editable={isEditable}
+                                        />
+                                    </View>
+                                </View>
+                        }
+                                <View style={{ marginVertical: 10}}>
+                                    <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>세부경력정보 직접기입<Text style={[ styles.OrengeStar]}>*</Text></Text>
+                                    <TextInput 
+                                        style={{ borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, padding: 10, minHeight: 150, backgroundColor:bgColor}}
+                                        textAlignVertical="top"
+                                        placeholder="ex) - 흙막이 작업 : 3년"
+                                        placeholderTextColor={colors.BORDER_GRAY_COLOR3}
+                                        multiline={true}
+                                        numberOfLines={4}
+                                        editable={isEditable}
+                                        onChange={(e) => console.log(e.nativeEvent.text)}
+                                        // value={}
+                                    />
+                                </View>
                     </View>
                 </View>
             </View>
@@ -170,12 +218,13 @@ export const SettingProfile = () => {
                 <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>나의 포부</Text>
                 <View style={{ paddingVertical: 10 }}>
                     <TextInput 
-                        style={{ borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, padding: 10, minHeight: 150, }}
+                        style={{ borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, padding: 10, minHeight: 150, backgroundColor:bgColor}}
                         textAlignVertical="top"
                         placeholder="ex) 누구보다 성실하게 일해왔다고 자부합니다."
                         placeholderTextColor={colors.BORDER_GRAY_COLOR3}
                         multiline={true}
                         numberOfLines={4}
+                        editable={isEditable}
                         onChange={(e) => console.log(e.nativeEvent.text)}
                         // value={}
                     />
@@ -212,27 +261,34 @@ export const SettingProfile = () => {
                             {   
                                 isChecked &&
                                 <View>
-                                    <Text style={[ styles.textLabel, fontStyle.f_semibold, { marginTop: 15 }]}>회사 검색</Text>
-                                    <View style={{ position: 'relative'}}>
-                                        <TouchableOpacity onPressIn={handlePressIn} onPressOut={handlePressOut}>
-                                            <TextInput 
-                                                placeholder='회사명 또는 사업자등록번호로 검색' 
-                                                placeholderTextColor={colors.BORDER_GRAY_COLOR3} 
-                                                style={[fontStyle.f_light, { fontSize: 16 , borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingLeft: 15, paddingRight: 45}]}
-                                            />
-                                            <Image 
-                                                source={ isPressed ? require('../../../assets/img/ic_search_g.png') : require('../../../assets/img/ic_search.png')} 
-                                                style={{position: 'absolute', width: 20, height: 20, top: 15, right: 15,}}
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
+                                    {
+                                        isEditable &&
+                                        <View>
+                                            <Text style={[ styles.textLabel, fontStyle.f_semibold, { marginTop: 15 }]}>회사 검색</Text>
+                                            <View style={{ position: 'relative'}}>
+                                                <TouchableOpacity onPressIn={handlePressIn} onPressOut={handlePressOut}>
+                                                    <TextInput 
+                                                        placeholder='회사명 또는 사업자등록번호로 검색' 
+                                                        placeholderTextColor={colors.BORDER_GRAY_COLOR3} 
+                                                        style={[fontStyle.f_light, { fontSize: 16 , borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingLeft: 15, paddingRight: 45}]}
+                                                    />
+                                                    <Image 
+                                                        source={ isPressed ? require('../../../assets/img/ic_search_g.png') : require('../../../assets/img/ic_search.png')} 
+                                                        style={{position: 'absolute', width: 20, height: 20, top: 15, right: 15,}}
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    }
                                     <View style={{paddingVertical: 10}}>
                                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>회사명</Text>
-                                        <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15}}/>
+                                        <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15, backgroundColor:bgColor}} 
+                                            editable={isEditable}/>
                                     </View>
                                     <View style={{paddingVertical: 10}}>
                                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>대표자</Text>
-                                        <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15}}/>
+                                        <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15, backgroundColor:bgColor}} 
+                                            editable={isEditable}/>
                                     </View>
                                 </View>
                             }
@@ -245,19 +301,27 @@ export const SettingProfile = () => {
                     <View style={{ paddingVertical: 10 }}>
                         <View style={{ marginBottom: 15 }}>
                             <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>은행명<Text style={[ styles.OrengeStar]}>*</Text></Text>
-                            <CustomSelectBox 
-                                defaultText='선택하세요.'
-                                strOptionList={['국민','기업','농협','신한','산업','우리','한국씨티','하나','SC제일','경남','광주','대구','도이치','부산','산림조합중앙회','저축','새마을금고','수협','신협','우체국','전북','제주','케이뱅크','토스뱅크',]}
-                                selOption={strOption}
-                                strSetOption={setStrOption}
-                                buttonStyle={selectBoxStyle.btnStyle}
-                                buttonTextStyle={selectBoxStyle2.btnTextStyle}
-                                rowStyle={selectBoxStyle.rowStyle}
-                                rowTextStyle={selectBoxStyle.rowTextStyle}
-                            />
+                            {
+                                isEditable
+                                ?
+                                    <CustomSelectBox 
+                                        defaultText='선택하세요.'
+                                        strOptionList={['국민','기업','농협','신한','산업','우리','한국씨티','하나','SC제일','경남','광주','대구','도이치','부산','산림조합중앙회','저축','새마을금고','수협','신협','우체국','전북','제주','케이뱅크','토스뱅크',]}
+                                        selOption={strOption}
+                                        strSetOption={setStrOption}
+                                        buttonStyle={selectBoxStyle.btnStyle}
+                                        buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                                        rowStyle={selectBoxStyle.rowStyle}
+                                        rowTextStyle={selectBoxStyle.rowTextStyle}
+                                    />
+                                :
+                                    <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15, backgroundColor:bgColor}} 
+                                        editable={isEditable}/>
+                            }
                             <View style={{paddingVertical: 10}}>
                                 <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>계좌번호</Text>
-                                <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15}}/>
+                                <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15, backgroundColor:bgColor}} 
+                                    editable={isEditable}/>
                             </View>
                         </View>
                     </View>
@@ -289,7 +353,7 @@ export const SettingProfile = () => {
                             <AlertModal 
                                 show={alertModal.alert}
                                 msg={alertModal.msg}
-                                // action={} // 저장일 때 -> 저장 -> "파일이 저장되었습니다.", 삭제일 때 -> 삭제, 설정완료 버튼 클릭 시(필수항목체크 후) -> 마이페이지 이동  
+                                // action={}
                                 hide={alertModalOff}
                                 type={alertModal.type}
                             />
@@ -301,11 +365,19 @@ export const SettingProfile = () => {
                         <Image style={{ width: 16, height: 16,}} source={ require('../../../assets/img/ic_add.png')}/>
                     </View> */}
                 <View style={{ marginVertical: 20,}}>
-                    <TouchableOpacity onPress={checkInputValue}>
-                        <View style={[styles.buttonStyle,]}>
-                            <Text style={[ styles.buttonLabelStyle,]}>프로필 설정 완료</Text>
-                        </View>
-                    </TouchableOpacity>
+                    {
+                        isEditable
+                        ?   <TouchableOpacity onPress={() => {}}>
+                                <View style={[ styles.buttonStyle ]}>
+                                    <Text style={ [styles.buttonLabelStyle] }>프로필 수정 완료</Text>
+                                </View>
+                            </TouchableOpacity>
+                        :   <TouchableOpacity onPress={handleButtonClick}>
+                                <View style={[ styles.whiteButtonStyle ]}>
+                                    <Text style={ [styles.whiteButtonLabelStyle] }>수정하기</Text>
+                                </View>
+                            </TouchableOpacity>
+                    }
                 </View>
             </View>
         </ScrollView>

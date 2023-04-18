@@ -23,6 +23,7 @@ export type RouterNavigatorParams = {
     EquimentsDetail:undefined;
     SettingProfile:undefined;
     FavoriteFilotIndex:undefined;
+    MyProfile:undefined;
 
     /** board */
     DetailField:undefined //현장세부내용
