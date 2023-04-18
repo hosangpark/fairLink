@@ -80,17 +80,27 @@ export interface TextBoxType {
     type: number,
 }
 
-export interface CustomInputTextBoxType{
+export interface CustomInputTextBoxType {
     style? : object,
     imgfile:ImageSourcePropType | undefined,
     placeholder:string,
     button:string,
     action:()=>void
 }
-export interface CustomWaveBoxType{
+export interface CustomWaveBoxType {
     style? : object,
     imgfile:ImageSourcePropType | undefined,
     placeholder:string,
     button:string,
     action:()=>void
+}
+export interface PilotInfoCardType {
+    index: string,
+    userName: string,
+    age: number,
+    career: number,
+    phone: string,
+    score: number,
+    recommendation: number,
+    action: ()=>void
 }
