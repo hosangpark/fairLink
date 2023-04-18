@@ -1,4 +1,5 @@
 export type RouterNavigatorParams = {
+    Auth:undefined;
     Main:undefined;
     Video:undefined;
     Board:{
@@ -12,9 +13,10 @@ export type RouterNavigatorParams = {
     MemberLine:undefined;
     ApplicantStatus:undefined;
     
-    
     /** mypage */
-    MyInfo:undefined;
+    MyInfo:{
+        userType:string
+    };
     FavoriteList:{
         userType:string
     };
@@ -33,5 +35,5 @@ export type RouterNavigatorParams = {
     PilotProfile:undefined //조종사프로필
     ElectronicContract:undefined //전자계약
     WorkReport:undefined //작업일보작성
-    Matching:undefined //
+    Matching:undefined
 }

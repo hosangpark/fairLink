@@ -4,10 +4,14 @@ import CheckBox from '@react-native-community/checkbox';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle } from '../../style/style';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouterNavigatorParams } from '../../../type/routerType';
 
 export const MemberLine = () => {
 
     const [selectItem, setSelectItem] = useState<number>();
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     const memberLineData = [
         { id: 0, title: '건설회사', detail: '건설회사 임직원', onIcon: require('../../assets/img/ic_member1_on.png'), offIcon: require('../../assets/img/ic_member1_off.png')},
@@ -25,25 +29,39 @@ export const MemberLine = () => {
                 <View style={{ marginHorizontal: 20, }}>
                     { memberLineData.map((data, key) => (
                         
-                        <View style={{ marginBottom: 20, backgroundColor: colors.WHITE_COLOR, borderColor: selectItem === data.id ? colors.MAIN_COLOR : colors.BORDER_GRAY_COLOR, borderWidth: 1, borderRadius: 8, }}>
-                        <TouchableOpacity onPress={() => setSelectItem(data.id)}>
-                            <View key={key} style={{  padding: 20,  flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Image style={{ width: 45, height: 52, marginRight: 20 }} source={selectItem === data.id ? data.onIcon : data.offIcon} />
-                                    <View>
-                                        <Text style={[fontStyle.f_bold, { fontSize: 24, color: selectItem === data.id ? colors.MAIN_COLOR : colors.FONT_COLOR_BLACK, opacity: selectItem === data.id ? 1 : 0.55 }]}>{data.title}</Text>
-                                        <Text style={[fontStyle.f_regular, { fontSize: 15, color: selectItem === data.id ? colors.MAIN_COLOR : colors.FONT_COLOR_GRAY }]}>{data.detail}</Text>
+                        <TouchableOpacity onPress={() => setSelectItem(data.id)} style={{ 
+                            marginBottom: 20, 
+                            backgroundColor: colors.WHITE_COLOR, 
+                            borderColor: selectItem === data.id ? colors.MAIN_COLOR : colors.BORDER_GRAY_COLOR, 
+                            borderWidth: 1, 
+                            borderRadius: 8,
+                            flexDirection:'row',
+                            justifyContent:'space-between',
+                            alignItems:'center',
+                            padding:20,
+                        }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center',flex:8 ,marginRight:10}}>
+                                <Image style={{ width: 45, height: 52, marginRight: 20 }} source={selectItem === data.id ? data.onIcon : data.offIcon} />
+                                <View style={{flex:1}}>
+                                    <Text style={[fontStyle.f_bold, { fontSize: 24, color: selectItem === data.id ? colors.MAIN_COLOR : colors.FONT_COLOR_BLACK, opacity: selectItem === data.id ? 1 : 0.55 }]}>{data.title}</Text>
+                                    <View style={{flexDirection:'row'}}>
+                                        <Text style={[fontStyle.f_regular, {flex:1,flexWrap:'wrap', fontSize: 15, color: selectItem === data.id ? colors.MAIN_COLOR : colors.FONT_COLOR_GRAY }]}>{data.detail}</Text>
                                     </View>
                                 </View>
+                            </View>
+                            <View style={{flex:1,}}>
                                 <Image style={{ width: 22, height: 17, }} source={selectItem === data.id ? require('../../assets/img/ic_check_lg_on.png') : require('../../assets/img/ic_check_lg_off.png')} />
                             </View>
                         </TouchableOpacity>
-                        </View>
                     ))}
                 </View>
 
                 <View style={{ margin: 20 }}>
-                    <TouchableOpacity style={{ backgroundColor: colors.MAIN_COLOR, borderRadius: 4, padding: 12, }}>
+                    <TouchableOpacity style={{ backgroundColor: colors.MAIN_COLOR, borderRadius: 4, padding: 12, }}
+                        onPress={()=>{
+                            navigation.replace('Main');
+                        }}
+                    >
                         <Text style={[ fontStyle.f_semibold, { color: colors.WHITE_COLOR, fontSize: 18, textAlign: 'center', }]}>선택완료</Text>
                     </TouchableOpacity>
                 </View>

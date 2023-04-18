@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">fairlink</string>
+    <string name="kakao_app_key">76adec8f51ba3a8f5d7ac06f322f9892</string>
 </resources>
