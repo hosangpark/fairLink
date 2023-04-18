@@ -10,6 +10,7 @@ import CheckBox from "@react-native-community/checkbox";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
+import { MyPageIndexType } from "../../screenType";
 
 // 마이페이지 -> 프로필 설정하기 -> 해당 페이지로 이동해야함
 export const SettingProfile = () => {
@@ -38,7 +39,7 @@ export const SettingProfile = () => {
         setIsChecked(!isChecked);
     } 
 
-    const alertModalOn = ( msg : string, type? : string ) => {
+    const alertModalOn = ( msg : string, type? : string) => {
         setAlertModal({
             alert: true,
             strongMsg: '',
@@ -145,7 +146,7 @@ export const SettingProfile = () => {
                             </View>
                         </View>
                         <TouchableOpacity>
-                            <View style={[ styles.whiteButtonStyle,{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}]}>
+                            <View style={[ styles.whiteButtonStyle,{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10}]}>
                                 <Image style={{ width: 14, height: 14, marginRight: 6 }} source={ require('../../../assets/img/ic_add.png')}/>
                                 <Text style={[fontStyle.f_semibold, { fontSize: 18, color: colors.MAIN_COLOR}]}>장비 추가</Text>
                             </View>
@@ -280,7 +281,7 @@ export const SettingProfile = () => {
                                 <View style={[styles.docImage]}>
                                     <View style={{ flexDirection: 'row', width: '100%', height: '100%'}}>
                                         <Image style={{ width: '100%', height: '100%',}} source={ require('../../../assets/img/ic_main4.png')}/>
-                                        <TouchableOpacity onPress={() => alertModalOn(`${data.name}을 삭제하시겠습니까?`)}>
+                                        <TouchableOpacity onPress={() => alertModalOn(`${data.name}을 삭제하시겠습니까?`, 'confirm')}>
                                             <Image style={{ width: 22, height: 22, marginTop: 10, marginLeft: -30, opacity: 2 }} source={ require('../../../assets/img/ic_modify.png')}/>
                                         </TouchableOpacity>
                                     </View>

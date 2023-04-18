@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
 
-export const MyInfo = () => {
+export const MyInfo = ({route}:any) => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [isEditable, setIsEditable] = useState(false);
     const [name, setName] = useState('')
@@ -20,7 +20,8 @@ export const MyInfo = () => {
         setBgColor(colors.WHITE_COLOR)
         scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true});
     };
-
+    console.log(route.params)
+    
     return (
         <ScrollView ref={scrollViewRef}>
             <BackHeader title="나의 정보" />
@@ -36,61 +37,70 @@ export const MyInfo = () => {
                             onChange={() => setText(text)}
                         />
                     </View>
-                    {/* 조종사 */}
-                    <View>
-                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>생년월일</Text>
-                        <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
-                            editable={isEditable}
-                            value={text}
-                            onChange={() => setText(text)}
-                        />
-                    </View>
-                    {/* 건설 */}
-                    <View> 
-                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>직책</Text>
-                        <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
-                            editable={isEditable}
-                            value={text}
-                            onChange={() => setText(text)}
-                        />
-                    </View>
+                    { /* 조종사 */
+                        route.params.userType !== '1' 
+                        &&
+                        <View>
+                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>생년월일</Text>
+                            <TextInput 
+                                style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
+                                editable={isEditable}
+                                value={text}
+                                onChange={() => setText(text)}
+                            />
+                        </View>
+                    } 
+                    { /* 건설 */
+                        route.params.userType ==='1' 
+                        &&
+                        <View> 
+                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>직책</Text>
+                            <TextInput 
+                                style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
+                                editable={isEditable}
+                                value={text}
+                                onChange={() => setText(text)}
+                            />
+                        </View>
+                    }
                 </View>
             </View>
-            {/* 건설 */}
-            <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
-                <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>회사 정보</Text>
-                <View style={{ paddingVertical: 10 }}>
-                    <View>
-                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>회사명</Text>
-                        <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
-                            editable={isEditable}
-                            value={text}
-                            onChange={() => setText(text)}
-                        />
-                    </View>
-                    <View>
-                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>대표자</Text>
-                        <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
-                            editable={isEditable}
-                            value={text}
-                            onChange={() => setText(text)}
-                        />
-                    </View>
-                    <View>
-                        <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>사업자번호</Text>
-                        <TextInput 
-                            style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
-                            editable={isEditable}
-                            value={text}
-                            onChange={() => setText(text)}
-                        />
+            { /* 건설, 장비 */
+                route.params.userType !=='3' 
+                &&
+                <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
+                    <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>회사 정보</Text>
+                    <View style={{ paddingVertical: 10 }}>
+                        <View>
+                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>회사명</Text>
+                            <TextInput 
+                                style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
+                                editable={isEditable}
+                                value={text}
+                                onChange={() => setText(text)}
+                            />
+                        </View>
+                        <View>
+                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>대표자</Text>
+                            <TextInput 
+                                style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
+                                editable={isEditable}
+                                value={text}
+                                onChange={() => setText(text)}
+                            />
+                        </View>
+                        <View>
+                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>사업자번호</Text>
+                            <TextInput 
+                                style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
+                                editable={isEditable}
+                                value={text}
+                                onChange={() => setText(text)}
+                            />
+                        </View>
                     </View>
                 </View>
-            </View>
+            }
             <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR,}}>
                 <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>연락처</Text>
                 <View style={{ paddingTop: 10 }}>

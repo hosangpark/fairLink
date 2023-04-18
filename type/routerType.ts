@@ -14,7 +14,9 @@ export type RouterNavigatorParams = {
     
     
     /** mypage */
-    MyInfo:undefined;
+    MyInfo:{
+        userType:string
+    };
     FavoriteList:{
         userType:string
     };
@@ -32,4 +34,5 @@ export type RouterNavigatorParams = {
     CompanyProfile:undefined //장비회사프로필
     ElectronicContract:undefined //전자계약
     WorkReport:undefined //작업일보작성
+    Matching:undefined
 }
