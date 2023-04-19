@@ -28,7 +28,7 @@ export const FavoriteSpare = () => {
                     <Text style={[styles.buttonLabelStyle]}>조종사 추가하기</Text>
                 </View>
             </TouchableOpacity>
-            <View>
+            <View style={{marginBottom:30}}>
                 <UserInfoCard 
                     index = '0'
                     jobType = '0'
@@ -43,7 +43,7 @@ export const FavoriteSpare = () => {
                     action={()=>{}}
                 />
             </View>
-            <View>
+            <View style={{marginBottom:30}}>
                 <UserInfoCard 
                     index = '0'
                     jobType = '0'

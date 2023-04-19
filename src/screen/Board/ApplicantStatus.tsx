@@ -29,7 +29,7 @@ export const ApplicantStatus = () => {
                 <View style={{ marginBottom: 25 }}>
                     <Text style={[ fontStyle.f_semibold, {fontSize: 18, color: colors.FONT_COLOR_BLACK}]}>현재까지 지원자 <Text style={{ color: colors.MAIN_COLOR}}>4</Text>명</Text>
                 </View>
-                <View style={{ marginVertical: 5 }}>                
+                <View style={{ marginVertical: 15 }}>                
                     <UserInfoCard 
                         index="1"
                         empName='힘찬중기'
@@ -44,7 +44,7 @@ export const ApplicantStatus = () => {
                         action={()=>{}}
                     />
                 </View>
-                <View style={{ marginVertical: 5 }}>                
+                <View style={{ marginVertical: 15 }}>                
                     <UserInfoCard 
                         index="2"
                         empName='힘찬중기'

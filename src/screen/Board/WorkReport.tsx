@@ -3,7 +3,6 @@ import {SafeAreaView,View,Text,FlatList, ScrollView,StyleSheet, TouchableOpacity
 import { BoardIndexType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../style/style';
-import { UserInfoCard } from '../../component/card/UserInfoCard';
 import { useNavigation } from '@react-navigation/native';    
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';

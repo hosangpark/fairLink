@@ -20,15 +20,15 @@ import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
 
 
 const FirstRoute = () => (
-    <View style={{ backgroundColor: colors.WHITE_COLOR, flex: 1}}>
+
         <Profile />
-    </View>
+
 );
 
 const SecondRoute = () => (
-    <View style={{ backgroundColor: colors.WHITE_COLOR, flex: 1}}>
+
         <RequiredDocuments/>
-    </View>
+
 );
 
 
@@ -66,8 +66,7 @@ export const PilotProfile = () => {
     return (
         <SafeAreaView style={{flex:1}}>
             <BackHeader title="조종사 프로필"/>
-            <View style={{flex:1}}>
-                <ProfileInfoCard
+                {/* <ProfileInfoCard
                     index = '0'
                     jobType = '차주 겸 조종사' 
                     userProfileUrl = '' 
@@ -79,9 +78,11 @@ export const PilotProfile = () => {
                     age = '42' 
                     gender = '남' 
                     phone = '010-1123-1111'
-                />
-                {/* <View style={{flex:1}}> */}
+                    /> */}
+                <View style={{height:150,backgroundColor:'aqua'}}></View>
+            <>
                 <TabView
+                overScrollMode={'auto'}
                     navigationState={{ index, routes }}
                     renderScene={renderScene}
                     onIndexChange={setIndex}
@@ -113,7 +114,6 @@ export const PilotProfile = () => {
                         />
                     )}
                 />
-                {/* </View> */}
                 <TouchableOpacity onPress={() => alertModalOn('','test')}>
                     <View style={[styles.buttonStyle, {}]}>
                         <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>조종사 선택 완료</Text>
@@ -126,7 +126,7 @@ export const PilotProfile = () => {
                     hide={alertModalOff}
                     type={alertModal.type}
                 />
-            </View>
+            </>
         </SafeAreaView>
 
     )
