@@ -180,18 +180,18 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         source={guaranteeImage}
                         resizeMode="cover"
                         imageStyle={{ borderRadius: 10 }}>
-                        <Image 
-                        style={{ width: 15, height: 15}}
-                        source={require('../../assets/img/ic_add.png')}
-                        />
-                        <TouchableOpacity
-                            style={{ position:'absolute', right: 10, top: 10 }}
-                            onPress={() =>{setguaranteeImage}}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../assets/img/ic_modify.png')}
+                            <Image 
+                            style={{ width: 15, height: 15}}
+                            source={require('../../assets/img/ic_add.png')}
                             />
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ position:'absolute', right: 10, top: 10 }}
+                                onPress={() =>{setguaranteeImage}}>
+                                <Image
+                                style={{ width: 25, height: 25 }}
+                                source={require('../../assets/img/ic_modify.png')}
+                                />
+                            </TouchableOpacity>
                         </ImageBackground>
                     </TouchableOpacity>
                 {/* <FlatList

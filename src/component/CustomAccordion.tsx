@@ -3,7 +3,6 @@ import { CustomAccordionType } from './componentsType';
 import { Text, TouchableOpacity, View,Image,FlatList } from 'react-native';
 import { colors, fontStyle, styles } from '../style/style';
 import { NodataView } from './NodataView';
-import { UserInfoCard } from './card/UserInfoCard';
 import { UserInfoCard2 } from './card/UserInfoCard2';
 
 

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { ScrollView, View, Text, Image } from "react-native";
 import { BackHeader } from "../../component/header/BackHeader";
 import { colors, fontStyle, styles } from "../../style/style";
-import { ProfileInfoCard } from "../../component/card/ProfileInfoCard";
-import { UserInfoCard } from "../../component/card/UserInfoCard";
 import { PilotInfoCard } from "../../component/card/PilotInfoCard";
 import CheckBox from "@react-native-community/checkbox";
 import { TouchableOpacity } from "react-native-gesture-handler";

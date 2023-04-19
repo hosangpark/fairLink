@@ -145,6 +145,7 @@ export const FavoriteListIndex = ({route}:any) => {
                     showsVerticalScrollIndicator={false}
                     renderItem={({item,index})=>{
                         return(
+                            <View style={{marginBottom:30}}>
                             <UserInfoCard 
                                 index={item.index}
                                 empName={item.empName}
@@ -158,6 +159,7 @@ export const FavoriteListIndex = ({route}:any) => {
                                 isDelete={true}
                                 action={()=>{}}
                             />
+                            </View>
                         )
                     }}
                 />

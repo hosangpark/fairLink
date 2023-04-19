@@ -6,7 +6,7 @@ import { colors, fontStyle } from '../../../style/style';
 export const Profile = () => {
 
     return (
-        <View style={{ backgroundColor: colors.WHITE_COLOR, padding: 20}}>
+        <View style={{ backgroundColor: colors.WHITE_COLOR, padding: 20,flex:1}}>
             <Text style={[ fontStyle.f_semibold, { fontSize: 20, color:colors.FONT_COLOR_BLACK}]}>경력사항</Text>
             <View style={{ marginVertical: 10 }}>
                 <Text style={[ fontStyle.f_medium, { fontSize: 16, color: colors.FONT_COLOR_BLACK}]}>10년</Text>

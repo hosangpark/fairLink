@@ -15,7 +15,8 @@ export const Auth = () => {
         AsyncStorage.getItem('loginInfo').then(data => {
             if(data === null){
                 //props.navigation.navigate('Login');
-                navigation.replace('SignIn');
+                // navigation.replace('SignIn');
+                navigation.replace('Main');
             }
             else{
                 // dispatch(loginAction.updateLogin(data));

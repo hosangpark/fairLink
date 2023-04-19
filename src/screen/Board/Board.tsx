@@ -7,6 +7,8 @@ import { CustomSelectBox } from '../../component/CustomSelectBox';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
+import { CustomButton } from '../../component/CustomButton';
+
 
 export const Board = ({route}:any) => {
     const [userType,setUserType] = useState('2')
@@ -14,6 +16,7 @@ export const Board = ({route}:any) => {
     const accordionList = userType =='1'?
     ['배차 모집중','계약 진행중','작업중','작업완료']:
     ['조종사 모집중','현장지원 완료','계약진행중','작업중/작업예정','작업완료']
+
 
     const [items,setItems] = useState([
     {
@@ -84,6 +87,25 @@ export const Board = ({route}:any) => {
     return(
         <View style={{flex:1,}}>
         <BackHeader title="배차이력 및 현황" />
+        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                <CustomButton
+                    action={()=>{setUserType('1')}}
+                    label={'건설회사'}
+                    style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
+                    labelStyle={styles.whiteButtonLabelStyle}
+                />
+                <CustomButton
+                    action={()=>{setUserType('2')}}
+                    label={'장비회사'}
+                    style={{flex:1,marginRight:10}}
+                />
+                <CustomButton
+                    action={()=>{setUserType('3')}}
+                    label={'조종사'}
+                    style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
+                    labelStyle={styles.whiteButtonLabelStyle}
+                />
+            </View>
          <ScrollView style={{flex:1}}>
             <View style={{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,padding:20}}>
                 <View style={{flexDirection:'row'}}>
