@@ -5,6 +5,8 @@ import { colors, fontStyle, styles } from '../../../style/style';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
+import { AlertClearType } from "../../../modal/modalType";
+import { AlertModal, initialAlert } from "../../../modal/AlertModal";
 
 export const MyInfo = ({route}:any) => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -12,15 +14,41 @@ export const MyInfo = ({route}:any) => {
     const [name, setName] = useState('')
     const [text,setText] = useState<string>('')
     const [bgColor, setBgColor] = useState(colors.BACKGROUND_COLOR_GRAY1)
+    const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
 
     const scrollViewRef = useRef<ScrollView>(null);
 
     const handleButtonClick = () => {
-        setIsEditable(true)
-        setBgColor(colors.WHITE_COLOR)
-        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true});
+        if (isEditable === false) {
+            setIsEditable(true)
+            setBgColor(colors.WHITE_COLOR)
+            scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true});
+        } else {
+            handleInputCheck()
+            console.log('check')
+        }
     };
-    console.log(route.params)
+    
+    const handleInputCheck = () => {
+        // if ("필수항목 누락 시") {
+            alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
+        // } else {
+        //     setIsEditable(false)
+        //     setBgColor(colors.BACKGROUND_COLOR_GRAY1)
+        // }
+    }
+    const alertModalOn = ( msg : string, type? : string ) => {
+        setAlertModal({
+            alert: true,
+            strongMsg: '',
+            msg: msg,
+            type: type ? type : '' ,
+        })
+    }
+
+    const alertModalOff = () => {
+        setAlertModal(initialAlert);
+    }
     
     return (
         <ScrollView ref={scrollViewRef}>
@@ -127,7 +155,7 @@ export const MyInfo = ({route}:any) => {
             <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR,}}>
                 {
                     isEditable
-                    ?   <TouchableOpacity onPress={() => navigation.navigate('ApplicantStatus')}>
+                    ?   <TouchableOpacity onPress={handleButtonClick}>
                             <View style={[ styles.buttonStyle ]}>
                                 <Text style={ [styles.buttonLabelStyle] }>수정완료</Text>
                             </View>
@@ -139,6 +167,14 @@ export const MyInfo = ({route}:any) => {
                         </TouchableOpacity>
                 }
             </View>
+            <AlertModal
+                show={alertModal.alert}
+                msg={alertModal.msg}
+                // action={alertAction}
+                hide={alertModalOff}
+                type={alertModal.type}
+                btnLabel={alertModal.type}
+            />
         </ScrollView>
     )
 }

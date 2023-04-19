@@ -2,6 +2,8 @@ import React from 'react';
 import { Text, TouchableOpacity, View ,Image } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
 import { UserInfoCardType } from '../componentsType';
+import { AlertClearType } from '../../modal/modalType';
+import { AlertModal, initialAlert } from '../../modal/AlertModal';
 
 
 export const UserInfoCard = ({
@@ -19,7 +21,20 @@ export const UserInfoCard = ({
     action
 }:UserInfoCardType) => {
 
+    const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
 
+    const alertModalOn = ( msg : string, type? : string ) => {
+        setAlertModal({
+            alert: true,
+            strongMsg: '',
+            msg: msg,
+            type: type ? type : '' ,
+        })
+    }
+
+    const alertModalOff = () => {
+        setAlertModal(initialAlert);
+    }
 
     return (
         <TouchableOpacity style={{width:'100%',position:'relative',}} onPress={action}>
@@ -50,7 +65,7 @@ export const UserInfoCard = ({
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => alertModalOn(`${userName} 조종사를 즐겨찾기에서 삭제하시겠습니까?`, 'confirm')}>
                         { isDelete ? <Image source={require('../../assets/img/ic_trash1.png')} style={{width:25,height:25}} /> : null }
                         { isFavorite === '0' 
                             ? <Image source={require('../../assets/img/ic_bookmark_on.png')} style={{width:22,height:30}} /> 
@@ -64,6 +79,14 @@ export const UserInfoCard = ({
                     <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>경력 15년+</Text>
                 </View>
                 <Text style={[fontStyle.f_light,{fontSize:15,color:colors.FONT_COLOR_BLACK2,marginTop:10}]}>{location}</Text>
+                <AlertModal
+                    show={alertModal.alert}
+                    msg={alertModal.msg}
+                    // action={alertAction}
+                    hide={alertModalOff}
+                    type={alertModal.type}
+                    btnLabel={''}
+                />
             </View>
         </TouchableOpacity>
     )

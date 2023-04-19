@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserInfoCard } from "../../../component/card/UserInfoCard";
 import { AlertClearType } from "../../../modal/modalType";
 import { AlertModal, initialAlert } from "../../../modal/AlertModal";
+import { NodataView } from "../../../component/NodataView";
 
 export const FavoriteSpare = () => {
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
@@ -28,6 +29,11 @@ export const FavoriteSpare = () => {
                     <Text style={[styles.buttonLabelStyle]}>조종사 추가하기</Text>
                 </View>
             </TouchableOpacity>
+            {
+                // 즐겨찾기 등록 전
+                <NodataView msg={'즐겨찾기 조종사가 없습니다'}/>
+            }
+
             <View style={{marginBottom:30}}>
                 <UserInfoCard 
                     index = '0'
@@ -59,7 +65,7 @@ export const FavoriteSpare = () => {
                 />
             </View>
             <AlertModal 
-                show={alertModal.alert}
+            show={alertModal.alert}
                 msg={alertModal.msg}
                 // action={}
                 hide={alertModalOff}

@@ -129,6 +129,8 @@ export const Matching = () => {
                                         phone="010-1234-5678"
                                         score={4.8}
                                         recommendation={5}
+                                        editable={false}
+                                        placeholderTextColor=""
                                         action={()=>{}}
                                     />
                                 </View>

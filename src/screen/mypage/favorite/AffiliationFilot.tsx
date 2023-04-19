@@ -3,6 +3,7 @@ import { ScrollView, View, Text, useWindowDimensions } from "react-native";
 import { colors, fontStyle, styles } from "../../../style/style";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserInfoCard } from "../../../component/card/UserInfoCard";
+import { NodataView } from "../../../component/NodataView";
 
 export const AffiliationFilot = () => {
 
@@ -13,6 +14,11 @@ export const AffiliationFilot = () => {
                     <Text style={[styles.buttonLabelStyle]}>조종사 추가하기</Text>
                 </View>
             </TouchableOpacity>
+            {
+                // 즐겨찾기 등록 전
+                // <NodataView msg={'즐겨찾기 조종사가 없습니다'}/>
+            }
+
             <View style={{marginBottom:30}}>
                 <UserInfoCard 
                     index = '0'

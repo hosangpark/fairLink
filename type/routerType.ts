@@ -40,7 +40,9 @@ export type RouterNavigatorParams = {
     FavoriteAdd:undefined;
     EquimentsAdd:undefined;
     EquimentsDetail:undefined;
-    SettingProfile:undefined;
+    SettingProfile:{
+        userType:string
+    };
     FavoriteFilotIndex:undefined;
     MyProfile:undefined;
 
