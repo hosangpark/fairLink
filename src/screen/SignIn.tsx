@@ -10,16 +10,25 @@ import { KakaoOAuthToken } from '@react-native-seoul/kakao-login';
 
 import {
     KakaoProfile,
-    getProfile as getKakaoProfile,
     login,
     logout,
     unlink,
     getProfile,
   } from '@react-native-seoul/kakao-login';
+import { LoginIntroModal } from '../modal/LoginIntroModal';
 
 export const SignIn = () => {
-    const [checked, setChecked] = useState(false);
+    const [isAutoLogin, setIsAutoLogin] = useState(false);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+
+    const [introModal, setIntroModal] = useState(false);
+
+    const introAction = () => {
+        setIntroModal(false);
+        signInWithKakao();
+        
+    }
+
 
     const signInWithKakao = async (): Promise<void> => { //카카오 로그인
         try {
@@ -33,7 +42,7 @@ export const SignIn = () => {
             console.log(profile);
 
             if(token){
-                navigation.navigate('Agreements');
+                navigation.navigate('Agreements',{token : token.accessToken});
             }
 
         //   setResult(JSON.stringify(token));
@@ -56,6 +65,11 @@ export const SignIn = () => {
       };
     return (
         <View style={{ backgroundColor: colors.WHITE_COLOR, flex: 1 }}>
+            <LoginIntroModal 
+                show={introModal}
+                hide={()=>{setIntroModal(false)}}
+                action={introAction}
+            />
             <View style={{flex:1, alignItems:'center',justifyContent:'space-between'}}>
                 <View style={{flex:1}} />
                 <View style={{flex:1,justifyContent:'center',alignItems:'center',width:'100%',}}>
@@ -65,7 +79,7 @@ export const SignIn = () => {
 
                         
                     </View>
-                    <TouchableOpacity onPress={()=>{signInWithKakao();}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20,marginTop:40}}>
+                    <TouchableOpacity onPress={()=>{setIntroModal(true);}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20,marginTop:40}}>
                         <View style={{flex:1,backgroundColor:colors.KAKAO_YELLOW,alignItems:'center',justifyContent:'center',borderRadius:8}}>
                             <Text style={[fontStyle.f_medium ,{ fontSize: 18, color: colors.FONT_COLOR_BLACK3 }]}>카카오로 시작하기</Text>
                         </View>
@@ -79,11 +93,11 @@ export const SignIn = () => {
                     <View style={{flexDirection: 'row', marginTop:20}}>
                         <CheckBox
                             disabled={false}
-                            value={checked}
-                            onValueChange={(e) => setChecked(e)}
+                            value={isAutoLogin}
+                            onValueChange={(e) => setIsAutoLogin(e)}
                             tintColors={{ true: colors.MAIN_COLOR }}
                             style={{ width: 24, height: 24 }}
-                            />
+                        />
                         <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK, marginHorizontal: 10,}]}>자동로그인</Text>
                     </View>
                 </View>
@@ -94,30 +108,8 @@ export const SignIn = () => {
                         <Text style={[fontStyle.f_regular, { fontSize: 16, color:colors.MAIN_COLOR,}]}>Fair Link</Text>
                     </View>
                 </View>
+                
             </View>
-            {/* <View style={{ flex: 3, justifyContent: 'flex-end', alignItems: 'center', margin: 20}}>
-                <Text style={[fontStyle.s_regular, { fontSize : 18, color: colors.MAIN_COLOR}]}>중장비 배차 시범서비스</Text>
-                <Text style={[fontStyle.k_bold, { fontSize : 50, color: colors.MAIN_COLOR}]}>페어링크</Text>
-            </View>
-            <View style={{ flex: 1, margin: 20 }}>
-                <TouchableOpacity style={{ backgroundColor: colors.KAKAO_YELLOW, borderRadius: 8, alignItems: 'center', justifyContent: 'center', height: 52 }}
-                    onPress={() => navigation.navigate('Agreements')}>
-                    <Text style={[fontStyle.f_medium ,{ fontSize: 18, color: colors.FONT_COLOR_BLACK3 }]}>카카오로 시작하기</Text>
-                </TouchableOpacity>
-                <View style={{ flexDirection: 'row', justifyContent: 'center',}}>
-                    <View style={{flexDirection: 'row', marginVertical: 8, marginTop: 12, }}>
-                        <CheckBox
-                            disabled={false}
-                            value={checked}
-                            onValueChange={(e) => setChecked(e)}
-                            tintColors={{ true: colors.MAIN_COLOR }}
-                            style={{ width: 24, height: 24 }}
-                            />
-                        <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK, marginHorizontal: 10,}]}>자동로그인</Text>
-                    </View>
-                </View>
-            </View> */}
-            {/* 푸터 */}
             
         </View>
     

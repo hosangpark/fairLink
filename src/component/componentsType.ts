@@ -1,4 +1,5 @@
-import { ImageSourcePropType } from "react-native";
+import { ImageSourcePropType,KeyboardTypeOptions } from "react-native";
+
 export interface BackHeaderType {
     backAction? : () => void;
     title : string;
@@ -22,15 +23,19 @@ export interface ObjectArrayType {
 export type CustomSelectBoxType = {
     strOptionList? : string[],
     objOptionList? : ObjectArrayType[], 
-    strSetOption? : (opt : string) => void;
+    strSetOption? : (opt : string, type?: string) => void;
     objSetOption? : (opt : ObjectArrayType) => void;
     selOption? : string | ObjectArrayType;
+    type? : string,
     defaultText : string;
     style? : object;
     buttonStyle: object;
     buttonTextStyle: object;
     rowStyle: object;
     rowTextStyle: object;
+    title? : string,
+    essential? : boolean,
+    isDisable? : boolean,
 }
 
 
@@ -91,19 +96,24 @@ export interface TextBoxType {
 }
 
 export interface CustomInputTextBoxType {
+    containerStyle? : object,
     style? : object,
-    imgfile:ImageSourcePropType | undefined,
+    inputType? : KeyboardTypeOptions,
+    imgfile?:ImageSourcePropType,
     placeholder:string,
     button:string,
     action:()=>void,
     editable:boolean
     placeholderTextColor:string,
     input? : string,
-    setInput? : (text:string) => void;
+    setInput? : (text:string,key?:string) => void;
+    type? : string,
+    title? : string,
+    essential? : boolean,
 }
 export interface CustomWaveBoxType {
     style? : object,
-    imgfile:ImageSourcePropType | undefined,
+    imgfile?:ImageSourcePropType,
     placeholder1:string,
     placeholder2:string,
     button:string,
@@ -122,4 +132,12 @@ export interface PilotInfoCardType {
     action: ()=>void
     editable:boolean
     placeholderTextColor:string
+}
+
+export type MarginComType = {
+    mt? : number,
+    mb? : number,
+    my? : number,
+    isBorder? : boolean,
+    isBorderDeep ? : boolean,
 }

@@ -49,7 +49,7 @@ export const AlertModal = ({ //알림창
                 <View style={[modalStyle.modalWrapper,modalStyle.alertModal]}>
                     <View style={{marginBottom:20}}>
                         {title &&
-                        <Text style={[modalStyle.title,fontStyle.f_bold]}>
+                        <Text style={[modalStyle.title,fontStyle.f_bold,{textAlign:'center',marginBottom:10}]}>
                             {title}
                         </Text>
                         }

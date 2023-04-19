@@ -118,9 +118,10 @@ export const selectBoxStyle = StyleSheet.create({
         ...fontStyle.f_regular,
         color:colors.FONT_COLOR_BLACK,
         textAlign:'left',
+        fontSize:16,
     },
     rowStyle: {backgroundColor:colors.WHITE_COLOR, borderBottomColor:colors.BORDER_GRAY_COLOR},
-    rowTextStyle: {color:colors.FONT_COLOR_BLACK, textAlign: 'left',...fontStyle.f_regular},
+    rowTextStyle: {color:colors.FONT_COLOR_BLACK, textAlign: 'left',...fontStyle.f_regular,fontSize:16},
 })
 export const selectBoxStyle2 = StyleSheet.create({
     btnStyle : {
@@ -149,7 +150,11 @@ export const styles = StyleSheet.create({
         flexDirection : 'row',
         justifyContent : 'center'
     },
-
+    white_box_con : {
+        backgroundColor:colors.WHITE_COLOR,
+        paddingHorizontal:20,
+        paddingVertical:30,
+    },
     buttonStyle : {
         backgroundColor:colors.MAIN_COLOR,
         width:'100%',
@@ -342,6 +347,14 @@ export const styles = StyleSheet.create({
         
         alignItems: 'center', 
         justifyContent: 'center'
+    },
+    addButton:{
+        borderWidth:1,
+        borderColor:colors.MAIN_COLOR,
+        paddingHorizontal:20,
+        paddingVertical:5,
+        backgroundColor:colors.WHITE_COLOR,
+        borderRadius:4,
     }
 });
 

@@ -16,6 +16,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 
+import {Platform} from 'react-native';
+import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 
 /**
  * react-native 버전 및 sdk 버전은 git hub readme 참조해주세요. 
@@ -42,6 +44,38 @@ import store from './src/redux/store';
 const App = () => {
 
   const [queryClient] = React.useState(()=>new QueryClient);
+
+  React.useEffect(()=>{
+    if (Platform.OS === "android") {
+      check(PERMISSIONS.ANDROID.CAMERA)
+        .then((result) => {
+          // GRANTED 를 넣은 이유는 ELSE 문으로 가지 않게 하기 위해서 넣었음.
+          // TODO: 사실 깔끔하게 만들기 위해서는 분리할 필요가 있음 if (alreadyGranted) return 과 같이...
+          if (result === RESULTS.DENIED || result === RESULTS.GRANTED) {
+            return request(PERMISSIONS.ANDROID.CAMERA);
+          } else {
+            console.log(result);
+            throw new Error("카메라 지원 안 함");
+          }
+        })
+        .catch(console.error);
+    } else {
+      check(PERMISSIONS.IOS.CAMERA)
+        .then((result) => {
+          if (
+            result === RESULTS.DENIED ||
+            result === RESULTS.LIMITED ||
+            result === RESULTS.GRANTED
+          ) {
+            return request(PERMISSIONS.IOS.CAMERA);
+          } else {
+            console.log(result);
+            throw new Error("카메라 지원 안 함");
+          }
+        })
+        .catch(console.error);
+    }
+  },[])
 
   return (
     <QueryClientProvider client={queryClient}>
