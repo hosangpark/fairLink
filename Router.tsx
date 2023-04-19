@@ -28,6 +28,8 @@ import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIn
 import { Matching } from './src/screen/Board/Matching';
 import { MyProfile } from './src/screen/mypage/settingProfile/MyProfile';
 import { Auth } from './src/screen/Auth';
+import { JoinInfo } from './src/screen/signUp/JoinInfo';
+import { RegDocument } from './src/screen/signUp/RegDocument';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -81,7 +83,22 @@ export const Router = () => {
                     component={SignIn}
                     options={{headerShown:false}}
                 />
-
+                
+                <Stack.Screen // 회원 구분
+                    name={'MemberLine'}
+                    component={MemberLine}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen //회원정보 입력
+                    name={'JoinInfo'}
+                    component={JoinInfo}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'RegDocument'}
+                    component={RegDocument}
+                    options={{headerShown:false}}
+                />
 
                  {/** board - 이력 및 현황 */}
                 <Stack.Screen  // 이력 및 현황 - 현장세부내용
@@ -125,11 +142,7 @@ export const Router = () => {
                     options={{headerShown:false}}
                 />
 
-                <Stack.Screen // 회원 구분
-                    name={'MemberLine'}
-                    component={MemberLine}
-                    options={{headerShown:false}}
-                />
+                
                 
                 <Stack.Screen // 지원자 현황
                     name={'ApplicantStatus'}

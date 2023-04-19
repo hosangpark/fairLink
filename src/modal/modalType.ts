@@ -1,3 +1,4 @@
+import { SelImageType } from "../screen/screenType";
 
 
 export type AlertClearType = { //초기 alert state 타입
@@ -43,6 +44,12 @@ export type AlertModalType = { //alertModal props type
     title? : string,
     action? : () => void;
     btnLabel? : string,
+}
+
+export type SelectImageUploadType = {
+    show : boolean,
+    hide : () => void,
+    setImage : (image:SelImageType) => void;
 }
 
 

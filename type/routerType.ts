@@ -1,5 +1,8 @@
 export type RouterNavigatorParams = {
+    /* 인증 */
     Auth:undefined;
+
+    /** main */
     Main:undefined;
     Video:undefined;
     Board:{
@@ -7,10 +10,24 @@ export type RouterNavigatorParams = {
     };
     Release:undefined;
     MyPage:undefined;
-    Agreements:undefined;
+
+    /** user */
     SignIn:undefined;
+    Agreements:{
+        token : string;
+    };
+    MemberLine:{
+        token : string;
+    };
+    JoinInfo : {
+        token : string;
+        memberType : number;
+    }
+    RegDocument : {
+        memberType : number;
+    }
+
     OpenConstruction:undefined;
-    MemberLine:undefined;
     ApplicantStatus:undefined;
     
     /** mypage */

@@ -7,10 +7,13 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
+import { MemberLineType } from '../screenType';
 
-export const MemberLine = () => {
+export const MemberLine = ({route}:MemberLineType) => {
 
-    const [selectItem, setSelectItem] = useState<number>();
+    const {token} = route.params;
+
+    const [selectItem, setSelectItem] = useState<number>(0);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     const memberLineData = [
@@ -29,7 +32,7 @@ export const MemberLine = () => {
                 <View style={{ marginHorizontal: 20, }}>
                     { memberLineData.map((data, key) => (
                         
-                        <TouchableOpacity onPress={() => setSelectItem(data.id)} style={{ 
+                        <TouchableOpacity key={key} onPress={() => setSelectItem(data.id)} style={{ 
                             marginBottom: 20, 
                             backgroundColor: colors.WHITE_COLOR, 
                             borderColor: selectItem === data.id ? colors.MAIN_COLOR : colors.BORDER_GRAY_COLOR, 
@@ -59,7 +62,7 @@ export const MemberLine = () => {
                 <View style={{ margin: 20 }}>
                     <TouchableOpacity style={{ backgroundColor: colors.MAIN_COLOR, borderRadius: 4, padding: 12, }}
                         onPress={()=>{
-                            navigation.replace('Main');
+                            navigation.navigate('JoinInfo',{token:token,memberType : selectItem});
                         }}
                     >
                         <Text style={[ fontStyle.f_semibold, { color: colors.WHITE_COLOR, fontSize: 18, textAlign: 'center', }]}>선택완료</Text>

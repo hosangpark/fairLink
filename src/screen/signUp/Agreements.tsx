@@ -7,8 +7,13 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
+import { AgreementsType } from '../screenType';
 
-export const Agreements = () => {
+
+
+export const Agreements = ({route}:AgreementsType) => {
+
+    const {token} = route.params;
 
     const [checkItems, setCheckItems] = useState<number[]>([]);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -80,7 +85,7 @@ export const Agreements = () => {
                 </View>
                 <View style={{ margin: 20 }}>
                     <TouchableOpacity style={{ backgroundColor: colors.MAIN_COLOR, borderRadius: 4, padding: 12, }}
-                        onPress={() => navigation.navigate('MemberLine')}>
+                        onPress={() => navigation.navigate('MemberLine',{token:token})}>
                         <Text style={[ fontStyle.f_semibold, { color: colors.WHITE_COLOR, fontSize: 18, textAlign: 'center', }]}>동의하고 계속하기</Text>
                     </TouchableOpacity>
                 </View>
