@@ -38,7 +38,7 @@ export const Volunteer = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginVertical: 5 }}>                
+                <View style={{ marginVertical: 15 }}>                
                     <UserInfoCard 
                         index="1"
                         empName='힘찬중기'
@@ -54,7 +54,7 @@ export const Volunteer = () => {
                         action={()=>{navigation.navigate('CompanyProfile')}}
                     />
                 </View>
-                <View style={{ marginVertical: 5 }}>                
+                <View style={{ marginVertical: 15 }}>
                     <UserInfoCard 
                         index="2"
                         empName='힘찬중기'

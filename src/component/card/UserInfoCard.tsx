@@ -22,7 +22,7 @@ export const UserInfoCard = ({
 
 
     return (
-        <TouchableOpacity style={{width:'100%',position:'relative',marginBottom:30}} onPress={action}>
+        <TouchableOpacity style={{width:'100%',position:'relative',}} onPress={action}>
             {   jobType === '0' 
                 ?   null 
                 :   <View style={[styles.cardJobArea,{borderColor: jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>

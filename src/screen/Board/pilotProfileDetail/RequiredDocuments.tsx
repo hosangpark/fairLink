@@ -8,7 +8,7 @@ import { StatusDisplay } from '../../../component/StatusDisplay';
 export const RequiredDocuments = () => {
 
     return (
-        <ScrollView style={{ backgroundColor: colors.WHITE_COLOR, paddingHorizontal: 20, paddingBottom: 20 }}>
+        <View style={{ backgroundColor: colors.WHITE_COLOR, paddingHorizontal: 20, paddingBottom: 20,flex:1 }}>
             <View style={{ marginVertical: 20}}>
                 <StatusDisplayHeader category={'차량서류'} />
                 <StatusDisplay name={'건설기계등록증'} type={1}/>
@@ -27,6 +27,6 @@ export const RequiredDocuments = () => {
                 <StatusDisplay name={'건설기계조종사면허증'} type={1}/>
                 <StatusDisplay name={'운전면허증(1종)'} type={1}/>
             </View>
-        </ScrollView>
+        </View>
     )
 }
