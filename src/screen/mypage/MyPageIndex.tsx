@@ -30,7 +30,11 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             navigation.navigate('OpenConstruction');
         }
         else if(alertModal.type === 'none_profile'){
-            navigation.navigate('SettingProfile');
+            if ( userType === '2') {
+                navigation.navigate('SettingProfile',{userType:'2'});
+            } else if ( userType === '3') {
+                navigation.navigate('SettingProfile',{userType:'3'});
+            }
         }
     }
 
@@ -97,7 +101,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                 userType == '2'?
                 <View style={styles.deepTopBorder}>   
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
-                        // onPress={()=>{navigation.navigate('MyProfile')}}
+                        // onPress={() => {navigation.navigate('MyProfile')}}
                         onPress={()=>{alertModalOn('작성된 프로필이 없습니다. 프로필 작성을 먼저해주세요.','none_profile')}}
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
@@ -126,7 +130,8 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {userType:'3'}) }}>
+                    {/* <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {userType:'3'}) }}> */}
+                    <TouchableOpacity onPress={() => {navigation.navigate('Matching') }}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>

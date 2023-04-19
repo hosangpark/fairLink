@@ -57,11 +57,11 @@ export const Router = () => {
                 {/** page가 추가되면 페이지에 여기에 stack을 추가해주세요. */}
 
                 {/** Auth */}
-                <Stack.Screen 
+                {/* <Stack.Screen 
                     name={"Auth"}
                     component={Auth}
                     options={{headerShown:false}}
-                />
+                /> */}
                 {/** MAIN */}
                 <Stack.Screen 
                     name={'Main'}

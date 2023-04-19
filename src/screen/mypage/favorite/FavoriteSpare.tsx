@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserInfoCard } from "../../../component/card/UserInfoCard";
 import { AlertClearType } from "../../../modal/modalType";
 import { AlertModal, initialAlert } from "../../../modal/AlertModal";
+import { NodataView } from "../../../component/NodataView";
 
 export const FavoriteSpare = () => {
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
@@ -28,38 +29,30 @@ export const FavoriteSpare = () => {
                     <Text style={[styles.buttonLabelStyle]}>조종사 추가하기</Text>
                 </View>
             </TouchableOpacity>
-            <View>
-                <UserInfoCard 
-                    index = '0'
-                    jobType = '0'
-                    userProfileUrl = ''
-                    empName = '힘찬중기'
-                    userName = '정우성'
-                    score = {5}
-                    rating = {41}
-                    recEmpCount = {6}
-                    location = '[경남] 진주시, 사천시, 창원시'
-                    isDelete = {true}
-                    action={()=>{}}
-                />
-            </View>
-            <View>
-                <UserInfoCard 
-                    index = '0'
-                    jobType = '0'
-                    userProfileUrl = ''
-                    empName = '힘찬중기'
-                    userName = '정우성'
-                    score = {5}
-                    rating = {41}
-                    recEmpCount = {6}
-                    location = '[경남] 진주시, 사천시, 창원시'
-                    isDelete = {true}
-                    action = {()=>{}}
-                />
-            </View>
+            {
+                // 즐겨찾기 등록 전
+                <NodataView msg={'즐겨찾기 조종사가 없습니다'}/>
+            }
+            {
+                // 즐겨찾기 등록 후
+                // <View>
+                //     <UserInfoCard 
+                //         index = '0'
+                //         jobType = '0'
+                //         userProfileUrl = ''
+                //         empName = '힘찬중기'
+                //         userName = '정우성'
+                //         score = {5}
+                //         rating = {41}
+                //         recEmpCount = {6}
+                //         location = '[경남] 진주시, 사천시, 창원시'
+                //         isDelete = {true}
+                //         action={()=>{}}
+                //     />
+                // </View>
+            }
             <AlertModal 
-                show={alertModal.alert}
+            show={alertModal.alert}
                 msg={alertModal.msg}
                 // action={}
                 hide={alertModalOff}

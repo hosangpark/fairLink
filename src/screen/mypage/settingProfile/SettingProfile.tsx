@@ -13,7 +13,7 @@ import { RouterNavigatorParams } from "../../../../type/routerType";
 import { MyPageIndexType } from "../../screenType";
 
 // 마이페이지 -> 프로필 설정하기 -> 해당 페이지로 이동해야함
-export const SettingProfile = () => {
+export const SettingProfile = ({route}:any) => {
     const [isEditable, setIsEditable] = useState(false);
     const [strOption,setStrOption] = useState<string>('')
     const [statusType, setstatusType] = useState<number>(0) // 0: 미등록, 1: 승인중, 2: 승인완료
@@ -61,6 +61,8 @@ export const SettingProfile = () => {
         }
     }
 
+    console.log(route.params.userType)
+    console.log('route')
     return (
         <ScrollView>
             <BackHeader title="프로필 설정하기"/>
@@ -82,6 +84,8 @@ export const SettingProfile = () => {
                 </View>
             </View>
             { // (조종사 일 때)
+                route.params.userType ==='3'
+                &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>활동지역</Text>
                     <View style={{ paddingVertical: 10 }}>
@@ -183,6 +187,8 @@ export const SettingProfile = () => {
                 </View>
             </View>
             { // (조종사 일 때)
+                route.params.userType ==='3'
+                &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>소속회사</Text>
                     <View style={{ paddingVertical: 10,  }}>
@@ -241,6 +247,8 @@ export const SettingProfile = () => {
                 </View>
             }
             { // (조종사 일 때)
+                route.params.userType ==='3'
+                &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>계좌정보</Text>
                     <View style={{ paddingVertical: 10 }}>
