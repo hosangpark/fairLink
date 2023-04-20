@@ -141,3 +141,9 @@ export type MarginComType = {
     isBorder? : boolean,
     isBorderDeep ? : boolean,
 }
+
+export type SelectedEquipmentCardType = {
+    equipNumb : string,
+    year : number,
+    sideEquip : string,
+}

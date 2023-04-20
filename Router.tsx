@@ -25,11 +25,12 @@ import { WorkReport } from './src/screen/Board/WorkReport';
 import { ElectronicContract } from './src/screen/Board/ElectronicContract';
 import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';
-import { Matching } from './src/screen/Board/Matching';
+import { MatchingEquipment } from './src/screen/Board/MatchingEquipment';
 import { MyProfile } from './src/screen/mypage/settingProfile/MyProfile';
 import { Auth } from './src/screen/Auth';
 import { JoinInfo } from './src/screen/signUp/JoinInfo';
 import { RegDocument } from './src/screen/signUp/RegDocument';
+import { MatchingFilot } from './src/screen/Board/MatchingFilot';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -107,8 +108,13 @@ export const Router = () => {
                     options={{headerShown:false}}
                 />
                 <Stack.Screen // 현장지원하기 - 현장세부내용 - 장비 및 조종사 매칭
-                    name={'Matching'}
-                    component={Matching}
+                    name={'MatchingEquipment'}
+                    component={MatchingEquipment}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen
+                    name={'MatchingFilot'}
+                    component={MatchingFilot}
                     options={{headerShown:false}}
                 />
                 <Stack.Screen // 이력 및 현황 - 작업세부내용

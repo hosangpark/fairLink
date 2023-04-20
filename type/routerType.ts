@@ -54,5 +54,6 @@ export type RouterNavigatorParams = {
     PilotProfile:undefined //조종사프로필
     ElectronicContract:undefined //전자계약
     WorkReport:undefined //작업일보작성
-    Matching:undefined
+    MatchingEquipment:undefined
+    MatchingFilot:undefined
 }
