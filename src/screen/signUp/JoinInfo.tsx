@@ -22,55 +22,57 @@ export const JoinInfo = ({route}:JoinInfoType) => {
         // getProfileInfo();
     },[])
     return (
-        <ScrollView style={{flex:1}}>
+        <View style={{flex:1}}>
             <BackHeader title={`회원가입 : ${memberType === 0 ? '건설회사' : memberType === 1 ? '장비회사' : '조종사'}`}/>
-
-            <View style={styles.white_box_con}>
-                <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>회원정보</Text>
-                <View style={{marginTop:20}}>
-                    <View style={{flexDirection:'row',marginBottom:15}}>
-                        <View style={{flex:2.5}}>
-                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>이름</Text>
+            <ScrollView style={{flex:1}}>
+                <View style={styles.white_box_con}>
+                    <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>회원정보</Text>
+                    <View style={{marginTop:20}}>
+                        <View style={{flexDirection:'row',marginBottom:15}}>
+                            <View style={{flex:2.5}}>
+                                <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>이름</Text>
+                            </View>
+                            <View style={{flex:8}}>
+                                <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>김철수</Text>
+                            </View>
                         </View>
-                        <View style={{flex:8}}>
-                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>김철수</Text>
+                        <View style={{flexDirection:'row',marginBottom:15}}>
+                            <View style={{flex:2.5}}>
+                                <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>생년월일</Text>
+                            </View>
+                            <View style={{flex:8}}>
+                                <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>83.01.01</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View style={{flexDirection:'row',marginBottom:15}}>
-                        <View style={{flex:2.5}}>
-                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>생년월일</Text>
-                        </View>
-                        <View style={{flex:8}}>
-                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>83.01.01</Text>
-                        </View>
-                    </View>
-                    <View style={{flexDirection:'row',marginBottom:15}}>
-                        <View style={{flex:2.5}}>
-                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>연락처</Text>
-                        </View>
-                        <View style={{flex:8}}>
-                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>010-1234-5678</Text>
+                        <View style={{flexDirection:'row',marginBottom:15}}>
+                            <View style={{flex:2.5}}>
+                                <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>연락처</Text>
+                            </View>
+                            <View style={{flex:8}}>
+                                <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>010-1234-5678</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
 
-            <View style={{...styles.white_box_con,marginTop:10, flex:1}}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>회원정보 추가입력</Text>
-                    <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.FONT_COLOR_BLACK}]}><Text style={{color:colors.ORANGE_COLOR}}>*</Text> 필수항목</Text>
+                <View style={{...styles.white_box_con,marginTop:10, flex:1}}>
+                    <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+                        <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>회원정보 추가입력</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.FONT_COLOR_BLACK}]}><Text style={{color:colors.ORANGE_COLOR}}>*</Text> 필수항목</Text>
+                    </View>
+                    {memberType === 0 &&
+                        <ErectionInputInfo sns_id={token} memberType={memberType} />
+                    }
+                    {memberType === 1 &&
+                        <EquInputInfo sns_id={token} memberType={memberType} />
+                    } 
+                    {memberType === 2 &&
+                        <PilotInputInfo sns_id={token} memberType={memberType} />
+                    }
+                    
                 </View>
-                {memberType === 0 &&
-                    <ErectionInputInfo memberType={memberType} />
-                }
-                {memberType === 1 &&
-                    <EquInputInfo memberType={memberType} />
-                } 
-                {memberType === 2 &&
-                    <PilotInputInfo memberType={memberType} />
-                }
-                
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </View>
+
     )
 }

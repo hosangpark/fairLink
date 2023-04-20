@@ -26,12 +26,15 @@ export type JoinInfoType = RouteType & {
 }
 
 export type ErectionInputInfoType = {
+    sns_id : string,
     memberType : number,
 }
 export type EquInputInfoType ={
+    sns_id : string,
     memberType : number,
 }
 export type PilotInputInfoType = {
+    sns_id : string,
     memberType : number,
 }
 

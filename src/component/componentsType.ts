@@ -1,5 +1,9 @@
 import { ImageSourcePropType,KeyboardTypeOptions } from "react-native";
 
+export interface NumberObejctType {
+    [key: number]: string;
+}
+
 export interface BackHeaderType {
     backAction? : () => void;
     title : string;
@@ -36,7 +40,7 @@ export type CustomSelectBoxType = {
     strOptionList? : string[],
     objOptionList? : ObjectArrayType[], 
     strSetOption? : (opt : string, type?: string) => void;
-    objSetOption? : (opt : ObjectArrayType) => void;
+    objSetOption? : (opt : string, type?: string) => void;
     selOption? : string | ObjectArrayType;
     type? : string,
     defaultText : string;
