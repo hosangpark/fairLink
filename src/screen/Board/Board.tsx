@@ -11,11 +11,14 @@ import { CustomButton } from '../../component/CustomButton';
 
 
 export const Board = ({route}:any) => {
-    const [userType,setUserType] = useState('2')
+    const [userType,setUserType] = useState('3')
     const [strOption,setStrOption] = useState<string>('')
     const accordionList = userType =='1'?
     ['배차 모집중','계약 진행중','작업중','작업완료']:
+    userType =='2'?
     ['조종사 모집중','현장지원 완료','계약진행중','작업중/작업예정','작업완료']
+    :
+    ['현장지원 완료','작업중/작업예정','작업완료']
 
 
     const [items,setItems] = useState([
@@ -143,9 +146,14 @@ export const Board = ({route}:any) => {
                     </Text>
                     <CustomSelectBox 
                         defaultText='전체'
-                        strOptionList={userType =='1'?
+                        strOptionList={
+                        userType =='1'?
                         ['전체','배차 모집중','계약 진행중','작업중','작업완료']:
-                        ['전체','조종사 모집중','현장지원 완료','계약진행중','작업중/작업예정','작업완료']}
+                        userType == '2'?
+                        ['전체','조종사 모집중','현장지원 완료','계약진행중','작업중/작업예정','작업완료']
+                        :
+                        ['전체','현장지원 완료','작업중/작업예정','작업완료']
+                        }
                         selOption={strOption}
                         strSetOption={setStrOption}
                         buttonStyle={selectBoxStyle.btnStyle}
@@ -163,6 +171,7 @@ export const Board = ({route}:any) => {
                     key={i}
                     title={data}
                     data={items}
+                    userType={userType}
                     action={()=>{console.log(i)}}
                 />
                 :
@@ -171,6 +180,7 @@ export const Board = ({route}:any) => {
                     key={i}
                     title={data}
                     data={items}
+                    userType={userType}
                     action={()=>{console.log(i)}}
                 />
                 }

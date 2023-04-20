@@ -32,9 +32,12 @@ export const UserInfoCard2 = ({
     
     return(
         <TouchableOpacity style={{margin:20}} onPress={()=>
-            {if(workType==0){
+        {
+            if(workType==0){
                 navigation.navigate('DetailField')
-            } else {navigation.navigate('DetailWork')}
+            } else {
+                navigation.navigate('DetailWork')
+            }
         }}
         >
             <View style={[styles.card2Wrapper]}>
@@ -61,8 +64,8 @@ export const UserInfoCard2 = ({
                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {score}년+</Text>
                     </TouchableOpacity>
                 </View>
-                {complete&&
-                    <CustomButton 
+                {complete &&
+                    <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
                         label={'작업일보 승인대기'}
@@ -70,7 +73,7 @@ export const UserInfoCard2 = ({
                     />
                 }
                 {userType=='2' &&
-                    <CustomButton 
+                    <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
                         label={'모집취소'}
