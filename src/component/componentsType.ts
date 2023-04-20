@@ -11,10 +11,22 @@ export interface CustomButtonType {
     label : string,
     action : ()=>void,
 }
+export interface CustomPhoneCallType {
+    phonenumber:string
+    alertModalOn: (e:string)=>void
+}
 export interface CustomAccordionType {
     title:string,
     data:object[],
+    userType:string
     action : ()=>void,
+}
+export interface DocumentAccordionType {
+    title:string,
+    subList:{
+        title:string,
+        registration:boolean,
+    }[],
 }
 
 export interface ObjectArrayType {

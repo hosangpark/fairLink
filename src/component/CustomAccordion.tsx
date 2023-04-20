@@ -9,6 +9,7 @@ import { UserInfoCard2 } from './card/UserInfoCard2';
 export const CustomAccordion = ({
     title,
     data,
+    userType,
     action,
 }:CustomAccordionType) => {
   const [open,setOpen] = useState(false)
@@ -27,7 +28,11 @@ export const CustomAccordion = ({
             <Text style={[fontStyle.f_medium,{color:colors.FONT_COLOR_BLACK2}]}>
               총 <Text style={{color:colors.MAIN_COLOR}}>{data.length}</Text>건
             </Text>
+            {open?
             <Image style={{width:24,height:24,marginLeft:15,transform:[{rotate:'180deg'}]}} source={require('../assets/img/ic_dropdown.png')}/>
+            :
+            <Image style={{width:24,height:24,marginLeft:15,}} source={require('../assets/img/ic_dropdown.png')}/>
+            }
           </View>
         </TouchableOpacity>
           {open&&
@@ -42,7 +47,7 @@ export const CustomAccordion = ({
                 userName={item.userName}
                 workType={item.workType}
                 complete={item.complete}
-                userType={item.userType}
+                userType={userType}
                 total={item.total}
               />
             )

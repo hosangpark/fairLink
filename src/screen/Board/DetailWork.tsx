@@ -7,16 +7,18 @@ import { CustomSelectBox } from '../../component/CustomSelectBox';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
-import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
 import { CustomButton } from '../../component/CustomButton';
 import { SelectModal } from '../../modal/SelectModal';
 import { AlertModal ,initialAlert} from '../../modal/AlertModal';
 import { AlertClearType } from '../../modal/modalType';
 import { UserInfoCard } from '../../component/card/UserInfoCard';
+import { DocumentAccordion } from '../../component/DocumentAccordion';
+import { User1DocumentList, User2DocumentList, User3DocumentList } from '../../component/UserDocumentList';
+import { CustomPhoneCall } from '../../component/CustomPhoneCall';
 
 export const DetailWork = () => {
-    const [userType,setUserType] = useState('2')
+    const [userType,setUserType] = useState('3')
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [strOption , setStrOption] = React.useState<string>('');
     const [selectoday , setSelectoday] = React.useState<boolean>(false);
@@ -77,13 +79,10 @@ export const DetailWork = () => {
                         <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>담당자</Text>
                         <Text style={[fontStyle.f_regular,DetailWorkStyle.boxText2]}>이상순 차장</Text>
                     </View>
-                    <TouchableOpacity style={{flexDirection:'row', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5,justifyContent:'center',marginVertical:10}}
-                    onPress={()=>{alertModalOn('010-2627-0184')}}
-                    >
-                    <Image style={{width:25,height:25,marginRight:5}} source={require('../../assets/img/ic_phone.png')}/>
-                    <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.MAIN_COLOR,flexShrink:1}]}>
-                        010-1234-5678</Text>
-                    </TouchableOpacity>
+                    <CustomPhoneCall
+                        phonenumber={'010-2641-1541'}
+                        alertModalOn={()=>alertModalOn('010-2641-1541')}
+                    />
                 </View>
             </View>
             }
@@ -178,7 +177,7 @@ export const DetailWork = () => {
                 </View>
                 }
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입장비</Text>
-                {userType == '1' ?
+                {userType !== '2' ?
                 <View style={DetailWorkStyle.cardbox}>
                     <View style={DetailWorkStyle.cardInbox}>
                         <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>장비명</Text>
@@ -200,10 +199,10 @@ export const DetailWork = () => {
                         <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>대표자명</Text>
                         <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
                     </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>전화번호</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
-                    </View>
+                    <CustomPhoneCall
+                        phonenumber={'010-2641-1541'}
+                        alertModalOn={()=>alertModalOn('010-2641-1541')}
+                    />
                 </View>
                 :
                 <View style={{borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,borderRadius:8,flexDirection:'row',marginBottom:30}}>
@@ -224,8 +223,9 @@ export const DetailWork = () => {
                     </View>
                 </View>
                 }
-                <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입조종사</Text>
                 {userType == '1'?
+                <>
+                <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입조종사</Text>
                 <View style={DetailWorkStyle.cardbox}>
                     <View style={DetailWorkStyle.cardInbox}>
                         <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>조종사명</Text>
@@ -243,13 +243,17 @@ export const DetailWork = () => {
                         <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>추천수</Text>
                         <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
                     </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>전화번호</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
-                    </View>
+                    <CustomPhoneCall
+                        phonenumber={'010-2641-1541'}
+                        alertModalOn={()=>alertModalOn('010-2641-1541')}
+                    />
                 </View>
+                </>
                     :
                     <>
+                    {userType == '2' &&
+                    <>
+                    <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입조종사</Text>
                     <View style={{borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,borderRadius:8}}>
                         <UserInfoCard
                             index="1"
@@ -266,19 +270,18 @@ export const DetailWork = () => {
                             action={()=>{navigation.navigate('CompanyProfile')}}
                         />
                     </View>
-                        <TouchableOpacity style={{flexDirection:'row', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5,justifyContent:'center',marginVertical:10}}
-                        onPress={()=>{alertModalOn('010-2627-0184')}}
-                        >
-                        <Image style={{width:25,height:25,marginRight:5}} source={require('../../assets/img/ic_phone.png')}/>
-                        <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.MAIN_COLOR,flexShrink:1}]}>
-                            010-1234-5678</Text>
-                        </TouchableOpacity>
+                    </>
+                    }
                     </>
                 }
             </View>
             <View style={DetailWorkStyle.Whitebox}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:24}]}>대금관리</Text>
+                {userType !== '3'?
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>장비대금</Text>
+                :
+                <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>스페어대금</Text>
+                }
                 <View style={DetailWorkStyle.paymentcolorBox}>
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>
                         대금</Text>
@@ -325,7 +328,7 @@ export const DetailWork = () => {
                 </View>
                 }
                 {userType=='1' ?
-                <View>
+                <>
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>
                     계좌정보</Text>
                 <View style={DetailWorkStyle.paymentBox}>
@@ -348,9 +351,9 @@ export const DetailWork = () => {
                             박호상</Text>
                     </View>
                 </View>
-                </View>
+                </>
                 :
-                <View>
+                <>
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>
                     세금계산서 발행처</Text>
                 <View style={DetailWorkStyle.paymentBox}>
@@ -373,7 +376,7 @@ export const DetailWork = () => {
                             박호상</Text>
                     </View>
                 </View>
-                </View>
+                </>
                 }
 
                 {userType=='1' &&
@@ -404,69 +407,25 @@ export const DetailWork = () => {
                         <Text style={[fontStyle.f_regular,DetailWorkStyle.MaincolorText]}>전체선택</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={[DetailWorkStyle.documentBox,]}>
-                    <TouchableOpacity style={[DetailWorkStyle.documentBoxinTop]} onPress={()=>setOpenbox(!openbox)}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            장비(차량) 서류</Text>
-                        <Image style={{width:24,height:24}} source={require('../../assets/img/ic_dropdown.png')}/>
-                    </TouchableOpacity>
-                    {openbox&&
-                    <View style={[DetailWorkStyle.documentBoxinBox,{height:400}]}>
-                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <TouchableOpacity onPress={()=>{}}>
-                                <Image style={{width:20,height:20,marginRight:10}} source={require('../../assets/img/ic_check_off.png')}/>
-                            </TouchableOpacity>
-                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginRight:5}]}>건설기계조종사면허증</Text>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>[승인완료]</Text>
-                        </View>
-                        <Image resizeMode={'contain'} style={{width:92,height:92,marginVertical:20,}} source={require('../../assets/img/b_menu3_off.png')}/>
-                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <TouchableOpacity onPress={()=>{}}>
-                                <Image style={{width:20,height:20,marginRight:10}} source={require('../../assets/img/ic_check_off.png')}/>
-                            </TouchableOpacity>
-                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginRight:5}]}>운전명허증(1종)</Text>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>[승인완료]</Text>
-                        </View>
-                        <Image resizeMode={'contain'} style={{width:92,height:92,marginVertical:20,}} source={require('../../assets/img/b_menu3_off.png')}/>
-                    </View>
-                    }
-                </View>
-                <View style={[DetailWorkStyle.documentBox,]}>
-                    <TouchableOpacity style={[DetailWorkStyle.documentBoxinTop]} onPress={()=>setOpenbox(!openbox)}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            계약 서류</Text>
-                        <Image style={{width:24,height:24}} source={require('../../assets/img/ic_dropdown.png')}/>
-                    </TouchableOpacity>
-                    {openbox&&
-                    <View style={[DetailWorkStyle.documentBoxinBox,{height:400}]}>
-                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <TouchableOpacity onPress={()=>{}}>
-                                <Image style={{width:20,height:20,marginRight:10}} source={require('../../assets/img/ic_check_off.png')}/>
-                            </TouchableOpacity>
-                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginRight:5}]}>건설기계조종사면허증</Text>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>[승인완료]</Text>
-                        </View>
-                        <Image resizeMode={'contain'} style={{width:92,height:92,marginVertical:20,}} source={require('../../assets/img/b_menu3_off.png')}/>
-                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                            <TouchableOpacity onPress={()=>{}}>
-                                <Image style={{width:20,height:20,marginRight:10}} source={require('../../assets/img/ic_check_off.png')}/>
-                            </TouchableOpacity>
-                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginRight:5}]}>운전명허증(1종)</Text>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>[승인완료]</Text>
-                        </View>
-                        <Image resizeMode={'contain'} style={{width:92,height:92,marginVertical:20,}} source={require('../../assets/img/b_menu3_off.png')}/>
-                    </View>
-                    }
-                </View>
-                
+                {userType == "1" &&
+                <User1DocumentList
+                />
+                }
+                {userType == "2" &&
+                <User2DocumentList
+                />
+                }
+                {userType == "3" &&
+                <User3DocumentList
+                />
+                }
                 <CustomButton
-                style={{flex:1,marginRight:10}}
-                labelStyle={[{fontSize:16}]}
-                label={'선택문서 공유하기'}
-                action={()=>{navigation.goBack() ,console.log('선택문서 공유하기')}}
+                    style={{flex:1,marginRight:10}}
+                    labelStyle={[{fontSize:16}]}
+                    label={'선택문서 공유하기'}
+                    action={()=>{navigation.goBack() ,console.log('선택문서 공유하기')}}
                 />
             </View>
-            
         </ScrollView>
         <AlertModal
             show={alertModal.alert}
