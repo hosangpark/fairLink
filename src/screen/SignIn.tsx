@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../type/routerType';
 import { KakaoOAuthToken } from '@react-native-seoul/kakao-login';
+import messaging from '@react-native-firebase/messaging';
 
 import {
     KakaoProfile,
@@ -16,37 +17,49 @@ import {
     getProfile,
   } from '@react-native-seoul/kakao-login';
 import { LoginIntroModal } from '../modal/LoginIntroModal';
+import { usePostMutation } from '../util/reactQuery';
 
 export const SignIn = () => {
     const [isAutoLogin, setIsAutoLogin] = useState(false);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+
+    const signInMutation = usePostMutation('signIn','member/login.php'); //로그인 mutation
 
     const [introModal, setIntroModal] = useState(false);
 
     const introAction = () => {
         setIntroModal(false);
         signInWithKakao();
-        
     }
 
 
     const signInWithKakao = async (): Promise<void> => { //카카오 로그인
         try {
             const token: KakaoOAuthToken = await login();
-            console.log('accessToken ? ' , token.accessToken);
-            console.log('accessTokenExpiresAt' , token.accessTokenExpiresAt);
-            console.log('refreshToken ? ' , token.refreshToken);
-            console.log('refreshTokenExp ? ' , token.refreshTokenExpiresAt);
+            const pushToken = await messaging().getToken();
+            // console.log('pushToken ? ' ,pushToken);
+            // console.log('accessToken ? ' , token.accessToken);
             
-            const profile: KakaoProfile = await getProfile();
-            console.log(profile);
+            const profile: any = await getProfile();
 
-            if(token){
-                navigation.navigate('Agreements',{token : token.accessToken});
+            if(profile.id){
+                console.log(profile.id);
+
+                const signInParams = {
+                    sns_id : profile.id,
+                    app_token : pushToken,
+                }
+                const {result,data, msg} = await signInMutation.mutateAsync(signInParams);
+
+
+                if(result === 'true'){
+                    // navigation.replace('Main');
+                    console.log(data);
+                }
+                else{
+                    navigation.navigate('Agreements',{token : profile.id});
+                }
             }
-
-        //   setResult(JSON.stringify(token));
-        
         } catch(err) {
             console.log(err);
             

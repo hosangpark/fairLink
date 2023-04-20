@@ -1,8 +1,8 @@
 import {useQuery , useMutation } from 'react-query';
 import axios from 'axios';
 
-export const baseUrl = '';
-export const debugKey = '';
+export const baseUrl = 'https://fairlink.cafe24.com/api/';
+export const debugKey = 'L0FONYcvjajULdjnaKpBP';
 
 const axiosInstance = axios.create({
     baseURL : baseUrl
@@ -17,7 +17,7 @@ export const fetchPostData = async (postData:object , apiUrl : string) => { //re
     }
 
 const {data} = await axiosInstance.post(apiUrl,{
-        debug_key : debugKey,
+        debug_jwt : debugKey,
         ...postData
     },config)
 

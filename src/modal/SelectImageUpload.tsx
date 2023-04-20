@@ -62,7 +62,6 @@ export const SelectImageUpload = ({ //서류 업로드 (카메라, 갤러리 선
             return;
         }
         if(res.assets?.length > 0){
-            console.log(res);
             setImage(res.assets[0]);
             hide();
         }
@@ -90,7 +89,6 @@ export const SelectImageUpload = ({ //서류 업로드 (카메라, 갤러리 선
                 const result = await check(PERMISSIONS.IOS.CAMERA);
                 switch (result) {
                 case 'granted': //ios 권한 허용
-                    console.log('카메라 권한이 허용됨');
                     launchCamera(imagePickerOption, onPickImage);
                     break;
                 case 'denied': //카메라 거부
