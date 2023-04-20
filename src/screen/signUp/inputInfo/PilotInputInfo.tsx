@@ -34,7 +34,7 @@ interface PilotInputInfoItemType {
     accessories : string[],
 }
 
-export const PilotInputInfo = ({memberType}:PilotInputInfoType) => {
+export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
@@ -327,7 +327,7 @@ export const PilotInputInfo = ({memberType}:PilotInputInfoType) => {
                     )
                 })} */}
                 <CustomButton 
-                    action={()=>{navigation.replace('RegDocument',{memberType:memberType})}}
+                    action={()=>{navigation.replace('RegDocument',{memberType:memberType,})}}
                     label='저장 후 필수서류 등록'
                     style={{marginTop:30}}
                     labelStyle={{...fontStyle.f_semibold}}

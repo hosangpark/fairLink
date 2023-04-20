@@ -1,7 +1,6 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineReducers , configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import { Loading } from '../reducers/LoadingReducer';
-
 const rootReducer = combineReducers({ //reducer 묶기
     isLoading : Loading,
 })
@@ -22,5 +21,7 @@ export type AppDispatch = typeof store.dispatch;
 
 export const useAppSelector : TypedUseSelectorHook<RootState> = useSelector; //useSelector 커스텀
 export const useAppDispatch = () => useDispatch<AppDispatch>(); //useDispatch 커스텀
+
+
 
 export default store;

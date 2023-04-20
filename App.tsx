@@ -19,6 +19,7 @@ import store from './src/redux/store';
 import {Platform} from 'react-native';
 import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 
+import messaging from '@react-native-firebase/messaging';
 /**
  * react-native 버전 및 sdk 버전은 git hub readme 참조해주세요. 
  *
@@ -44,6 +45,19 @@ import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 const App = () => {
 
   const [queryClient] = React.useState(()=>new QueryClient);
+
+  messaging().setBackgroundMessageHandler(async remoteMessage => { //background push
+    console.log('is background', remoteMessage);
+  });
+
+  React.useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      //forground 푸시
+    });
+    return unsubscribe;
+  });
+
 
   React.useEffect(()=>{
     if (Platform.OS === "android") {

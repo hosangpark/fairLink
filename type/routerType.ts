@@ -24,7 +24,9 @@ export type RouterNavigatorParams = {
         memberType : number;
     }
     RegDocument : {
+        fileCheck:object;
         memberType : number;
+        mt_idx : number;
     }
 
     OpenConstruction:undefined;

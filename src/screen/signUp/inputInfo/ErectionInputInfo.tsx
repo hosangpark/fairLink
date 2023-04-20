@@ -10,14 +10,22 @@ import { ErectionInputInfoType } from '../../screenType';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../type/routerType';
+import { getProfile } from '@react-native-seoul/kakao-login';
+import CheckBox from '@react-native-community/checkbox';
+import messaging from '@react-native-firebase/messaging';
+import { usePostMutation } from '../../../util/reactQuery';
 
 
 export const ErectionInputInfo = ({
+    sns_id,
     memberType
 }:ErectionInputInfoType) => {
 
+
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
+
+    const signupErecMutation = usePostMutation('signupErec','member/signup1.php');
 
     const alertModalOn = (msg : string, type? : string, strongMsg? : string) => {
         setAlertModal({
@@ -33,10 +41,10 @@ export const ErectionInputInfo = ({
     }
 
     const [inputInfo , setInputInfo] = React.useState({
-        emp_name : '',
-        position : '',
-        mb_name : '',
-        emp_number : '',
+        mct_company : '',
+        mct_position : '',
+        mct_ceo : '',
+        mct_busi_num : '',
     })
 
     const inputInfoHandler = (text : string, key? : string) => {
@@ -48,12 +56,43 @@ export const ErectionInputInfo = ({
         }
     }
 
-    const saveInfoHandler = () => {
-        // if(inputInfo.emp_name === '' || inputInfo.position === '' || inputInfo.mb_name === '' || inputInfo.emp_number === ''){
-        //     alertModalOn('필수항목을 모두 입력하세요.');
-        // }
+    const saveInfoHandler = async () => {
+        if(inputInfo.mct_company === '' || inputInfo.mct_position === '' || inputInfo.mct_ceo === '' || inputInfo.mct_busi_num === ''){
+            alertModalOn('필수항목을 모두 입력하세요.');
+        }
+        else{
+            const pushToken = await messaging().getToken();
+            const profile: any = await getProfile();
+
+            const erecSignUpParams = {
+                mt_id : profile.email === 'null' ? 'aaa@aaa.com' : profile.email,
+                sns_id : sns_id,
+                app_token : pushToken,
+                sql_check : 'N',
+                mt_type : '1',
+                mt_name : profile.nickname === 'null' ? 'name' : profile.nickname,
+                mt_birth : profile.birthyear === 'null' || profile.birthday === 'null' ? '1998-01-06' : profile.birthyaer+'-'+profile.birthday,
+                // mt_gender : 'M'
+                mt_hp : profile.phoneNumber === 'null' ? '010-9793-9181' : profile.phoneNumber,
+                mct_company : inputInfo.mct_company,
+                mct_position : inputInfo.mct_position,
+                mct_ceo : inputInfo.mct_ceo,
+                mct_busi_num : inputInfo.mct_busi_num,
+            }
+
+            const {data,msg,result} = await signupErecMutation.mutateAsync(erecSignUpParams);
+            console.log(result,msg);
+            console.log(data);
+
+            if(result === 'true'){
+                navigation.replace('RegDocument',{fileCheck:data.data.file_check,memberType:memberType,mt_idx:data.data.mt_idx});
+            }
+            else{
+
+            }
+        }
         // else{
-            navigation.navigate('RegDocument',{memberType:memberType})
+            // navigation.navigate('RegDocument',{memberType:memberType})
         // }
     }
 
@@ -66,9 +105,9 @@ export const ErectionInputInfo = ({
                 editable={true}
                 placeholder='회사명을 입력해주세요.'
                 placeholderTextColor={colors.GRAY_COLOR}
-                input={inputInfo.emp_name}
+                input={inputInfo.mct_company}
                 setInput={inputInfoHandler}
-                type={'emp_name'}
+                type={'mct_company'}
                 title={'회사명'}
                 essential
             />
@@ -79,9 +118,9 @@ export const ErectionInputInfo = ({
                 editable={true}
                 placeholder='직책을 입력해주세요.'
                 placeholderTextColor={colors.GRAY_COLOR}
-                input={inputInfo.position}
+                input={inputInfo.mct_position}
                 setInput={inputInfoHandler}
-                type={'position'}
+                type={'mct_position'}
                 title={'직책'}
                 essential
             />
@@ -92,10 +131,10 @@ export const ErectionInputInfo = ({
                 editable={true}
                 placeholder='대표자명을 입력해주세요.'
                 placeholderTextColor={colors.GRAY_COLOR}
-                input={inputInfo.mb_name}
+                input={inputInfo.mct_ceo}
                 setInput={inputInfoHandler}
-                type={'mb_name'}
-                title={'회사명'}
+                type={'mct_ceo'}
+                title={'대표자명'}
 
                 essential
             />
@@ -106,9 +145,9 @@ export const ErectionInputInfo = ({
                 editable={true}
                 placeholder='사업자등록번호를 입력해주세요.'
                 placeholderTextColor={colors.GRAY_COLOR}
-                input={inputInfo.emp_number}
+                input={inputInfo.mct_busi_num}
                 setInput={inputInfoHandler}
-                type={'emp_number'}
+                type={'mct_busi_num'}
                 title={'사업자등록번호'}
                 essential
                 inputType={'number-pad'}
