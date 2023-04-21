@@ -13,7 +13,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../type/routerType";
 
 export const MatchingEquipment = () => {
-    const [checkItems, setCheckItems] = useState<number>();
     const [selectedItems, setSelectedItems] = useState<number>();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
@@ -33,8 +32,8 @@ export const MatchingEquipment = () => {
     const handleEquipCheck = (checked:boolean, id:number) => {
         if (checked) {
             setSelectedItems(id);
-        } else if ( id === checkItems) {
-            setSelectedItems(-1);
+        } else if ( id === selectedItems) {
+            setSelectedItems(undefined);
         }
     };
 
@@ -95,7 +94,7 @@ export const MatchingEquipment = () => {
                                         value={selectedItems === (data.id) ? true : false}
                                         onValueChange={(e) => handleEquipCheck(e, data.id)}
                                         tintColors={{ true: colors.MAIN_COLOR }}
-                                        style={{ width: 20, height: 20, marginVertical: 6, top: 1, left: 1, zIndex: 1, position: 'absolute' }}
+                                        style={{ width: 20, height: 20, marginVertical: 6, top: 1, left: 1, zIndex: 1, position: 'absolute',}}
                                     />
                                     <SelectedEquipmentCard 
                                         equipNumb={data.equipNumb}

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { ScrollView, View, Text, useWindowDimensions } from "react-native";
+import { ScrollView, View, Text, useWindowDimensions, StyleSheet } from "react-native";
 import { BackHeader } from "../../component/header/BackHeader";
 import { colors, fontStyle, styles } from "../../style/style";
 import { TabView, SceneMap ,TabBar} from 'react-native-tab-view';
@@ -49,6 +49,7 @@ export const CompanyProfile = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const layout = useWindowDimensions();
     const [index, setIndex] = React.useState(0);
+    const [tab, setTab] = useState(0);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
     const [routes] = React.useState([
         { key: 'first', title: '프로필' },
@@ -73,7 +74,7 @@ export const CompanyProfile = () => {
     return (
         <SafeAreaView style={{flex:1}}>
             <BackHeader title="장비회사 프로필"/>
-            <View style={{flex:1}}>
+            <ScrollView style={{flex:1}}>
                 <ProfileInfoCard
                     index = '0'
                     jobType = '차주 겸 조종사' 
@@ -88,7 +89,31 @@ export const CompanyProfile = () => {
                     phone = '010-1123-1111'
                 />
                 {/* <View style={{flex:1}}> */}
-                <TabView
+                <View style={{ flexDirection:'row', backgroundColor:colors.WHITE_COLOR, justifyContent:'space-around', alignItems: 'center', }}>
+                    <View style={tab === 0 ? TabStyle.tabViewOn : TabStyle.tabViewOff }>
+                        <TouchableOpacity onPress={() => setTab(0)}>
+                            <Text style={[ tab === 0 ? fontStyle.f_semibold && TabStyle.tabTextOn : fontStyle.f_light && TabStyle.tabTextOff]}>프로필</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={tab === 1 ? TabStyle.tabViewOn : TabStyle.tabViewOff }>
+                        <TouchableOpacity onPress={() => setTab(1)}>
+                            <Text style={[ tab === 1 ? fontStyle.f_semibold && TabStyle.tabTextOn : fontStyle.f_light && TabStyle.tabTextOff]}>필수서류</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={tab === 2 ? TabStyle.tabViewOn : TabStyle.tabViewOff }>
+                        <TouchableOpacity onPress={() => setTab(2)}>
+                            <Text style={[ tab === 2 ? fontStyle.f_semibold && TabStyle.tabTextOn : fontStyle.f_light && TabStyle.tabTextOff]}>부속장치</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                {
+                    tab === 0
+                    ? FirstRoute()
+                    : tab === 1
+                    ? SecondRoute()
+                    : ThirdRoute()
+                }
+                {/* <TabView
                     navigationState={{ index, routes }}
                     renderScene={renderScene}
                     onIndexChange={setIndex}
@@ -119,7 +144,7 @@ export const CompanyProfile = () => {
                             )}
                         />
                     )}
-                />
+                /> */}
                 {/* </View> */}
                 <TouchableOpacity onPress={() => alertModalOn('','test')}>
                     <View style={[styles.buttonStyle, {}]}>
@@ -133,8 +158,15 @@ export const CompanyProfile = () => {
                     hide={alertModalOff}
                     type={alertModal.type}
                 />
-            </View>
+            </ScrollView>
         </SafeAreaView>
 
     )
 }
+
+const TabStyle = StyleSheet.create({
+    tabViewOn : { flex: 1, borderBottomWidth: 3, borderColor: colors.MAIN_COLOR},
+    tabViewOff : { flex: 1, borderBottomWidth: 1, borderColor: colors.BORDER_GRAY_COLOR1},
+    tabTextOn : { color:colors.FONT_COLOR_BLACK, fontSize: 18,  textAlign: 'center', paddingVertical:10},
+    tabTextOff : { color:colors.FONT_COLOR_GRAY, fontSize: 18,  textAlign: 'center', paddingVertical:10},
+})
