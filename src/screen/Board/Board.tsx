@@ -13,6 +13,8 @@ import { CustomButton } from '../../component/CustomButton';
 export const Board = ({route}:any) => {
     const [userType,setUserType] = useState('3')
     const [strOption,setStrOption] = useState<string>('')
+    const [year,setYear] = useState<string>('')
+    const [month,setMonth] = useState<string>('')
     const accordionList = userType =='1'?
     ['배차 모집중','계약 진행중','작업중','작업완료']:
     userType =='2'?
@@ -118,8 +120,8 @@ export const Board = ({route}:any) => {
                     <CustomSelectBox 
                         defaultText='선택하세요.'
                         strOptionList={['2020년','2021년','2022년','2023년',]}
-                        selOption={strOption}
-                        strSetOption={setStrOption}
+                        selOption={year}
+                        strSetOption={setYear}
                         buttonStyle={selectBoxStyle.btnStyle}
                         buttonTextStyle={selectBoxStyle.btnTextStyle}
                         rowStyle={selectBoxStyle.rowStyle}
@@ -132,8 +134,8 @@ export const Board = ({route}:any) => {
                     <CustomSelectBox 
                         defaultText='선택하세요.'
                         strOptionList={['1월','2월','3월','4월',]}
-                        selOption={strOption}
-                        strSetOption={setStrOption}
+                        selOption={month}
+                        strSetOption={setMonth}
                         buttonStyle={selectBoxStyle.btnStyle}
                         buttonTextStyle={selectBoxStyle.btnTextStyle}
                         rowStyle={selectBoxStyle.rowStyle}
