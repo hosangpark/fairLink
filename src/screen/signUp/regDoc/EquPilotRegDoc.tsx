@@ -4,7 +4,7 @@ import {View ,Text, TouchableOpacity,ImageBackground,Image, Platform} from 'reac
 import { colors, fontStyle, styles } from '../../../style/style';
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
 import { NumberObejctType } from '../../../component/componentsType';
-import { equUploadList } from '../../../component/utils/list';
+import { equUploadList, pilotUploadList } from '../../../component/utils/list';
 import { SelImageType } from '../../screenType';
 import { AlertModal, initialAlert } from '../../../modal/AlertModal';
 import { SelectImageUpload } from '../../../modal/SelectImageUpload';
@@ -17,7 +17,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../type/routerType';
 
 
-type PilotRegDocType = {
+type EquPilotRegDocType = {
     memberType : number,
     mt_idx:number,
     fileCheck : NumberObejctType,
@@ -31,11 +31,14 @@ type tempUploadImageType = {
     key : string,
 }
 
-export const PilotRegDoc = ({memberType,fileCheck,mt_idx}:PilotRegDocType) => { //조종사, 조종사 서류 받기
+export const EquPilotRegDoc = ({memberType,fileCheck,mt_idx}:EquPilotRegDocType) => { //장비업체, 조종사 서류 받기
+
+    console.log(memberType);
 
     const dispatch = useAppDispatch();
+    const reqFileList = memberType === 1 ? equUploadList : pilotUploadList;
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const uploadEquDocMutation = usePostMutation('uploadErecDoc','member/signup2_file.php',true);
+    const uploadEquDocMutation = usePostMutation('uploadErecDoc',memberType === 1 ? 'member/signup2_file.php' : 'member/signup4_file.php' ,true);
 
     const [uploadList, setUploadList] = React.useState<tempUploadImageType[]>([]);
 
@@ -112,7 +115,7 @@ export const PilotRegDoc = ({memberType,fileCheck,mt_idx}:PilotRegDocType) => { 
             if(fileCheck[key] === 'Y'){
                 const filterData = uploadList.filter(el => el.key === key);
                 if(filterData.length === 0){
-                    const noneData = equUploadList.find(el=> el.key === key);
+                    const noneData = reqFileList.find(el=> el.key === key);
                     console.log(noneData);
                     if(noneData){
                         alertModalOn(`${noneData.name}을 업로드해주세요.`,'확인')
@@ -156,7 +159,7 @@ export const PilotRegDoc = ({memberType,fileCheck,mt_idx}:PilotRegDocType) => { 
             </View>
 
             
-            {equUploadList.map((item,index) => {
+            {reqFileList.map((item,index) => {
                 return(
                     <View key={index}>
                         {Object.values(fileCheck)[index] === 'Y' &&

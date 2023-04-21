@@ -75,6 +75,16 @@ export const equUploadList = [
     {key : '9', name : '통장사본'},
     {key : '10', name : '장비사진'},
 ]
+
+export const pilotUploadList = [
+    {key : '1', name : '건설기계조종사면허증'},
+    {key : '2', name : '운전면허증'},
+    {key : '3', name : '건설기계조종사 안전교육이수증'},
+    {key : '4', name : '건설기초안전보건교육'},
+    {key : '5', name : '화물운송종사자 자격증'},
+    {key : '6', name : '이동식 크레인조종교육이수증 또는 기중기운전기능사'},
+    {key : '7', name : '통장사본'},
+]
     // '고소작업차(굴절)' : 
 export const getEquipListConverter = (equipList:object[]) => { //장비 타입 return
     let tempArray : string[] = [];
