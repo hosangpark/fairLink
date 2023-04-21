@@ -49,11 +49,11 @@ export const SignIn = () => {
             
             const profile: any = await getProfile();
 
-            if(profile.id){
+            // if(profile.id){
                 console.log(profile.id);
 
                 const signInParams = {
-                    sns_id : profile.id,
+                    sns_id : profile.id ? profile.id : '123',
                     app_token : pushToken,
                 }
                 const {result,data, msg} = await signInMutation.mutateAsync(signInParams);
@@ -69,7 +69,7 @@ export const SignIn = () => {
                 else{
                     navigation.navigate('Agreements',{token : profile.id});
                 }
-            }
+            // }
         } catch(err) {
             console.log(err);
             
