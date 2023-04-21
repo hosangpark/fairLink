@@ -1,8 +1,10 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineReducers , configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import { Loading } from '../reducers/LoadingReducer';
+import { UserInfo } from '../reducers/UserInfoReducer';
 const rootReducer = combineReducers({ //reducer 묶기
     isLoading : Loading,
+    userInfo : UserInfo,
 })
 //자동로그인 체크를 하면 local 로그인정보 & 자동로그인 체크 안할경우 session
 

@@ -9,51 +9,57 @@ import { CustomSelectBox } from '../../../component/CustomSelectBox';
 import { selectBoxStyle } from '../../../style/style';
 import { AlertModal, initialAlert } from '../../../modal/AlertModal';
 import { CustomButton } from '../../../component/CustomButton';
-import { PilotInputInfoType } from '../../screenType';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../type/routerType';
+import { EquInputInfoType, PilotInputInfoType } from '../../screenType';
+import { accessoriesConvert, bankList, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, locationList } from '../../../component/utils/list';
+import { usePostMutation } from '../../../util/reactQuery';
+import messaging from '@react-native-firebase/messaging';
+import { getProfile } from '@react-native-seoul/kakao-login';
 
 interface PilotInputInfoItemType {
     mb_sex_m : boolean,
     mb_sex_f : boolean,
 
-    location : string,
+    mpt_location : string,
 
-    emp_name : string,
-    mb_name : string,
-    emp_number : string,
+    mpt_company : string,
+    mpt_ceo : string,
+    mpt_busi_num : string,
 
-    bank : string,
-    bank_number : string,
+    mpt_vank : string,
+    mpt_vank_num : string,
 
-    equ_type : string,
-    equ_stand : string,
-    equ_stand_detail : string,
+    mpt_equip_type : string,
+    mpt_equip_stand1 : string,
+    mpt_equip_stand2 : string,
 
-    accessories : string[],
 }
-
 export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php');
+    const signUpPilotMutation = usePostMutation('signUpPilot','member/signup4.php');
 
+    const [equipMainList, setEquipMianList] = React.useState<object[]>([]);
+
+    
+        
     const [inputInfo, setInputInfo] = React.useState<PilotInputInfoItemType>({
         mb_sex_m : true,
         mb_sex_f : false,
 
-        emp_name : '',
-        mb_name : '',
-        emp_number : '',
-        location : '',
-        bank : '',
-        bank_number:'',
+        mpt_company : '',
+        mpt_ceo : '',
+        mpt_busi_num : '',
+        mpt_location : '',
+        mpt_vank : '',
+        mpt_vank_num:'',
 
-        equ_type : '',
-        equ_stand : '',
-        equ_stand_detail : '',
-
-        accessories : [],
+        mpt_equip_type : '',
+        mpt_equip_stand1 : '',
+        mpt_equip_stand2 : '',
     })
     const [tempSelAcc , setTempSelAcc] = React.useState('');
 
@@ -73,10 +79,6 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
     }
 
 
-    const tempBankList = [
-        '기업은행','부산은행','신한은행','국민은행'
-    ];
-
     const inputInfoHandler = (text : string, key? : string) => {
         if(key){
             setInputInfo({
@@ -86,43 +88,92 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
         }
     }
 
-    // const tempSelAccHandler = (text:string) => { //부속장치 선택했을때 임시 저장
-    //     setTempSelAcc(text);
-    // }
+    const getEquipList = async () => { //장비 리스트 불러오기
+        const {data} = await getEquipListMutation.mutateAsync({});
 
-    // const accessoriesAddHandler = () => { //부속장치 추가했을때 이벤트
-    //     let tempArray : string[] = [...inputInfo.accessories];
+        setEquipMianList(data.data);
+    }
 
-    //     let flag = true;
-    //     inputInfo.accessories.forEach((item,index) => {
-    //         if(tempSelAcc === item){
-    //             alertModalOn('이미 선택한 부속 장치 입니다.');
-    //             flag = false;
-    //             return;
-    //         }
-    //     })
-    //     if(flag){
-    //         tempArray.push(tempSelAcc);
+    const tempSelAccHandler = (text:string) => { //부속장치 선택했을때 임시 저장
+        setTempSelAcc(text);
+    }
 
-    //         setInputInfo({
-    //             ...inputInfo,
-    //             accessories : [...tempArray],
-    //         })
-    //         setTempSelAcc('');
-    //     }
-    // }
 
-    // const deleteAccHandler = (index:number) => {
-    //     let tempArray : string[] = [...inputInfo.accessories];
-    //     if(tempArray[index]){
-    //         tempArray.splice(index,1);
+    const saveInfoHandler = async () => { //장비업체 회원가입
+        console.log(sns_id);
+        console.log(inputInfo);
 
-    //         setInputInfo({
-    //             ...inputInfo,
-    //             accessories : [...tempArray]
-    //         })
-    //     }
-    // }
+
+        const pushToken = await messaging().getToken();
+        const profile: any = await getProfile();
+
+        const signUpParams = {
+            mt_id : profile.email === 'null' ? 'aaa@aaa.com' : profile.email,
+            sns_id : sns_id,
+            app_token : pushToken,
+            sql_check : 'N',
+            mt_type : '4',
+            mt_name : profile.nickname === 'null' ? 'name' : profile.nickname,
+            mt_birth : profile.birthyear === 'null' || profile.birthday === 'null' ? '1998-01-06' : profile.birthyaer+'-'+profile.birthday,
+            // mt_gender : 'M'
+            mt_hp : profile.phoneNumber === 'null' ? '010-9793-9181' : profile.phoneNumber,
+            mt_gender : inputInfo.mb_sex_m ? 'M' : 'F',
+            mpt_company : inputInfo.mpt_company,
+            mpt_ceo : inputInfo.mpt_ceo,
+            mpt_busi_num : inputInfo.mpt_busi_num,
+            mpt_location:inputInfo.mpt_location,
+            mpt_vank:inputInfo.mpt_vank,
+            mpt_vank_num:inputInfo.mpt_vank_num,
+            mpt_equip_type : inputInfo.mpt_equip_type,
+            mpt_equip_stand1 : inputInfo.mpt_equip_stand1,
+            mpt_equip_stand2 : inputInfo.mpt_equip_stand2,
+        }
+
+        const {data,msg,result} = await signUpPilotMutation.mutateAsync(signUpParams);
+        console.log(data,msg,result);
+
+        if(result === 'true'){
+            navigation.replace('RegDocument',{fileCheck:data.data.file_check,memberType:memberType,mt_idx:data.data.mt_idx});
+        }
+        else{
+
+        }
+    }
+
+    const inputCheckHandler = () => {
+        if(inputInfo.mpt_company === ''  || inputInfo.mpt_ceo === '' || inputInfo.mpt_busi_num === '' || inputInfo.mpt_location === '' || inputInfo.mpt_vank === '' || inputInfo.mpt_vank_num === '' || inputInfo.mpt_equip_type === ''){
+            alertModalOn('필수항목을 모두 입력하세요.');
+        }
+        else if(inputInfo.mpt_equip_type !== ''){
+            if(inputInfo.mpt_equip_stand1 === ''){
+                alertModalOn('장비 규격을 선택해주세요.');
+            }
+            else{
+                if(inputInfo.mpt_equip_stand2 === ''){
+                    alertModalOn('장비 상세 규격을 선택해주세요.');
+                }
+                else{
+                    saveInfoHandler();
+                }
+            }
+        }   
+    }
+
+    React.useEffect(()=>{
+        getEquipList();
+    },[])
+
+    React.useEffect(()=>{
+        if(inputInfo.mpt_equip_type !== ''){
+            setInputInfo({
+                ...inputInfo,
+                mpt_equip_stand1 : '',
+                mpt_equip_stand2 : '',
+            })
+            setTempSelAcc('');
+        }
+    },[inputInfo.mpt_equip_type])
+
 
     return(
         <View style={{flex:1}}>
@@ -168,10 +219,10 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                     editable
                     placeholder='회사명을 입력해주세요.'
                     placeholderTextColor={colors.GRAY_COLOR}
-                    input={inputInfo.emp_name}
+                    input={inputInfo.mpt_company}
                     setInput={inputInfoHandler}
                     title='회사명'
-                    type='emp_name'
+                    type='mpt_company'
                     essential
                 />
                 <CustomInputTextBox 
@@ -181,10 +232,10 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                     editable
                     placeholder='대표자명을 입력해주세요.'
                     placeholderTextColor={colors.GRAY_COLOR}
-                    input={inputInfo.mb_name}
+                    input={inputInfo.mpt_ceo}
                     setInput={inputInfoHandler}
                     title='대표자명'
-                    type="mb_name"
+                    type="mpt_ceo"
                     essential
                 />
                 <CustomInputTextBox 
@@ -194,19 +245,19 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                     editable
                     placeholder='사업자등록번호를 입력해주세요.'
                     placeholderTextColor={colors.GRAY_COLOR}
-                    input={inputInfo.emp_name}
+                    input={inputInfo.mpt_busi_num}
                     setInput={inputInfoHandler}
                     title='사업자등록번호'
-                    type="emp_number"
+                    type="mpt_busi_num"
                     essential
+                    inputType='number-pad'
                 />
                 <MarginCom mt={20} />
-
                 <CustomSelectBox 
-                    strOptionList={tempBankList}
+                    strOptionList={locationList}
                     strSetOption={inputInfoHandler}
-                    type={'location'}
-                    selOption={inputInfo.location}
+                    type={'mpt_location'}
+                    selOption={inputInfo.mpt_location}
                     buttonStyle={selectBoxStyle.btnStyle}
                     buttonTextStyle={selectBoxStyle.btnTextStyle}
                     rowStyle={selectBoxStyle.rowStyle}
@@ -219,10 +270,10 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                  */}
                 <MarginCom isBorder isBorderDeep mt={30} mb={30} />
                 <CustomSelectBox 
-                    strOptionList={tempBankList}
-                    strSetOption={inputInfoHandler}
-                    type={'bank'}
-                    selOption={inputInfo.bank}
+                    objOptionList={bankList}
+                    objSetOption={inputInfoHandler}
+                    type={'mpt_vank'}
+                    selOption={bankList.filter(el=>el.key === inputInfo.mpt_vank)[0] ? bankList.filter(el=>el.key === inputInfo.mpt_vank)[0].name : ''}
                     buttonStyle={selectBoxStyle.btnStyle}
                     buttonTextStyle={selectBoxStyle.btnTextStyle}
                     rowStyle={selectBoxStyle.rowStyle}
@@ -231,6 +282,7 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                     title={'주거래은행'}
                     essential
                 />
+            
                 <CustomInputTextBox 
                     containerStyle={{marginTop:20}}
                     action={()=>{}}
@@ -238,96 +290,68 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                     editable
                     placeholder="계좌번호를 입력해주세요. ( '-' 포함 )"
                     placeholderTextColor={colors.GRAY_COLOR}
-                    input={inputInfo.emp_name}
+                    input={inputInfo.mpt_vank_num}
                     setInput={inputInfoHandler}
-                    title='사업자등록번호'
-                    type="bank_number"
+                    title='계좌번호'
+                    type="mpt_vank_num"
                     essential
+                    inputType='number-pad'
                 />
                 <MarginCom isBorder isBorderDeep mt={30} mb={30} />
+                
                 <CustomSelectBox 
-                    strOptionList={tempBankList}
+                    strOptionList={getEquipListConverter(equipMainList)}
                     strSetOption={inputInfoHandler}
-                    selOption={inputInfo.equ_type}
+                    selOption={inputInfo.mpt_equip_type}
                     buttonStyle={selectBoxStyle.btnStyle}
                     buttonTextStyle={selectBoxStyle.btnTextStyle}
                     rowStyle={selectBoxStyle.rowStyle}
                     rowTextStyle={selectBoxStyle.rowTextStyle}
                     defaultText='장비 종류 선택'
-                    type={'equ_type'}
+                    type={'mpt_equip_type'}
                     title={'장비 종류'}
                     essential
                 />
                 <View style={{flexDirection:'row',marginTop:5}}>
                     <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>*</Text>
-                    <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR,marginLeft:5}]}>{`조종 가능한 장비 중 메인 장비 1대만 등록 \n기타 장비는 회원가입 후 '마이페이지-장비현황'에서 추가해주세요.`}</Text>
+                    <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR,marginLeft:5}]}>대표자 명의의 보유장비가 여러대일 경우, 메인 장비 1대만 등록 기타 장비는 회원가입 후 '마이페이지-장비현황'에서 추가해주세요.</Text>
                 </View>
                 <MarginCom mt={20}/>
                 <CustomSelectBox 
-                    strOptionList={tempBankList}
+                    strOptionList={getEquipStandConverter(equipMainList,inputInfo.mpt_equip_type) ? getEquipStandConverter(equipMainList,inputInfo.mpt_equip_type) : ['선택하세요.']}
                     strSetOption={inputInfoHandler}
-                    selOption={inputInfo.equ_stand}
+                    selOption={inputInfo.mpt_equip_stand1}
                     buttonStyle={selectBoxStyle.btnStyle}
                     buttonTextStyle={selectBoxStyle.btnTextStyle}
                     rowStyle={selectBoxStyle.rowStyle}
                     rowTextStyle={selectBoxStyle.rowTextStyle}
-                    defaultText={inputInfo.equ_type === '' ? '장비 종류를 선택해주세요.' : '장비 규격 선택'}
-                    type={'equ_stand'}
+                    defaultText={inputInfo.mpt_equip_type === '' ? '장비 종류를 선택해주세요.' : '장비 규격 선택'}
+                    type={'mpt_equip_stand1'}
                     title={'장비 규격'}
                     essential
-                    isDisable={inputInfo.equ_type === ''}
+                    isDisable={inputInfo.mpt_equip_type === ''}
                 />
                 <MarginCom mt={20}/>
+
                 <CustomSelectBox 
-                    strOptionList={tempBankList}
+                    strOptionList={getEquStaDetailCon(equipMainList,inputInfo.mpt_equip_type,inputInfo.mpt_equip_stand1) ? getEquStaDetailCon(equipMainList,inputInfo.mpt_equip_type,inputInfo.mpt_equip_stand1) : ['선택하세요.']}
                     strSetOption={inputInfoHandler}
-                    selOption={inputInfo.equ_stand_detail}
+                    selOption={inputInfo.mpt_equip_stand2}
                     buttonStyle={selectBoxStyle.btnStyle}
                     buttonTextStyle={selectBoxStyle.btnTextStyle}
                     rowStyle={selectBoxStyle.rowStyle}
                     rowTextStyle={selectBoxStyle.rowTextStyle}
-                    defaultText={inputInfo.equ_stand === '' ? '장비 규격을 선택해주세요.' : '장비 상세 규격 선택'}
-                    type={'equ_stand_detail'}
+                    defaultText={inputInfo.mpt_equip_stand1 === '' ? '장비 규격을 선택해주세요.' : '장비 상세 규격 선택'}
+                    type={'mpt_equip_stand2'}
                     title={'장비 상세 규격'}
                     essential
-                    isDisable={inputInfo.equ_type === ''}
+                    isDisable={inputInfo.mpt_equip_stand1 === ''}
                 />
-                {/* <MarginCom mt={20}/>
-                <View>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16, color:colors.FONT_COLOR_BLACK,marginBottom:5}]}>부속 장치</Text>
-                    <View style={{flexDirection:'row'}}>
-                        <CustomSelectBox 
-                            strOptionList={tempBankList}
-                            strSetOption={tempSelAccHandler}
-                            selOption={tempSelAcc}
-                            buttonStyle={selectBoxStyle.btnStyle}
-                            buttonTextStyle={selectBoxStyle.btnTextStyle}
-                            rowStyle={selectBoxStyle.rowStyle}
-                            rowTextStyle={selectBoxStyle.rowTextStyle}
-                            defaultText={'부속 장비 선택'}
-                            style={{flex:7}}
-                        />
-                        <TouchableOpacity onPress={accessoriesAddHandler} style={[styles.addButton,{flexDirection:'row',justifyContent:'center',alignItems:'center',marginLeft:10}]}>
-                            <Image source={require('../../../assets/img/ic_add2.png')} style={{width:16,height:13}}/>
-                            <Text style={[fontStyle.f_semibold,{fontSize:18,color:colors.MAIN_COLOR,marginLeft:5}]}>추가</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                {inputInfo.accessories.map((item,index) => {
-                    return(
-                        <View key={index}>
-                            <MarginCom mt={10} />
-                            <View style={[styles.TextInputFalseBox,{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingHorizontal:20,paddingVertical:15,}]}>
-                                <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{item}</Text>
-                                <TouchableOpacity onPress={()=>{deleteAccHandler(index)}}>
-                                    <Image source={require('../../../assets/img/ic_circle_x.png')} style={{width:20,height:20}}/>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    )
-                })} */}
+                <MarginCom mt={20}/>
+                
                 <CustomButton 
-                    action={()=>{navigation.replace('RegDocument',{memberType:memberType,})}}
+                    // action={()=>{navigation.replace('RegDocument',{memberType:memberType})}}
+                    action={inputCheckHandler}
                     label='저장 후 필수서류 등록'
                     style={{marginTop:30}}
                     labelStyle={{...fontStyle.f_semibold}}

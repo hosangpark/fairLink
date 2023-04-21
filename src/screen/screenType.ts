@@ -51,5 +51,6 @@ export interface SelImageType {
     height : number,
     width:number,
     type:string,
+    key?:string,
 }
 //user end

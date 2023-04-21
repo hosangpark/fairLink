@@ -18,8 +18,15 @@ import {
   } from '@react-native-seoul/kakao-login';
 import { LoginIntroModal } from '../modal/LoginIntroModal';
 import { usePostMutation } from '../util/reactQuery';
+import { useAppDispatch, useAppSelector } from '../redux/store';
+import { updateUserInfo } from '../redux/actions/UserInfoReducer';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const SignIn = () => {
+    const dispatch = useAppDispatch();
+
+    const userInfo = useAppSelector(state => state.userInfo);
+
     const [isAutoLogin, setIsAutoLogin] = useState(false);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
@@ -53,8 +60,11 @@ export const SignIn = () => {
 
 
                 if(result === 'true'){
-                    // navigation.replace('Main');
-                    console.log(data);
+                    navigation.replace('Main');
+                    dispatch(updateUserInfo(data.data));
+                    if(isAutoLogin){
+                        AsyncStorage.setItem('loginInfo',profile.id);
+                    }
                 }
                 else{
                     navigation.navigate('Agreements',{token : profile.id});
@@ -76,6 +86,10 @@ export const SignIn = () => {
           
         }
       };
+
+    React.useEffect(()=>{
+        console.log(isAutoLogin);
+    },[isAutoLogin])
     return (
         <View style={{ backgroundColor: colors.WHITE_COLOR, flex: 1 }}>
             <LoginIntroModal 

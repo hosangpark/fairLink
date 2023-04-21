@@ -2,7 +2,7 @@ import React from 'react';
 import {View,ScrollView} from 'react-native';
 import { RegDocumentType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
-import { EquRegDoc } from './regDoc/EquRegDoc';
+import { EquPilotRegDoc } from './regDoc/EquPilotRegDoc';
 import { colors } from '../../style/style';
 import { ErectionRegDoc } from './regDoc/ErectionRegDoc';
 
@@ -17,7 +17,7 @@ export const RegDocument = ({route}:RegDocumentType) => {
             <ScrollView style={{flex:1}}>
                 <View style={{flex:1}}>
                     {memberType !== 0 ?
-                        <EquRegDoc fileCheck={fileCheck} memberType={memberType} mt_idx={mt_idx}/>
+                        <EquPilotRegDoc fileCheck={fileCheck} memberType={memberType} mt_idx={mt_idx}/>
                         :
                         <ErectionRegDoc memberType={memberType} fileCheck={fileCheck} mt_idx={mt_idx} />
                     }
