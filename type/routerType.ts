@@ -4,7 +4,9 @@ export type RouterNavigatorParams = {
 
     /** main */
     Main:undefined;
-    Video:undefined;
+    Request:undefined;
+    OpenRequest:undefined;
+    AcquaintanceRequest:undefined;
     Board:{
         type:string
     };

@@ -11,7 +11,7 @@ import { CustomButton } from '../../component/CustomButton';
 import { useAppSelector } from '../../redux/store';
 
 
-export const Board = ({route}:any) => {
+export const Request = () => {
     const {mt_type} = useAppSelector(state => state.userInfo);
     const [strOption,setStrOption] = useState<string>('')
     const [year,setYear] = useState<string>('')
@@ -83,24 +83,20 @@ export const Board = ({route}:any) => {
 
 
     useEffect(()=>{
-        if(route.params.type=='default'){
-            setStrOption('전체')
-        } else {
-            setStrOption('작업중')
-        }
+      console.log('req')
     },[])
 
     return(
         <View style={{flex:1,}}>
-        <BackHeader title="배차이력 및 현황" />
+        <BackHeader title={mt_type == '1' ? "배차요청하기" : "현장지원하기"} />
          <ScrollView style={{flex:1}}>
             <View style={{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,padding:20}}>
-                <View style={{flexDirection:'row'}}>
-                <View style={{flex:1,marginRight:10,marginBottom:20}}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]}>연도
+                <View style={{flexDirection:'row',marginBottom:20}}>
+                <View style={{flex:1}}>
+                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]}>종류
                     </Text>
                     <CustomSelectBox 
-                        defaultText='선택하세요.'
+                        defaultText='굴착기'
                         strOptionList={['2020년','2021년','2022년','2023년',]}
                         selOption={year}
                         strSetOption={setYear}
@@ -110,11 +106,25 @@ export const Board = ({route}:any) => {
                         rowTextStyle={selectBoxStyle.rowTextStyle}
                     />
                 </View>
-                <View style={{flex:1}}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]}>월
+                <View style={{flex:1,marginHorizontal:10}}>
+                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]}>규격
                     </Text>
                     <CustomSelectBox 
-                        defaultText='선택하세요.'
+                        defaultText='6W'
+                        strOptionList={['1월','2월','3월','4월',]}
+                        selOption={month}
+                        strSetOption={setMonth}
+                        buttonStyle={selectBoxStyle.btnStyle}
+                        buttonTextStyle={selectBoxStyle.btnTextStyle}
+                        rowStyle={selectBoxStyle.rowStyle}
+                        rowTextStyle={selectBoxStyle.rowTextStyle}
+                    />
+                </View>
+                <View style={{flex:1}}>
+                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]}>지급
+                    </Text>
+                    <CustomSelectBox 
+                        defaultText='일대'
                         strOptionList={['1월','2월','3월','4월',]}
                         selOption={month}
                         strSetOption={setMonth}
@@ -146,47 +156,7 @@ export const Board = ({route}:any) => {
                         rowTextStyle={selectBoxStyle.rowTextStyle}
                     />
                 </View>
-            </View>
-        {
-            accordionList.map((data, i) => (
-                <View key={i}>
-                {strOption == '전체'?
-                <CustomAccordion
-                    key={i}
-                    title={data}
-                    data={items}
-                    userType={mt_type}
-                    action={()=>{console.log(i)}}
-                />
-                :
-                strOption == data &&
-                <CustomAccordion
-                    key={i}
-                    title={data}
-                    data={items}
-                    userType={mt_type}
-                    action={()=>{console.log(i)}}
-                />
-                }
-                </View>
-            ))
-        }
-        {/* <FlatList
-            data={accordionList}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<NodataView />}
-            // ListFooterComponent={isListLoading ? <LoadingIndicator /> : null}
-            renderItem={({ item,index} ) => (
-              <CustomAccordion
-                title={item}
-                data={items}
-                action={()=>{}}
-                Accordionkey={index}
-            />
-            )}
-          /> */}
-            
-            
+            </View>            
         </ScrollView>
     </View>
     )

@@ -145,7 +145,7 @@ export const FavoriteListIndex = ({route}:any) => {
                     showsVerticalScrollIndicator={false}
                     renderItem={({item,index})=>{
                         return(
-                            <View style={{marginBottom:30}}>
+                            <View style={{paddingVertical:15}}>
                             <UserInfoCard 
                                 index={item.index}
                                 empName={item.empName}

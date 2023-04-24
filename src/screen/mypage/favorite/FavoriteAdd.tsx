@@ -4,13 +4,14 @@ import { BackHeader } from '../../../component/header/BackHeader';
 import { TabView, SceneMap ,TabBar} from 'react-native-tab-view';
 import { colors, fontStyle } from '../../../style/style';
 import { FavoriteAddPhone } from './favoriteAddDetail/FavoriteAddPhone';
+import { WorkHistory } from './favoriteAddDetail/WorkHistory';
 
 const FirstRoute = () => (
     <FavoriteAddPhone />
   );
   
 const SecondRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#fff' }} />
+    <WorkHistory/>
 );
 
 const renderScene = SceneMap({

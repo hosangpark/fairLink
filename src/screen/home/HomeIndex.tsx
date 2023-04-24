@@ -21,12 +21,10 @@ type tempItem = {
 }
 
 export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
-	// const [userType,setUserType] = useState('1')
 	const {mt_type} = useAppSelector(state => state.userInfo);
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
-
 	const tempListDate = [
 		{type : 1, subText : '굴삭기' },
 		{type : 2, subText : '크레인' },
@@ -41,7 +39,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	}
 
 	const tempAction = () => {
-
+		console.log('d')
 	}
 
 
@@ -68,8 +66,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				hide={tempModalHide}
 				action={tempAction}
 			/>
-			<ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
-				
+			<ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>			
 				<View style={[styles.bottomBorder,{backgroundColor:colors.WHITE_COLOR,padding:20}]}>
 					<View style={[{flexDirection: 'row', alignItems: 'flex-end'}]}>
 						<Text style={[fontStyle.k_bold, { color: colors.MAIN_COLOR, fontSize: 25 }]}>페어링크</Text>
@@ -78,27 +75,15 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				</View>
 				<View style={[styles.mainMenuWrapper,{backgroundColor:colors.WHITE_COLOR}]}>
 					<View style={{flexDirection:'row',flex:1}}>
-						{mt_type === '1' ?
-							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{setTempModal(true)} }>
-								<View>
-									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>배차</Text>
-									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>요청하기</Text>
-								</View>
-								<View style={{alignItems:'flex-end'}}>
-									<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main1.png')} />
-								</View>
-							</TouchableOpacity>
-						:	
-							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{setTempModal(true)} }>
-								<View>
-									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>현장</Text>
-									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>지원하기</Text>
-								</View>
-								<View style={{alignItems:'flex-end'}}>
-									<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main1.png')} />
-								</View>
-							</TouchableOpacity>
-						}
+						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{setTempModal(true)} }>
+							<View>
+								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>{mt_type=="1"? '배차':'현장'}</Text>
+								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>{mt_type=="1"? '요청하기':'지원하기'}</Text>
+							</View>
+							<View style={{alignItems:'flex-end'}}>
+								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main1.png')} />
+							</View>
+						</TouchableOpacity>
 						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.SKY_BLUE_COLOR}]} onPress={() => {if(setTabIndex)setTabIndex(3),navigation.navigate('Board',{type:'default'})} }>
 							<View>
 								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>배차이력 및</Text>
@@ -119,29 +104,17 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main3.png')} />
 							</View>
 						</TouchableOpacity>
-					{mt_type == '1'? 
+
 						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() => 
 							// navigation.navigate('MyPage') }>
 							{if(setTabIndex)setTabIndex(3),navigation.navigate('Board',{type:'workreport'}) }}>
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text>
+							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>{mt_type=="1"? '서류자동화':'작업일보'}</Text>
+							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>
+								{mt_type=="1"? '서비스':'작성'}</Text>
 							<View style={{alignItems:'flex-end'}}>
 								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main4.png')} />
 							</View>
 						</TouchableOpacity>
-						:
-						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() => 
-						// navigation.navigate('MyPage') }>
-						{if(setTabIndex)setTabIndex(3),navigation.navigate('Board',{type:'workreport'}) }}>
-						<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작업일보</Text>
-						<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작성</Text>
-						{/* <Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
-						<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text> */}
-						<View style={{alignItems:'flex-end'}}>
-							<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main4.png')} />
-						</View>
-					</TouchableOpacity>
-					}
 					</View>
 				</View>
 				<View style={[{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY2,padding:20}]}>

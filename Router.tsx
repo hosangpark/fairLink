@@ -31,6 +31,9 @@ import { Auth } from './src/screen/Auth';
 import { JoinInfo } from './src/screen/signUp/JoinInfo';
 import { RegDocument } from './src/screen/signUp/RegDocument';
 import { MatchingFilot } from './src/screen/Board/MatchingFilot';
+import { Request } from './src/screen/Request/Request';
+import { OpenRequest } from './src/screen/Request/OpenRequest';
+import { AcquaintanceRequest } from './src/screen/Request/AcquaintanceRequest';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -97,6 +100,21 @@ export const Router = () => {
                 <Stack.Screen 
                     name={'RegDocument'}
                     component={RegDocument}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'Request'}
+                    component={Request}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'OpenRequest'}
+                    component={OpenRequest}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen 
+                    name={'AcquaintanceRequest'}
+                    component={AcquaintanceRequest}
                     options={{headerShown:false}}
                 />
 

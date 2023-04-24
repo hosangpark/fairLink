@@ -1,13 +1,13 @@
 import React from 'react';
-import { Text, TouchableOpacity, View ,Image } from 'react-native';
+import { Text, TouchableOpacity, View ,Image,StyleSheet } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
-import { UserInfoCard2Type } from '../componentsType';
+import { BoardCardType } from '../componentsType';
 import { CustomButton } from '../CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 
-export const UserInfoCard2 = ({
+export const BoardCard = ({
     jobType = '',
     userName = '',
     score = 0,
@@ -16,7 +16,7 @@ export const UserInfoCard2 = ({
     workType=0,
     userType='',
     total=0
-}:UserInfoCard2Type) => {
+}:BoardCardType) => {
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
@@ -51,20 +51,31 @@ export const UserInfoCard2 = ({
                 </View>
                 <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:16}}>
                     <View style={{flex:1,paddingRight:30}}>
-                        <Text style={[fontStyle.f_bold,{fontSize:18,color:colors.FONT_COLOR_BLACK,marginBottom:8,}]} numberOfLines={1}>길동고등학교 창호보수</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>창호 철거 및 교체</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>스카이 43m</Text>
+                        <Text style={[fontStyle.f_bold,{fontSize:18,color:colors.FONT_COLOR_BLACK,marginBottom:userType=='3'? 5:8,}]} numberOfLines={1}>
+                            길동고등학교 창호보수</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:userType=='3'? 5:8}]} numberOfLines={1}>
+                            창호 철거 및 교체</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:userType=='3'? 5:8}]} numberOfLines={1}>
+                            스카이 43m</Text>
+                        {userType=='3' &&
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:userType=='3'? 5:8}]} numberOfLines={1}>
+                            경력 2년 +</Text>
+                        }
                     </View>
                     <TouchableOpacity style={[styles.card2Profile]} onPress={FlowEvent}>
                         <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
-                            {userType=='1'? '조종사':'지원자'}</Text>
+                            {userType=='1'? '조종사':userType=='2'? '지원자':'장비회사'}</Text>
                         <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>
-                            {userType=='1'? userName:[total]+'명'}
+                            {userType=='1'? userName:userType=='2'? [total]+'명':'기린중기'}
                         </Text>
+                        {userType !=='3' ?
                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {score}년+</Text>
+                        :
+                        <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.ORANGE_COLOR}]}>선정전</Text>
+                        }
                     </TouchableOpacity>
                 </View>
-                {complete &&
+                {complete && userType !=="3" &&
                     <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
@@ -76,7 +87,15 @@ export const UserInfoCard2 = ({
                     <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
-                        label={'모집취소'}
+                        label={'모집 취소'}
+                        action={()=>{navigation.navigate('WorkReport')}}
+                    />
+                }
+                {userType=='3' &&
+                    <CustomButton
+                        style={{}}
+                        labelStyle={{fontSize:16}}
+                        label={'지원 취소'}
                         action={()=>{navigation.navigate('WorkReport')}}
                     />
                 }
@@ -84,3 +103,6 @@ export const UserInfoCard2 = ({
         </TouchableOpacity>
     )
 }
+const BoardCardstyle = StyleSheet.create({
+
+})

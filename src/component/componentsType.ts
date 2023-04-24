@@ -25,6 +25,13 @@ export interface CustomAccordionType {
     userType:string
     action : ()=>void,
 }
+export interface CustomAccordionType2 {
+    title:string,
+    subtitle:string,
+    data:object[],
+    userType:string
+    action : ()=>void,
+}
 export interface DocumentAccordionType {
     title:string,
     subList:{
@@ -66,8 +73,9 @@ export interface UserInfoCardType {
     location:string,
     isDelete: boolean,
     isFavorite?:string,
+    isCheck?:string,
     index : string,
-    action:()=>void
+    action:(e:string)=>void
 }
 export interface HeavyEquipmentCardType {
     EquiName : string,
@@ -79,7 +87,7 @@ export interface HeavyEquipmentCardType {
     action:()=>void
     action2:()=>void
 }
-export interface UserInfoCard2Type {
+export interface BoardCardType {
     jobType:string,
     userName:string,
     score:number,
