@@ -45,8 +45,8 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
         })
     }
     const alertAction = () => {
-        if(alertModal.type === ''){ 
-            navigation.navigate('OpenConstruction');
+        if(alertModal.type === 'none_cons'){ 
+            navigation.navigate('OpenConstruction',{isData:false});
         }
         else if(alertModal.type === 'none_profile'){
             if ( mt_type === '2') {
@@ -69,13 +69,9 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             await pilotmyPageMutation.mutateAsync(idxParams)
 
             if(result === 'true'){
-                console.log("result",result)
-                console.log("data",data.data)
-                console.log("msg",msg)
                 setMypageData(data.data)
             }
             else{
-                console.log("else",result)
             }
         // }
         } catch(err) {
@@ -94,7 +90,6 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             setTabIndex(4);
         }
         mypageInform()
-        console.log(mt_type)
     },[])
 
     React.useEffect(()=>{
@@ -142,7 +137,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                 {mt_type == '1'?
                 <View style={styles.deepTopBorder}>
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
-                        onPress={()=>{alertModalOn(`개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`);}}
+                        onPress={()=>{alertModalOn(`개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`,'none_cons');}}
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 현장</Text>  
                     </TouchableOpacity>
@@ -204,7 +199,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     action={alertAction} // 서류작성_임대계약페이지 만들어지면 연결
                     hide={alertModalOff}
                     type={alertModal.type}
-                    btnLabel={alertModal.type ==='' ? '현장개설하기' : '프로필 작성하기'}
+                    btnLabel={alertModal.type ==='none_cons' ? '현장개설하기' : '프로필 작성하기'}
                 />
             </ScrollView>
         </View>
