@@ -17,7 +17,7 @@ import { DocumentAccordion } from '../../component/DocumentAccordion';
 import { User1DocumentList, User2DocumentList, User3DocumentList } from '../../component/UserDocumentList';
 import { CustomPhoneCall } from '../../component/CustomPhoneCall';
 
-export const DetailWork = () => {
+export const DetailWork = ({route}:any) => {
     const [userType,setUserType] = useState('3')
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [strOption , setStrOption] = React.useState<string>('');

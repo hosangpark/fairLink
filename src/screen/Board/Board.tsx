@@ -13,7 +13,7 @@ import { usePostMutation } from '../../util/reactQuery';
 
 
 export const Board = ({route}:any) => {
-    const {mt_type} = useAppSelector(state => state.userInfo);
+    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const [strOption,setStrOption] = useState<string>('')
     const [year,setYear] = useState<string>('')
     const [month,setMonth] = useState<string>('')
@@ -26,6 +26,7 @@ const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_ord
   const BoardInfrom = async (): Promise<void> => {
         try {
             const idxParams = {
+                // mt_idx : mt_idx,
                 mt_idx : '17',
                 year:year,
                 month:month,

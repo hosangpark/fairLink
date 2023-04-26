@@ -9,15 +9,75 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { AlertModal,initialAlert } from '../../modal/AlertModal';
 import { AlertClearType } from '../../modal/modalType';
+import { usePostQuery } from '../../util/reactQuery';
+import { useAppSelector } from '../../redux/store';
 
-export const DetailField = () => {
-    const userType:string = "2"
+const DetailFieldBox = ({
+    title,
+    text,
+    cot_pay_type,
+    cot_career,
+    cot_age,
+    cot_score,
+    cot_goods,
+    cot_start_date,
+    cot_end_date,
+    cot_start_time,
+    cot_end_time,
+    cot_pay_date
+}:any)=>{
+    // {title:string,text:string,cot_pay_type?:string,cot_start_date?:string}
+    return(
+    <View style={DetailFieldstyle.DetailFieldBox}>
+        <Text style={[fontStyle.f_semibold,DetailFieldstyle.DetailFieldTitle]}>{title}</Text>
+        {text&&
+        <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
+            {text}
+        </Text>
+        }
+        {cot_pay_date&&
+        <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
+            {cot_pay_date + " 일"}
+        </Text>
+        }
+        {title == '지원가능' &&
+        <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText,{lineHeight:25}]}>
+            경력 {cot_career} 년 이상 {'\n'}
+            연령 {cot_age}세 미만 {'\n'}
+            평점 {cot_score == '0'? '무관': cot_score + '이상'} {'\n'}
+            추천수 {cot_goods == '0'? '무관': cot_goods + '이상'}
+        </Text>
+        }
+        {title == '작업기간' &&
+        <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText,{lineHeight:25}]}>
+            {cot_start_date} ~ {cot_end_date} {'\n'}
+            {cot_start_time} ~ {cot_end_time}
+        </Text>
+        }
+        {title =='대금' &&
+        <>
+        {cot_pay_type !== 'Y'?
+        <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.MAIN_COLOR,borderWidth:1,borderColor:colors.MAIN_COLOR,borderRadius:4,paddingHorizontal:10,marginLeft:10}]}>
+            일대</Text>
+            :
+        <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.WHITE_COLOR,borderWidth:1,borderColor:colors.MAIN_COLOR,borderRadius:4,paddingHorizontal:10,backgroundColor:colors.MAIN_COLOR,marginLeft:10}]}>
+            월대</Text>
+        }
+        </>
+        }
+    </View>
+    )
+
+}
+
+export const DetailField = ({route}:any) => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 
     const alertModalOn = (strongMsg : string, type? : string) => { //alert 켜기
         setAlertModal({
             alert:true,
-            strongMsg:'010-2927-0185',
+            strongMsg:strongMsg,
             msg:`로${"\n"}전화연결 하시겠습니까?`,
             type:'confirm' ,
         })
@@ -25,93 +85,91 @@ export const DetailField = () => {
     const alertModalOff = () =>{ //modal 종료
         setAlertModal(initialAlert)
     }
-    useEffect(()=>{console.log('route')},[])
+
+    const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = usePostQuery('getManagerList',{mt_idx : "17",cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
+
+    React.useEffect(()=>{
+        console.log('test')
+    },[])
+
     return(
         <View style={{flex:1,}}>
         <BackHeader title="현장세부내용" />
         <ScrollView style={{flex:1,backgroundColor:colors.WHITE_COLOR}}>
             <View style={{backgroundColor:colors.MAIN_COLOR,padding:20}}>
-                <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.WHITE_COLOR,marginBottom:3}]}>본사 사옥 신축공사</Text>
-                <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:8}]}>GS건설</Text>
+                <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.WHITE_COLOR,marginBottom:3}]}>
+                    {DetailFieldData.data.data.crt_name}
+                </Text>
+                <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:8}]}>
+                    {DetailFieldData.data.data.company}</Text>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                 <Image resizeMode={'contain'} style={{width:10,height:15,marginRight:5}} source={require('../../assets/img/ic_map_pin_w.png')}/>
                 <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3,opacity:0.85}]}>
-                    
-                    경남 진주시 충무공동 사들로 123번길 32
+                    {DetailFieldData.data.data.detail_location}
                 </Text>
                 </View>
             </View>
             <View style={{paddingHorizontal:20,paddingVertical:20}}>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,DetailFieldstyle.DetailFieldTitle]}>장비</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W</Text>
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>최소연식</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W</Text>
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>부속장치</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W</Text>
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>작업내용</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W</Text>
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>지원가능</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W</Text>
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>작업기간</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W</Text>
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>회사명</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W굴삭기6W굴삭기6W굴삭기6W굴삭기6W굴삭기6W굴삭기6W굴삭기6W굴삭기6W굴삭기6W</Text>
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>대금</Text>
-                    <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginRight:10,flexShrink:1}]} numberOfLines={1}>
-                        70만원70만원70만원70만원70만원70만원70만원70만원70만원</Text>
-                    {userType == '1'?
-                    <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.MAIN_COLOR,borderWidth:1,borderColor:colors.MAIN_COLOR,borderRadius:4,paddingHorizontal:10,}]}>
-                        일대</Text>
-                        :
-                    <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.WHITE_COLOR,borderWidth:1,borderColor:colors.MAIN_COLOR,borderRadius:4,paddingHorizontal:10,backgroundColor:colors.MAIN_COLOR}]}>
-                        월대</Text>
-                    }
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>지급일</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W</Text>
-                </View>
-                <View style={DetailFieldstyle.DetailFieldBox}>
-                    <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>담당자</Text>
-                    <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText]}>
-                        굴삭기6W</Text>
-                </View>
+                <DetailFieldBox
+                    title={'장비'}
+                    text={DetailFieldData.data.data.cot_e_type}
+                />
+                <DetailFieldBox
+                    title={'최소연식'}
+                    text={DetailFieldData.data.data.cot_e_year}
+                />
+                <DetailFieldBox
+                    title={'부속장치'}
+                    text={DetailFieldData.data.data.cot_e_sub}
+                />
+                <DetailFieldBox
+                    title={'작업내용'}
+                    text={DetailFieldData.data.data.cot_content}
+                />
+                <DetailFieldBox
+                    title={'지원가능'}
+                    cot_career={DetailFieldData.data.data.cot_career}
+                    cot_age={DetailFieldData.data.data.cot_age}
+                    cot_score={DetailFieldData.data.data.cot_score}
+                    cot_goods={DetailFieldData.data.data.cot_goods}
+                />
+                <DetailFieldBox
+                    title={'작업기간'}
+                    cot_start_date={DetailFieldData.data.data.cot_start_date}
+                    cot_end_date={DetailFieldData.data.data.cot_end_date}
+                    cot_start_time={DetailFieldData.data.data.cot_start_time}
+                    cot_end_time={DetailFieldData.data.data.cot_end_time}
+                />
+                <DetailFieldBox
+                    title={'회사명'}
+                    text={DetailFieldData.data.data.company}
+                />
+                <DetailFieldBox
+                    title={'대금'}
+                    text={DetailFieldData.data.data.cot_pay_price}
+                    cot_pay_type={DetailFieldData.data.data.cot_pay_type}
+                />
+                <DetailFieldBox
+                    title={'지급일'}
+                    cot_pay_date={DetailFieldData.data.data.cot_pay_date}
+                />
+                <DetailFieldBox
+                    title={'담당자'}
+                    text={DetailFieldData.data.data.cot_m_name}
+                />
                 <View style={DetailFieldstyle.DetailFieldBox}>
                     <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>연락처</Text>
                     <TouchableOpacity style={{flexDirection:'row', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5}}
-                    onPress={()=>{alertModalOn('')}}
+                    onPress={()=>{alertModalOn(DetailFieldData.data.data.cot_m_num)}}
                     >
                     <Image style={{width:25,height:25}} source={require('../../assets/img/ic_phone.png')}/>
                     <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.MAIN_COLOR,flexShrink:1}]}>
-                        010-1234-5678</Text>
+                        {DetailFieldData.data.data.cot_m_num}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={[userType === '1'? DetailFieldstyle.staticbox : DetailFieldstyle.staticbox2 ]}>
-                {userType ==='1' ?
+            <View style={[mt_type === '1'? DetailFieldstyle.staticbox : DetailFieldstyle.staticbox2 ]}>
+                {mt_type ==='1' ?
                 <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:16}]}>
                     지원하기
                 </Text>
@@ -126,7 +184,7 @@ export const DetailField = () => {
                 </View>
                 }
                 
-                {userType ==='1' ?
+                {mt_type ==='1' ?
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}>
                         <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
