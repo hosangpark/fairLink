@@ -9,15 +9,28 @@ import { AlertClearType } from '../../modal/modalType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { CustomButton } from '../../component/CustomButton';
+import { useAppSelector } from '../../redux/store';
+import { usePostQuery } from '../../util/reactQuery';
 
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
-    const [userType,setUserType] = useState('1')
+    // const [userType,setUserType] = useState('1')
+    const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
 
+    const {data:myInfoData,isLoading:myInfoLoading,isError,refetch} = usePostQuery('getMyInfo',{mt_idx:mt_idx},'cons/mypage_info.php');
+
+    const [myInfo, setMyInfo] = React.useState({
+        company : '',
+        hp : '',
+        name : '',
+        position : '',
+        require_check : '',
+    })
+
     const alertModalOn = (msg : string, type? : string) => { //alert 켜기
-        setAlertModal({
+        setAlertModal({  
             alert:true,
             strongMsg:'',
             msg:msg,
@@ -30,10 +43,10 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             navigation.navigate('OpenConstruction');
         }
         else if(alertModal.type === 'none_profile'){
-            if ( userType === '2') {
+            if ( mt_type === '2') {
                 navigation.navigate('SettingProfile',{userType:'2'});
-            } else if ( userType === '3') {
-                navigation.navigate('SettingProfile',{userType:'3'});
+            } else if ( mt_type === '4') {
+                navigation.navigate('SettingProfile',{userType:'4'});
             }
         }
     }
@@ -49,10 +62,22 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
         }
     },[])
 
+    React.useEffect(()=>{
+        if(myInfoData){
+            setMyInfo(myInfoData.data.data);
+        }
+    },[myInfoData])
+
+    React.useEffect(()=>{
+        if(isFocused){
+            refetch();
+        }
+    },[isFocused])
+
     return (
         <View style={{flex:1}}>
             <BackHeader title="마이페이지" />
-            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+            {/* <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                 <CustomButton
                     action={()=>{setUserType('1')}}
                     label={'건설회사'}
@@ -70,16 +95,16 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
                     labelStyle={styles.whiteButtonLabelStyle}
                 />
-            </View>
+            </View> */}
             <ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
                 <View style={{padding:20}}>
                     <View style={[{backgroundColor:colors.MAIN_COLOR,borderRadius:8,padding:20}]}>
-                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3}]}>남동종합건설</Text>
-                        <Text style={[fontStyle.f_semibold,{fontSize:24,color:colors.WHITE_COLOR,marginBottom:7}]}>홍길동 차장님</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:18 , color:colors.WHITE_COLOR}]}>010-1234-5678</Text>
+                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3}]}>{myInfo.company}</Text>
+                        <Text style={[fontStyle.f_semibold,{fontSize:24,color:colors.WHITE_COLOR,marginBottom:7}]}>{myInfo.name} {myInfo.position}님</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:18 , color:colors.WHITE_COLOR}]}>{myInfo.hp}</Text>
                     </View>
                 </View>
-                {userType == '1'?
+                {mt_type == '1'?
                 <View style={styles.deepTopBorder}>
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
                         onPress={()=>{alertModalOn(`개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`);}}
@@ -98,7 +123,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     </TouchableOpacity>
                 </View>
                     :
-                userType == '2'?
+                    mt_type == '2'?
                 <View style={styles.deepTopBorder}>   
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
                         // onPress={() => {navigation.navigate('MyProfile')}}

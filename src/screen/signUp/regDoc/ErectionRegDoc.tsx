@@ -11,19 +11,34 @@ import { SelImageType } from '../../screenType';
 import { SelectImageUpload, initialFileType } from '../../../modal/SelectImageUpload';
 import { NumberObejctType } from '../../../component/componentsType';
 import { usePostMutation } from '../../../util/reactQuery';
+import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-community/async-storage';
+import { useAppDispatch } from '../../../redux/store';
+import { updateUserInfo } from '../../../redux/actions/UserInfoReducer';
 
 type ErectionRegDocType = {
     memberType : number,
     fileCheck : NumberObejctType,
     mt_idx : number,
+    mt_id : string,
 }
 
-export const ErectionRegDoc = ({memberType,fileCheck,mt_idx}:ErectionRegDocType) => { //건설회사 파일 받기
+type tempUploadImageType = {
+    name : string
+    type : string,
+    uri : string,
+    size : number,
+}
 
 
+export const ErectionRegDoc = ({memberType,fileCheck,mt_idx,mt_id}:ErectionRegDocType) => { //건설회사 파일 받기
+
+    const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const [busRegImage,setBusRegImage] = React.useState<SelImageType>(()=>initialFileType);
-    const uploadErecDocMutation = usePostMutation('uploadErecDoc','member/signup1_file.php');
+    const [busRegImage,setBusRegImage] = React.useState<tempUploadImageType>(()=>initialFileType);
+    const uploadErecDocMutation = usePostMutation('uploadErecDoc','member/signup1_file.php',true);
+    const signInMutation = usePostMutation('signIn','member/login.php'); //로그인 mutation
+
 
     const [alertModal, setAlertModal] = React.useState({
         ...initialAlert,
@@ -51,17 +66,45 @@ export const ErectionRegDoc = ({memberType,fileCheck,mt_idx}:ErectionRegDocType)
         })
     }
 
-    const alertAction = () => {
+    const alertAction = async () => {
         if(alertModal.type === 'delete_confirm'){
             setBusRegImage(()=>initialFileType)
         }
         else if(alertModal.type === 'upload_success'){
-            navigation.replace('Main');
+
+            const pushToken = await messaging().getToken();
+
+            const signInParams = {
+                sns_id : mt_id ? mt_id : '123',
+                app_token : pushToken,
+            }
+            const {result,data, msg} = await signInMutation.mutateAsync(signInParams);
+
+
+            if(result === 'true'){
+                navigation.replace('Main');
+                dispatch(updateUserInfo(data.data));
+                // if(isAutoLogin){
+                AsyncStorage.setItem('loginInfo',mt_id);
+                // }
+                navigation.replace('Main');
+
+            }
+            else{
+                navigation.navigate('Agreements',{token : mt_id});
+            }
+
         }
     }
 
     const uploadImage = async (image : SelImageType) => {
-        setBusRegImage(image);
+        // setBusRegImage(image);
+        setBusRegImage({
+            name : image.fileName,
+            type : 'image/jpg',
+            uri : image.uri,
+            size : image.fileSize,
+        })
     }
 
     const uploadDocumentHandler = async () => { //서류 업로드
@@ -75,10 +118,13 @@ export const ErectionRegDoc = ({memberType,fileCheck,mt_idx}:ErectionRegDocType)
                 mct_file : busRegImage,
             }
 
+            console.log(fileUploadParams);
+            
             const {result,msg} = await uploadErecDocMutation.mutateAsync(fileUploadParams);
 
 
             if(result === 'true'){
+
                 alertModalOn('회원가입이 완료되었습니다.','확인','upload_success');
             }
             else{

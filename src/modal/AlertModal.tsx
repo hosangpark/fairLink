@@ -53,7 +53,7 @@ export const AlertModal = ({ //알림창
                             {title}
                         </Text>
                         }
-                        <Text style={[modalStyle.contents,fontStyle.f_medium]}>
+                        <Text style={[modalStyle.contents,fontStyle.f_medium,{textAlign:'center'}]}>
                             {strongMsg &&
                             <Text style={fontStyle.f_bold}> [{strongMsg}] </Text>
                             }{msg}

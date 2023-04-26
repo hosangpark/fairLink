@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {ScrollView, TouchableOpacity, View,Image} from 'react-native';
+import {ScrollView, TouchableOpacity, View,Image,BackHandler} from 'react-native';
 import {Text} from 'react-native';
 import { styles, fontStyle, colors, swiperStyles } from '../../style/style';
 import { TextBox } from '../../component/TextBox';
@@ -14,6 +14,9 @@ import { LoginIntroModal } from '../../modal/LoginIntroModal';
 import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
 import { CustomButton } from '../../component/CustomButton';
 import { useAppSelector } from '../../redux/store';
+import { usePostQuery } from '../../util/reactQuery';
+import { AlertModal, initialAlert } from '../../modal/AlertModal';
+import cusToast from '../../util/toast/CusToast';
 
 type tempItem = {
 	type : number, //리스트타입
@@ -22,10 +25,13 @@ type tempItem = {
 
 export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	// const [userType,setUserType] = useState('1')
-	const {mt_type} = useAppSelector(state => state.userInfo);
+	const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+	const {data : reqCheckData , refetch:reqCheckRefetch} = usePostQuery('getConsReqCheck',{mt_idx:mt_idx},'cons/cons_require_check.php');
+
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
+    const [exitApp , setExitApp] = React.useState(false);
 
 	const tempListDate = [
 		{type : 1, subText : '굴삭기' },
@@ -34,14 +40,47 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 		{type : 1, subText : '굴삭기' },
 	]
 
-	const [tempModal, setTempModal] = React.useState(false);
+	const [reqConModal, setReqConModal] = React.useState(false);
 
-	const tempModalHide = () =>{
-		setTempModal(false);
+	const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
+
+	const alertModalOn = (msg:string, type?:string) => {
+		setAlertModal({
+			...alertModal,
+			alert:true,
+			msg:msg,
+			type:type?type : '',
+
+		})
+	}
+	const alertModalOff = () => {
+		setAlertModal(()=>initialAlert);
+	}
+	const alertAction = () => {
+		if(alertModal.type === 'none_req_con'){
+			navigation.navigate('OpenConstruction');
+		}
+	}
+
+	const reqConModalHide = () =>{
+		setReqConModal(false);
 	}
 
 	const tempAction = () => {
 
+	}
+
+	const reqConHandler = () => {
+		if(reqCheckData){
+			const reqCheck = reqCheckData.data.data.require_check;
+
+			if(reqCheck === 'Y'){
+				setReqConModal(true)
+			}
+			else{
+				alertModalOn(`개설된 현장이 없습니다.\n현장개설을 먼저 해주세요.`,'none_req_con');
+			}
+		}
 	}
 
 
@@ -54,19 +93,68 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 		)
 	}
 
+	const backAction = () => {
+  
+        var timeout;
+        let tmp = 0;
+           if(tmp==0){
+           
+              if ((exitApp == undefined || !exitApp) && isFocused) {
+                 
+                 cusToast("한번 더 누르시면 종료됩니다");
+                 setExitApp(true);
+                 timeout = setTimeout(
+                       () => {
+                       setExitApp(false);
+                       },
+                       4000
+                 );
+              } else {
+                // appTimeSave();
+				if(timeout) clearTimeout(timeout);
+                BackHandler.exitApp();  // 앱 종료
+              }
+              return true;
+           }
+    }
+
+    React.useEffect(()=>{
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+        if(!isFocused){
+            backHandler.remove();
+        }
+    },[isFocused,exitApp])
+
 	React.useEffect(()=>{
 		if(isFocused && setTabIndex){
 			setTabIndex(1);
+			reqCheckRefetch();
 		}
 	},[isFocused])
+
+	React.useEffect(()=>{
+		if(reqCheckData){
+			console.log(reqCheckData);
+		}
+	},[reqCheckData])
 
 
 	return (
 		<View style={{flex:1}}>
 			<ReqDispatchModal 
-				show={tempModal}
-				hide={tempModalHide}
+				show={reqConModal}
+				hide={reqConModalHide}
 				action={tempAction}
+			/>
+			<AlertModal 
+				show={alertModal.alert}
+				hide={alertModalOff}
+				msg={alertModal.msg}
+				action={alertAction}
+				type={alertModal.type}
 			/>
 			<ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
 				
@@ -79,7 +167,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				<View style={[styles.mainMenuWrapper,{backgroundColor:colors.WHITE_COLOR}]}>
 					<View style={{flexDirection:'row',flex:1}}>
 						{mt_type === '1' ?
-							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{setTempModal(true)} }>
+							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={reqConHandler}>
 								<View>
 									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>배차</Text>
 									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>요청하기</Text>
@@ -89,7 +177,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 								</View>
 							</TouchableOpacity>
 						:	
-							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{setTempModal(true)} }>
+							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{setReqConModal(true)} }>
 								<View>
 									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>현장</Text>
 									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>지원하기</Text>
@@ -121,8 +209,9 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 						</TouchableOpacity>
 					{mt_type == '1'? 
 						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() => 
-							// navigation.navigate('MyPage') }>
-							{if(setTabIndex)setTabIndex(3),navigation.navigate('Board',{type:'workreport'}) }}>
+							alertModalOn('해당 서비스는 정식버전 출시 후 오픈예정입니다.')}
+						>
+
 							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
 							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text>
 							<View style={{alignItems:'flex-end'}}>
