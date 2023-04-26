@@ -17,7 +17,7 @@ import {
     getProfile,
   } from '@react-native-seoul/kakao-login';
 import { LoginIntroModal } from '../modal/LoginIntroModal';
-import { usePostMutation } from '../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../util/reactQuery';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { updateUserInfo } from '../redux/actions/UserInfoReducer';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -31,6 +31,7 @@ export const SignIn = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     const signInMutation = usePostMutation('signIn','member/login.php'); //로그인 mutation
+    // const {data : listData , isLoading : listLoading, isError  : listError, refetch : listRefetch} = usePostQuery('cashKey' , {}, '/apiadress'); //list query
 
     const [introModal, setIntroModal] = useState(false);
 
@@ -90,6 +91,13 @@ export const SignIn = () => {
     React.useEffect(()=>{
         console.log(isAutoLogin);
     },[isAutoLogin])
+
+    // React.useEffect(()=>{ //query list setState
+    //     if(listData){
+    //         setList(listData.data)
+    //     }
+    // },[listData,listLoading])
+
     return (
         <View style={{ backgroundColor: colors.WHITE_COLOR, flex: 1 }}>
             <LoginIntroModal 

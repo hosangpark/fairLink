@@ -3,7 +3,7 @@ import { DocumentAccordionType } from './componentsType';
 import { Text, TouchableOpacity, View,Image,FlatList, StyleSheet } from 'react-native';
 import { colors, fontStyle, styles } from '../style/style';
 import { NodataView } from './NodataView';
-import { UserInfoCard2 } from './card/UserInfoCard2';
+import { UserInfoCard2 } from './card/BoardCard';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { CustomButton } from './CustomButton';
 

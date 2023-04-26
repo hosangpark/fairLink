@@ -18,6 +18,7 @@ export const UserInfoCard = ({
     location = '[경남] 진주시, 사천시, 창원시',
     isDelete = true,
     isFavorite,
+    isCheck,
     action
 }:UserInfoCardType) => {
 
@@ -37,14 +38,14 @@ export const UserInfoCard = ({
     }
 
     return (
-        <TouchableOpacity style={{width:'100%',position:'relative',}} onPress={action}>
+        <TouchableOpacity style={{width:'100%',position:'relative'}} onPress={()=>action(index)}>
             {   jobType === '0' 
                 ?   null 
                 :   <View style={[styles.cardJobArea,{borderColor: jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
                         <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
                     </View>
             }
-            <View style={[styles.cardWrapper]}>
+            <View style={[styles.cardWrapper,{backgroundColor:isCheck == index? '#EDF6F6':'white',borderWidth:isCheck == index? 1.5:1.5,borderColor:isCheck == index? colors.MAIN_COLOR:colors.BORDER_GRAY_COLOR}]}>
                 <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                     <View style={{flexDirection:'row',alignItems:'center'}}>
                         <View style={[styles.cardProfileSize]}>
@@ -65,16 +66,25 @@ export const UserInfoCard = ({
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <TouchableOpacity onPress={() => alertModalOn(`${userName} 조종사를 즐겨찾기에서 삭제하시겠습니까?`, 'confirm')}>
+                    <TouchableOpacity onPress={() => 
+                        isDelete? alertModalOn(`${userName} 조종사를 즐겨찾기에서 삭제하시겠습니까?`, 'confirm')
+                        : action(index)
+                    }
+                        >
                         { isDelete ? <Image source={require('../../assets/img/ic_trash1.png')} style={{width:25,height:25}} /> : null }
                         { isFavorite === '0' 
                             ? <Image source={require('../../assets/img/ic_bookmark_on.png')} style={{width:22,height:30}} /> 
                             : isFavorite === '1' 
                                 ? <Image source={require('../../assets/img/ic_bookmark_off.png')} style={{width:22,height:30}} /> 
                                 : null }
+                        { isCheck == index?
+                            <Image source={require('../../assets/img/ic_check_on.png')} style={{width:25,height:25}} />
+                            :
+                            <Image source={require('../../assets/img/ic_check_off.png')} style={{width:25,height:25}} />
+                        }
                     </TouchableOpacity>
                 </View>
-                <View style={[styles.cardInfoArea]}>
+                <View style={[styles.cardInfoArea,{backgroundColor:isCheck == index? '#D3E9EB':colors.BACKGROUND_COLOR_GRAY1,borderWidth:1,borderColor:isCheck == index? '#9ACCCF':colors.BORDER_GRAY_COLOR}]}>
                     <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>6W 굴착기</Text>
                     <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>경력 15년+</Text>
                 </View>

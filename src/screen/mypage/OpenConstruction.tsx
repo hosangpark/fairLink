@@ -15,6 +15,22 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
 
     const [strOption,setStrOption] = useState<string>('')
     const [guaranteeImage,setguaranteeImage] = useState<undefined>()
+    const [crt_name, setcrt_name] = useState<string>('')
+    const [crt_director,setcrt_director] = useState<string>('')
+    const [crt_m_name,setcrt_m_name] = useState<string>('')
+    const [crt_m_num,setcrt_m_num] = useState<string>('')
+    const [crt_email,setcrt_email] = useState<string>('')
+    const [crt_start_date,setcrt_start_date] = useState<string>('')
+    const [crt_end_date,setcrt_end_date] = useState<string>('')
+    const [crt_location,setcrt_location] = useState<string>('')
+    const [crt_monthly,setcrt_monthly] = useState<string>('')
+    const [crt_monthly_start,setcrt_monthly_start] = useState<string>('')
+    const [crt_file1,setcrt_file1] = useState<string>('')
+    const [crt_origin,setcrt_origin] = useState<string>('')
+
+    React.useEffect(()=>{
+        
+    },[])
 
     return (
         <View style={{flex:1}}>
@@ -28,89 +44,67 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         필수항목
                         </Text>
                 </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>현장명
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                    <CustomInputTextBox
-                        style={{}}
-                        placeholder={'계약서에 명시된 현장명을 기입하세요.'}
-                        imgfile={undefined}
-                        button={''}
-                        action={()=>{}}
-                        editable={true}
-                        placeholderTextColor={''}
-                    />
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>현장소장명
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                    <CustomInputTextBox
-                        style={{}}
-                        placeholder={''}
-                        imgfile={undefined}
-                        button={''}
-                        action={()=>{}}
-                        editable={true}
-                        placeholderTextColor={''}
-                    />
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>담당자
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                    <CustomInputTextBox
-                        style={{}}
-                        placeholder={''}
-                        imgfile={undefined}
-                        button={'변경'}
-                        action={()=>{}}
-                        editable={true}
-                        placeholderTextColor={''}
-                    />
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>담당자 연락처
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                    <CustomInputTextBox
-                        style={{}}
-                        placeholder={''}
-                        imgfile={require('../../assets/img/ic_modify2.png')}
-                        button={''}
-                        action={()=>{}}
-                        editable={true}
-                        placeholderTextColor={''}
-                    />
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>담당자 이메일
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                    <CustomInputTextBox
-                        style={{}}
-                        placeholder={''}
-                        imgfile={require('../../assets/img/ic_modify2.png')}
-                        button={''}
-                        action={()=>{}}
-                        editable={true}
-                        placeholderTextColor={''}
-                    />
-                </View>
+                <CustomInputTextBox
+                    title={'현장명'}
+                    essential={true}
+                    containerStyle={styles.SubTitleText}
+                    text={crt_name}
+                    setText={setcrt_name}
+                    placeholder={'계약서에 명시된 현장명을 기입하세요.'}
+                    imgfile={undefined}
+                    editable={true}
+                />
+                <CustomInputTextBox
+                    title={'현장소장명'}
+                    essential={true}
+                    containerStyle={styles.SubTitleText}
+                    text={crt_director}
+                    setText={setcrt_director}
+                    imgfile={undefined}
+                    editable={true}
+                />
+                <CustomInputTextBox
+                    title={'담당자'}
+                    essential={true}
+                    containerStyle={styles.SubTitleText}
+                    text={crt_m_name}
+                    setText={setcrt_m_name}
+                    imgfile={undefined}
+                    button={'변경'}
+                    editable={true}
+                />
+                <CustomInputTextBox
+                    title={'담당자 연락처'}
+                    essential={true}
+                    containerStyle={styles.SubTitleText}
+                    text={crt_m_num}
+                    setText={setcrt_m_num}
+                    imgfile={require('../../assets/img/ic_modify2.png')}
+                    editable={true}
+                    inputType={'number-pad'}
+                />
+                <CustomInputTextBox
+                    title={'담당자 이메일'}
+                    essential={true}
+                    text={crt_email}
+                    setText={setcrt_email}
+                    containerStyle={styles.SubTitleText}
+                    imgfile={require('../../assets/img/ic_modify2.png')}
+                    editable={true}
+                    inputType={'email-address'}
+                />
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>공사기간
                     <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomWaveBox
-                        style={{}}
-                        placeholder1={''}
-                        placeholder2={''}
+                        text1={crt_start_date}
+                        setText1={setcrt_start_date}
+                        text2={crt_end_date}
+                        setText2={setcrt_end_date}
                         imgfile={require('../../assets/img/ic_calendar.png')}
-                        button={''}
                         action={()=>{}}
                         editable={true}
-                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -159,11 +153,11 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <CustomWaveBox
-                        style={{}}
-                        placeholder1={''}
-                        placeholder2={''}
+                        text1={crt_start_date}
+                        setText1={setcrt_start_date}
+                        text2={crt_start_date}
+                        setText2={setcrt_start_date}
                         imgfile={require('../../assets/img/ic_dropdown.png')}
-                        button={''}
                         action={()=>{}}
                         editable={true}
                         placeholderTextColor={''}
@@ -241,11 +235,11 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 /> */}
                 </View>
                 <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>원도급사명
-                    </Text>
                     <CustomInputTextBox
-                        style={{}}
+                        title={'원도급사명'}
                         placeholder={'하도급사만 작성'}
+                        text={crt_origin}
+                        setText={setcrt_origin}
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
@@ -254,10 +248,10 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     />
                 </View>
                 <CustomButton
-                style={{}}
-                labelStyle={{}}
-                label={'현장개설 완료'}
-                action={()=>{}}
+                    style={{}}
+                    labelStyle={{}}
+                    label={'현장개설 완료'}
+                    action={()=>{console.log('ㅇ')}}
                 />
                 </View>
             </ScrollView>

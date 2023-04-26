@@ -25,6 +25,13 @@ export interface CustomAccordionType {
     userType:string
     action : ()=>void,
 }
+export interface CustomAccordionType2 {
+    title:string,
+    subtitle:string,
+    data:object[],
+    userType:string
+    action : ()=>void,
+}
 export interface DocumentAccordionType {
     title:string,
     subList:{
@@ -66,8 +73,9 @@ export interface UserInfoCardType {
     location:string,
     isDelete: boolean,
     isFavorite?:string,
+    isCheck?:string,
     index : string,
-    action:()=>void
+    action:(e:string)=>void
 }
 export interface HeavyEquipmentCardType {
     EquiName : string,
@@ -79,7 +87,7 @@ export interface HeavyEquipmentCardType {
     action:()=>void
     action2:()=>void
 }
-export interface UserInfoCard2Type {
+export interface BoardCardType {
     jobType:string,
     userName:string,
     score:number,
@@ -116,26 +124,32 @@ export interface CustomInputTextBoxType {
     style? : object,
     inputType? : KeyboardTypeOptions,
     imgfile?:ImageSourcePropType,
-    placeholder:string,
-    button:string,
-    action:()=>void,
-    editable:boolean
-    placeholderTextColor:string,
+    placeholder?:string,
+    button?:string,
+    action?:()=>void,
+    editable?:boolean
+    placeholderTextColor?:string,
     input? : string,
     setInput? : (text:string,key?:string) => void;
     type? : string,
     title? : string,
     essential? : boolean,
+    text:string,
+    setText:(e:string)=>void
 }
 export interface CustomWaveBoxType {
     style? : object,
     imgfile?:ImageSourcePropType,
-    placeholder1:string,
-    placeholder2:string,
-    button:string,
-    action:()=>void,
-    editable:boolean,
-    placeholderTextColor:string
+    placeholder1?:string,
+    placeholder2?:string,
+    button?:string,
+    action?:()=>void,
+    editable?:boolean,
+    placeholderTextColor?:string,
+    text1:string,
+    setText1:(e:string)=>void,
+    text2:string,
+    setText2:(e:string)=>void,
 }
 export interface PilotInfoCardType {
     index: string,
@@ -162,4 +176,21 @@ export type SelectedEquipmentCardType = {
     equipNumb : string,
     year : number,
     sideEquip : string,
+}
+
+export type MypageDataType = { //초기 alert state 타입
+    company:string,
+    hp:string,
+    name:string,
+    position:string,
+    require_check:string
+}
+export type MyInfoDataType = { //초기 alert state 타입
+    mt_name:string,
+    mct_busi_num:string,
+    mct_ceo:string,
+    mct_company:string,
+    mct_position:string
+    mt_email:string
+    mt_hp:string
 }

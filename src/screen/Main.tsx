@@ -16,10 +16,12 @@ import { MyPageIndex } from './mypage/MyPageIndex';
 import { Agreements } from './signUp/Agreements';
 import { SignIn } from './SignIn';
 import cusToast from '../util/toast/CusToast';
+import { useAppSelector } from '../redux/store';
+import { Request } from './Request/Request';
 
 
 export const Main = () => {
-
+	const {mt_type} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
 
     /**
@@ -98,10 +100,10 @@ export const Main = () => {
                     }}
                 />
                 <Tab.Screen 
-                    name="Vedio" 
+                    name="Request" 
                     // component={Video}
                     // component={Agreements}
-                    component={SignIn}
+                    component={Request}
                     
                     listeners={{
                         tabPress : (e)=>{
@@ -114,7 +116,7 @@ export const Main = () => {
                         tabBarIcon: ({color, size}) => (
                             <View style={{alignItems:'center',justifyContent:'center'}}>
                                 <Image style={{width:25,height:25,resizeMode:'contain'}} source={tabIndex === 2 ? require('../assets/img/b_menu2_on.png') : require('../assets/img/b_menu2_off.png')} />
-                                <Text style={[fontStyle.f_medium,{fontSize:14, color:tabIndex === 2 ? colors.MAIN_COLOR : colors.FONT_COLOR_GRAY,marginTop:5}]}>배차요청</Text>
+                                <Text style={[fontStyle.f_medium,{fontSize:14, color:tabIndex === 2 ? colors.MAIN_COLOR : colors.FONT_COLOR_GRAY,marginTop:5}]}>{mt_type =="1"? "배차요청":"현장지원"}</Text>
                             </View>
                             ),
                     }}

@@ -9,15 +9,23 @@ import { AlertClearType } from '../../modal/modalType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { CustomButton } from '../../component/CustomButton';
+import { usePostMutation } from '../../util/reactQuery';
 import { useAppSelector } from '../../redux/store';
-import { usePostQuery } from '../../util/reactQuery';
+import { MypageDataType } from '../../component/componentsType';
 
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
-    // const [userType,setUserType] = useState('1')
     const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
-    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
+    const navigation = useNavigation<
+    StackNavigationProp<RouterNavigatorParams>>();
+    const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert);
+    const [mypageData, setMypageData] = React.useState<MypageDataType>([]);
+
+
+    const consmyPageMutation = usePostMutation('consmyPage','cons/mypage_info.php')
+    const equipmyPageMutation = usePostMutation('equipmyPage','equip/mypage_info.php')
+    const pilotmyPageMutation = usePostMutation('pilotmyPage','pilot/mypage_info.php')
+
 
     const {data:myInfoData,isLoading:myInfoLoading,isError,refetch} = usePostQuery('getMyInfo',{mt_idx:mt_idx},'cons/mypage_info.php');
 
@@ -37,7 +45,6 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             type:type ? type : '' ,
         })
     }
-
     const alertAction = () => {
         if(alertModal.type === ''){ 
             navigation.navigate('OpenConstruction');
@@ -50,16 +57,45 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             }
         }
     }
+    const mypageInform = async (): Promise<void> => { //카카오 로그인
+        try {
+            const idxParams = {
+                mt_idx : '17',
+            }
+            const {result,data, msg} = 
+            mt_type == '1'?  await consmyPageMutation.mutateAsync(idxParams)
+            :
+            mt_type == '2'?  await equipmyPageMutation.mutateAsync(idxParams)
+            :
+            await pilotmyPageMutation.mutateAsync(idxParams)
+
+            if(result === 'true'){
+                console.log("result",result)
+                console.log("data",data.data)
+                console.log("msg",msg)
+                setMypageData(data.data)
+            }
+            else{
+                console.log("else",result)
+            }
+        // }
+        } catch(err) {
+            console.log(err);
+        }
+    };
 
     /**TODO */
     const alertModalOff = () =>{ //modal 종료
         setAlertModal(initialAlert)
     }
 
+
     React.useEffect(()=>{
         if(isFocused && setTabIndex){
             setTabIndex(4);
         }
+        mypageInform()
+        console.log(mt_type)
     },[])
 
     React.useEffect(()=>{
@@ -112,18 +148,18 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 현장</Text>  
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
-                        onPress={()=>{navigation.navigate('FavoriteList',{userType:'1'});}}
+                        onPress={()=>{navigation.navigate('FavoriteList',{mt_type:'1'});}}
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>즐겨찾기 장비 관리</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {userType:'1'})}}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {mt_type:'1'})}}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
-                    :
-                    mt_type == '2'?
+                :
+                mt_type == '2'?
                 <View style={styles.deepTopBorder}>   
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
                         // onPress={() => {navigation.navigate('MyProfile')}}
@@ -131,7 +167,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{navigation.navigate('FavoriteList',{userType:'2'});}}>
+                    <TouchableOpacity onPress={()=>{navigation.navigate('FavoriteList',{mt_type:'2'});}}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>장비 현황</Text>
                         </View>
@@ -141,7 +177,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 조종사 관리</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo',{userType:'2'}) }}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo',{mt_type:'2'}) }}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>

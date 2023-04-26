@@ -21,8 +21,9 @@ export const CustomInputTextBox = ({
     type,
     title,
     essential,
+    text,
+    setText,
 }:CustomInputTextBoxType) => {
-  const [text,setText] = useState<string>('')
     return(
       <View style={{...containerStyle}}>
         {title &&
@@ -32,16 +33,14 @@ export const CustomInputTextBox = ({
           <TextInput
               keyboardType={inputType} 
               style={[fontStyle.f_regular,{flexShrink:1,paddingHorizontal:10,flex:1,}]}
-              // value={input} //살려주세요.
-
-              value={text} //나중에 지워주세요
+              value={text}
               onChangeText={e=>{
                 if(type && setInput){
                   setInput(e,type)
-                  setText(e) //나중에 지워주세요
+                  setText(e)
                 }
                 else{
-                  setText(e) //나중에 지워주세요
+                  setText(e)
                 }
               }}
               placeholder={placeholder}

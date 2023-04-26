@@ -5,7 +5,6 @@ import { colors, fontStyle, styles } from "../../style/style";
 import { TabView, SceneMap ,TabBar} from 'react-native-tab-view';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ProfileInfoCard } from "../../component/card/ProfileInfoCard";
-import { CustomWaveBox } from "../../component/CustomWaveBox";
 import { useNavigation } from '@react-navigation/native';    
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
