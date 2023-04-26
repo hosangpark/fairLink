@@ -105,3 +105,4 @@ export interface CancleReasonModalType extends ModalType{ //반려사유 입력 
 export type LoadingModalType = { //loading modal props type
     isLoading : boolean,
 }
+

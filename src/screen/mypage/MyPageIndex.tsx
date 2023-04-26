@@ -9,12 +9,23 @@ import { AlertClearType } from '../../modal/modalType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { CustomButton } from '../../component/CustomButton';
+import { usePostMutation } from '../../util/reactQuery';
+import { useAppSelector } from '../../redux/store';
+import { MypageDataType } from '../../component/componentsType';
 
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
-    const [userType,setUserType] = useState('1')
+    const {mt_type} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
-    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
+    const navigation = useNavigation<
+    StackNavigationProp<RouterNavigatorParams>>();
+    const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert);
+    const [mypageData, setMypageData] = React.useState<MypageDataType>([]);
+
+
+    const consmyPageMutation = usePostMutation('consmyPage','cons/mypage_info.php')
+    const equipmyPageMutation = usePostMutation('equipmyPage','equip/mypage_info.php')
+    const pilotmyPageMutation = usePostMutation('pilotmyPage','pilot/mypage_info.php')
+
 
     const alertModalOn = (msg : string, type? : string) => { //alert 켜기
         setAlertModal({
@@ -24,62 +35,71 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             type:type ? type : '' ,
         })
     }
-
     const alertAction = () => {
         if(alertModal.type === ''){ 
             navigation.navigate('OpenConstruction');
         }
         else if(alertModal.type === 'none_profile'){
-            if ( userType === '2') {
-                navigation.navigate('SettingProfile',{userType:'2'});
-            } else if ( userType === '3') {
-                navigation.navigate('SettingProfile',{userType:'3'});
+            if ( mt_type === '2') {
+                navigation.navigate('SettingProfile',{mt_type:'2'});
+            } else if ( mt_type === '3') {
+                navigation.navigate('SettingProfile',{mt_type:'3'});
             }
         }
     }
+    const mypageInform = async (): Promise<void> => { //카카오 로그인
+        try {
+            const idxParams = {
+                mt_idx : '17',
+            }
+            const {result,data, msg} = 
+            mt_type == '1'?  await consmyPageMutation.mutateAsync(idxParams)
+            :
+            mt_type == '2'?  await equipmyPageMutation.mutateAsync(idxParams)
+            :
+            await pilotmyPageMutation.mutateAsync(idxParams)
+
+            if(result === 'true'){
+                console.log("result",result)
+                console.log("data",data.data)
+                console.log("msg",msg)
+                setMypageData(data.data)
+            }
+            else{
+                console.log("else",result)
+            }
+        // }
+        } catch(err) {
+            console.log(err);
+        }
+    };
 
     /**TODO */
     const alertModalOff = () =>{ //modal 종료
         setAlertModal(initialAlert)
     }
 
+
     React.useEffect(()=>{
         if(isFocused && setTabIndex){
             setTabIndex(4);
         }
+        mypageInform()
+        console.log(mt_type)
     },[])
 
     return (
         <View style={{flex:1}}>
             <BackHeader title="마이페이지" />
-            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <CustomButton
-                    action={()=>{setUserType('1')}}
-                    label={'건설회사'}
-                    style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
-                    labelStyle={styles.whiteButtonLabelStyle}
-                />
-                <CustomButton
-                    action={()=>{setUserType('2')}}
-                    label={'장비회사'}
-                    style={{flex:1,marginRight:10}}
-                />
-                <CustomButton
-                    action={()=>{setUserType('3')}}
-                    label={'조종사'}
-                    style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
-                    labelStyle={styles.whiteButtonLabelStyle}
-                />
-            </View>
             <ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
                 <View style={{padding:20}}>
                     <View style={[{backgroundColor:colors.MAIN_COLOR,borderRadius:8,padding:20}]}>
-                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3}]}>남동종합건설</Text>
-                        <Text style={[fontStyle.f_semibold,{fontSize:24,color:colors.WHITE_COLOR,marginBottom:7}]}>홍길동 차장님</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:18 , color:colors.WHITE_COLOR}]}>010-1234-5678</Text>
+                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3}]}>{mypageData.company}</Text>
+                        <Text style={[fontStyle.f_semibold,{fontSize:24,color:colors.WHITE_COLOR,marginBottom:7}]}>{mypageData.position} {mypageData.name}</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:18 , color:colors.WHITE_COLOR}]}>{mypageData.hp}</Text>
                     </View>
                 </View>
-                {userType == '1'?
+                {mt_type == '1'?
                 <View style={styles.deepTopBorder}>
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
                         onPress={()=>{alertModalOn(`개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`);}}
@@ -87,18 +107,18 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 현장</Text>  
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
-                        onPress={()=>{navigation.navigate('FavoriteList',{userType:'1'});}}
+                        onPress={()=>{navigation.navigate('FavoriteList',{mt_type:'1'});}}
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>즐겨찾기 장비 관리</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {userType:'1'})}}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {mt_type:'1'})}}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
                     :
-                userType == '2'?
+                mt_type == '2'?
                 <View style={styles.deepTopBorder}>   
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
                         // onPress={() => {navigation.navigate('MyProfile')}}
@@ -106,7 +126,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>{navigation.navigate('FavoriteList',{userType:'2'});}}>
+                    <TouchableOpacity onPress={()=>{navigation.navigate('FavoriteList',{mt_type:'2'});}}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>장비 현황</Text>
                         </View>
@@ -116,7 +136,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 조종사 관리</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo',{userType:'2'}) }}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo',{mt_type:'2'}) }}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>

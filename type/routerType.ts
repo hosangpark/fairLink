@@ -36,16 +36,16 @@ export type RouterNavigatorParams = {
     
     /** mypage */
     MyInfo:{
-        userType:string
+        mt_type:string
     };
     FavoriteList:{
-        userType:string
+        mt_type:string
     };
     FavoriteAdd:undefined;
     EquimentsAdd:undefined;
     EquimentsDetail:undefined;
     SettingProfile:{
-        userType:string
+        mt_type:string
     };
     FavoriteFilotIndex:undefined;
     MyProfile:undefined;

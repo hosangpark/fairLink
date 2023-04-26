@@ -59,10 +59,8 @@ export const ElectronicContract = () => {
                         style={{height:46}}
                         placeholder={'빈칸'}
                         imgfile={undefined}
-                        button={''}
                         action={()=>{}}
                         editable={true}
-                        placeholderTextColor={''}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>

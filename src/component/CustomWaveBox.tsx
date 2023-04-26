@@ -15,30 +15,40 @@ export const CustomWaveBox = ({
     button,
     action,
     editable,
-    placeholderTextColor
+    placeholderTextColor,
+    text1,
+    setText1,
+    text2,
+    setText2,
 }:CustomWaveBoxType) => {
     return(
       <View style={{flexDirection:'row'}}>
           <CustomInputTextBox
-              style={[{flex:1},style]}
-              placeholder={placeholder1}
-              imgfile={imgfile}
-              button={button}
-              action={action}
-              editable={editable}
-              placeholderTextColor={placeholderTextColor}
+            text={text1}
+            setText={setText1}
+            style={style}
+            containerStyle={{flex:1}}
+            placeholder={placeholder1}
+            imgfile={imgfile}
+            button={button}
+            action={action}
+            editable={editable}
+            placeholderTextColor={placeholderTextColor}
           />
           <View style={{justifyContent:'center',alignItems:'center',width:30}}>
               <Text style={[fontStyle.f_semibold,{fontSize:18}]}>~</Text>
           </View>
           <CustomInputTextBox
-              style={[{flex:1},style]}
-              placeholder={placeholder2}
-              imgfile={imgfile}
-              button={button}
-              action={action}
-              editable={editable}
-              placeholderTextColor={placeholderTextColor}
+            text={text2}
+            setText={setText2}
+            style={style}
+            containerStyle={{flex:1}}
+            placeholder={placeholder2}
+            imgfile={imgfile}
+            button={button}
+            action={action}
+            editable={editable}
+            placeholderTextColor={placeholderTextColor}
           />
       </View>
     )
