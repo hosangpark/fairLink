@@ -56,7 +56,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             }
         }
     }
-    const mypageInform = async (): Promise<void> => { //카카오 로그인
+    const mypageInform = async (): Promise<void> => {
         try {
             const idxParams = {
                 mt_idx : '17',

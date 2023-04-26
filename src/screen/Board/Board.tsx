@@ -9,78 +9,49 @@ import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
 import { CustomButton } from '../../component/CustomButton';
 import { useAppSelector } from '../../redux/store';
+import { usePostMutation } from '../../util/reactQuery';
 
 
 export const Board = ({route}:any) => {
     const {mt_type} = useAppSelector(state => state.userInfo);
-    const [userType,setUserType] = useState(mt_type);
     const [strOption,setStrOption] = useState<string>('')
     const [year,setYear] = useState<string>('')
     const [month,setMonth] = useState<string>('')
-    const accordionList = mt_type =='1'?
-    ['배차 모집중','계약 진행중','작업중','작업완료']:
-    mt_type =='2'?
-    ['조종사 모집중','현장지원 완료','계약진행중','작업중/작업예정','작업완료']
-    :
-    ['현장지원 완료','작업중/작업예정','작업완료']
+    const [listData,setListData] = useState<any>([])
 
+const consBoardListMutation = usePostMutation('consBoardList','cons/cons_order_list.php')
+const equipBoardListMutation = usePostMutation('equipBoardList','equip/equip_order_list.php')
+const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_order_list.php')
 
-    const [items,setItems] = useState([
-    {
-      empName:'힘찬중기',
-      jobType:'1',
-      location:'전남 여수시',
-      rating:23,
-      recEmpCount:64,
-      userName:'홍길동',
-      score:5,
-      complete:true,
-      userProfileUrl:'',
-      workType:0,
-      mt_type:'1'
-    },
-    {
-      empName:'힘찬중기',
-      jobType:'1',
-      location:'경남',
-      rating:23,
-      score:5,
-      recEmpCount:64,
-      userName:'김경태',
-      complete:'',
-      userProfileUrl:'',
-      workType:1,
-      mt_type:'1'
-    },
-    {
-      empName:'SKT T1',
-      jobType:'2',
-      location:'서울',
-      rating:2900,
-      score:5,
-      recEmpCount:64,
-      userName:'이상혁',
-      complete:'',
-      userProfileUrl:'',
-      workType:1,
-      userType:'4',
-      total:8
-    },
-    {
-      empName:'SKT T1',
-      jobType:'2',
-      location:'서울',
-      rating:2900,
-      score:5,
-      recEmpCount:64,
-      userName:'이상혁',
-      complete:'',
-      userProfileUrl:'',
-      workType:1,
-      mt_type:'2',
-      total:8
-    },
-  ])
+  const BoardInfrom = async (): Promise<void> => {
+        try {
+            const idxParams = {
+                mt_idx : '17',
+                year:year,
+                month:month,
+                status:'',
+            }
+            const {result,data, msg} = 
+            mt_type == '1'?  await consBoardListMutation.mutateAsync(idxParams)
+            :
+            mt_type == '2'?  await equipBoardListMutation.mutateAsync(idxParams)
+            :
+            await pilotBoardListMutation.mutateAsync(idxParams)
+
+            if(result === 'true'){
+                console.log("result",result)
+                console.log("data",data.data)
+                console.log("msg",msg)
+                setListData(data.data)
+            }
+            else{
+                console.log("else",result)
+            }
+        // }
+        } catch(err) {
+            console.log(err);
+        }
+    };
 
 
     useEffect(()=>{
@@ -89,31 +60,12 @@ export const Board = ({route}:any) => {
         } else {
             setStrOption('작업중')
         }
+        BoardInfrom()
     },[])
 
     return(
         <View style={{flex:1,}}>
         <BackHeader title="배차이력 및 현황" />
-
-        {/* <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <CustomButton
-                    action={()=>{setUserType('1')}}
-                    label={'건설회사'}
-                    style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
-                    labelStyle={styles.whiteButtonLabelStyle}
-                />
-                <CustomButton
-                    action={()=>{setUserType('2')}}
-                    label={'장비회사'}
-                    style={{flex:1,marginRight:10}}
-                />
-                <CustomButton
-                    action={()=>{setUserType('4')}}
-                    label={'조종사'}
-                    style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
-                    labelStyle={styles.whiteButtonLabelStyle}
-                />
-            </View> */}
          <ScrollView style={{flex:1}}>
             <View style={{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,padding:20}}>
                 <View style={{flexDirection:'row'}}>
@@ -153,11 +105,11 @@ export const Board = ({route}:any) => {
                         defaultText='전체'
                         strOptionList={
                         mt_type =='1'?
-                        ['전체','배차 모집중','계약 진행중','작업중','작업완료']:
+                        ['전체','배차 모집중','계약진행중','작업중','작업완료']:
                         mt_type == '2'?
-                        ['전체','조종사 모집중','현장지원 완료','계약진행중','작업중/작업예정','작업완료']
+                        ['전체','조종사 모집중','현장지원 완료','계약진행중','작업중 / 작업예정','작업완료']
                         :
-                        ['전체','현장지원 완료','작업중/작업예정','작업완료']
+                        ['전체','현장지원 완료','작업중 / 작업예정','작업완료']
                         }
                         selOption={strOption}
                         strSetOption={setStrOption}
@@ -169,24 +121,22 @@ export const Board = ({route}:any) => {
                 </View>
             </View>
         {
-            accordionList.map((data, i) => (
+            listData.map((data:{title:string}, i:number) => (
                 <View key={i}>
                 {strOption == '전체'?
                 <CustomAccordion
                     key={i}
-                    title={data}
-                    data={items}
+                    data={listData[i]}
                     userType={mt_type}
-                    action={()=>{console.log(i)}}
+                    action={()=>{}}
                 />
                 :
-                strOption == data &&
+                strOption == data.title &&
                 <CustomAccordion
                     key={i}
-                    title={data}
-                    data={items}
+                    data={listData[i]}
                     userType={mt_type}
-                    action={()=>{console.log(i)}}
+                    action={()=>{}}
                 />
                 }
                 </View>

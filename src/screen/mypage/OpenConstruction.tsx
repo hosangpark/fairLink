@@ -27,6 +27,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
     const {isData} = route.params;
     const {mt_idx} = useAppSelector(state => state.userInfo);
 
+
     const {data : manList, isLoading : manLoading, isError : manError} = usePostQuery('getManagerList',{mt_idx : mt_idx},'cons/manager_list.php')
     const [guaranteeImage,setguaranteeImage] = useState<undefined>();
 
@@ -445,51 +446,6 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                             }
                         </ImageBackground>
                     </TouchableOpacity>
-                {/* <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    data={undefined}
-                    renderItem={({ item, index }) => (
-                    <View style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1 }}
-                        source={{ uri: item.uri }}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <TouchableOpacity
-                            style={{ alignItems: 'flex-end', right: 10, top: 10 }}
-                            onPress={() => Delete(index)}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ico_close1.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                        {index == 0 && (
-                        <View
-                            style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            backgroundColor: colors.GREEN_COLOR_2,
-                            width: '100%',
-                            alignItems: 'center',
-                            height: 25,
-                            justifyContent: 'center',
-                            borderBottomLeftRadius: 10,
-                            borderBottomRightRadius: 10,
-                            }}>
-                            <Text
-                            style={[
-                                style.text_sb,
-                                { fontSize: 13, color: colors.WHITE_COLOR },
-                            ]}>
-                            {t('대표사진')}
-                            </Text>
-                        </View>
-                        )}
-                    </View>
-                    )}
-                    horizontal={true}
-                /> */}
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <CustomInputTextBox
