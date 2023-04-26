@@ -9,17 +9,16 @@ import { AlertClearType } from '../../modal/modalType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { CustomButton } from '../../component/CustomButton';
-import { usePostMutation } from '../../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import { useAppSelector } from '../../redux/store';
 import { MypageDataType } from '../../component/componentsType';
 
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
-    const navigation = useNavigation<
-    StackNavigationProp<RouterNavigatorParams>>();
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert);
-    const [mypageData, setMypageData] = React.useState<MypageDataType>([]);
+    const [mypageData, setMypageData] = React.useState<MypageDataType[]>([]);
 
 
     const consmyPageMutation = usePostMutation('consmyPage','cons/mypage_info.php')
@@ -51,9 +50,9 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
         }
         else if(alertModal.type === 'none_profile'){
             if ( mt_type === '2') {
-                navigation.navigate('SettingProfile',{userType:'2'});
+                navigation.navigate('SettingProfile',{mt_type:'2'});
             } else if ( mt_type === '4') {
-                navigation.navigate('SettingProfile',{userType:'4'});
+                navigation.navigate('SettingProfile',{mt_type:'4'});
             }
         }
     }

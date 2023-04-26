@@ -7,22 +7,20 @@ import { TextInput } from 'react-native-gesture-handler';
 
 
 export const CustomInputTextBox = ({
-    containerStyle,
-    style,
+    containerStyle, //container style
+    style, //input box style
     inputType = 'default',
     placeholder,
-    imgfile,
-    button,
-    action,
-    editable,
-    placeholderTextColor,
-    setInput,
-    input,
-    type,
-    title,
-    essential,
-    text,
-    setText,
+    imgfile, //이미지 파일
+    button, //btn 여부 (string) 버튼 텍스트
+    action, //btn action
+    editable, //수정 여부
+    placeholderTextColor, //placeholder 색상
+    setInput, //text input handler 
+    input, //input value값
+    type, //input 객체 key값 (단일 string이면 없어도 ok)
+    title, //텍스트박스 제목
+    essential, //필수 표시
 }:CustomInputTextBoxType) => {
     return(
       <View style={{...containerStyle}}>
@@ -33,14 +31,13 @@ export const CustomInputTextBox = ({
           <TextInput
               keyboardType={inputType} 
               style={[fontStyle.f_regular,{flexShrink:1,paddingHorizontal:10,flex:1,}]}
-              value={text}
+              value={input}
               onChangeText={e=>{
-                if(type && setInput){
-                  setInput(e,type)
-                  setText(e)
-                }
-                else{
-                  setText(e)
+                if(setInput){
+                  if(type){
+                    setInput(e,type);
+                  }
+                  setInput(e);
                 }
               }}
               placeholder={placeholder}
