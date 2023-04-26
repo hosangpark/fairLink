@@ -59,7 +59,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	}
 	const alertAction = () => {
 		if(alertModal.type === 'none_req_con'){
-			navigation.navigate('OpenConstruction');
+			navigation.navigate('OpenConstruction',{isData:false});
 		}
 	}
 

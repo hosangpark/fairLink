@@ -43,6 +43,7 @@ export type AlertModalType = { //alertModal props type
     type? : string,
     title? : string,
     action? : () => void;
+    cancleAction? : () => void;
     btnLabel? : string,
 }
 
@@ -93,6 +94,7 @@ export interface LastDispatchModalType extends ModalType{ //최근 배차리스�
 
 export interface ReqDispatchModalType extends ModalType{ //배차요청 type 선택 modal
     action? : () => void;
+    isReplace? : boolean;
 }
 
 export interface RecEmpModalType extends ModalType{ //추천기업 현황 modal 
