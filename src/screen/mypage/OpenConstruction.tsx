@@ -8,11 +8,14 @@ import { CustomInputTextBox } from '../../component/CustomInputTextBox';
 import { CustomButton } from '../../component/CustomButton';
 import { CustomSelectBox } from '../../component/CustomSelectBox';
 import { CustomWaveBox } from '../../component/CustomWaveBox';
+import { datedata } from '../../component/datedata';
+import CheckBox from '@react-native-community/checkbox';
 
 
 
 export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
 
+    const [check1,setCheck1] = useState(false)
     const [strOption,setStrOption] = useState<string>('')
     const [guaranteeImage,setguaranteeImage] = useState<undefined>()
     const [crt_name, setcrt_name] = useState<string>('')
@@ -48,8 +51,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     title={'현장명'}
                     essential={true}
                     containerStyle={styles.SubTitleText}
-                    text={crt_name}
-                    setText={setcrt_name}
+                    input={crt_name}
+                    setInput={setcrt_name}
                     placeholder={'계약서에 명시된 현장명을 기입하세요.'}
                     imgfile={undefined}
                     editable={true}
@@ -58,8 +61,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     title={'현장소장명'}
                     essential={true}
                     containerStyle={styles.SubTitleText}
-                    text={crt_director}
-                    setText={setcrt_director}
+                    input={crt_director}
+                    setInput={setcrt_director}
                     imgfile={undefined}
                     editable={true}
                 />
@@ -67,8 +70,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     title={'담당자'}
                     essential={true}
                     containerStyle={styles.SubTitleText}
-                    text={crt_m_name}
-                    setText={setcrt_m_name}
+                    input={crt_m_name}
+                    setInput={setcrt_m_name}
                     imgfile={undefined}
                     button={'변경'}
                     editable={true}
@@ -77,8 +80,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     title={'담당자 연락처'}
                     essential={true}
                     containerStyle={styles.SubTitleText}
-                    text={crt_m_num}
-                    setText={setcrt_m_num}
+                    input={crt_m_num}
+                    setInput={setcrt_m_num}
                     imgfile={require('../../assets/img/ic_modify2.png')}
                     editable={true}
                     inputType={'number-pad'}
@@ -86,8 +89,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                 <CustomInputTextBox
                     title={'담당자 이메일'}
                     essential={true}
-                    text={crt_email}
-                    setText={setcrt_email}
+                    input={crt_email}
+                    setInput={setcrt_email}
                     containerStyle={styles.SubTitleText}
                     imgfile={require('../../assets/img/ic_modify2.png')}
                     editable={true}
@@ -113,9 +116,9 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     </Text>
                     <CustomSelectBox 
                         defaultText='선택하세요.'
-                        strOptionList={['가','나','다','라',]}
-                        selOption={strOption}
-                        strSetOption={setStrOption}
+                        strOptionList={['영흥','나','다','라',]}
+                        selOption={crt_location}
+                        strSetOption={setcrt_location}
                         buttonStyle={selectBoxStyle.btnStyle}
                         buttonTextStyle={selectBoxStyle.btnTextStyle}
                         rowStyle={selectBoxStyle.rowStyle}
@@ -127,17 +130,23 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <View style={{flexDirection:'row'}}>
-                        <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>{}}>
-                            <Image style={{width:20,height:20}} source={require('../../assets/img/ic_check_off_sm.png')}/>
+                        <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>setCheck1(!check1)}>
+                            <CheckBox 
+                            value={!check1}
+                            onValueChange={()=>{}}
+                            />
                             <Text style={[fontStyle.f_medium, {fontSize:16,marginHorizontal:5}]}>당일</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>{}}>
-                            <Image style={{width:20,height:20}} source={require('../../assets/img/ic_check_off_sm.png')}/>
+                        <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>setCheck1(!check1)}>
+                            <CheckBox 
+                            value={check1}
+                            onValueChange={()=>{}}
+                            />
                             <Text style={{marginHorizontal:5}}>매월</Text>
                             <CustomSelectBox 
                                 style={{flex:1}}
                                 defaultText='10일'
-                                strOptionList={['1일','2일','3일','4일']}
+                                strOptionList={datedata}
                                 selOption={strOption}
                                 strSetOption={setStrOption}
                                 buttonStyle={selectBoxStyle2.btnStyle}
@@ -238,8 +247,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <CustomInputTextBox
                         title={'원도급사명'}
                         placeholder={'하도급사만 작성'}
-                        text={crt_origin}
-                        setText={setcrt_origin}
+                        input={crt_origin}
+                        setInput={setcrt_origin}
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
