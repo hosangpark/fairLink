@@ -32,7 +32,9 @@ export type RouterNavigatorParams = {
         mt_id : string;
     }
 
-    OpenConstruction:undefined;
+    OpenConstruction:{
+        isData:boolean,
+    };
     ApplicantStatus:undefined;
     
     /** mypage */

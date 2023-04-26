@@ -61,9 +61,9 @@ interface ObjectArrayType {
 export type SelectModalType = { //select box있는 modal type
     show : boolean,
     hide : () =>void;
-    action : (opt : string) => void;
-    strSetOption? : (opt : string) => void;
-    objSetOption? : (opt : ObjectArrayType) => void;
+    action : () => void;
+    strSetOption? : (opt : string , type? : string) => void;
+    objSetOption? : (opt : string , type? : string) => void;
     bigTitle? : string,
     smallTitle? : string,
     date? : string,
@@ -71,7 +71,11 @@ export type SelectModalType = { //select box있는 modal type
     objOptList ? :ObjectArrayType[],
     defaultText ? :string,
     btnLabel : string,
-    style:object
+    style ? :object,
+    type? : string,
+    labelFooter? : string,
+    selOption? : string,
+    isDisable? : boolean,
 }
 
 interface ModalType { //default modal type

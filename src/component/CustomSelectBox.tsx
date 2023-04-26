@@ -21,10 +21,12 @@ export const CustomSelectBox = ({
     title,
     essential,
     isDisable,
+    labelFooter,
 }:CustomSelectBoxType) =>{
 
     const citiesDropdownRef = React.useRef<any>();
     const [objList, setObjList] = React.useState<string[]>([]);
+
 
     React.useEffect(()=>{
         if(objOptionList){
@@ -32,7 +34,6 @@ export const CustomSelectBox = ({
             objOptionList.map((item,index) => {
                 tempArray.push(item.name);
             });
-
             setObjList([...tempArray]);
         }
     },[])
@@ -53,15 +54,23 @@ export const CustomSelectBox = ({
                                 if(type){
                                     strSetOption(selectedItem,type);
                                 }   
+                                else{
                                     strSetOption(selectedItem);
+                                }
                             }
                         }}
-                        defaultButtonText={defaultText}
+                        defaultButtonText={labelFooter ? defaultText+labelFooter : defaultText}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             if(selOption && selOption !== ''){
+                                if(labelFooter){
+                                    return String(selOption)+labelFooter;
+                                }
                                 return String(selOption)
                             }
                             else{
+                                if(labelFooter){
+                                    return defaultText+labelFooter;
+                                }
                                 return defaultText;
                             }
                         }}
@@ -79,7 +88,8 @@ export const CustomSelectBox = ({
                         disabled={isDisable}
                     />
                 }
-                {objList.length > 0 &&
+                {(objOptionList && objList.length > 0) &&
+                    
                     <SelectDropdown
                         ref={citiesDropdownRef}
                         data={objList}
@@ -87,23 +97,28 @@ export const CustomSelectBox = ({
                             if(objSetOption){
                                 let tempIdx = objOptionList?.filter((el)=>el.name === objItem)[0].key;
 
-                                console.log(tempIdx);
                                 if(tempIdx){
                                     if(type){
                                         objSetOption(tempIdx,type);
                                     }
-                                    objSetOption(tempIdx);
+                                    else{
+                                        objSetOption(tempIdx);
+                                    }
                                 }
                             }
                         }}
-                        defaultButtonText={defaultText}
+                        defaultButtonText={labelFooter ? defaultText+labelFooter : defaultText}
                         buttonTextAfterSelection={(selectedItem, index) => {
-                            // let tempName = objOptionList?.filter((el)=>el.key === selOption)[0].name;
-
                             if(selOption && selOption !== ''){
+                                if(labelFooter){
+                                    return String(selOption)+labelFooter;
+                                }
                                 return String(selOption)
                             }
                             else{
+                                if(labelFooter){
+                                    return String(defaultText)+labelFooter;
+                                }
                                 return defaultText;
                             }
                         }}

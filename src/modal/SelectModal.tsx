@@ -21,7 +21,11 @@ export const SelectModal = ({
     defaultText = '',
     btnLabel = '확인',
     style,
+    type,
+    selOption
 }:SelectModalType) =>{
+
+
     return(
         <Modal 
             animationIn  ={"slideInUp"}
@@ -33,7 +37,7 @@ export const SelectModal = ({
             style={[{justifyContent:'center',alignItems:'center',flex:1,flexDirection : 'column', zIndex:999999999}]}
             onBackdropPress={hide}
         >
-            <View style={[modalStyle.loginIntroModal,style]}>
+            <View style={[modalStyle.modalWrapper ,modalStyle.loginIntroModal,style]}>
                 {date &&
                     <View style={{width:'100%'}}>
                         <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK2}]}>{date}</Text>
@@ -49,23 +53,39 @@ export const SelectModal = ({
                         <Text>{smallTitle}</Text>
                     </View>
                 }
-
-                <CustomSelectBox
-                    style={{marginTop:20}}
-                    defaultText='선택하세요.'
-                    objOptionList={objOptList}
-                    objSetOption={objOptList && objSetOption}
-                    strOptionList={strOptList}
-                    strSetOption={strOptList && strSetOption}
-                    buttonStyle={selectBoxStyle.btnStyle}
-                    buttonTextStyle={selectBoxStyle.btnTextStyle}
-                    rowStyle={selectBoxStyle.rowStyle}
-                    rowTextStyle={selectBoxStyle.rowTextStyle}
-                />
-
+                <View style={{flexDirection:'row'}}>
+                    {objOptList &&
+                        <CustomSelectBox
+                            style={{marginTop:20}}
+                            defaultText='선택하세요.'
+                            objOptionList={objOptList}
+                            objSetOption={objOptList && objSetOption}
+                            type={type}
+                            buttonStyle={selectBoxStyle.btnStyle}
+                            buttonTextStyle={selectBoxStyle.btnTextStyle}
+                            rowStyle={selectBoxStyle.rowStyle}
+                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                            selOption={selOption}
+                        />
+                    }
+                    {strOptList &&
+                        <CustomSelectBox
+                            style={{marginTop:20}}
+                            defaultText='선택하세요.'
+                            type={type}
+                            strOptionList={strOptList}
+                            strSetOption={strOptList && strSetOption}
+                            buttonStyle={selectBoxStyle.btnStyle}
+                            buttonTextStyle={selectBoxStyle.btnTextStyle}
+                            rowStyle={selectBoxStyle.rowStyle}
+                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                            selOption={selOption}
+                        />
+                    }
+                </View>
             <CustomButton
                 style={{marginTop:20}}
-                action={()=>{}}
+                action={action}
                 label={btnLabel}
             />
             </View>

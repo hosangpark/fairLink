@@ -1,5 +1,27 @@
 import { usePostMutation } from "../../util/reactQuery"
 
+export const monthList = () => {
+    const tempArray = [];
+
+    for(let i=1; i<=12; i++){
+        tempArray.push(String(i));
+    }
+    return tempArray;
+}
+
+export const dayList = () => {
+    const tempArray = [];
+
+    for(let i=1; i<=31; i++){
+        tempArray.push({
+            key:String(i),
+            name:String(i)+'일',
+        });
+    }
+
+    return tempArray;
+}
+
 export const bankList = [
     {key : '1', name : '국민은행'},
     {key : '2', name : '기업은행'},

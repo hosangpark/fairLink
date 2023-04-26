@@ -367,6 +367,7 @@ export const modalStyle = StyleSheet.create({
         width:'100%',
         alignItems:'center',
         justifyContent:'center',
+        // flex:1,
     },
 
     loginIntroModal : {
