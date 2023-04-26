@@ -7,7 +7,7 @@ import { colors } from '../../style/style';
 import { ErectionRegDoc } from './regDoc/ErectionRegDoc';
 
 export const RegDocument = ({route}:RegDocumentType) => {
-    const {memberType,fileCheck,mt_idx} = route.params;
+    const {memberType,fileCheck,mt_idx,mt_id} = route.params;
 
 
 
@@ -17,9 +17,9 @@ export const RegDocument = ({route}:RegDocumentType) => {
             <ScrollView style={{flex:1}}>
                 <View style={{flex:1}}>
                     {memberType !== 0 ?
-                        <EquPilotRegDoc fileCheck={fileCheck} memberType={memberType} mt_idx={mt_idx}/>
+                        <EquPilotRegDoc mt_id={mt_id} fileCheck={fileCheck} memberType={memberType} mt_idx={mt_idx}/>
                         :
-                        <ErectionRegDoc memberType={memberType} fileCheck={fileCheck} mt_idx={mt_idx} />
+                        <ErectionRegDoc mt_id={mt_id} memberType={memberType} fileCheck={fileCheck} mt_idx={mt_idx} />
                     }
                 </View>
             </ScrollView>

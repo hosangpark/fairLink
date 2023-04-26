@@ -8,10 +8,12 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
 import { CustomButton } from '../../component/CustomButton';
+import { useAppSelector } from '../../redux/store';
 
 
 export const Board = ({route}:any) => {
-    const [userType,setUserType] = useState('3')
+    const {mt_type} = useAppSelector(state => state.userInfo);
+    const [userType,setUserType] = useState(mt_type);
     const [strOption,setStrOption] = useState<string>('')
     const [year,setYear] = useState<string>('')
     const [month,setMonth] = useState<string>('')
@@ -61,7 +63,7 @@ export const Board = ({route}:any) => {
       complete:'',
       userProfileUrl:'',
       workType:1,
-      userType:'3',
+      userType:'4',
       total:8
     },
     {
@@ -92,7 +94,7 @@ export const Board = ({route}:any) => {
     return(
         <View style={{flex:1,}}>
         <BackHeader title="배차이력 및 현황" />
-        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+        {/* <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                 <CustomButton
                     action={()=>{setUserType('1')}}
                     label={'건설회사'}
@@ -105,12 +107,12 @@ export const Board = ({route}:any) => {
                     style={{flex:1,marginRight:10}}
                 />
                 <CustomButton
-                    action={()=>{setUserType('3')}}
+                    action={()=>{setUserType('4')}}
                     label={'조종사'}
                     style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
                     labelStyle={styles.whiteButtonLabelStyle}
                 />
-            </View>
+            </View> */}
          <ScrollView style={{flex:1}}>
             <View style={{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,padding:20}}>
                 <View style={{flexDirection:'row'}}>
