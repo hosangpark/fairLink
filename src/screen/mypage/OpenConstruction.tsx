@@ -62,11 +62,11 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
     const [tempSelName, setTempSelName] = React.useState('');
 
     const [selectModal, setSelectModal] = React.useState(false);
-    const [startDateModal, setStartDateModal] = React.useState({
+    const [startDateModal, setStartDateModal] = React.useState({ //공시기간 시작일 modal
         show:false,
         date:new Date()
     });
-    const [endDateModal, setEndDateModal] = React.useState({
+    const [endDateModal, setEndDateModal] = React.useState({ //공사기간 마지막일 modal
         show:false,
         date : new Date()
     });
@@ -84,7 +84,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         })
     };
 
-    const datePickerHide = () => {
+    const datePickerHide = () => { //datepicker hide
         setStartDateModal({...startDateModal, show:false});
         setEndDateModal({...startDateModal, show:false});
     }
@@ -128,7 +128,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         }
     }
 
-    const startDateHandler = (date : Date) => {
+    const startDateHandler = (date : Date) => { //공사기간 시작일 선택 handler
         setStartDateModal({
             show:false,
             date : date,
@@ -140,7 +140,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
             crt_start_date : tempDate,
         })
     }
-    const endDateHandler = (date : Date) => {
+    const endDateHandler = (date : Date) => { //공사기간 마지막날 선택 handler
         setEndDateModal({
             show:false,
             date : date,
@@ -161,7 +161,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         }
     }
 
-    const managerSelHandler = () => {
+    const managerSelHandler = () => { //담당자 선택했을때 데이터 처리
 
         if(consInputInfo.crt_m_cons_idx === ''){
             setSelectModal(false);
@@ -184,7 +184,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         }
     }
 
-    const uploadImage = async (image : SelImageType) => {
+    const uploadImage = async (image : SelImageType) => { //이미지 데이터 셋팅
         // setBusRegImage(image);
         setConsInputInfo({
             ...consInputInfo,
@@ -483,7 +483,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                 btnLabel={alertModal.btnLabel}
                 type={alertModal.type}
             />
-            <SelectModal 
+            <SelectModal  //담당자 선택 modal
                 bigTitle='담당자를 변경해주세요.'
                 objOptList={managerList}
                 objSetOption={inputHandler}
@@ -495,14 +495,14 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                 show={selectModal}
                 selOption={tempSelName}
             />
-             <DateTimePickerModal
+             <DateTimePickerModal //공사기간 시작일 date picker
                 isVisible={startDateModal.show}
                 mode="date"
                 onConfirm={startDateHandler}
                 onCancel={datePickerHide}
                 date={startDateModal.date}
             />
-             <DateTimePickerModal
+             <DateTimePickerModal //공사기간 마지막일 date picker
                 isVisible={endDateModal.show}
                 mode="date"
                 onConfirm={endDateHandler}
