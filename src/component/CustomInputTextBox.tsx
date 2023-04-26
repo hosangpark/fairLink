@@ -21,29 +21,33 @@ export const CustomInputTextBox = ({
     type, //input 객체 key값 (단일 string이면 없어도 ok)
     title, //텍스트박스 제목
     essential, //필수 표시
+    whiteReadOnly, //입력은 못하지만 화이트색상 textBox
 }:CustomInputTextBoxType) => {
     return(
       <View style={{...containerStyle}}>
         {title &&
           <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:5}]}>{title} <Text style={{color:colors.ORANGE_COLOR}}>{essential && '*'}</Text></Text>
         }
-        <View style={[editable?styles.TextInputBox:styles.TextInputFalseBox,style]}>
+        <View style={[(editable || whiteReadOnly) ?styles.TextInputBox:styles.TextInputFalseBox,style]}>
           <TextInput
               keyboardType={inputType} 
-              style={[fontStyle.f_regular,{flexShrink:1,paddingHorizontal:10,flex:1,}]}
+              style={[fontStyle.f_regular,{flexShrink:1,paddingHorizontal:10,flex:1,color:colors.FONT_COLOR_BLACK}]}
               value={input}
               onChangeText={e=>{
                 if(setInput){
                   if(type){
                     setInput(e,type);
                   }
-                  setInput(e);
+                  else{
+                    setInput(e);
+                  }
                 }
               }}
               placeholder={placeholder}
               placeholderTextColor={placeholderTextColor}
               editable={editable}
-              >
+              
+          >
           </TextInput>
           {button || imgfile ?
           <TouchableOpacity onPress={()=>{

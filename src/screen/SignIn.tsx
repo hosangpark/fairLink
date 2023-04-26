@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import { colors, fontStyle, styles } from '../style/style';
 import CheckBox from '@react-native-community/checkbox';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -108,13 +108,14 @@ export const SignIn = () => {
             <View style={{flex:1, alignItems:'center',justifyContent:'space-between'}}>
                 <View style={{flex:1}} />
                 <View style={{flex:1,justifyContent:'center',alignItems:'center',width:'100%',}}>
-                    <View>
+                    {/* <View>
                         <Text style={[fontStyle.s_regular, { fontSize : 18, color: colors.MAIN_COLOR,textAlign:'center'}]}>중장비 배차 시범서비스</Text>
                         <Text style={[fontStyle.k_bold, { fontSize : 50, color: colors.MAIN_COLOR,textAlign:'center',marginTop:10}]}>페어링크</Text>
-
-                        
+                    </View> */}
+                    <View>
+                        <Image source={require('../assets/img/logo.png')} style={{width:270,resizeMode:'contain'}} />
                     </View>
-                    <TouchableOpacity onPress={()=>{setIntroModal(true);}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20,marginTop:40}}>
+                    <TouchableOpacity onPress={()=>{setIntroModal(true);}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20}}>
                         <View style={{flex:1,backgroundColor:colors.KAKAO_YELLOW,alignItems:'center',justifyContent:'center',borderRadius:8}}>
                             <Text style={[fontStyle.f_medium ,{ fontSize: 18, color: colors.FONT_COLOR_BLACK3 }]}>카카오로 시작하기</Text>
                         </View>

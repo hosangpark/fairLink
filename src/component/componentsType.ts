@@ -62,6 +62,7 @@ export type CustomSelectBoxType = {
     title? : string,
     essential? : boolean,
     isDisable? : boolean,
+    labelFooter? : string,
 }
 export type CustomWaveSelectBoxType = {
     style : object,
@@ -149,6 +150,7 @@ export interface CustomInputTextBoxType {
     type? : string,
     title? : string,
     essential? : boolean,
+    whiteReadOnly? : boolean,
 }
 export interface CustomWaveBoxType {
     style? : object,
@@ -157,12 +159,15 @@ export interface CustomWaveBoxType {
     placeholder2?:string,
     button?:string,
     action?:()=>void,
+    action2?:()=>void,
     editable?:boolean,
     placeholderTextColor?:string,
     text1:string,
-    setText1:(e:string)=>void,
+    setText1:(e:string,type?:string)=>void,
+    type1? : string,
     text2:string,
-    setText2:(e:string)=>void,
+    setText2:(e:string,type?:string)=>void,
+    type2? : string,
 }
 export interface PilotInfoCardType {
     index: string,
