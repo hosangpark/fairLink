@@ -14,26 +14,33 @@ import { dayList, locationList } from '../../component/utils/list';
 import { SelectImageUpload } from '../../modal/SelectImageUpload';
 import { initialAlert } from '../../modal/AlertModal';
 import { AlertModal } from '../../modal/AlertModal';
-import { useAppSelector } from '../../redux/store';
-import { usePostQuery } from '../../util/reactQuery';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import { ObjectArrayType } from '../../component/componentsType';
 import { ObjArrayType } from '../screenType';
 import { SelectModal } from '../../modal/SelectModal';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import cusToast from '../../util/toast/CusToast';
+import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
+import { toggleLoading } from '../../redux/actions/LoadingAction';
 
 
 export const OpenConstruction = ({route}:OpenConstructionType) => {
 
     const {isData} = route.params;
     const {mt_idx} = useAppSelector(state => state.userInfo);
+    const dispatch = useAppDispatch();
 
+    const {data:myReqInfo, isLoading:myReqInfoLoading, isError:myReqInfoError} = usePostQuery('getMyConsReqInfo',{mt_idx:mt_idx},'cons/cons_require_info.php');
 
-    const {data : manList, isLoading : manLoading, isError : manError} = usePostQuery('getManagerList',{mt_idx : mt_idx},'cons/manager_list.php')
+    const [editMode, setEditMode] = React.useState('');
+
     const [guaranteeImage,setguaranteeImage] = useState<undefined>();
 
     const [cameraModal, setCameraModal] = useState(false);
 
     const crtClearInfo = { //state 초기화 object
+        mt_idx : mt_idx,
         crt_name : '',
         crt_director : '',
         crt_m_cons_idx:'',
@@ -53,14 +60,20 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
             uri :'',
             type : '',
         },
+        crt_temp_file_uri : '',
         crt_origin : '',
     }
 
 
     const [consInputInfo, setConsInputInfo] = React.useState(()=>crtClearInfo); //입력정보
+
+    const [isEditNumber, setIsEditNumber] = React.useState(false);
+    const [isEditEmail, setIsEditEmail] = React.useState(false);
+
     const [managerList, setMangetList] = React.useState<ObjArrayType[]>([]); //담당자 정보리스트
     const [tempSelName, setTempSelName] = React.useState('');
 
+	const [reqConModal, setReqConModal] = React.useState(false);
     const [selectModal, setSelectModal] = React.useState(false);
     const [startDateModal, setStartDateModal] = React.useState({ //공시기간 시작일 modal
         show:false,
@@ -76,6 +89,11 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         title:'',
         btnLabel :'',
     })
+
+    const {data : manList, isLoading : manLoading, isError : manError} = usePostQuery('getManagerList',{mt_idx : mt_idx},'cons/manager_list.php')
+    const consReqUpdate = usePostMutation('consReqUpdate','cons/cons_require_update.php',consInputInfo.crt_file1.uri !== '');
+
+
     const alertModalOff= () => {
         setAlertModal({
             ...initialAlert,
@@ -110,7 +128,9 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                 }
             })
         }
-        else if(alertModal.type === 'upload_success'){
+        else if(alertModal.type === 'go_req_confirm'){
+            setEditMode('view');
+            setReqConModal(true);
         }
     }
 
@@ -197,10 +217,55 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         })
     }
 
+    const submitCons = async () => { //현장개설
+        if(consInputInfo.crt_name === ''){
+            alertModalOn('현장명을 입력해주세요.','확인');
+        }
+        else if(consInputInfo.crt_director === ''){
+            alertModalOn('현장소장명을 입력해주세요','확인');
+        }
+        else if(consInputInfo.crt_m_name === ''){
+            alertModalOn('담당자를 선택해주세요.','확인');
+        }
+        else if(consInputInfo.crt_m_num === ''){
+            alertModalOn('담당자 연락처를 입력해주세요.','확인');
+        }
+        else if(consInputInfo.crt_start_date === ''){
+            alertModalOn('공사 시작날짜를 선택해주세요.','확인');
+        }
+        else if(consInputInfo.crt_end_date === ''){
+            alertModalOn('공사 마지막날짜를 선택해주세요.','확인');
+        }
+        else if(consInputInfo.crt_location === ''){
+            alertModalOn('현장 주소를 선택해주세요.','확인');
+        }
+        else{
+            dispatch(toggleLoading(true));
+            const {result,msg,data} = await consReqUpdate.mutateAsync(consInputInfo);
 
+            if(result === 'true'){
+                dispatch(toggleLoading(false));
+                alertModalOn(`${editMode === 'edit' ? '나의 현장 수정이' : '현장개설이'} 완료되었습니다.\n 지금 바로 배차요청 하시겠습니까?`,'예','go_req_confirm','',consInputInfo.crt_name);
+            }
+            else{
+                dispatch(toggleLoading(false));
+                alertModalOn(msg,'확인');
+            }
+        }        
+    }
 
 
     React.useEffect(()=>{
+        if(isData){
+            setEditMode('view');
+        }
+        else{
+            setEditMode('write');
+        }
+    },[])
+
+    React.useEffect(()=>{
+        dispatch(toggleLoading(manLoading));
         if(manList){
             // console.log(manList);
             const manListArray = manList.data.data;
@@ -216,6 +281,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
             }
             setMangetList([...tempArray]);
         }
+        
     },[manList])
 
     React.useEffect(()=>{
@@ -233,9 +299,24 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         }
     },[consInputInfo.crt_m_cons_idx])
 
+    React.useEffect(()=>{
+        dispatch(toggleLoading(myReqInfoLoading));
+        if(isData && myReqInfo){
+
+            const bodyData = myReqInfo.data.data;
+
+
+            setConsInputInfo({
+                ...consInputInfo,
+                ...bodyData,
+                crt_temp_file_uri : bodyData.crt_file1,
+            })
+        }
+    },[myReqInfo])
+
     return (
         <View style={{flex:1}}>
-            <BackHeader title={isData ? '나의 현장' : '현장개설하기'} />
+            <BackHeader title={editMode !== 'write' ? '나의 현장' : '현장개설하기'} />
             <ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
                 <View style={{paddingHorizontal:20,paddingTop:30,paddingBottom:25}}>
                 <View style={[styles.TitleText]}>
@@ -254,7 +335,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                     type={'crt_name'}
                     placeholder={'계약서에 명시된 현장명을 기입하세요.'}
                     imgfile={undefined}
-                    editable={true}
+                    editable={editMode !== 'view'}
                 />
                 <CustomInputTextBox
                     title={'현장소장명'}
@@ -264,7 +345,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                     setInput={inputHandler}
                     type={'crt_director'}
                     imgfile={undefined}
-                    editable={true}
+                    editable={editMode !== 'view'}
                 />
                 <CustomInputTextBox
                     title={'담당자'}
@@ -274,10 +355,10 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                     setInput={inputHandler}
                     type={'crt_m_name'}
                     imgfile={undefined}
-                    button={'변경'}
+                    button={editMode !== 'view' ? '변경' :''}
                     editable={false}
-                    whiteReadOnly={true}
-                    action={()=>{setSelectModal(true)}}
+                    whiteReadOnly={editMode !== 'view'}
+                    action={()=>{if(editMode !== 'view')setSelectModal(true)}}
                     placeholder='담당자를 선택해주세요.'
                 />
                 <CustomInputTextBox
@@ -287,11 +368,16 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                     input={consInputInfo.crt_m_num}
                     setInput={inputHandler}
                     type={'crt_m_num'}
-                    imgfile={isData && require('../../assets/img/ic_modify2.png')}
-                    editable={false}
+                    imgfile={editMode !== 'view' && require('../../assets/img/ic_modify2.png')}
+                    editable={isEditNumber}
                     inputType={'number-pad'}
-                    whiteReadOnly={true}
+                    whiteReadOnly={editMode !== 'view'}
                     placeholder='담당자를 선택해주세요.'
+                    action={()=>{
+                        if(editMode !== 'view'){
+                            setIsEditNumber(true); cusToast('변경할 연락처를 입력해주세요.')
+                        }
+                    }}
                 />
                 <CustomInputTextBox
                     title={'담당자 이메일'}
@@ -300,10 +386,15 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                     setInput={inputHandler}
                     type={'crt_email'}
                     containerStyle={styles.SubTitleText}
-                    imgfile={isData && require('../../assets/img/ic_modify2.png')}
-                    editable={false}
+                    imgfile={editMode !== 'view' && require('../../assets/img/ic_modify2.png')}
+                    editable={isEditEmail}
                     inputType={'email-address'}
-                    whiteReadOnly={true}
+                    whiteReadOnly={editMode !== 'view'}
+                    action={()=>{
+                        if(editMode !== 'view'){
+                            setIsEditEmail(true); cusToast('변경할 이메일을 입력해주세요.');
+                        }
+                    }}
                 />
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>공사기간
@@ -317,10 +408,9 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                         setText2={inputHandler}
                         type2={'crt_end_date'}
                         imgfile={require('../../assets/img/ic_calendar.png')}
-                        action={()=>{setStartDateModal({...startDateModal,show:true});console.log('dddddd')}}
-                        action2={()=>{setEndDateModal({...endDateModal,show:true})}}
-
-                        editable={true}
+                        action={()=>{if(editMode !== 'view')setStartDateModal({...startDateModal,show:true})}}
+                        action2={()=>{if(editMode !== 'view')setEndDateModal({...endDateModal,show:true})}}
+                        editable={editMode !== 'view'}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -336,6 +426,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                         rowTextStyle={selectBoxStyle.rowTextStyle}
                         title='현장 주소'
                         essential
+                        isDisable={editMode === 'view'}
                     />
                 </View>
                 <View style={[styles.SubTitleText]}>
@@ -343,17 +434,27 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                     <Text style={styles.OrengeStar}>*</Text>
                     </Text>
                     <View style={{flexDirection:'row'}}>
-                        <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>{inputHandler('now','crt_monthly_type')}}>
+                        <TouchableOpacity style={{flex:1,flexDirection:'row',alignItems:'center'}} onPress={()=>{
+                            if(editMode !== 'view'){
+                                inputHandler('now','crt_monthly_type')
+                            }
+                        }}>
                             <CheckBox 
                                 value={consInputInfo.crt_monthly_type === 'now'}
                                 onValueChange={()=>{inputHandler('now','crt_monthly_type')}}
+                                disabled={editMode === 'view'}
                             />
                             <Text style={[fontStyle.f_medium, {fontSize:16,marginHorizontal:5}]}>당일</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{flex:1.3,flexDirection:'row',alignItems:'center'}} onPress={()=>inputHandler('day','crt_monthly_type')}>
+                        <TouchableOpacity style={{flex:1.3,flexDirection:'row',alignItems:'center'}} onPress={()=>{
+                            if(editMode !== 'view'){
+                                inputHandler('day','crt_monthly_type')
+                            }
+                        }}>
                             <CheckBox 
                             value={consInputInfo.crt_monthly_type === 'day'}
                             onValueChange={()=>{inputHandler('day','crt_monthly_type')}}
+                            disabled={editMode === 'view'}
                             />
                             <Text style={{marginRight:5}}>매월</Text>
                             <CustomSelectBox 
@@ -368,6 +469,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                                 buttonTextStyle={selectBoxStyle2.btnTextStyle}
                                 rowStyle={selectBoxStyle2.rowStyle}
                                 rowTextStyle={selectBoxStyle2.rowTextStyle}
+                                isDisable={editMode === 'view'}
                             />
                         </TouchableOpacity>
                     </View>
@@ -388,6 +490,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                             rowStyle={selectBoxStyle.rowStyle}
                             rowTextStyle={selectBoxStyle.rowTextStyle}
                             labelFooter='일'
+                            isDisable={editMode === 'view'}
                         />
                         <Text style={{marginHorizontal:10}}>~</Text>
                         <CustomSelectBox 
@@ -401,6 +504,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                             rowStyle={selectBoxStyle.rowStyle}
                             rowTextStyle={selectBoxStyle.rowTextStyle}
                             labelFooter='일'
+                            isDisable={editMode === 'view'}
                         />
                     </View>
                     {/* <CustomWaveBox
@@ -424,25 +528,40 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }} onPress={()=>{setCameraModal(true)}}>
                         <ImageBackground
                         style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={consInputInfo.crt_file1.uri === '' ? undefined : {uri:consInputInfo.crt_file1.uri}}
+                        source={
+                            consInputInfo.crt_temp_file_uri === '' ? 
+                                consInputInfo.crt_file1.uri === '' ? undefined 
+                                :
+                                {uri:consInputInfo.crt_file1.uri}
+                            :
+                            {uri:consInputInfo.crt_temp_file_uri}
+                        }
                         resizeMode="cover"
                         imageStyle={{ borderRadius: 10 }}>
-                            {consInputInfo.crt_file1.uri === '' ? 
-                            <Image 
-                                style={{ width: 15, height: 15}}
-                                source={require('../../assets/img/ic_add.png')}
-                            />
-                            :
-                                <TouchableOpacity
-                                    style={{ position:'absolute', right: 10, top: 10 }}
-                                    onPress={() =>{
-                                        alertModalOn('파일을 삭제하시겠습니까?','삭제하기','delete_confirm','','건설기계지급보증서.JPG')
-                                    }}>
-                                    <Image
-                                    style={{ width: 25, height: 25 }}
-                                    source={require('../../assets/img/ic_modify.png')}
+                            {consInputInfo.crt_file1.uri === '' ?
+                                editMode !== 'view' ?
+                                    <Image 
+                                        style={{ width: 15, height: 15}}
+                                        source={require('../../assets/img/ic_add.png')}
                                     />
-                                </TouchableOpacity>
+                                :
+                                    <></>
+                            :
+                                editMode !== 'view' ?
+                                    <TouchableOpacity
+                                        style={{ position:'absolute', right: 10, top: 10 }}
+                                        onPress={() =>{
+                                            if(editMode !== 'view'){
+                                                alertModalOn('파일을 삭제하시겠습니까?','삭제하기','delete_confirm','','건설기계지급보증서.JPG')
+                                            }
+                                        }}>
+                                        <Image
+                                        style={{ width: 25, height: 25 }}
+                                        source={require('../../assets/img/ic_modify.png')}
+                                        />
+                                    </TouchableOpacity>
+                                :
+                                    <></>
                             }
                         </ImageBackground>
                     </TouchableOpacity>
@@ -457,15 +576,26 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                         imgfile={undefined}
                         button={''}
                         action={()=>{}}
-                        editable={true}
+                        editable={editMode !== 'view'}
                         placeholderTextColor={''}
                     />
                 </View>
                 <CustomButton
                     style={{}}
                     labelStyle={{}}
-                    label={'현장개설 완료'}
-                    action={()=>{console.log('ㅇ')}}
+                    label={
+                        editMode === 'write' ? '현장개설 완료' :
+                        editMode === 'view' ? '수정하기' :
+                        editMode === 'edit' ? '수정완료' : ''
+                    }
+                    action={()=>{
+                        if(editMode !== 'view'){
+                            submitCons();
+                        }
+                        else{
+                            setEditMode('edit');
+                        }
+                    }}
                 />
                 </View>
             </ScrollView>
@@ -482,6 +612,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                 action={alertAction}
                 btnLabel={alertModal.btnLabel}
                 type={alertModal.type}
+                cancleAction={()=>{setEditMode('view')}} //임시
             />
             <SelectModal  //담당자 선택 modal
                 bigTitle='담당자를 변경해주세요.'
@@ -509,6 +640,11 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                 onCancel={datePickerHide}
                 date={endDateModal.date}
             />
+            <ReqDispatchModal 
+				show={reqConModal}
+				hide={()=>{setReqConModal(false);}}
+				action={()=>{console.log('dd')}}
+			/>
         </View>
     )
 }

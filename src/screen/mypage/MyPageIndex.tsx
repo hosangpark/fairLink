@@ -8,12 +8,13 @@ import { AlertModal ,initialAlert} from '../../modal/AlertModal';
 import { AlertClearType } from '../../modal/modalType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
-import { CustomButton } from '../../component/CustomButton';
 import { usePostMutation, usePostQuery } from '../../util/reactQuery';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { MypageDataType } from '../../component/componentsType';
+import { toggleLoading } from '../../redux/actions/LoadingAction';
 
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
+    const dispatch = useAppDispatch();
     const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -93,6 +94,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     },[])
 
     React.useEffect(()=>{
+        dispatch(toggleLoading(myInfoLoading));
         if(myInfoData){
             setMyInfo(myInfoData.data.data);
         }
@@ -137,7 +139,14 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                 {mt_type == '1'?
                 <View style={styles.deepTopBorder}>
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
-                        onPress={()=>{alertModalOn(`개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`,'none_cons');}}
+                        onPress={()=>{
+                            if(myInfo.require_check === 'Y'){
+                                navigation.navigate('OpenConstruction',{isData:true});
+                            }
+                            else{
+                                alertModalOn(`개설된 현장이 없습니다.${"\n"}현장개설을 먼저 해주세요.`,'none_cons');
+                            }
+                        }}
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 현장</Text>  
                     </TouchableOpacity>

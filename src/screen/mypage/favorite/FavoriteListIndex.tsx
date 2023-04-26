@@ -12,15 +12,25 @@ import { HeavyEquipmentCard } from '../../../component/card/HeavyEquipmentCard';
 import { colors, fontStyle } from '../../../style/style';
 import { AlertClearType } from '../../../modal/modalType';
 import { AlertModal,initialAlert } from '../../../modal/AlertModal';
+import { RecEmpModal } from '../../../modal/RecEmpModal';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
+import { LoadingModal } from '../../../modal/LoadingModal';
+import { toggleLoading } from '../../../redux/actions/LoadingAction';
+import { usePostQuery } from '../../../util/reactQuery';
 
 export const FavoriteListIndex = ({route}:any) => {
 
+    const {mt_type , mt_idx} = useAppSelector(state => state.userInfo);
+    const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     // const [deletecard,setDeletecard] = useState<SetStateAction<any>>([])
     const [btnOpen,setBtnOpen] = useState(false)
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
-    const deletecard:Array<string> = []
+    const deletecard:Array<string> = [];
 
+    const {data:likeData, isLoading:likeLoading ,isError:likeError} = usePostQuery('getFavoriteList',{mt_idx:'17'},'cons/cons_like_list.php')
+
+    const [favoriteList, setFavoriteList] = React.useState([]);
     const Addnavigation = () =>{
         if(route.params.userType == '1'){
             navigation.navigate('FavoriteAdd')
@@ -126,19 +136,24 @@ export const FavoriteListIndex = ({route}:any) => {
 
     ]
 
+    React.useEffect(()=>{
+        dispatch(toggleLoading(likeLoading));
+        if(likeData){
+            const bodyData = likeData.data.data;
+            setFavoriteList([...bodyData]);
+        }
+    },[likeData])
+
     return(
         <View style={{flex:1}}>
-            <BackHeader title={
-                route.params.userType == '1'?
-                '즐겨찾기 장비 관리':'장비현황'
-                } />
+            <BackHeader title={mt_type === '1' ? '즐겨찾기 장비관리' : '장비현황' } />
             <View style={{paddingHorizontal:20,flex:1}}>
                 <CustomButton 
                     style={{marginVertical:20,}}
                     action={Addnavigation}
                     label={'장비 추가하기'}
                 />
-                {route.params.userType == '1'?
+                {route.params.mt_type == '1'?
                 <FlatList 
                     data={tempList}
                     style={{marginTop:10}}
@@ -158,6 +173,7 @@ export const FavoriteListIndex = ({route}:any) => {
                                 userProfileUrl={item.userProfileUrl}
                                 isDelete={true}
                                 action={()=>{}}
+                                isCheck={''}
                             />
                             </View>
                         )
@@ -203,6 +219,11 @@ export const FavoriteListIndex = ({route}:any) => {
             btnLabel={'현장개설하기'}
             action={()=>navigation.navigate('Board',{type:'default'})}
         />
+        {/* <RecEmpModal 
+            show={true}
+            hide={()=>{}}
+
+        /> */}
         </View>
     )
 }

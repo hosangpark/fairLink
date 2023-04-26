@@ -6,22 +6,22 @@ import { StyleSheet ,Image} from 'react-native';
 import { colors, fontStyle } from '../style/style';
 
 export const CustomSelectBox = ({
-    strOptionList,
-    objOptionList,
-    strSetOption,
-    objSetOption,
-    selOption,
-    type,
-    defaultText,
-    style,
+    strOptionList, //string 형태 배열
+    objOptionList, //object 형태 배열 [{key:...,name:...}...]
+    strSetOption, //string 형태 배열 셋팅
+    objSetOption, //object 형태 배열 셋팅
+    selOption, //선택한 옵션
+    type, //object 형태 배열일때 사용. (설정할 state의 객체 key값 - objOption의 key값이 들어감)
+    defaultText, //선택하지 않았을때 텍스트
+    style, //스타일
     buttonStyle,
     buttonTextStyle,
     rowStyle,
     rowTextStyle,
-    title,
-    essential,
-    isDisable,
-    labelFooter,
+    title,//제목
+    essential, //필수여부
+    isDisable, //selectbox 비활성화 true일때 비활성화
+    labelFooter, //name 꼬릿말
 }:CustomSelectBoxType) =>{
 
     const citiesDropdownRef = React.useRef<any>();
@@ -59,7 +59,7 @@ export const CustomSelectBox = ({
                                 }
                             }
                         }}
-                        defaultButtonText={labelFooter ? defaultText+labelFooter : defaultText}
+                        defaultButtonText={(selOption && selOption !== '' &&labelFooter) ? String(selOption)+labelFooter :(selOption && selOption !== '') ? String(selOption) : labelFooter ? defaultText+labelFooter : defaultText}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             if(selOption && selOption !== ''){
                                 if(labelFooter){
@@ -107,7 +107,7 @@ export const CustomSelectBox = ({
                                 }
                             }
                         }}
-                        defaultButtonText={labelFooter ? defaultText+labelFooter : defaultText}
+                        defaultButtonText={(selOption && selOption !== '' &&labelFooter) ? String(selOption)+labelFooter :(selOption && selOption !== '') ? String(selOption) :labelFooter ? defaultText+labelFooter : defaultText}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             if(selOption && selOption !== ''){
                                 if(labelFooter){

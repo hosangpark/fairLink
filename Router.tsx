@@ -34,6 +34,8 @@ import { MatchingFilot } from './src/screen/Board/MatchingFilot';
 import { Request } from './src/screen/Request/Request';
 import { OpenRequest } from './src/screen/Request/OpenRequest';
 import { AcquaintanceRequest } from './src/screen/Request/AcquaintanceRequest';
+import { useAppSelector } from './src/redux/store';
+import { LoadingModal } from './src/modal/LoadingModal';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -43,7 +45,7 @@ export const Router = () => {
         router stack이 추가될때 넘겨야할 params가 있으면 RouterNavigatorParams에 타입을 선언해주세요.
     */
     const Stack = createStackNavigator<RouterNavigatorParams>(); 
-
+    const loading = useAppSelector(state => state.isLoading);
     React.useEffect(()=>{
         setTimeout(()=>{
             try{
@@ -226,6 +228,9 @@ export const Router = () => {
                 />
             </Stack.Navigator>
             <Toast config={toastConfig}/>
+            <LoadingModal 
+                isLoading={loading.isLoading}
+            />
         </>
     )
 }
