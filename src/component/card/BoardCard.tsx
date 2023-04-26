@@ -6,34 +6,39 @@ import { CustomButton } from '../CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
+import { useAppSelector } from '../../redux/store';
 
 export const BoardCard = ({
-    jobType = '',
-    userName = '',
-    score = 0,
-    location = '',
-    complete=false,
-    workType=0,
-    userType='',
-    total=0
+    jobType,
+    cat_idx,
+    cot_idx,
+    start_date,
+    end_date,
+    location,
+    crt_name,
+    content,
+    equip,
+    career,
+    apply_count,
+    cardtitle
 }:BoardCardType) => {
-
+    const {mt_type} = useAppSelector(state=>state.userInfo)
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     const FlowEvent = () =>{
-        if(userType=='1'){
+        if(mt_type=='1' && cardtitle=="배차 모집중"){
             navigation.navigate('Volunteer')
-        } else if(userType=='3') {
+        } else if(mt_type=='3') {
             navigation.navigate('PilotProfile')
         } else {
-            navigation.navigate('Volunteer')
+            navigation.navigate('PilotProfile')
         }
     }
     
     return(
         <TouchableOpacity style={{margin:20}} onPress={()=>
         {
-            if(workType==0){
+            if(cardtitle=="배차 모집중"){
                 navigation.navigate('DetailField')
             } else {
                 navigation.navigate('DetailWork')
@@ -43,7 +48,7 @@ export const BoardCard = ({
             <View style={[styles.card2Wrapper]}>
                 <View style={[styles.card2Location]}>
                     <Text style={[fontStyle.f_regular,{fontSize:16,marginRight:12,color:colors.FONT_COLOR_BLACK}]}>
-                        23.03.07
+                        {start_date}
                     </Text>
                     <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK2}]}>
                         {location}
@@ -51,31 +56,31 @@ export const BoardCard = ({
                 </View>
                 <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:16}}>
                     <View style={{flex:1,paddingRight:30}}>
-                        <Text style={[fontStyle.f_bold,{fontSize:18,color:colors.FONT_COLOR_BLACK,marginBottom:userType=='3'? 5:8,}]} numberOfLines={1}>
-                            길동고등학교 창호보수</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:userType=='3'? 5:8}]} numberOfLines={1}>
-                            창호 철거 및 교체</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:userType=='3'? 5:8}]} numberOfLines={1}>
-                            스카이 43m</Text>
-                        {userType=='3' &&
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:userType=='3'? 5:8}]} numberOfLines={1}>
-                            경력 2년 +</Text>
+                        <Text style={[fontStyle.f_bold,{fontSize:18,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='3'? 5:8,}]} numberOfLines={1}>
+                            {crt_name}</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='3'? 5:8}]} numberOfLines={1}>
+                            {content}</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='3'? 5:8}]} numberOfLines={1}>
+                            {equip}</Text>
+                        {mt_type=='3' &&
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='3'? 5:8}]} numberOfLines={1}>
+                            경력 {career}년 +</Text>
                         }
                     </View>
                     <TouchableOpacity style={[styles.card2Profile]} onPress={FlowEvent}>
                         <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
-                            {userType=='1'? '조종사':userType=='2'? '지원자':'장비회사'}</Text>
+                            {mt_type=='1'? '조종사':mt_type=='2'? '지원자':'장비회사'}</Text>
                         <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>
-                            {userType=='1'? userName:userType=='2'? [total]+'명':'기린중기'}
+                            {mt_type!=='3'? [apply_count]+'명':'기린중기'}
                         </Text>
-                        {userType !=='3' ?
-                        <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {score}년+</Text>
+                        {mt_type !=='3' ?
+                        <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {career}년+</Text>
                         :
                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.ORANGE_COLOR}]}>선정전</Text>
                         }
                     </TouchableOpacity>
                 </View>
-                {complete && userType !=="3" &&
+                {mt_type !=="3" && cardtitle == "작업완료" &&
                     <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
@@ -83,7 +88,15 @@ export const BoardCard = ({
                         action={()=>{navigation.navigate('WorkReport')}}
                     />
                 }
-                {userType=='2' &&
+                {mt_type !=="3" && cardtitle == "계약진행중" &&
+                    <CustomButton
+                        style={{}}
+                        labelStyle={{fontSize:16}}
+                        label={'계약서 작성(확인)'}
+                        action={()=>{navigation.navigate('ElectronicContract')}}
+                    />
+                }
+                {mt_type !=='3' && cardtitle == "배차 모집중" &&
                     <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
@@ -91,7 +104,7 @@ export const BoardCard = ({
                         action={()=>{navigation.navigate('WorkReport')}}
                     />
                 }
-                {userType=='3' &&
+                {mt_type=='3' &&
                     <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}

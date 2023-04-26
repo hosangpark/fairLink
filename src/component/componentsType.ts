@@ -20,8 +20,11 @@ export interface CustomPhoneCallType {
     alertModalOn: (e:string)=>void
 }
 export interface CustomAccordionType {
-    title:string,
-    data:object[],
+    data:{
+        title:string,
+        count:number,
+        list:object[]
+    },
     userType:string
     action : ()=>void,
 }
@@ -60,6 +63,14 @@ export type CustomSelectBoxType = {
     essential? : boolean,
     isDisable? : boolean,
 }
+export type CustomWaveSelectBoxType = {
+    style : object,
+    strOptionList : string[],
+    selOption1 : string | ObjectArrayType;
+    setStrOption1: (opt : string, type?: string) => void;
+    selOption2 : string | ObjectArrayType;
+    setStrOption2: (opt : string, type?: string) => void;
+}
 
 
 export interface UserInfoCardType {
@@ -88,14 +99,18 @@ export interface HeavyEquipmentCardType {
     action2:()=>void
 }
 export interface BoardCardType {
-    jobType:string,
-    userName:string,
-    score:number,
-    location:string,
-    complete:boolean
-    workType:number
-    userType:string
-    total:number
+    jobType?:string,
+    cat_idx?:string
+    cot_idx?:string
+    start_date:string
+    end_date:string
+    location:string
+    crt_name:string
+    content:string
+    equip:string
+    career:string
+    apply_count:string
+    cardtitle:string
 }
 
 export interface ProfileCardType {

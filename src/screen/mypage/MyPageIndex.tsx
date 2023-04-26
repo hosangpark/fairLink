@@ -9,7 +9,7 @@ import { AlertClearType } from '../../modal/modalType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { CustomButton } from '../../component/CustomButton';
-import { usePostMutation } from '../../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import { useAppSelector } from '../../redux/store';
 import { MypageDataType } from '../../component/componentsType';
 
@@ -51,13 +51,13 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
         }
         else if(alertModal.type === 'none_profile'){
             if ( mt_type === '2') {
-                navigation.navigate('SettingProfile',{userType:'2'});
+                navigation.navigate('SettingProfile',{mt_type:'2'});
             } else if ( mt_type === '4') {
-                navigation.navigate('SettingProfile',{userType:'4'});
+                navigation.navigate('SettingProfile',{mt_type:'4'});
             }
         }
     }
-    const mypageInform = async (): Promise<void> => { //카카오 로그인
+    const mypageInform = async (): Promise<void> => {
         try {
             const idxParams = {
                 mt_idx : '17',
@@ -95,7 +95,6 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             setTabIndex(4);
         }
         mypageInform()
-        console.log(mt_type)
     },[])
 
     React.useEffect(()=>{

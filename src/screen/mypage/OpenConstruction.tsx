@@ -10,6 +10,7 @@ import { CustomSelectBox } from '../../component/CustomSelectBox';
 import { CustomWaveBox } from '../../component/CustomWaveBox';
 import { datedata } from '../../component/datedata';
 import CheckBox from '@react-native-community/checkbox';
+import { CustomWaveSelectBox } from '../../component/CustomWaveSelectBox';
 
 
 
@@ -28,6 +29,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
     const [crt_location,setcrt_location] = useState<string>('')
     const [crt_monthly,setcrt_monthly] = useState<string>('')
     const [crt_monthly_start,setcrt_monthly_start] = useState<string>('')
+    const [crt_monthly_end,setcrt_monthly_end] = useState<string>('')
     const [crt_file1,setcrt_file1] = useState<string>('')
     const [crt_origin,setcrt_origin] = useState<string>('')
 
@@ -147,8 +149,8 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                                 style={{flex:1}}
                                 defaultText='10일'
                                 strOptionList={datedata}
-                                selOption={strOption}
-                                strSetOption={setStrOption}
+                                selOption={crt_monthly}
+                                strSetOption={setcrt_monthly}
                                 buttonStyle={selectBoxStyle2.btnStyle}
                                 buttonTextStyle={selectBoxStyle2.btnTextStyle}
                                 rowStyle={selectBoxStyle2.rowStyle}
@@ -161,7 +163,15 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>대금지급산출기간
                     <Text style={styles.OrengeStar}>*</Text>
                     </Text>
-                    <CustomWaveBox
+                    <CustomWaveSelectBox
+                        style={{}}
+                        strOptionList={datedata}
+                        selOption1={crt_monthly_start}
+                        setStrOption1={setcrt_monthly_start}
+                        selOption2={crt_monthly_end}
+                        setStrOption2={setcrt_monthly_end}
+                    />
+                    {/* <CustomWaveBox
                         text1={crt_start_date}
                         setText1={setcrt_start_date}
                         text2={crt_start_date}
@@ -170,7 +180,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                         action={()=>{}}
                         editable={true}
                         placeholderTextColor={''}
-                    />
+                    /> */}
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>건설기계지급보증서
@@ -180,7 +190,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
                         <ImageBackground
                         style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={guaranteeImage}
+                        source={crt_file1}
                         resizeMode="cover"
                         imageStyle={{ borderRadius: 10 }}>
                             <Image 
@@ -189,7 +199,7 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                             />
                             <TouchableOpacity
                                 style={{ position:'absolute', right: 10, top: 10 }}
-                                onPress={() =>{setguaranteeImage}}>
+                                onPress={() =>{setcrt_file1}}>
                                 <Image
                                 style={{ width: 25, height: 25 }}
                                 source={require('../../assets/img/ic_modify.png')}
@@ -197,51 +207,6 @@ export const OpenConstruction = ({setTabIndex}:MyPageIndexType) => {
                             </TouchableOpacity>
                         </ImageBackground>
                     </TouchableOpacity>
-                {/* <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    data={undefined}
-                    renderItem={({ item, index }) => (
-                    <View style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1 }}
-                        source={{ uri: item.uri }}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <TouchableOpacity
-                            style={{ alignItems: 'flex-end', right: 10, top: 10 }}
-                            onPress={() => Delete(index)}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ico_close1.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                        {index == 0 && (
-                        <View
-                            style={{
-                            position: 'absolute',
-                            bottom: 0,
-                            backgroundColor: colors.GREEN_COLOR_2,
-                            width: '100%',
-                            alignItems: 'center',
-                            height: 25,
-                            justifyContent: 'center',
-                            borderBottomLeftRadius: 10,
-                            borderBottomRightRadius: 10,
-                            }}>
-                            <Text
-                            style={[
-                                style.text_sb,
-                                { fontSize: 13, color: colors.WHITE_COLOR },
-                            ]}>
-                            {t('대표사진')}
-                            </Text>
-                        </View>
-                        )}
-                    </View>
-                    )}
-                    horizontal={true}
-                /> */}
                 </View>
                 <View style={[styles.SubTitleText]}>
                     <CustomInputTextBox
