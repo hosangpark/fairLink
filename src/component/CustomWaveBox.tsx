@@ -24,8 +24,8 @@ export const CustomWaveBox = ({
     return(
       <View style={{flexDirection:'row'}}>
           <CustomInputTextBox
-            text={text1}
-            setText={setText1}
+            input={text1}
+            setInput={setText1}
             style={style}
             containerStyle={{flex:1}}
             placeholder={placeholder1}
@@ -39,8 +39,8 @@ export const CustomWaveBox = ({
               <Text style={[fontStyle.f_semibold,{fontSize:18}]}>~</Text>
           </View>
           <CustomInputTextBox
-            text={text2}
-            setText={setText2}
+            input={text2}
+            setInput={setText2}
             style={style}
             containerStyle={{flex:1}}
             placeholder={placeholder2}
