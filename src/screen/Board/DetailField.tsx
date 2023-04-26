@@ -10,7 +10,7 @@ import { RouterNavigatorParams } from '../../../type/routerType';
 import { AlertModal,initialAlert } from '../../modal/AlertModal';
 import { AlertClearType } from '../../modal/modalType';
 
-export const DetailField = () => {
+export const DetailField = ({route}:any) => {
     const userType:string = "2"
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 
@@ -25,7 +25,7 @@ export const DetailField = () => {
     const alertModalOff = () =>{ //modal 종료
         setAlertModal(initialAlert)
     }
-    useEffect(()=>{console.log('route')},[])
+    useEffect(()=>{console.log(route.params.cot_idx)},[])
     return(
         <View style={{flex:1,}}>
         <BackHeader title="현장세부내용" />
