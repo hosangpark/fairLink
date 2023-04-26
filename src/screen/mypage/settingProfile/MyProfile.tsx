@@ -5,7 +5,6 @@ import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from "../.
 import { CustomSelectBox } from "../../../component/CustomSelectBox";
 import { AlertClearType } from "../../../modal/modalType";
 import { AlertModal, initialAlert } from "../../../modal/AlertModal";
-import { CustomInputTextBox } from "../../../component/CustomInputTextBox";
 import CheckBox from "@react-native-community/checkbox";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";

@@ -134,8 +134,6 @@ export interface CustomInputTextBoxType {
     type? : string,
     title? : string,
     essential? : boolean,
-    text:string,
-    setText:(e:string)=>void
 }
 export interface CustomWaveBoxType {
     style? : object,

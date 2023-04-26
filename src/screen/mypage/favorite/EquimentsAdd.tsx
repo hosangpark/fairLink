@@ -4,7 +4,6 @@ import { BackHeader } from '../../../component/header/BackHeader';
 import { TabView, SceneMap ,TabBar} from 'react-native-tab-view';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../../style/style';
 import { FavoriteAddPhone } from './favoriteAddDetail/FavoriteAddPhone';
-import { CustomInputTextBox } from '../../../component/CustomInputTextBox';
 import { CustomButton } from '../../../component/CustomButton';
 import { CustomSelectBox } from '../../../component/CustomSelectBox';
 

@@ -21,8 +21,6 @@ export const CustomInputTextBox = ({
     type,
     title,
     essential,
-    text,
-    setText,
 }:CustomInputTextBoxType) => {
     return(
       <View style={{...containerStyle}}>
@@ -33,14 +31,13 @@ export const CustomInputTextBox = ({
           <TextInput
               keyboardType={inputType} 
               style={[fontStyle.f_regular,{flexShrink:1,paddingHorizontal:10,flex:1,}]}
-              value={text}
+              value={input}
               onChangeText={e=>{
-                if(type && setInput){
-                  setInput(e,type)
-                  setText(e)
-                }
-                else{
-                  setText(e)
+                if(setInput){
+                  if(type){
+                    setInput(e,type)
+                  }
+                  setInput(e)
                 }
               }}
               placeholder={placeholder}
