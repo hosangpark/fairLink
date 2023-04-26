@@ -19,6 +19,12 @@ export type ManagerItemType = { //담당자 아이템 타입
     crt_m_num : string,
 }
 
+export type FavoriteListItemType = {
+    carrer : string,
+    compnay:string,
+    equip:string,
+}
+
 export interface HomeIndexType {
     setTabIndex? : (tab:number) => void;
 }

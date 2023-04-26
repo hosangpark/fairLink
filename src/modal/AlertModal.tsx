@@ -22,6 +22,7 @@ export const AlertModal = ({ //알림창
     title,
     action,
     btnLabel,
+    cancleAction
 }:AlertModalType) => {
 
     return(
@@ -67,7 +68,7 @@ export const AlertModal = ({ //알림창
                                 label={'예'}
                             />
                             <CustomButton
-                                action={()=>{hide();}}
+                                action={()=>{if(cancleAction)cancleAction(); hide();}}
                                 label={'아니오'}
                                 style={{...styles.whiteButtonStyle,flex:1}}
                                 labelStyle={styles.whiteButtonLabelStyle}
