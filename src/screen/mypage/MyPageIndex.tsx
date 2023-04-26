@@ -16,10 +16,9 @@ import { MypageDataType } from '../../component/componentsType';
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
-    const navigation = useNavigation<
-    StackNavigationProp<RouterNavigatorParams>>();
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert);
-    const [mypageData, setMypageData] = React.useState<MypageDataType>([]);
+    const [mypageData, setMypageData] = React.useState<MypageDataType[]>([]);
 
 
     const consmyPageMutation = usePostMutation('consmyPage','cons/mypage_info.php')
