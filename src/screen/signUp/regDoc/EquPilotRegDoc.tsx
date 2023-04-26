@@ -21,6 +21,7 @@ type EquPilotRegDocType = {
     memberType : number,
     mt_idx:number,
     fileCheck : NumberObejctType,
+    mt_id:string,
 }
 
 type tempUploadImageType = {
@@ -31,7 +32,7 @@ type tempUploadImageType = {
     key : string,
 }
 
-export const EquPilotRegDoc = ({memberType,fileCheck,mt_idx}:EquPilotRegDocType) => { //장비업체, 조종사 서류 받기
+export const EquPilotRegDoc = ({memberType,fileCheck,mt_idx,mt_id}:EquPilotRegDocType) => { //장비업체, 조종사 서류 받기
 
     console.log(memberType);
 
@@ -39,7 +40,9 @@ export const EquPilotRegDoc = ({memberType,fileCheck,mt_idx}:EquPilotRegDocType)
     const reqFileList = memberType === 1 ? equUploadList : pilotUploadList;
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const uploadEquDocMutation = usePostMutation('uploadErecDoc',memberType === 1 ? 'member/signup2_file.php' : 'member/signup4_file.php' ,true);
+    const signInMutation = usePostMutation('signIn','member/login.php'); //로그인 mutation
 
+    
     const [uploadList, setUploadList] = React.useState<tempUploadImageType[]>([]);
 
     const [alertModal, setAlertModal] = React.useState({
@@ -76,6 +79,9 @@ export const EquPilotRegDoc = ({memberType,fileCheck,mt_idx}:EquPilotRegDocType)
             
         }
         else if(alertModal.type === 'upload_success'){
+
+
+
             navigation.replace('Main');
         }
     }

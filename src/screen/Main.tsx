@@ -23,7 +23,6 @@ import { Request } from './Request/Request';
 export const Main = () => {
 	const {mt_type} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
-    const [exitApp , setExitApp] = React.useState(false);
 
     /**
      * 
@@ -41,40 +40,7 @@ export const Main = () => {
 
     const [tabIndex, setTabIndex] = useState(1);
 
-    const backAction = () => {
-  
-        var timeout;
-        let tmp = 0;
-           if(tmp==0){
-           
-              if ((exitApp == undefined || !exitApp) && isFocused) {
-                 
-                 cusToast("한번 더 누르시면 종료됩니다");
-                 setExitApp(true);
-                 timeout = setTimeout(
-                       () => {
-                       setExitApp(false);
-                       },
-                       4000
-                 );
-              } else {
-                // appTimeSave();
-                clearTimeout(timeout);
-                BackHandler.exitApp();  // 앱 종료
-              }
-              return true;
-           }
-    }
-
-    React.useEffect(()=>{
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        );
-        if(!isFocused){
-            backHandler.remove();
-        }
-    },[isFocused,exitApp])
+    
 
     // function testNavi(path:keyof RouterNavigatorParams){ //이동해야할 path가 존재한다면 RouterNavigatorParams에 추가해주세요.
         

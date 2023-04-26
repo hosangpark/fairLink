@@ -83,7 +83,7 @@ export const SettingProfile = ({route}:any) => {
                 </View>
             </View>
             { // (조종사 일 때)
-                route.params.userType ==='3'
+                route.params.userType ==='4'
                 &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>활동지역</Text>
@@ -186,7 +186,7 @@ export const SettingProfile = ({route}:any) => {
                 </View>
             </View>
             { // (조종사 일 때)
-                route.params.userType ==='3'
+                route.params.userType ==='4'
                 &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>소속회사</Text>
@@ -246,7 +246,7 @@ export const SettingProfile = ({route}:any) => {
                 </View>
             }
             { // (조종사 일 때)
-                route.params.userType ==='3'
+                route.params.userType ==='4'
                 &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>계좌정보</Text>

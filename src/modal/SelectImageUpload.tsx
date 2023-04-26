@@ -9,13 +9,10 @@ import { MarginCom } from '../component/MarginCom';
 import { PERMISSIONS, request,check, RESULTS,openSettings } from 'react-native-permissions';
 import { AlertModal, initialAlert } from './AlertModal';
 export const initialFileType = {
+    name : '',
+    type : '',
     uri : '',
-    fileName : '',
-    base64 : '',
-    fileSize : 0,
-    height : 0,
-    width:0,
-    type:'',
+    size : 0,
 }
 
 export const SelectImageUpload = ({ //서류 업로드 (카메라, 갤러리 선택 modal)

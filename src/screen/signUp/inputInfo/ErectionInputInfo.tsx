@@ -85,7 +85,12 @@ export const ErectionInputInfo = ({
             console.log(data);
 
             if(result === 'true'){
-                navigation.replace('RegDocument',{fileCheck:data.data.file_check,memberType:memberType,mt_idx:data.data.mt_idx});
+                navigation.replace('RegDocument',{
+                    fileCheck:data.data.file_check,
+                    memberType:memberType,
+                    mt_idx:data.data.mt_idx,
+                    mt_id : sns_id,
+                });
             }
             else{
 
