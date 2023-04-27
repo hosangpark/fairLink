@@ -20,9 +20,18 @@ export type ManagerItemType = { //담당자 아이템 타입
 }
 
 export type FavoriteListItemType = {
-    carrer : string,
-    compnay:string,
+    like_idx:string,
+    img_url:string,
+    mpt_idx:string,
+    pilot_type:string,
+    good:number,
+    company:string,
+    name:string,
+    score:number,
+    score_count:number,
     equip:string,
+    career:string,
+    location:string,
 }
 
 export interface HomeIndexType {
