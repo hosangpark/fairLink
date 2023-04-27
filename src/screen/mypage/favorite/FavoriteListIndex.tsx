@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { LoadingModal } from '../../../modal/LoadingModal';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
 import { usePostQuery } from '../../../util/reactQuery';
+import { FavoriteListItemType } from '../../screenType';
 
 export const FavoriteListIndex = ({route}:any) => {
 
@@ -30,7 +31,7 @@ export const FavoriteListIndex = ({route}:any) => {
 
     const {data:likeData, isLoading:likeLoading ,isError:likeError} = usePostQuery('getFavoriteList',{mt_idx:'17'},'cons/cons_like_list.php')
 
-    const [favoriteList, setFavoriteList] = React.useState([]);
+    const [favoriteList, setFavoriteList] = React.useState<FavoriteListItemType[]>([]);
     const Addnavigation = () =>{
         if(route.params.userType == '1'){
             navigation.navigate('FavoriteAdd')
@@ -155,22 +156,22 @@ export const FavoriteListIndex = ({route}:any) => {
                 />
                 {route.params.mt_type == '1'?
                 <FlatList 
-                    data={tempList}
+                    data={favoriteList}
                     style={{marginTop:10}}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item,index})=>{
                         return(
                             <View style={{paddingVertical:15}}>
                             <UserInfoCard 
-                                index={item.index}
-                                empName={item.empName}
-                                jobType={item.jobType}
+                                index={String(index)}
+                                empName={item.company}
+                                jobType={item.pilot_type === 'Y' ? '1' : '0'}
                                 location={item.location}
-                                rating={item.rating}
-                                recEmpCount={item.recEmpCount}
+                                rating={item.score_count}
+                                recEmpCount={item.good}
                                 score={item.score}
-                                userName={item.userName}
-                                userProfileUrl={item.userProfileUrl}
+                                userName={item.name}
+                                userProfileUrl={item.img_url}
                                 isDelete={true}
                                 action={()=>{}}
                                 isCheck={''}
