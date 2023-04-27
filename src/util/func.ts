@@ -101,6 +101,15 @@ export const pwCheckRe = (pw:string,pw_re:string) => { //비밀번호 재입력 
     }
 }
 
+export const phoneAutoHipone = (phone:string) => {
+
+    // const stringPhone = phone.replaceAll('-','');
+
+    const hiponePhone = phone.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+
+    return hiponePhone;
+}
+
 export const phoneCheck = (phone:string) => { //휴대폰 유효성 검사(-제외)
     const phoneRule = /^(01[0]{1})[0-9]{3,4}[0-9]{4}$/
 

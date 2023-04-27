@@ -1,4 +1,5 @@
 import { ImageSourcePropType,KeyboardTypeOptions } from "react-native";
+import { FavoriteListItemType } from "../screen/screenType";
 
 export interface NumberObejctType {
     [key: number]: string;
@@ -7,6 +8,7 @@ export interface NumberObejctType {
 export interface BackHeaderType {
     backAction? : () => void;
     title : string;
+    isPop? : boolean;
 }
 
 export interface CustomButtonType {
@@ -75,19 +77,21 @@ export type CustomWaveSelectBoxType = {
 
 
 export interface UserInfoCardType {
-    jobType : string,
-    userProfileUrl : string,
-    empName : string,
-    userName:string,
-    score:number,
-    rating:number,
-    recEmpCount:number,
-    location:string,
+    // jobType : string,
+    // userProfileUrl : string,
+    // empName : string,
+    // userName:string,
+    // score:number,
+    // rating:number,
+// recEmpCount:number
+    // location:string,
+    item : FavoriteListItemType,
     isDelete: boolean,
-    isFavorite?:string,
+    isFavorite?:boolean,
     isCheck?:string,
     index : string,
-    action:(e:string)=>void
+    action:(e:string)=>void,
+    refetch? : () => void;
 }
 export interface HeavyEquipmentCardType {
     EquiName : string,
@@ -154,6 +158,7 @@ export interface CustomInputTextBoxType {
 }
 export interface CustomWaveBoxType {
     style? : object,
+    title? : string,
     imgfile?:ImageSourcePropType,
     placeholder1?:string,
     placeholder2?:string,
@@ -168,6 +173,9 @@ export interface CustomWaveBoxType {
     text2:string,
     setText2:(e:string,type?:string)=>void,
     type2? : string,
+    whiteReadOnly1? : boolean,
+    whiteReadOnly2? : boolean,
+    essential? : boolean,
 }
 export interface PilotInfoCardType {
     index: string,

@@ -33,14 +33,15 @@ import { RegDocument } from './src/screen/signUp/RegDocument';
 import { MatchingFilot } from './src/screen/Board/MatchingFilot';
 import { Request } from './src/screen/Request/Request';
 import { OpenRequest } from './src/screen/Request/OpenRequest';
-import { AcquaintanceRequest } from './src/screen/Request/AcquaintanceRequest';
+import { AcquaintanceRequest } from './src/screen/Request/acqReq/AcquaintanceRequest';
 import { useAppSelector } from './src/redux/store';
 import { LoadingModal } from './src/modal/LoadingModal';
+import { AcqReqStep1 } from './src/screen/Request/acqReq/AcqReqStep1';
+import { HomeIndex } from './src/screen/home/HomeIndex';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
 export const Router = () => { 
-
     /** 
         router stack이 추가될때 넘겨야할 params가 있으면 RouterNavigatorParams에 타입을 선언해주세요.
     */
@@ -75,7 +76,11 @@ export const Router = () => {
                     component={Main}
                     options={{headerShown:false}}
                 />
-
+                <Stack.Screen
+                    name={'Home'}
+                    component={HomeIndex}
+                    options={{headerShown:false}}
+                />
 
                 {/** USER  */}
                 <Stack.Screen // 이용약관
@@ -117,6 +122,11 @@ export const Router = () => {
                 <Stack.Screen 
                     name={'AcquaintanceRequest'}
                     component={AcquaintanceRequest}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen
+                    name={'AcqReqStep1'}
+                    component={AcqReqStep1}
                     options={{headerShown:false}}
                 />
 

@@ -104,7 +104,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
 
     const datePickerHide = () => { //datepicker hide
         setStartDateModal({...startDateModal, show:false});
-        setEndDateModal({...startDateModal, show:false});
+        setEndDateModal({...endDateModal, show:false});
     }
     const alertModalOn = (msg:string,btnLabel : string, type? : string, strongMsg? : string, title? : string) => {
         setAlertModal({

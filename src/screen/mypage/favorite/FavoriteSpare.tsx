@@ -35,7 +35,7 @@ export const FavoriteSpare = () => {
             }
 
             <View style={{marginBottom:30}}>
-                <UserInfoCard 
+                {/* <UserInfoCard 
                     index = '0'
                     jobType = '0'
                     userProfileUrl = ''
@@ -47,10 +47,10 @@ export const FavoriteSpare = () => {
                     location = '[경남] 진주시, 사천시, 창원시'
                     isDelete = {true}
                     action={()=>{}}
-                />
+                /> */}
             </View>
             <View style={{marginBottom:30}}>
-                <UserInfoCard 
+                {/* <UserInfoCard 
                     index = '0'
                     jobType = '0'
                     userProfileUrl = ''
@@ -62,7 +62,7 @@ export const FavoriteSpare = () => {
                     location = '[경남] 진주시, 사천시, 창원시'
                     isDelete = {true}
                     action = {()=>{}}
-                />
+                /> */}
             </View>
             <AlertModal 
             show={alertModal.alert}

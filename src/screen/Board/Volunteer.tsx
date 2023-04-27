@@ -39,7 +39,7 @@ export const Volunteer = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginVertical: 15 }}>                
-                    <UserInfoCard 
+                    {/* <UserInfoCard 
                         index="1"
                         empName='힘찬중기'
                         jobType='1' // (장비업체일 때 jobType = '0')
@@ -52,10 +52,10 @@ export const Volunteer = () => {
                         isDelete={false}
                         isFavorite='' // (장비업체일 때 즐겨찾기 on: isFavorite='0', off: isFavorite='1')
                         action={()=>{navigation.navigate('CompanyProfile')}}
-                    />
+                    /> */}
                 </View>
                 <View style={{ marginVertical: 15 }}>
-                    <UserInfoCard 
+                    {/* <UserInfoCard 
                         index="2"
                         empName='힘찬중기'
                         jobType='1'
@@ -67,7 +67,7 @@ export const Volunteer = () => {
                         userProfileUrl=''
                         isDelete={false}
                         action={()=>{navigation.navigate('CompanyProfile')}}
-                    />
+                    /> */}
                 </View>
             </View>
             
