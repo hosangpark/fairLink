@@ -39,7 +39,8 @@ export interface DocumentAccordionType {
     title:string,
     subList:{
         title:string,
-        registration:boolean,
+        file_check:string
+        file_url:string
     }[],
 }
 
@@ -101,8 +102,8 @@ export interface HeavyEquipmentCardType {
 }
 export interface BoardCardType {
     jobType?:string,
-    cat_idx?:string
-    cot_idx?:string
+    cat_idx:string 
+    cot_idx:string 
     start_date:string
     end_date:string
     location:string
@@ -211,4 +212,27 @@ export type MyInfoDataType = { //초기 alert state 타입
     mct_position:string
     mt_email:string
     mt_hp:string
+}
+export type DetailFieldBoxDataType = { 
+    crt_name:string,
+    company:string,
+    detail_location:string,
+    cot_e_type:string,
+    cot_e_year:string,
+    cot_e_sub:string,
+    cot_content:string,
+    cot_career:string,
+    cot_age:string,
+    cot_score:string,
+    cot_goods:string,
+    cot_start_date:string,
+    cot_end_date:string,
+    cot_start_time:string,
+    cot_end_time:string,
+    cot_pay_type:string,
+    cot_pay_price:string,
+    cot_pay_date:string,
+    cot_pay_etc?:string | null,
+    cot_m_name:string,
+    cot_m_num:string,
 }

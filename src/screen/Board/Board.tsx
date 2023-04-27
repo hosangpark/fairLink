@@ -4,7 +4,7 @@ import { BoardIndexType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../style/style';
 import { CustomSelectBox } from '../../component/CustomSelectBox';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
 import { CustomButton } from '../../component/CustomButton';
@@ -13,6 +13,7 @@ import { usePostMutation } from '../../util/reactQuery';
 
 
 export const Board = ({route}:any) => {
+    // const mt_type = "2"
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const [strOption,setStrOption] = useState<string>('')
     const [year,setYear] = useState<string>('')
@@ -55,14 +56,13 @@ const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_ord
     };
 
 
-    useEffect(()=>{
-        if(route.params.type=='default'){
-            setStrOption('전체')
-        } else {
-            setStrOption('작업중')
-        }
+
+    useFocusEffect(
+        React.useCallback(() => {
         BoardInfrom()
-    },[])
+        return () => {}
+        }, [strOption]),
+    );
 
     return(
         <View style={{flex:1,}}>

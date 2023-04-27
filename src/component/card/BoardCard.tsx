@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { useAppSelector } from '../../redux/store';
+import { usePostMutation } from '../../util/reactQuery';
 
 export const BoardCard = ({
     jobType,
@@ -34,6 +35,39 @@ export const BoardCard = ({
             navigation.navigate('PilotProfile')
         }
     }
+
+    
+    const consListDeleteMutation = usePostMutation('consListDelete','cons/cons_order_delete.php')
+    const equipListDeleteMutation = usePostMutation('equipListDelete','equip/equip_order_delete.php')
+    const pilotListDeleteMutation = usePostMutation('pilotListDelete','pilot/pilot_order_delete.php')
+
+  const BoardInfrom = async (): Promise<void> => {
+        try {
+            const idxParams = {
+            /** mt_idx 임의입력 수정필요 */
+                mt_idx : '17',
+                cot_idx:cot_idx,
+            }
+            const {result,data, msg} = 
+            mt_type == '1'?  await consListDeleteMutation.mutateAsync(idxParams)
+            :
+            mt_type == '2'?  await equipListDeleteMutation.mutateAsync(idxParams)
+            :
+            await pilotListDeleteMutation.mutateAsync(idxParams)
+
+            if(result === 'true'){
+                console.log("result",result)
+                console.log("data",data.data)
+                console.log("msg",msg)
+            }
+            else{
+                console.log("else",result)
+            }
+        // }
+        } catch(err) {
+            console.log(err);
+        }
+    };
     
     return(
         <TouchableOpacity style={{margin:20}} onPress={()=>
@@ -101,7 +135,7 @@ export const BoardCard = ({
                         style={{}}
                         labelStyle={{fontSize:16}}
                         label={'모집 취소'}
-                        action={()=>{navigation.navigate('WorkReport')}}
+                        action={BoardInfrom}
                     />
                 }
                 {mt_type=='3' &&

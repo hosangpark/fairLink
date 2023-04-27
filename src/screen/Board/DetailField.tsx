@@ -10,7 +10,10 @@ import { RouterNavigatorParams } from '../../../type/routerType';
 import { AlertModal,initialAlert } from '../../modal/AlertModal';
 import { AlertClearType } from '../../modal/modalType';
 import { usePostQuery } from '../../util/reactQuery';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { toggleLoading } from '../../redux/actions/LoadingAction';
+import { DetailFieldBoxDataType } from '../../component/componentsType';
+import { initialdetailFieldInfo } from '../../component/initialInform';
 
 const DetailFieldBox = ({
     title,
@@ -24,7 +27,8 @@ const DetailFieldBox = ({
     cot_end_date,
     cot_start_time,
     cot_end_time,
-    cot_pay_date
+    cot_pay_date,
+    cot_pay_etc
 }:any)=>{
     // {title:string,text:string,cot_pay_type?:string,cot_start_date?:string}
     return(
@@ -71,8 +75,12 @@ const DetailFieldBox = ({
 }
 
 export const DetailField = ({route}:any) => {
+    const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
+
+    
+    const [detailFieldInfo, setDetailFieldInfo] = React.useState<DetailFieldBoxDataType>(()=>initialdetailFieldInfo); //입력정보
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 
     const alertModalOn = (strongMsg : string, type? : string) => { //alert 켜기
         setAlertModal({
@@ -86,11 +94,20 @@ export const DetailField = ({route}:any) => {
         setAlertModal(initialAlert)
     }
 
-    const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = usePostQuery('getManagerList',{mt_idx : "17",cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
+    const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
+    /** mt_idx 임의입력 수정필요 */
+    usePostQuery('getDetailFieldData',{mt_idx : "17",cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
 
     React.useEffect(()=>{
         console.log('test')
     },[])
+
+    React.useEffect(()=>{
+        dispatch(toggleLoading(DetailFieldDataLoading));
+        if(DetailFieldData){
+            setDetailFieldInfo(DetailFieldData.data.data);
+        }
+    },[DetailFieldData])
 
     return(
         <View style={{flex:1,}}>
@@ -98,64 +115,64 @@ export const DetailField = ({route}:any) => {
         <ScrollView style={{flex:1,backgroundColor:colors.WHITE_COLOR}}>
             <View style={{backgroundColor:colors.MAIN_COLOR,padding:20}}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.WHITE_COLOR,marginBottom:3}]}>
-                    {DetailFieldData.data.data.crt_name}
+                    {detailFieldInfo.crt_name}
                 </Text>
                 <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:8}]}>
-                    {DetailFieldData.data.data.company}</Text>
+                    {detailFieldInfo.company}</Text>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                 <Image resizeMode={'contain'} style={{width:10,height:15,marginRight:5}} source={require('../../assets/img/ic_map_pin_w.png')}/>
                 <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3,opacity:0.85}]}>
-                    {DetailFieldData.data.data.detail_location}
+                    {detailFieldInfo.detail_location}
                 </Text>
                 </View>
             </View>
             <View style={{paddingHorizontal:20,paddingVertical:20}}>
                 <DetailFieldBox
                     title={'장비'}
-                    text={DetailFieldData.data.data.cot_e_type}
+                    text={detailFieldInfo.cot_e_type}
                 />
                 <DetailFieldBox
                     title={'최소연식'}
-                    text={DetailFieldData.data.data.cot_e_year}
+                    text={detailFieldInfo.cot_e_year}
                 />
                 <DetailFieldBox
                     title={'부속장치'}
-                    text={DetailFieldData.data.data.cot_e_sub}
+                    text={detailFieldInfo.cot_e_sub}
                 />
                 <DetailFieldBox
                     title={'작업내용'}
-                    text={DetailFieldData.data.data.cot_content}
+                    text={detailFieldInfo.cot_content}
                 />
                 <DetailFieldBox
                     title={'지원가능'}
-                    cot_career={DetailFieldData.data.data.cot_career}
-                    cot_age={DetailFieldData.data.data.cot_age}
-                    cot_score={DetailFieldData.data.data.cot_score}
-                    cot_goods={DetailFieldData.data.data.cot_goods}
+                    cot_career={detailFieldInfo.cot_career}
+                    cot_age={detailFieldInfo.cot_age}
+                    cot_score={detailFieldInfo.cot_score}
+                    cot_goods={detailFieldInfo.cot_goods}
                 />
                 <DetailFieldBox
                     title={'작업기간'}
-                    cot_start_date={DetailFieldData.data.data.cot_start_date}
-                    cot_end_date={DetailFieldData.data.data.cot_end_date}
-                    cot_start_time={DetailFieldData.data.data.cot_start_time}
-                    cot_end_time={DetailFieldData.data.data.cot_end_time}
+                    cot_start_date={detailFieldInfo.cot_start_date}
+                    cot_end_date={detailFieldInfo.cot_end_date}
+                    cot_start_time={detailFieldInfo.cot_start_time}
+                    cot_end_time={detailFieldInfo.cot_end_time}
                 />
                 <DetailFieldBox
                     title={'회사명'}
-                    text={DetailFieldData.data.data.company}
+                    text={detailFieldInfo.company}
                 />
                 <DetailFieldBox
                     title={'대금'}
-                    text={DetailFieldData.data.data.cot_pay_price}
-                    cot_pay_type={DetailFieldData.data.data.cot_pay_type}
+                    text={detailFieldInfo.cot_pay_price}
+                    cot_pay_type={detailFieldInfo.cot_pay_type}
                 />
                 <DetailFieldBox
                     title={'지급일'}
-                    cot_pay_date={DetailFieldData.data.data.cot_pay_date}
+                    cot_pay_date={detailFieldInfo.cot_pay_date}
                 />
                 <DetailFieldBox
                     title={'담당자'}
-                    text={DetailFieldData.data.data.cot_m_name}
+                    text={detailFieldInfo.cot_m_name}
                 />
                 <View style={DetailFieldstyle.DetailFieldBox}>
                     <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>연락처</Text>
@@ -164,7 +181,7 @@ export const DetailField = ({route}:any) => {
                     >
                     <Image style={{width:25,height:25}} source={require('../../assets/img/ic_phone.png')}/>
                     <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.MAIN_COLOR,flexShrink:1}]}>
-                        {DetailFieldData.data.data.cot_m_num}</Text>
+                        {detailFieldInfo.cot_m_num}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
