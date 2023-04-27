@@ -77,10 +77,14 @@ export const UserInfoCard = ({
                             : isFavorite === '1' 
                                 ? <Image source={require('../../assets/img/ic_bookmark_off.png')} style={{width:22,height:30}} /> 
                                 : null }
-                        { isCheck == index?
+                        { isCheck && 
+                        <>
+                        {isCheck == index?
                             <Image source={require('../../assets/img/ic_check_on.png')} style={{width:25,height:25}} />
                             :
                             <Image source={require('../../assets/img/ic_check_off.png')} style={{width:25,height:25}} />
+                        }
+                        </>
                         }
                     </TouchableOpacity>
                 </View>

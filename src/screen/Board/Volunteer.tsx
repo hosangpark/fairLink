@@ -51,7 +51,6 @@ export const Volunteer = () => {
                         userProfileUrl=''
                         isDelete={false}
                         isFavorite='' // (장비업체일 때 즐겨찾기 on: isFavorite='0', off: isFavorite='1')
-                        
                         action={()=>{navigation.navigate('CompanyProfile')}}
                     />
                 </View>
