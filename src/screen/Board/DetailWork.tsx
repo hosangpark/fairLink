@@ -16,18 +16,37 @@ import { UserInfoCard } from '../../component/card/UserInfoCard';
 import { DocumentAccordion } from '../../component/DocumentAccordion';
 import { User1DocumentList, User2DocumentList, User3DocumentList } from '../../component/UserDocumentList';
 import { CustomPhoneCall } from '../../component/CustomPhoneCall';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { usePostQuery } from '../../util/reactQuery';
+import { toggleLoading } from '../../redux/actions/LoadingAction';
+import { initialdetailWorkInfo } from '../../component/initialInform';
+import RNFetchBlob from 'rn-fetch-blob';
 
 export const DetailWork = ({route}:any) => {
-    const [userType,setUserType] = useState('3')
+    const dispatch = useAppDispatch();
+    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [strOption , setStrOption] = React.useState<string>('');
     const [selectoday , setSelectoday] = React.useState<boolean>(false);
     const [openbox,setOpenbox] = useState<boolean>(false)
+    const [onimage,setOnimage] = useState<boolean>(false)
+    const [onimageUri,setOnimageUri] = useState<string>('')
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
     const [selecttModal, setSelectModal] = React.useState<boolean>(false); //alert 객체 생성 (초기값으로 clear);
     const selectModalOn = (msg : string,strongMsg?:string, type? : string) => { //alert 켜기
         setSelectModal(true)
     }
+
+    const [detailWorkInfo, setDetailWorkInfo] = React.useState<any>(()=>initialdetailWorkInfo); //입력정보
+
+    const {data : DetailWorkData, isLoading : DetailWorkDataLoading, isError : DetailWorkDataError} = 
+    /** mt_idx 임의입력 수정필요 */
+    mt_type =="1"?
+    usePostQuery('getConsDetailWorkData',{mt_idx : "17", cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx},'cons/cons_order_info2.php')
+    :
+    usePostQuery('getEquipDetailWorkData',{mt_idx : "17", cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx},'equip/equip_order_info2.php')
+
+
     const alertModalOn = (strongMsg?:string) => { //alert 켜기
         setAlertModal({
             alert:true,
@@ -46,42 +65,66 @@ export const DetailWork = ({route}:any) => {
        } 
        alertModalOff();
     }
+    /**이미지 다운로드 */
+    const ImageDownload = async()=>{
+        await RNFetchBlob.config({
+        addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        path: `${RNFetchBlob.fs.dirs.DownloadDir}/${onimageUri}`,
+        },
+    }).fetch('GET', onimageUri);
+    }
+
+    React.useEffect(()=>{
+        dispatch(toggleLoading(DetailWorkDataLoading));
+        if(DetailWorkData){
+            setDetailWorkInfo(DetailWorkData.data.data);
+        }
+    },[DetailWorkData])
+
+    React.useEffect(()=>{
+        console.log(detailWorkInfo)
+    },[])
 
     
     return(
         <View style={{flex:1}}>
         <BackHeader title="작업세부내용" />
          <ScrollView style={{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}>
-            {userType !== '1' &&
+            {mt_type !== '1' &&
             <View style={DetailWorkStyle.Whitebox}>
                 <View style={{borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,borderRadius:8,marginBottom:20}}>
                     <View style={{backgroundColor:colors.WHITE_COLOR,paddingHorizontal:20,paddingVertical:16,borderRadius:8}}>
                         <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.MAIN_COLOR}]}>현장명</Text>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText3]}>신축공사12345</Text>
+                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText3]}>{detailWorkInfo.작업정보?.crt_name}</Text>
                     </View>
                     <View style={DetailWorkStyle.cardbox2}>
-                        <View style={DetailWorkStyle.cardInbox}>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>회사명</Text>
-                            <Text style={[fontStyle.f_regular,DetailWorkStyle.boxText2]}>에이스 종합건설</Text>
-                        </View>
-                        <View style={DetailWorkStyle.cardInbox}>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>현장소명</Text>
-                            <Text style={[fontStyle.f_regular,DetailWorkStyle.boxText2]}>고길동</Text>
-                        </View>
-                        <View style={DetailWorkStyle.cardInbox}>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>현장주소</Text>
-                            <Text style={[fontStyle.f_regular,DetailWorkStyle.boxText2]}>전남 여수시 남산동 2000-4141번지전남 여수시 남산동 2000-4141번지</Text>
-                        </View>
+                        <WorkLayoutbox
+                            title={'회사명'}
+                            text={detailWorkInfo.작업정보?.crt_company}
+                            boxfontstyle={fontStyle.f_regular}
+                        />
+                        <WorkLayoutbox
+                            title={'현장소명'}
+                            text={detailWorkInfo.작업정보?.crt_director}
+                            boxfontstyle={fontStyle.f_regular}
+                        />
+                        <WorkLayoutbox
+                            title={'현장주소'}
+                            text={detailWorkInfo.작업정보?.crt_location}
+                            boxfontstyle={fontStyle.f_regular}
+                        />
                     </View>
                 </View>
                 <View style={{borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,borderRadius:8,paddingHorizontal:20,paddingVertical:16,}}>
                     <View style={DetailWorkStyle.cardInbox}>
                         <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>담당자</Text>
-                        <Text style={[fontStyle.f_regular,DetailWorkStyle.boxText2]}>이상순 차장</Text>
+                        <Text style={[fontStyle.f_regular,DetailWorkStyle.boxText2]}>{detailWorkInfo.작업정보?.crt_m_name}</Text>
                     </View>
                     <CustomPhoneCall
-                        phonenumber={'010-2641-1541'}
-                        alertModalOn={()=>alertModalOn('010-2641-1541')}
+                        phonenumber={detailWorkInfo.작업정보?.crt_m_num}
+                        alertModalOn={()=>alertModalOn(detailWorkInfo.작업정보?.crt_m_num)}
                     />
                 </View>
             </View>
@@ -89,42 +132,49 @@ export const DetailWork = ({route}:any) => {
             <View style={DetailWorkStyle.Whitebox}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:24}]}>작업현황</Text>
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>작업개요</Text>
-                {userType == '1'?
+                {mt_type == '1'?
                 <View style={DetailWorkStyle.cardbox}>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>현장명</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>여수 여수아파트 신축공사여수 여수아파트 신축공사여수 여수아파트 신축공사</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>작업명</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>지하층 북층 터파기</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>작업일시</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>23.01.13</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>작업공종</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
-                    </View>
+                    <WorkLayoutbox
+                        title={'현장명'}
+                        text={detailWorkInfo.작업내용?.crt_name}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'작업명'}
+                        text={detailWorkInfo.작업내용?.content}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'작업일시'}
+                        text={detailWorkInfo.작업내용?.date}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'작업공종'}
+                        text={detailWorkInfo.작업내용?.species}
+                        boxfontstyle={fontStyle.f_light}
+                    />
                 </View>
                 :
                 <View style={DetailWorkStyle.cardbox}>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>작업공종</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>작업명</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>지하층 북층 터파기</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>작업기간</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>23.01.13 ~ 23.01.13</Text>
-                    </View>
+                    <WorkLayoutbox
+                        title={'작업공종'}
+                        text={detailWorkInfo.작업개요?.species}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'작업명'}
+                        text={detailWorkInfo.작업개요?.content}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'작업기간'}
+                        text={detailWorkInfo.작업개요?.start_date + " ~ " + detailWorkInfo.작업개요?.end_date}
+                        boxfontstyle={fontStyle.f_light}
+                    />
                 </View>
                 }
-                {userType=='1'&&
+                {mt_type=='1'&&
                 <View style={{marginBottom:30}}>
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>작업일정관리</Text>
                     <View style={{flexDirection:'row',justifyContent:'space-between'}}>
@@ -177,81 +227,93 @@ export const DetailWork = ({route}:any) => {
                 </View>
                 }
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입장비</Text>
-                {userType !== '2' ?
+                {mt_type !== '2' ?
                 <View style={DetailWorkStyle.cardbox}>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>장비명</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>여수 여수아파트 신축공사</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>규격</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>지하층 북층 터파기</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>사업자명</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>23.01.13</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>사업자등록번호</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>대표자명</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
-                    </View>
+                    <WorkLayoutbox
+                        title={'장비명'}
+                        text={detailWorkInfo.투입장비?.equip_name}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'규격'}
+                        text={detailWorkInfo.투입장비?.stand1 +"\n"+detailWorkInfo.투입장비?.stand2}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'사업자명'}
+                        text={detailWorkInfo.투입장비?.company}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'사업자등록번호'}
+                        text={detailWorkInfo.투입장비?.busi_num}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'대표자명'}
+                        text={detailWorkInfo.투입장비?.ceo}
+                        boxfontstyle={fontStyle.f_light}
+                    />
                     <CustomPhoneCall
-                        phonenumber={'010-2641-1541'}
-                        alertModalOn={()=>alertModalOn('010-2641-1541')}
+                        phonenumber={detailWorkInfo.투입장비?.hp}
+                        alertModalOn={()=>alertModalOn(detailWorkInfo.투입장비?.hp)}
                     />
                 </View>
                 :
                 <View style={{borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,borderRadius:8,flexDirection:'row',marginBottom:30}}>
-                    <Image style={{width:130,height:130}} source={require('../../assets/img/no_image.png')}/>
-                    <View style={{flex:1,paddingHorizontal:15,justifyContent:'center',borderLeftWidth:1,borderLeftColor:colors.BORDER_GRAY_COLOR}}>
-                        <View style={DetailWorkStyle.cardInbox}>
-                            <Text style={[fontStyle.f_medium,DetailWorkStyle.boxText1]}>차종 및 규격</Text>
-                            <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>017 굴삭기</Text>
-                        </View>
-                        <View style={DetailWorkStyle.cardInbox}>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>제작연도</Text>
-                            <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>2018년</Text>
-                        </View>
-                        <View style={DetailWorkStyle.cardInbox}>
-                            <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>차량번호</Text>
-                            <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>경기 12머6040</Text>
-                        </View>
+                    <Image style={{width:125,height:125}} source={require('../../assets/img/no_image.png')}/>
+                    <View style={{flex:1,paddingHorizontal:15,justifyContent:'center',borderLeftColor:colors.BORDER_GRAY_COLOR}}>
+                        <WorkLayoutbox
+                            title={'차종 및 규격'}
+                            text={detailWorkInfo.투입장비?.e_name}
+                            boxfontstyle={fontStyle.f_light}
+                        />
+                        <WorkLayoutbox
+                            title={'제작연도'}
+                            text={detailWorkInfo.투입장비?.e_year}
+                            boxfontstyle={fontStyle.f_light}
+                        />
+                        <WorkLayoutbox
+                            title={'차량번호'}
+                            text={detailWorkInfo.투입장비?.e_num}
+                            boxfontstyle={fontStyle.f_light}
+                        />
                     </View>
                 </View>
                 }
-                {userType == '1'?
+                {mt_type == '1'?
                 <>
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입조종사</Text>
                 <View style={DetailWorkStyle.cardbox}>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>조종사명</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>여수 여수아파트 신축공사</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>경력</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>지하층 북층 터파기</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>평점</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>23.01.13</Text>
-                    </View>
-                    <View style={DetailWorkStyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>추천수</Text>
-                        <Text style={[fontStyle.f_light,DetailWorkStyle.boxText2]}>터파기</Text>
-                    </View>
+                    <WorkLayoutbox
+                        title={'조종사명'}
+                        text={detailWorkInfo.투입조종사?.name}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'경력'}
+                        text={detailWorkInfo.투입조종사?.career + '년'}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'평점'}
+                        text={detailWorkInfo.투입조종사?.score}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'추천수'}
+                        text={detailWorkInfo.투입조종사?.good}
+                        boxfontstyle={fontStyle.f_light}
+                    />
                     <CustomPhoneCall
-                        phonenumber={'010-2641-1541'}
-                        alertModalOn={()=>alertModalOn('010-2641-1541')}
+                        phonenumber={detailWorkInfo.투입조종사?.hp}
+                        alertModalOn={()=>alertModalOn(detailWorkInfo.투입조종사?.hp)}
                     />
                 </View>
                 </>
                     :
                     <>
-                    {userType == '2' &&
+                    {mt_type == '2' &&
                     <>
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입조종사</Text>
                     <View style={{borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,borderRadius:8}}>
@@ -260,10 +322,10 @@ export const DetailWork = ({route}:any) => {
                             empName='힘찬중기'
                             jobType='0' // (장비업체일 때 jobType = '0')
                             location='[경남]'
-                            rating={23}
-                            score={5}
-                            recEmpCount={64}
-                            userName='알파치노'
+                            // rating={detailWorkInfo.투입조종사?.p_score}
+                            // score={detailWorkInfo.투입조종사?.p_score_count}
+                            // recEmpCount={detailWorkInfo.투입조종사?.good}
+                            // userName={detailWorkInfo.투입조종사?.p_name}
                             userProfileUrl=''
                             isDelete={false}
                             isFavorite='' // (장비업체일 때 즐겨찾기 on: isFavorite='0', off: isFavorite='1')
@@ -277,7 +339,7 @@ export const DetailWork = ({route}:any) => {
             </View>
             <View style={DetailWorkStyle.Whitebox}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:24}]}>대금관리</Text>
-                {userType !== '3'?
+                {mt_type !== '3'?
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>장비대금</Text>
                 :
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>스페어대금</Text>
@@ -286,70 +348,65 @@ export const DetailWork = ({route}:any) => {
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>
                         대금</Text>
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>
-                        총 1,200,000원</Text>
+                        총 {detailWorkInfo.대금관리?.all_price} 만원</Text>
                 </View>
                 <View style={DetailWorkStyle.paymentBox}>
-                    <View style={DetailWorkStyle.paymentinBox}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            기간</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            23.01.13 ~ 23.01.14 (2일)</Text>
-                    </View>
-                    <View style={[DetailWorkStyle.paymentinBox,{marginVertical:10}]}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            일대</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            600,000원600,000원600,000원</Text>
-                    </View>
-                    <View style={DetailWorkStyle.paymentinBox}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            대금</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            600,000원 X 2일</Text>
-                    </View>
-                    <View style={{alignItems:'flex-end'}}>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            = 1,200,000원</Text>
-                    </View>
+                    <WorkLayoutbox
+                        title={'기간'}
+                        text={detailWorkInfo.대금관리?.date}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={detailWorkInfo.대금관리?.price_type == "Y" ? '일대':'월대'}
+                        text={detailWorkInfo.대금관리?.price + "만원"}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'대금'}
+                        text={detailWorkInfo.대금관리?.check_price}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    {/* <WorkLayoutbox
+                        title={''}
+                        text={'= 1,200,000원'}
+                        boxfontstyle={fontStyle.f_light}
+                    /> */}
                 </View>
-                {userType=='1' ?
+                {mt_type=='1' ?
                 <View style={[DetailWorkStyle.paymentinBox,{marginVertical:30}]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
                         입금기한</Text>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                        23.02.28</Text>
+                        {detailWorkInfo.대금관리?.pay_date}</Text>
                 </View>
                 :
                 <View style={[{marginVertical:30}]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
                         입금예정일</Text>
                     <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                        23.02.28</Text>
+                        {detailWorkInfo.대금관리?.pay_date}</Text>
                 </View>
                 }
-                {userType=='1' ?
+                {mt_type=='1' ?
                 <>
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>
                     계좌정보</Text>
                 <View style={DetailWorkStyle.paymentBox}>
-                    <View style={DetailWorkStyle.paymentinBox}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            은행명</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            신한</Text>
-                    </View>
-                    <View style={[DetailWorkStyle.paymentinBox,{marginVertical:10}]}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            계좌번호</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            110-398-556960</Text>
-                    </View>
-                    <View style={DetailWorkStyle.paymentinBox}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            예금주</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            박호상</Text>
-                    </View>
+                    <WorkLayoutbox
+                        title={'은행명'}
+                        text={detailWorkInfo.대금관리?.met_bank}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'계좌번호'}
+                        text={detailWorkInfo.대금관리?.met_bank_num}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'예금주'}
+                        text={detailWorkInfo.대금관리?.met_vholder}
+                        boxfontstyle={fontStyle.f_light}
+                    />
                 </View>
                 </>
                 :
@@ -357,29 +414,26 @@ export const DetailWork = ({route}:any) => {
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>
                     세금계산서 발행처</Text>
                 <View style={DetailWorkStyle.paymentBox}>
-                    <View style={DetailWorkStyle.paymentinBox}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            회사명</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            에이스종합건설</Text>
-                    </View>
-                    <View style={[DetailWorkStyle.paymentinBox,{marginVertical:10}]}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            사업자등록번호</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            110-398-556960</Text>
-                    </View>
-                    <View style={DetailWorkStyle.paymentinBox}>
-                        <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            대표자명</Text>
-                        <Text style={[fontStyle.f_light,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
-                            박호상</Text>
-                    </View>
+                    <WorkLayoutbox
+                        title={'회사명'}
+                        text={'에이스종합건설'}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'사업자등록번호'}
+                        text={'110-398-556960'}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'대표자명'}
+                        text={'구구구'}
+                        boxfontstyle={fontStyle.f_light}
+                    />
                 </View>
                 </>
                 }
 
-                {userType=='1' &&
+                {mt_type=='1' &&
                 <View style={DetailWorkStyle.paymentBox}>
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>
                     통장사본</Text>
@@ -388,13 +442,13 @@ export const DetailWork = ({route}:any) => {
                         style={[styles.whiteButtonStyle,{flex:1,marginRight:10}]}
                         labelStyle={[styles.whiteButtonLabelStyle,{fontSize:16}]}
                         label={'미리보기'}
-                        action={()=>{console.log('미리보기')}}
+                        action={()=>{setOnimage(true),setOnimageUri(detailWorkInfo.대금관리.bank_file)}}
                         />
                         <CustomButton
                         style={{flex:1}}
                         labelStyle={{fontSize:16}}
                         label={'다운로드'}
-                        action={()=>{console.log('다운로드')}}
+                        action={()=>{ImageDownload}}
                         />
                     </View>
                 </View>
@@ -407,16 +461,25 @@ export const DetailWork = ({route}:any) => {
                         <Text style={[fontStyle.f_regular,DetailWorkStyle.MaincolorText]}>전체선택</Text>
                     </TouchableOpacity>
                 </View>
-                {userType == "1" &&
+                {mt_type == "1" &&
                 <User1DocumentList
+                    items1={detailWorkInfo['서류관리-장비(차량) 서류']}
+                    items2={detailWorkInfo['서류관리-자격 및 기타 서류']}
+                    items3={detailWorkInfo['서류관리-계약서류']}
+                    items4={detailWorkInfo['서류관리-작업일보']}
                 />
                 }
-                {userType == "2" &&
+                {mt_type == "2" &&
                 <User2DocumentList
+                    items1={detailWorkInfo['서류관리-장비(차량) 서류']}
+                    items2={detailWorkInfo['서류관리-자격 및 기타 서류']}
+                    items3={detailWorkInfo['서류관리-계약서류']}
+                    items4={detailWorkInfo['서류관리-작업일보']}
                 />
                 }
-                {userType == "3" &&
+                {mt_type == "3" &&
                 <User3DocumentList
+                    items1={detailWorkInfo['서류관리-작업일보']}
                 />
                 }
                 <CustomButton
@@ -435,6 +498,14 @@ export const DetailWork = ({route}:any) => {
             type={alertModal.type}
             action={()=>{}}
         />
+        {onimage &&
+        <TouchableOpacity style={{position:'absolute',width:'100%',height:'100%',backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}
+            onPress={()=>setOnimage(false)}
+        >
+            <Image style={{position:'absolute',right:30,top:30}} source={require('../../assets/img/ic_x.png')}/>
+            <Image resizeMode={'contain'} style={{width:'100%',height:'100%',zIndex:999}} source={{uri:onimageUri}}/>
+        </TouchableOpacity>
+        }
     </View>
     )
 }
@@ -470,6 +541,15 @@ const DateBox = ({action}:{action:(e:string)=>void})=>{
     // </View>
     //     <Text></Text>
     // </TouchableOpacity>
+    )
+}
+
+const WorkLayoutbox = ({title,text,boxfontstyle}:{title:string,text:string,boxfontstyle:object})=>{
+    return(
+    <View style={DetailWorkStyle.cardInbox}>
+        <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1]}>{title}</Text>
+        <Text style={[boxfontstyle,DetailWorkStyle.boxText2]}>{text}</Text>
+    </View>
     )
 }
 

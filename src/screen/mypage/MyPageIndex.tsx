@@ -109,25 +109,6 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     return (
         <View style={{flex:1}}>
             <BackHeader title="마이페이지" />
-            {/* <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                <CustomButton
-                    action={()=>{setUserType('1')}}
-                    label={'건설회사'}
-                    style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
-                    labelStyle={styles.whiteButtonLabelStyle}
-                />
-                <CustomButton
-                    action={()=>{setUserType('2')}}
-                    label={'장비회사'}
-                    style={{flex:1,marginRight:10}}
-                />
-                <CustomButton
-                    action={()=>{setUserType('3')}}
-                    label={'조종사'}
-                    style={{...styles.whiteButtonStyle,flex:1,marginRight:10}}
-                    labelStyle={styles.whiteButtonLabelStyle}
-                />
-            </View> */}
             <ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
                 <View style={{padding:20}}>
                     <View style={[{backgroundColor:colors.MAIN_COLOR,borderRadius:8,padding:20}]}>
