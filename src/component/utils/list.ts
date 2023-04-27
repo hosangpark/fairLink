@@ -22,6 +22,16 @@ export const dayList = () => {
     return tempArray;
 }
 
+export const pilotCareerList = [
+    '없음',
+    '1년+',
+    '2년+',
+    '3년+',
+    '5년+',
+    '7년+',
+    '10년+',
+]
+
 export const bankList = [
     {key : '1', name : '국민은행'},
     {key : '2', name : '기업은행'},
@@ -47,6 +57,22 @@ export const bankList = [
     {key : '22', name : '제주'},
     {key : '23', name : '케이뱅크'},
     {key : '24', name : '토스뱅크'}
+]
+
+export const speciesList = [ //공종 리스트
+    '토공사',
+    '기초공사',
+    '철근콘크리트',
+    '도로공사',
+    '관로공사',
+    '가설물설치해체',
+    '철공공사',
+    '지붕 및 홈통공사',
+    '창호 및 유리공사',
+    '칠공사(도장)',
+    '단열공사',
+    '철거공사',
+    '자재운반 및 기타'
 ]
 
 export const locationList = [

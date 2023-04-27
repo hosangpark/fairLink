@@ -19,11 +19,11 @@ export type ManagerItemType = { //담당자 아이템 타입
     crt_m_num : string,
 }
 
-export type FavoriteListItemType = {
+export type FavoriteListItemType = { //userInfo card에 들어가는 정보 
     like_idx:string,
     img_url:string,
     mpt_idx:string,
-    pilot_type:string,
+    pilot_type?:string,
     good:number,
     company:string,
     name:string,
@@ -32,9 +32,32 @@ export type FavoriteListItemType = {
     equip:string,
     career:string,
     location:string,
+
+    //배차선택시 들어감
+    age ? : number,
+    equip_idx? : string,
+    equip_stand1? : string,
+    equip_stand2? : string,
+    equip_type? : string,
+    equip_year? : string,
+
 }
 
+export type ReqTopInfo = { //배차요청 상단정보 item
+    company : string,
+    crt_director : string,
+    crt_location : string,
+    crt_m_hp : string | null,
+    crt_m_idx : string | null,
+    crt_m_name : string,
+    crt_name : string,
+    detail_location : string,
+}
 export interface HomeIndexType {
+    setTabIndex? : (tab:number) => void;
+}
+
+export interface RequestIndexType {
     setTabIndex? : (tab:number) => void;
 }
 
@@ -72,6 +95,13 @@ export type EquInputInfoType ={ //건설회사 정보넣기 페이지 (회원가
 export type PilotInputInfoType = { //조종사 정보넣기 페이지 (회원가입)
     sns_id : string,
     memberType : number,
+}
+
+
+
+/************ 배차요청 ********/
+export type AcqReqStep1Type = RouteType & {
+    
 }
 
 

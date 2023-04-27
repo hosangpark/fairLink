@@ -18,6 +18,7 @@ import { SignIn } from './SignIn';
 import cusToast from '../util/toast/CusToast';
 import { useAppSelector } from '../redux/store';
 import { Request } from './Request/Request';
+import { RequestRouter } from './Request/RequestRouter';
 
 
 export const Main = () => {
@@ -103,7 +104,7 @@ export const Main = () => {
                     name="Request" 
                     // component={Video}
                     // component={Agreements}
-                    component={Request}
+                    component={RequestRouter}
                     
                     listeners={{
                         tabPress : (e)=>{

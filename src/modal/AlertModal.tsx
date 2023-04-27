@@ -56,7 +56,7 @@ export const AlertModal = ({ //알림창
                         }
                         <Text style={[modalStyle.contents,fontStyle.f_medium,{textAlign:'center'}]}>
                             {strongMsg &&
-                            <Text style={fontStyle.f_bold}> [{strongMsg}] </Text>
+                            <Text style={fontStyle.f_bold}> {strongMsg} </Text>  // [] 잠시 삭제하겠습니다. strongMsg에 섞어서 넣어주세요.
                             }{msg}
                         </Text>
                     </View>
@@ -65,7 +65,7 @@ export const AlertModal = ({ //알림창
                             <CustomButton
                                 style={{flex:1,marginRight:10}}
                                 action={()=>{if(action)action(); hide();}}
-                                label={'예'}
+                                label={btnLabel ? btnLabel : '예'}
                             />
                             <CustomButton
                                 action={()=>{if(cancleAction)cancleAction(); hide();}}

@@ -23,16 +23,23 @@ export interface DispatchInfoItemType{ //최근 배차리스트 아이템 타입
     // setSelDispatch : (check : boolean , selIdx:string) => void;
 }
 
-export interface RecEmpItemType{ //추천기업 현황 card에 들어가는 info 타입
-    id:string,
-    company : string,
-    totalCount:string,
-    totalDay : string,
-    comment : string
-}
+// export interface RecEmpItemType{ //추천기업 현황 card에 들어가는 info 타입
+//     id:string,
+//     company : string,
+//     totalCount:string,
+//     totalDay : string,
+//     comment : string
+// }
 
 export type RecCardType = { //추천기업 현황 아이템 component 타입
     item : RecEmpItemType,
+}
+
+export type RecEmpItemType = {
+    company_name : string,
+    content : string,
+    count : string,
+    days : string,
 }
 
 export type AlertModalType = { //alertModal props type
@@ -99,6 +106,7 @@ export interface ReqDispatchModalType extends ModalType{ //배차요청 type 선
 
 export interface RecEmpModalType extends ModalType{ //추천기업 현황 modal 
     action? : () => void;
+    mpt_idx : string;
 }
 
 export interface CancleReasonModalType extends ModalType{ //반려사유 입력 modal

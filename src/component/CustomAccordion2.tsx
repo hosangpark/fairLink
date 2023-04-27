@@ -39,7 +39,7 @@ export const CustomAccordion2 = ({
           {data.map((item:any,index)=>{
             return(
               <View style={{padding:20}} key={index}>
-                <UserInfoCard
+                {/* <UserInfoCard
                   index={item.index}
                   empName={item.empName}
                   jobType={item.jobType}
@@ -52,7 +52,7 @@ export const CustomAccordion2 = ({
                   isDelete={false}
                   isFavorite={'0'}
                   action={()=>{}}
-                />
+                /> */}
               </View>
             )
           })}

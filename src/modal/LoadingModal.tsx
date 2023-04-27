@@ -11,7 +11,7 @@ export const LoadingModal = ({
         <Modal 
                 isVisible={isLoading}
                 useNativeDriver={true}
-                style={[{justifyContent:'center',alignItems:'center',flex:1,flexDirection : 'column'}]}
+                style={[{justifyContent:'center',alignItems:'center',flex:1,flexDirection : 'column',zIndex:99999}]}
             >
                 <View>
                     <ActivityIndicator color="#0085CA" size={'large'} />

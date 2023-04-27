@@ -1,12 +1,19 @@
+import { FavoriteListItemType } from "../src/screen/screenType";
+
 export type RouterNavigatorParams = {
     /* 인증 */
     Auth:undefined;
 
     /** main */
     Main:undefined;
+    RequestMain : undefined ;
+    Home:undefined;
     Request:undefined;
     OpenRequest:undefined;
-    AcquaintanceRequest:undefined;
+    AcquaintanceRequest:undefined; //지인배차 요청 (회사선택)
+    AcqReqStep1 : { //지인배차 요청  step1
+        item : FavoriteListItemType;
+    }
     Board:{
         type:string
     };

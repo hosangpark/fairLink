@@ -5,7 +5,7 @@ import { CustomButton } from '../../../component/CustomButton';
 import { BackHeader } from '../../../component/header/BackHeader';
 import { UserInfoCard } from '../../../component/card/UserInfoCard';
 import { UserInfoCardType } from '../../../component/componentsType';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../type/routerType';
 import { HeavyEquipmentCard } from '../../../component/card/HeavyEquipmentCard';
@@ -23,17 +23,18 @@ export const FavoriteListIndex = ({route}:any) => {
 
     const {mt_type , mt_idx} = useAppSelector(state => state.userInfo);
     const dispatch = useAppDispatch();
+    const isFocused = useIsFocused();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     // const [deletecard,setDeletecard] = useState<SetStateAction<any>>([])
     const [btnOpen,setBtnOpen] = useState(false)
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
     const deletecard:Array<string> = [];
 
-    const {data:likeData, isLoading:likeLoading ,isError:likeError} = usePostQuery('getFavoriteList',{mt_idx:'17'},'cons/cons_like_list.php')
+    const {data:likeData, isLoading:likeLoading ,isError:likeError , refetch : getFavoriteRetch} = usePostQuery('getFavoriteList',{mt_idx:mt_idx},'cons/cons_like_list.php')
 
     const [favoriteList, setFavoriteList] = React.useState<FavoriteListItemType[]>([]);
     const Addnavigation = () =>{
-        if(route.params.userType == '1'){
+        if(mt_type == '1'){
             navigation.navigate('FavoriteAdd')
         } else {
             navigation.navigate('EquimentsAdd')
@@ -76,31 +77,6 @@ export const FavoriteListIndex = ({route}:any) => {
 
     // useEffect(()=>{console.log(route)},[])
     
-
-    const tempList = [
-        {
-            index:'1',
-            empName:'힘찬중기',
-            jobType:'1',
-            location:'[경남]',
-            rating:23,
-            score:5,
-            recEmpCount:64,
-            userName:'김경태',
-            userProfileUrl:'',
-        },
-        {
-            index:'2',
-            empName:'힘찬중기',
-            jobType:'2',
-            location:'[경남]',
-            rating:23,
-            score:5,
-            recEmpCount:64,
-            userName:'김경태',
-            userProfileUrl:'',
-        },
-    ]
     const EquiList = [
         {
             EquiName:'017 미니굴삭기',
@@ -143,11 +119,17 @@ export const FavoriteListIndex = ({route}:any) => {
             const bodyData = likeData.data.data;
             setFavoriteList([...bodyData]);
         }
-    },[likeData])
+    },[likeData,likeLoading])
+
+    React.useEffect(()=>{
+        if(isFocused){
+            getFavoriteRetch();
+        }
+    },[isFocused])
 
     return(
         <View style={{flex:1}}>
-            <BackHeader title={mt_type === '1' ? '즐겨찾기 장비관리' : '장비현황' } />
+            <BackHeader title={mt_type === '1' ? '즐겨찾기 장비 관리' : '장비현황' } />
             <View style={{paddingHorizontal:20,flex:1}}>
                 <CustomButton 
                     style={{marginVertical:20,}}
@@ -164,17 +146,11 @@ export const FavoriteListIndex = ({route}:any) => {
                             <View style={{paddingVertical:15}}>
                             <UserInfoCard 
                                 index={String(index)}
-                                empName={item.company}
-                                jobType={item.pilot_type === 'Y' ? '1' : '0'}
-                                location={item.location}
-                                rating={item.score_count}
-                                recEmpCount={item.good}
-                                score={item.score}
-                                userName={item.name}
-                                userProfileUrl={item.img_url}
+                                item={item}
                                 isDelete={true}
                                 action={()=>{}}
                                 isCheck={''}
+                                refetch={getFavoriteRetch}
                             />
                             </View>
                         )

@@ -9,7 +9,6 @@ export const axiosInstance = axios.create({
 })
 
 export const fetchPostData = async (postData:any, apiUrl : string, formData? :boolean) => { //respone 데이터 반환
-
     const config = {
         headers : {
             'Content-Type': 'multipart/form-data',

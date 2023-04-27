@@ -30,7 +30,7 @@ export const ApplicantStatus = () => {
                     <Text style={[ fontStyle.f_semibold, {fontSize: 18, color: colors.FONT_COLOR_BLACK}]}>현재까지 지원자 <Text style={{ color: colors.MAIN_COLOR}}>4</Text>명</Text>
                 </View>
                 <View style={{ marginVertical: 15 }}>                
-                    <UserInfoCard 
+                    {/* <UserInfoCard 
                         index="1"
                         empName='힘찬중기'
                         jobType='1'
@@ -42,10 +42,10 @@ export const ApplicantStatus = () => {
                         userProfileUrl=''
                         isDelete={false}
                         action={()=>{}}
-                    />
+                    /> */}
                 </View>
                 <View style={{ marginVertical: 15 }}>                
-                    <UserInfoCard 
+                    {/* <UserInfoCard 
                         index="2"
                         empName='힘찬중기'
                         jobType='1'
@@ -57,7 +57,7 @@ export const ApplicantStatus = () => {
                         userProfileUrl=''
                         isDelete={false}
                         action={()=>{}}
-                    />
+                    /> */}
                 </View>
             </View>
         </ScrollView>

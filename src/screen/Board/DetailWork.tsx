@@ -255,7 +255,7 @@ export const DetailWork = ({route}:any) => {
                     <>
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입조종사</Text>
                     <View style={{borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,borderRadius:8}}>
-                        <UserInfoCard
+                        {/* <UserInfoCard
                             index="1"
                             empName='힘찬중기'
                             jobType='0' // (장비업체일 때 jobType = '0')
@@ -268,7 +268,7 @@ export const DetailWork = ({route}:any) => {
                             isDelete={false}
                             isFavorite='' // (장비업체일 때 즐겨찾기 on: isFavorite='0', off: isFavorite='1')
                             action={()=>{navigation.navigate('CompanyProfile')}}
-                        />
+                        /> */}
                     </View>
                     </>
                     }

@@ -159,6 +159,7 @@ export const styles = StyleSheet.create({
         backgroundColor:colors.MAIN_COLOR,
         width:'100%',
         alignItems:'center',
+        justifyContent:'center',
         padding:10,
         borderRadius:4,
         borderWidth:1,
@@ -223,7 +224,7 @@ export const styles = StyleSheet.create({
         height:100,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor:'black',
+        // backgroundColor:'black',
         borderRadius:50
     },
     cardReqEmpBtn : {
