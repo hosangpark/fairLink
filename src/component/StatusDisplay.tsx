@@ -22,6 +22,7 @@ export const StatusDisplay: React.FC<StatusDisplayProps> = ({name, type,file_url
             <TouchableOpacity style={{flex: 5,flexShrink:1}} onPress={()=>{
                 if(file_url !== ""){
                     setshow(true)
+                    console.log(file_url)
                 }
             }}>
             <Text style={[fontStyle.f_medium, { fontSize: 16, color:colors.FONT_COLOR_BLACK,}]}>{name}</Text>
