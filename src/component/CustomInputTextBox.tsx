@@ -22,6 +22,7 @@ export const CustomInputTextBox = ({
     title, //텍스트박스 제목
     essential, //필수 표시
     whiteReadOnly, //입력은 못하지만 화이트색상 textBox
+    isTextLabel, //텍스트 라벨 input 끝쪽에 붙음 (type  = string)
 }:CustomInputTextBoxType) => {
     return(
       <View style={{...containerStyle}}>
@@ -59,6 +60,11 @@ export const CustomInputTextBox = ({
             }
           </TouchableOpacity>
           :null
+          }
+          {isTextLabel &&
+            <View style={{justifyContent:'center',alignItems:'center',marginHorizontal:10}}>
+              <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{isTextLabel}</Text>
+            </View>
           }
         </View>
       </View>

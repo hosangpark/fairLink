@@ -15,7 +15,7 @@ export const dayList = () => {
     for(let i=1; i<=31; i++){
         tempArray.push({
             key:String(i),
-            name:String(i)+'일',
+            name:String(i),
         });
     }
 

@@ -194,7 +194,7 @@ export const FavoriteListIndex = ({route}:any) => {
             hide={alertModalOff}
             type={alertModal.type}
             btnLabel={'현장개설하기'}
-            action={()=>navigation.navigate('Board',{type:'default'})}
+            action={()=>navigation.navigate('Board')}
         />
         {/* <RecEmpModal 
             show={true}

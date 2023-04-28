@@ -50,6 +50,8 @@ export interface ObjectArrayType {
     [key:string ] : string
 }
 export type CustomSelectBoxType = {
+    containerStyle? : object;
+    style? : object;
     strOptionList? : string[],
     objOptionList? : ObjectArrayType[], 
     strSetOption? : (opt : string, type?: string) => void;
@@ -57,7 +59,6 @@ export type CustomSelectBoxType = {
     selOption? : string | ObjectArrayType;
     type? : string,
     defaultText : string;
-    style? : object;
     buttonStyle: object;
     buttonTextStyle: object;
     rowStyle: object;
@@ -157,6 +158,7 @@ export interface CustomInputTextBoxType {
     title? : string,
     essential? : boolean,
     whiteReadOnly? : boolean,
+    isTextLabel? : string,
 }
 export interface CustomWaveBoxType {
     style? : object,

@@ -237,6 +237,13 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
         }
     },[inputInfo.met_equip_type])
 
+    React.useEffect(()=>{
+        setInputInfo({
+            ...inputInfo,
+            met_equip_stand2 : '',
+        })
+    },[inputInfo.met_equip_stand1])
+
 
     return(
         <View style={{flex:1}}>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { BackHeader } from '../../../component/header/BackHeader';
 import { AcqReqStep1Type, ManagerItemType, ObjArrayType, ReqTopInfo } from '../../screenType';
-import { usePostQuery } from '../../../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../../../util/reactQuery';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { AlertModal, initialAlert } from '../../../modal/AlertModal';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../../style/style';
@@ -12,7 +12,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
 import { MarginCom } from '../../../component/MarginCom';
 import { CustomSelectBox } from '../../../component/CustomSelectBox';
-import { accessoriesConvert, speciesList } from '../../../component/utils/list';
+import { accessoriesConvert, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, speciesList } from '../../../component/utils/list';
 import { CustomInputTextBox } from '../../../component/CustomInputTextBox';
 import { CustomWaveBox } from '../../../component/CustomWaveBox';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -22,27 +22,32 @@ import { CustomButton } from '../../../component/CustomButton';
 import { RequestRouterNavigatorParams } from '../../../../type/RequestRouterType';
 import { LastDispatchInfoModal } from '../../../modal/LastDispatchInfoModal';
 
-export type AcqReqStep1ItemType = {
-    cot_species : string,
-    cot_content:string,
-    cot_location:string,
-    cot_start_date:string,
-    cot_end_date : string,
-    cot_start_time :string,
-    cot_end_time : string,
-    cot_sat : string,
-    cot_sun : string,
-    cot_m_idx : string,
-    cot_m_name : string,
-    cot_m_num : string,
-    cot_e_sub : string[],  
+export type PublicReqStep1ItemType = {
+    cot_species : string, //공종
+    cot_content:string, //내용
+    cot_location:string, //위치
+    cot_start_date:string, //작업시작일
+    cot_end_date : string, //작업종료일
+    cot_start_time :string, //작업시간 시작
+    cot_end_time : string, //작업시간 끝
+    cot_sat : string, //토요일 제외 y n
+    cot_sun : string, //일요일 제외 y n
+    cot_m_idx : string, //담당자 idx
+    cot_m_name : string, //담당자 이름
+    cot_m_num : string, //담당자 번호
+    cot_e_sub : string[],  //부속부품
+
+    cot_e_type : string, //장비타입
+    cot_e_stand1 : string, //장비 규격
+    cot_e_stand2 : string, //장비 세부규격
+    cot_e_year : string //장비 최소연식
 }
 
-export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 step1
+export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 step1
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams & RequestRouterNavigatorParams>>();
     const dispatch = useAppDispatch();
-    const {item} = route.params //item : 선택한 지인 정보
+    // const {item} = route.params //item : 선택한 지인 정보
     const {mt_idx, mt_type} = useAppSelector(state => state.userInfo);
 
     //상단 정보 (내정보)
@@ -50,13 +55,15 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
     
     //담당자 불러오기
     const {data:myManData, isLoading : myManLoading, isError : myManError} = usePostQuery('getMyManData',{mt_idx:mt_idx},'cons/manager_list.php');
+    const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php');//장비 타입 불러오기
     
     const [myInfo, setMyInfo] = React.useState<ReqTopInfo>();
     const [managerList, setMangetList] = React.useState<ObjArrayType[]>([]); //담당자 정보리스트
     const [tempSelAcc , setTempSelAcc] = React.useState(''); //부속장치 선택값
     const [writeSelAcc, setWriteSelAcc] = React.useState(''); //부속장치 직접입력
+    const [equipMainList, setEquipMianList] = React.useState<object[]>([]);
 
-    const [inputInfo, setInputInfo] = React.useState<AcqReqStep1ItemType>({
+    const [inputInfo, setInputInfo] = React.useState<PublicReqStep1ItemType>({
         cot_species : '',
         cot_content:'',
         cot_location:'',
@@ -70,8 +77,12 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
         cot_m_name : '',
         cot_m_num : '',
         cot_e_sub : [],   
-    })
 
+        cot_e_type : '',
+        cot_e_stand1 : '',
+        cot_e_stand2 : '',
+        cot_e_year : '2023',
+    })
     const [startDateModal, setStartDateModal] = React.useState({ //작업기간 시작일 modal
         show:false,
         date:new Date()
@@ -212,6 +223,9 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
         if(inputInfo.cot_e_sub.length === 5){
             alertModalOn('부속 장치는 5개까지 선택가능합니다.');
         }
+        else if(inputInfo.cot_e_type === ''){
+            alertModalOn('장비종류를 선택해주세요.');
+        }
         else if(tempSelAcc === '기타(직접입력)' && writeSelAcc === ''){
             alertModalOn('부속 장치를 입력해주세요.');
         }
@@ -242,6 +256,12 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
                 setWriteSelAcc('');
             }
         }
+    }
+
+    const getEquipList = async () => { //장비 리스트 불러오기
+        const {data} = await getEquipListMutation.mutateAsync({});
+
+        setEquipMianList(data.data);
     }
 
     const deleteAccHandler = (index:number) => { //부속장치 삭제
@@ -275,15 +295,42 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
         else if(inputInfo.cot_m_idx === ''){
             alertModalOn('담당자를 선택해주세요.');
         }
+        else if(inputInfo.cot_e_type === ''){
+            alertModalOn('장비 종류를 선택해주세요.');
+        }
+        else if(inputInfo.cot_e_stand1 === ''){
+            alertModalOn('장비 규격을 선택해주세요.');
+        }
+        else if(inputInfo.cot_e_stand2 === ''){
+            alertModalOn('장비 상세 규격을 선택해주세요.');
+        }
         else{
-            navigation.navigate('AcqReqStep2',{item:item , firstInputInfo:inputInfo});
+            navigation.navigate('PublicReqStep2',{firstInputInfo:inputInfo});
         }
     }
 
     React.useEffect(()=>{
-        console.log(item);
+        getEquipList();
     },[])
 
+    React.useEffect(()=>{
+        if(inputInfo.cot_e_type !== ''){
+            setInputInfo({
+                ...inputInfo,
+                cot_e_stand1 : '',
+                cot_e_stand2 : '',
+                cot_e_sub:[],
+            })
+            setTempSelAcc('');
+        }
+    },[inputInfo.cot_e_type])
+
+    React.useEffect(()=>{
+        setInputInfo({
+            ...inputInfo,
+            cot_e_stand2 : '',
+        })
+    },[inputInfo.cot_e_stand1])
 
     React.useEffect(()=>{
         dispatch(toggleLoading(myInfoLoading));
@@ -337,7 +384,7 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
     },[inputInfo.cot_m_idx])
     return(
         <View style={{flex:1}}>
-            <BackHeader title={'지인 배차요청'}/>
+            <BackHeader title={'공개 배차요청'}/>
             {myInfoData &&
                 <ScrollView style={{flex:1}}>
                     <KeyboardAvoidingView>
@@ -371,29 +418,6 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
                                 </View>
                             </View>
                             <MarginCom mt={20} />
-                            <View style={[styles.card2Wrapper,{borderWidth:1}]}>
-                                <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-                                    <View style={{flexDirection:'row',alignItems:'center'}}>
-                                        <View style={[styles.cardProfileSize,{width:72,height:72}]}>
-                                            {item.img_url === '' ? 
-                                                <Image source={require('../../../assets/img/profile_default.png')} style={{width:72,height:72,borderRadius:50}}/>
-                                            :   
-                                                <Image source={{uri:item.img_url}} style={{width:72,height:72,borderRadius:50}}/> 
-                                            }
-                                        </View>
-                                        <View style={{marginLeft:10,justifyContent:'space-around'}}>
-                                            <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>{item.company}</Text>
-                                            <Text style={[fontStyle.f_semibold,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>{item.name}</Text>
-                                            <Text style={[fontStyle.f_regular,{fontSize:15,color:item.pilot_type === 'Y' ? colors.MAIN_COLOR : colors.ORANGE_COLOR}]}>{item.pilot_type === 'Y' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
-                                        </View>
-                                    </View>
-                                    <View style={{alignItems:'center',justifyContent:'center'}}>
-                                        <View style={{paddingVertical:3,paddingHorizontal:10,backgroundColor:colors.BLUE_COLOR3,borderRadius:4}}>
-                                            <Text style={[fontStyle.f_regular,{color:colors.MAIN_COLOR,fontSize:15}]}>적용중</Text>
-                                        </View>
-                                    </View> 
-                                </View>
-                            </View>
                         </View>
                         <View style={[styles.white_box_con,{marginTop:10,paddingBottom:20}]}>
                             <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
@@ -535,38 +559,71 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
                         <View style={[styles.white_box_con]}>
                             <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>장비정보</Text>
                             <MarginCom mt={30} />
-                            <CustomInputTextBox 
-                                editable={false}
-                                input={item.equip_type}
-                                title={'장비종류'}
+                            <CustomSelectBox 
+                                strOptionList={getEquipListConverter(equipMainList)}
+                                strSetOption={inputHandler}
+                                selOption={inputInfo.cot_e_type}
+                                buttonStyle={selectBoxStyle.btnStyle}
+                                buttonTextStyle={selectBoxStyle.btnTextStyle}
+                                rowStyle={selectBoxStyle.rowStyle}
+                                rowTextStyle={selectBoxStyle.rowTextStyle}
+                                defaultText='장비 종류 선택'
+                                type={'cot_e_type'}
+                                title={'장비 종류'}
+                                essential
                             />
+                            <MarginCom mt={20}/>
+                            <CustomSelectBox 
+                                strOptionList={getEquipStandConverter(equipMainList,inputInfo.cot_e_type) ? getEquipStandConverter(equipMainList,inputInfo.cot_e_type) : ['선택하세요.']}
+                                strSetOption={inputHandler}
+                                selOption={inputInfo.cot_e_stand1}
+                                buttonStyle={selectBoxStyle.btnStyle}
+                                buttonTextStyle={selectBoxStyle.btnTextStyle}
+                                rowStyle={selectBoxStyle.rowStyle}
+                                rowTextStyle={selectBoxStyle.rowTextStyle}
+                                defaultText={inputInfo.cot_e_type === '' ? '장비 종류를 선택해주세요.' : '장비 규격 선택'}
+                                type={'cot_e_stand1'}
+                                title={'장비 규격'}
+                                essential
+                                isDisable={inputInfo.cot_e_type === ''}
+                            />
+                            <MarginCom mt={20}/>
 
+                            <CustomSelectBox 
+                                strOptionList={getEquStaDetailCon(equipMainList,inputInfo.cot_e_type,inputInfo.cot_e_stand1) ? getEquStaDetailCon(equipMainList,inputInfo.cot_e_type,inputInfo.cot_e_stand1) : ['선택하세요.']}
+                                strSetOption={inputHandler}
+                                selOption={inputInfo.cot_e_stand2}
+                                buttonStyle={selectBoxStyle.btnStyle}
+                                buttonTextStyle={selectBoxStyle.btnTextStyle}
+                                rowStyle={selectBoxStyle.rowStyle}
+                                rowTextStyle={selectBoxStyle.rowTextStyle}
+                                defaultText={inputInfo.cot_e_stand1 === '' ? '장비 규격을 선택해주세요.' : '장비 상세 규격 선택'}
+                                type={'cot_e_stand2'}
+                                title={'장비 상세 규격'}
+                                essential
+                                isDisable={inputInfo.cot_e_stand1 === ''}
+                            />
                             <MarginCom mt={20} />
-                            <CustomInputTextBox 
-                                editable={false}
-                                input={item.equip_year}
+                            <CustomSelectBox 
+                                strOptionList={['2023','2022','2021','2020']}
+                                strSetOption={inputHandler}
+                                selOption={inputInfo.cot_e_year}
+                                buttonStyle={selectBoxStyle.btnStyle}
+                                buttonTextStyle={selectBoxStyle.btnTextStyle}
+                                rowStyle={selectBoxStyle.rowStyle}
+                                rowTextStyle={selectBoxStyle.rowTextStyle}
+                                defaultText={'선택하세요.'}
+                                type={'cot_e_year'}
                                 title={'최소연식'}
-                            />
-
-                            <MarginCom mt={20} />
-                            <CustomInputTextBox 
-                                editable={false}
-                                input={item.equip_stand1}
-                                title={'규격'}
-                            />
-
-                            <MarginCom mt={20} />
-                            <CustomInputTextBox 
-                                editable={false}
-                                input={item.equip_stand2}
-                                title={'세부규격'}
+                                essential
+                                labelFooter='년'
                             />
                             <MarginCom mt={20} />
                             <View>
                                 <Text style={[fontStyle.f_semibold,{fontSize:16, color:colors.FONT_COLOR_BLACK,marginBottom:5}]}>부속 장치</Text>
                                 <View style={{flexDirection:'row'}}>
                                     <CustomSelectBox 
-                                        strOptionList={accessoriesConvert(item.equip_type) ? accessoriesConvert(item.equip_type) : ['선택하세요.']}
+                                        strOptionList={accessoriesConvert(inputInfo.cot_e_type) ? accessoriesConvert(inputInfo.cot_e_type) : ['선택하세요.']}
                                         strSetOption={tempSelAccHandler}
                                         selOption={tempSelAcc}
                                         buttonStyle={selectBoxStyle.btnStyle}
@@ -575,7 +632,7 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
                                         rowTextStyle={selectBoxStyle.rowTextStyle}
                                         defaultText={'부속 장비 선택'}
                                         style={{flex:7}}
-                                        // isDisable={inputInfo.met_equip_type === ''}
+                                        isDisable={inputInfo.cot_e_type === ''}
                                     />
                                     <TouchableOpacity onPress={accessoriesAddHandler} style={[styles.addButton,{flexDirection:'row',justifyContent:'center',alignItems:'center',marginLeft:10}]}>
                                         <Image source={require('../../../assets/img/ic_add2.png')} style={{width:16,height:13}}/>

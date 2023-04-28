@@ -6,17 +6,17 @@ export type RouterNavigatorParams = {
 
     /** main */
     Main:undefined;
-    RequestMain : undefined ;
+    RequestRouter : {
+        screen : string,
+    } ;
     Home:undefined;
     Request:undefined;
     OpenRequest:undefined;
-    AcquaintanceRequest:undefined; //지인배차 요청 (회사선택)
-    AcqReqStep1 : { //지인배차 요청  step1
-        item : FavoriteListItemType;
-    }
-    Board:{
-        type:string
-    };
+    // AcquaintanceRequest:undefined; //지인배차 요청 (회사선택)
+    // AcqReqStep1 : { //지인배차 요청  step1
+    //     item : FavoriteListItemType;
+    // }
+    Board:undefined;
     Release:undefined;
     MyPage:undefined;
 

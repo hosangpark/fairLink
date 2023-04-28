@@ -102,8 +102,6 @@ export const Main = () => {
                 />
                 <Tab.Screen 
                     name="Request" 
-                    // component={Video}
-                    // component={Agreements}
                     component={RequestRouter}
                     
                     listeners={{
@@ -124,10 +122,15 @@ export const Main = () => {
                 />
                 <Tab.Screen 
                     name="Board" 
-                    component={Board}
+                    // component={Board}
+                    children={()=>{
+                        return(
+                            <Board setTabIndex={setTabIndex} />
+                        )
+                    }}
                     listeners={{
                         tabPress : (e)=>{
-                            setTabIndex(3);navigation.navigate('Board',{type:'default'})
+                            setTabIndex(3);navigation.navigate('Board');
                         }
                     }}
                     options={{
@@ -184,11 +187,6 @@ export const Main = () => {
                             ),
                     }}
                 />
-
-                {/* <Tab.Screen name="Video" component={Video} />
-                <Tab.Screen name="Board" component={Board} />
-                <Tab.Screen name="Release" component={Release} />
-                <Tab.Screen name="MyPage" component={MyPage} /> */}
             </Tab.Navigator>
         </SafeAreaView>
     )
