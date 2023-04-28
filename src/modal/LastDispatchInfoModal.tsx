@@ -1,6 +1,6 @@
 import React from 'react';
 import { DispatchInfoItemType, LastDispatchModalType } from './modalType';
-import {Pressable,View,Text, TouchableOpacity} from 'react-native';
+import {Pressable,View,Text, TouchableOpacity,Image} from 'react-native';
 import Modal from 'react-native-modal';
 import CheckBox from '@react-native-community/checkbox';
 import { colors, fontStyle, modalStyle, styles } from '../style/style';
@@ -14,10 +14,15 @@ type DispatchInfoType = {
     setSelDispatch : (check : boolean , selIdx:string) => void;
 }
 
-const DispatchHeader = ()=>{
+const DispatchHeader = ({hide}:{hide:()=>void})=>{
     return(
         <View style={{width:'100%'}}>
-            <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>최근 배차정보 불러오기</Text>
+            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+                <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>최근 배차정보 불러오기</Text>
+                <TouchableOpacity onPress={hide}>
+                    <Image source={require('../assets/img/ic_x.png')} style={{width:15,height:15}} />
+                </TouchableOpacity>
+            </View>
             <View style={{flexDirection:'row',marginTop:10,}}>
                 <Text style={[fontStyle.f_regular,{color:colors.MAIN_COLOR,fontSize:16,marginRight:3}]}>*</Text>
                 <Text style={[fontStyle.f_regular,{color:colors.MAIN_COLOR,fontSize:16,flexShrink:1}]}>선택한 이전 배차의 작업정보 및 대금정보가 현재 배차요청에 적용됩니다.</Text>
@@ -157,7 +162,7 @@ export const LastDispatchInfoModal = ({ //최근 배차목록 modal
                 onBackdropPress={hide}
         >
                 <View style={[modalStyle.modalWrapper,modalStyle.lastDispatchModal,{maxHeight:'90%'}]}>
-                    <DispatchHeader />
+                    <DispatchHeader hide={hide} />
                     <FlatList
                         style={{width:'100%',zIndex:10,marginTop:20}}
                         renderItem={({item})=>{

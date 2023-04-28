@@ -69,7 +69,6 @@ export type OpenConstructionType = RouteType & {
 }
 export interface BoardIndexType {
     setTabIndex? : (tab:number) => void;
-    type : string
 }
 
 // user
@@ -103,7 +102,9 @@ export type PilotInputInfoType = { //조종사 정보넣기 페이지 (회원가
 export type AcqReqStep1Type = RouteType & {
     
 }
-
+export type AcqReqStep2Type = RouteType & {
+    
+}
 
 export type RegDocumentType = RouteType & {
     

@@ -6,6 +6,8 @@ import { StyleSheet ,Image} from 'react-native';
 import { colors, fontStyle } from '../style/style';
 
 export const CustomSelectBox = ({
+    containerStyle = {flex:1}, // container style
+    style, //스타일
     strOptionList, //string 형태 배열
     objOptionList, //object 형태 배열 [{key:...,name:...}...]
     strSetOption, //string 형태 배열 셋팅
@@ -13,7 +15,6 @@ export const CustomSelectBox = ({
     selOption, //선택한 옵션
     type, //object 형태 배열일때 사용. (설정할 state의 객체 key값 - objOption의 key값이 들어감)
     defaultText, //선택하지 않았을때 텍스트
-    style, //스타일
     buttonStyle,
     buttonTextStyle,
     rowStyle,
@@ -40,7 +41,7 @@ export const CustomSelectBox = ({
 
 
     return(
-        <View style={{flex:1}}>
+        <View style={{...containerStyle}}>
             {title &&
                 <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:5}]}>{title} <Text style={{color:colors.ORANGE_COLOR}}>{essential && '*'}</Text></Text>
             }
@@ -75,7 +76,12 @@ export const CustomSelectBox = ({
                             }
                         }}
                         rowTextForSelection={(item, index) => {
-                        return item;
+                            if(labelFooter){
+                                return item+labelFooter;
+                            }
+                            else{
+                                return item;
+                            }
                         }}
                         buttonStyle={{...buttonStyle,backgroundColor:isDisable ? colors.BORDER_GRAY_COLOR1 : colors.WHITE_COLOR}}
                         buttonTextStyle={buttonTextStyle}
@@ -88,7 +94,7 @@ export const CustomSelectBox = ({
                         disabled={isDisable}
                     />
                 }
-                {(objOptionList && objList.length > 0) &&
+                {(objOptionList) &&
                     
                     <SelectDropdown
                         ref={citiesDropdownRef}
@@ -100,6 +106,7 @@ export const CustomSelectBox = ({
                                 if(tempIdx){
                                     if(type){
                                         objSetOption(tempIdx,type);
+                                        console.log(tempIdx, type);
                                     }
                                     else{
                                         objSetOption(tempIdx);
@@ -123,7 +130,12 @@ export const CustomSelectBox = ({
                             }
                         }}
                         rowTextForSelection={(item, index) => {
-                        return item;
+                            if(labelFooter){
+                                return item+labelFooter;
+                            }
+                            else{
+                                return item;
+                            }
                         }}
                         buttonStyle={{...buttonStyle,backgroundColor:isDisable ? colors.BORDER_GRAY_COLOR1 : colors.WHITE_COLOR}}
                         buttonTextStyle={buttonTextStyle}

@@ -149,6 +149,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				show={reqConModal}
 				hide={reqConModalHide}
 				action={tempAction}
+				setTabIndex={setTabIndex}
 			/>
 			<AlertModal 
 				show={alertModal.alert}
