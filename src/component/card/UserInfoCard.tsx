@@ -86,6 +86,7 @@ export const UserInfoCard = ({
             }
             else{
                 if(mt_type === '1'){
+                    console.log(item);
                     navigation.navigate('CompanyProfile',{
                         cat_idx:item.cat_idx,
                         cot_idx:item.cot_idx
@@ -149,7 +150,7 @@ export const UserInfoCard = ({
                         if(isDelete){
                             alertModalOn(`님을\n즐겨찾기에서 삭제하시겠습니까?`, 'delete_user_confirm',`${item.company} [${item.name}]`)
                         }
-                        else if(isFavorite){
+                        else if(isFavorite && item.mpt_idx){
                             action(item.mpt_idx);
                         }
                         else if(isCheck){
@@ -192,7 +193,7 @@ export const UserInfoCard = ({
                     show={recEmpModal}
                     hide={()=>{setRecEmpModal(false)}}
                     action={()=>{}}
-                    mpt_idx={item.mpt_idx}
+                    mpt_idx={item.mpt_idx ? item.mpt_idx : ''}
                 />
             </View>
         </TouchableOpacity>

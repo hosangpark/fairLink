@@ -103,7 +103,7 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
             const {data,result,msg} = await AcqReqMutation.mutateAsync(params);
 
             if(result === 'true'){
-                navigation.navigate('Board',{type:''})
+                navigation.navigate('Board')
             }
             else{
                 alertModalOn(msg);

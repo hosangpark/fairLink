@@ -17,7 +17,7 @@ import { initialAlert } from "../../modal/AlertModal";
 import { Profile } from "./companyProfileDetail/Profile";
 import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
 import { usePostQuery } from "../../util/reactQuery";
-import { useAppDispatch } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { initialConsProfile } from "../../component/initialInform";
 import { toggleLoading } from "../../redux/actions/LoadingAction";
 
@@ -50,12 +50,13 @@ const SubRoute = (route:any) => (
 export const CompanyProfile = ({route}:any) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    const {mt_idx} = useAppSelector(state => state.userInfo);
     const [tab, setTab] = useState(0);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
-    const [consprofileInfo, setconsprofileInfo] = React.useState<any>(()=>initialConsProfile); //입력정보
+    const [consprofileInfo, setconsprofileInfo] = React.useState(); //입력정보
     const {data : consprofileData, isLoading : consprofileDataLoading, isError : consprofileDataError} = 
     /** mt_idx 임의입력 수정필요 */
-    usePostQuery('getconsprofileData',{mt_idx : "17",cot_idx:route.params.cot_idx,cat_idx:route.params.cat_idx},'cons/cons_order_apply_info.php')
+    usePostQuery('getconsprofileData',{mt_idx : mt_idx,cot_idx:route.params.cot_idx,cat_idx:route.params.cat_idx},'cons/cons_order_apply_info.php')
 
     const alertModalOn = ( msg : string, type? : string ) => {
         setAlertModal({
@@ -73,6 +74,7 @@ export const CompanyProfile = ({route}:any) => {
     React.useEffect(()=>{
         dispatch(toggleLoading(consprofileDataLoading));
         if(consprofileData){
+            console.log(consprofileData);
             setconsprofileInfo(consprofileData.data);
         }
     },[consprofileData])
@@ -80,19 +82,21 @@ export const CompanyProfile = ({route}:any) => {
         <SafeAreaView style={{flex:1}}>
             <BackHeader title="장비회사 프로필"/>
             <ScrollView style={{flex:1}}>
-                <ProfileInfoCard
-                    userProfileUrl = {consprofileInfo.data.img_url}
-                    userName = {consprofileInfo.data.name}
-                    age = {consprofileInfo.data.age} 
-                    gender = {consprofileInfo.data.gender} 
-                    location = {consprofileInfo.data.equip}
-                    equip={consprofileInfo.data.equip}
-                    jobType = {consprofileInfo.data.type}
-                    phone = {consprofileInfo.data.hp}
-                    score_count = {consprofileInfo.data.score_count}
-                    score = {consprofileInfo.data.score}
-                    good = {consprofileInfo.data.good}
-                />
+                {/* {consprofileInfo &&
+                    <ProfileInfoCard
+                        userProfileUrl = {consprofileInfo.data.img_url}
+                        userName = {consprofileInfo.data.name}
+                        age = {consprofileInfo.data.age} 
+                        gender = {consprofileInfo.data.gender} 
+                        location = {consprofileInfo.data.equip}
+                        equip={consprofileInfo.data.equip}
+                        jobType = {consprofileInfo.data.type}
+                        phone = {consprofileInfo.data.hp}
+                        score_count = {consprofileInfo.data.score_count}
+                        score = {consprofileInfo.data.score}
+                        good = {consprofileInfo.data.good}
+                    />
+                } */}
                 <View style={{ flexDirection:'row', backgroundColor:colors.WHITE_COLOR, justifyContent:'space-around', alignItems: 'center', }}>
                     <View style={tab === 0 ? TabStyle.tabViewOn : TabStyle.tabViewOff }>
                         <TouchableOpacity onPress={() => setTab(0)}>
@@ -110,13 +114,13 @@ export const CompanyProfile = ({route}:any) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                {
+                {/* {
                     tab === 0
                     ? ProfileRoute(consprofileInfo.profile)
                     : tab === 1
                     ? DocRoute(consprofileInfo.doc_check)
                     : SubRoute(consprofileInfo.sub)
-                }
+                } */}
                 <TouchableOpacity onPress={() => alertModalOn('','test')}>
                     <View style={[styles.buttonStyle, {}]}>
                         <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>장비회사 선정</Text>
