@@ -75,7 +75,7 @@ export const UserInfoCard = ({
 
         // await alertModalOn('삭제가 완료되었습니다.','delete_success');
     }
-    
+    const item_pilot_type = item.pilot_type? item.pilot_type : item.type
 
     return (
         <TouchableOpacity style={{width:'100%',position:'relative'}} onPress={()=>{
@@ -86,16 +86,23 @@ export const UserInfoCard = ({
             }
             else{
                 if(mt_type === '1'){
-                    navigation.navigate('CompanyProfile');
+                    navigation.navigate('CompanyProfile',{
+                        cat_idx:item.cat_idx,
+                        cot_idx:item.cot_idx
+                    });
                 }
             }
         }}>
-            {   !item.pilot_type
-                ?   null 
-                :
+            {   item_pilot_type? 
                 <View style={[styles.cardJobArea,{borderColor: item.pilot_type === 'Y' ? colors.BLUE_COLOR : colors.ORANGE_COLOR,zIndex:11}]}>
-                    <Text style={[fontStyle.f_medium,{fontSize:15, color:item.pilot_type === 'Y' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>{item.pilot_type === 'Y' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
+                    <Text style={[fontStyle.f_medium,{fontSize:15, color:item.pilot_type === 'Y' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
+                        {item_pilot_type === 'Y'||'my' ? '차주 겸 조종사' : 
+                         item_pilot_type === 'N'||'like' ? '스페어 조종사' :
+                        '장비회사 소속 조종사'}
+                    </Text>
                 </View>
+                :
+                null
             }
             {(isCheck && isCheck !== index) && //체크박스 체크안되면 음영처리 및 체크이벤트
                 <TouchableOpacity onPress={()=>{action(index);}} style={{position:'absolute',width:'100%',height:'100%',backgroundColor:'rgba(0,0,0,0.2)',top:0,left:0,zIndex:10,borderRadius:8}} />
@@ -114,9 +121,21 @@ export const UserInfoCard = ({
                         <View style={{marginLeft:10,}}>
                             { !item.pilot_type 
                                 ? null 
-                                : <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.MAIN_COLOR}]}>{item.company}</Text>
+                                : <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.MAIN_COLOR}]}>
+                                    {item.company}
+                                </Text>
                             }
-                            <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>{item.name} 님</Text>
+                            { !item.met_company
+                                ? null
+                                :
+                                <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.MAIN_COLOR}]}>
+                                    {item.met_company}
+                                </Text>
+                            }
+                            <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>
+                                {item.name}
+                                {item.mpt_name}
+                                님</Text>
                             <View style={{flexDirection:'row',marginTop:5}}>
                                 <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK}]}>{item.score.toFixed(1)}</Text>
                                 <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK2,marginLeft:5}]}>평가수 {item.score_count}</Text>
@@ -156,7 +175,10 @@ export const UserInfoCard = ({
                     <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{item.equip}</Text>
                     <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>경력 {pilotCareerList[Number(item.career)]}</Text>
                 </View>
-                <Text style={[fontStyle.f_light,{fontSize:15,color:colors.FONT_COLOR_BLACK2,marginTop:10}]}>{item.location}</Text>
+                <Text style={[fontStyle.f_light,{fontSize:15,color:colors.FONT_COLOR_BLACK2,marginTop:10}]}>
+                    {item.location}
+                    {item.mpt_location}
+                </Text>
                 <AlertModal
                     show={alertModal.alert}
                     msg={alertModal.msg}

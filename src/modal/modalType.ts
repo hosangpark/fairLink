@@ -120,4 +120,10 @@ export interface CancleReasonModalType extends ModalType{ //반려사유 입력 
 export type LoadingModalType = { //loading modal props type
     isLoading : boolean,
 }
+export type ImageModalType = { 
+    show:boolean
+    action:()=>void
+    hide:()=>void,
+    imgrl : string,
+}
 

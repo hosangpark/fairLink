@@ -9,16 +9,17 @@ import { AlertModal, initialAlert } from '../../modal/AlertModal';
 
 export const ProfileInfoCard = ({
     index = '0',
-    jobType = '차주 겸 조종사',
+    jobType,
     userProfileUrl = '',
     userName = '정우성',
     score = 5,
-    rating = 41,
-    recEmpCount = 6,
+    score_count,
+    good,
     location = '경남 진주시',
     age = '42',
     gender = '남',
-    phone = '010-1123-1111'
+    phone = '010-1123-1111',
+    equip
 }:ProfileCardType) => {
 
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
@@ -41,23 +42,33 @@ export const ProfileInfoCard = ({
         <View style={{ margin: 20, position:'relative', }}>
             <View style={[styles.cardWrapper]}>
                 <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                    <View style={{flexDirection:'row',alignItems:'center',flex:1}}>
                         <View style={[styles.cardProfileSize]}>
-                            <Text>프로필 영역</Text>
+                            {userProfileUrl === '' ? 
+                                <Image source={require('../../assets/img/profile_default.png')} style={{width:100,height:100,borderRadius:50}}/>
+                            :   
+                                <Image source={{uri:userProfileUrl}} style={{width:100,height:100,borderRadius:50}}/> 
+                            }
                         </View>
-                        <View style={{marginLeft:15,}}>
+                        <View style={{marginLeft:15,flexShrink:1}}>
                             <View style={{ flexDirection: 'row', alignItems: 'center',}}>
                                 <Text style={[fontStyle.f_semibold, {fontSize: 18, color:colors.FONT_COLOR_BLACK}]}>{userName} / </Text>
-                                <Text style={[fontStyle.f_regular, {fontSize: 16, color:colors.FONT_COLOR_BLACK}]}>{age}세 ({gender})</Text>
+                                <Text style={[fontStyle.f_regular, {fontSize: 16, color:colors.FONT_COLOR_BLACK}]}>{age}세 ({gender=='M'? '남':'여'})</Text>
                             </View>
                             <View style={{ marginBottom: 5}}>
                                 <Text style={[fontStyle.f_regular,{fontSize:15, color:colors.MAIN_COLOR}]}>{location}</Text>
                             </View>
                             <View style={{ marginBottom: 7}}>
-                                <Text style={[fontStyle.f_regular,{fontSize:16, color:colors.FONT_COLOR_BLACK}]}>6W 굴착기, 2021년식</Text>
+                                <Text style={[fontStyle.f_regular,{fontSize:16, color:colors.FONT_COLOR_BLACK}]}>
+                                    {equip}
+                                </Text>
                             </View>
-                            <View style={{ backgroundColor:colors.WHITE_COLOR, borderWidth:1, borderRadius:16, paddingHorizontal:10, paddingVertical:2, borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR }}>
-                                <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>{jobType === '1' ? '차주 겸 조종사' : '장비회사 소속 조종사'}</Text>
+                            <View style={{flexDirection:'row'}}>
+                            <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR,borderWidth:1, borderRadius:16, paddingHorizontal:10, paddingVertical:2, borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
+                                {jobType === 'my' ? '차주 겸 조종사' : 
+                                jobType === 'like ' ? '스페어 조종사' :
+                                '장비회사 소속 조종사'}
+                            </Text>
                             </View>
                         </View>
                     </View>
@@ -86,7 +97,7 @@ export const ProfileInfoCard = ({
                     <StarRating score={score} />
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-                    <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK, marginRight: 10 }]}>평가 <Text style={{ color: colors.MAIN_COLOR}}>{rating}</Text> 개</Text>
+                    <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK, marginRight: 10 }]}>평가 <Text style={{ color: colors.MAIN_COLOR}}>{score_count}</Text> 개</Text>
                     <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK,}]}>평균 <Text style={{ color: colors.MAIN_COLOR}}>{score.toFixed(1)}</Text></Text>
                 </View>
             </View>
@@ -94,7 +105,7 @@ export const ProfileInfoCard = ({
     </View>
     <View style={{ margin: 20, position:'relative',}}>
         <View style={[styles.buttonStyle]}>
-            <Text style={[fontStyle.f_medium, {fontSize:16,color:colors.WHITE_COLOR,}]}>총 <Text style={[fontStyle.f_bold, {fontSize: 18, }]}>{recEmpCount}</Text> 업체가 추천을 해주었어요!</Text>
+            <Text style={[fontStyle.f_medium, {fontSize:16,color:colors.WHITE_COLOR,}]}>총 <Text style={[fontStyle.f_bold, {fontSize: 18, }]}>{good}</Text> 업체가 추천을 해주었어요!</Text>
         </View>
     </View>
     </>

@@ -17,13 +17,20 @@ export type DocumnetArrayType = {
         title:string
         file_check:string
         file_url:string
-    }>,
+    }> ,
     items3:Array<{
         title:string
         file_check:string
         file_url:string
     }>,
     items4:Array<{
+        title:string
+        file_check:string
+        file_url:string
+    }>,
+}
+export type DocumnetArrayType2 = { 
+    items1:Array<{
         title:string
         file_check:string
         file_url:string
@@ -86,7 +93,7 @@ export const User2DocumentList = ({
 }
 export const User3DocumentList = ({
     items1,
-}:DocumnetArrayType) => {
+}:DocumnetArrayType2) => {
     return(
     <>
       <DocumentAccordion

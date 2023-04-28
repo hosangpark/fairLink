@@ -8,8 +8,9 @@ import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/n
 import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
 import { CustomButton } from '../../component/CustomButton';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { usePostMutation } from '../../util/reactQuery';
+import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { monthList } from '../../component/utils/list';
 import { dateConverter } from '../../util/func';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -27,6 +28,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
     const [year,setYear] = useState<string>(String(new Date().getFullYear()));
     const [month,setMonth] = useState<string>(String(new Date().getMonth()+1));
     const [listData,setListData] = useState<any>([])
+    const dispatch = useAppDispatch();
 
     const consBoardListMutation = usePostMutation('consBoardList','cons/cons_order_list.php')
     const equipBoardListMutation = usePostMutation('equipBoardList','equip/equip_order_list.php')
@@ -52,6 +54,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
 
   const BoardInfrom = async (): Promise<void> => { //배차이력 불러오기
         try {
+            dispatch(toggleLoading(true));
             const idxParams = {
                 // mt_idx : mt_idx,
                 mt_idx : mt_idx,
@@ -68,16 +71,17 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
             await pilotBoardListMutation.mutateAsync(idxParams)
 
             if(result === 'true'){
-                console.log("result",result)
-                console.log("data",data.data)
-                console.log("msg",msg)
                 setListData(data.data)
+                console.log("result",result)
+                
             }
             else{
                 alertModalOn(msg,'api_error');
             }
+            dispatch(toggleLoading(false));
         // }
         } catch(err) {
+            dispatch(toggleLoading(false));
             alertModalOn(`예기치 못한 오류가 발생하였습니다. 고객센터에 문의해주세요.\n error_code : ${err}`,'api_error');
         }
     };
@@ -132,7 +136,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                     <CustomSelectBox 
                         defaultText='전체'
                         strOptionList={
-                        mt_type =='1'?
+                        mt_type == '1'?
                         ['전체','배차 모집중','계약진행중','작업중','작업완료']:
                         mt_type == '2'?
                         ['전체','조종사 모집중','현장지원 완료','계약진행중','작업중 / 작업예정','작업완료']
@@ -148,6 +152,8 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                     />
                 </View>
             </View>
+            {/* {listData.length > 0 ? }
+            <></> */}
         {
             listData.map((data:{title:string}, i:number) => (
                 <View key={i}>

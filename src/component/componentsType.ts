@@ -125,13 +125,14 @@ export interface ProfileCardType {
     userProfileUrl : string,
     userName:string,
     score:number,
-    rating:number,
-    recEmpCount:number,
+    score_count:string,
+    good:number,
     location:string,
     age : string,
     gender : string,
     phone : string,
-    index : string,
+    index? : string,
+    equip:string
 }
 
 export interface TextBoxType {
@@ -245,4 +246,44 @@ export type DetailFieldBoxDataType = {
     cot_pay_etc?:string | null,
     cot_m_name:string,
     cot_m_num:string,
+}
+export type VolunteerListType = { 
+    data:{
+        crt_name:string,
+        equip:string,
+        year:string,
+        sub:string,
+        start_date:string,
+        end_date:string,
+        start_time:string,
+        end_time:string
+    }
+    count:number,
+    list:{
+        cat_idx:string,
+        cot_idx:string,
+        type:string,
+        met_company:string,
+        mpt_name:string,
+        good:string,
+        score:number,
+        score_count:string,
+        equip:string,
+        mpt_career:string,
+        mpt_location:string,
+    }[]
+}
+
+export type consProfileDataType = {
+    profileData:{
+        mpt_career:string,
+        mpt_licence:string,
+        mpt_equip_memo:string,
+        mpt_aspire:string,
+    }
+}
+export type conssubDataType = {
+    subData:{
+        
+    }
 }
