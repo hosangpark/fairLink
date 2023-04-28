@@ -14,6 +14,8 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { DetailFieldBoxDataType } from '../../component/componentsType';
 import { initialdetailFieldInfo } from '../../component/initialInform';
+import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
+import { NumberComma } from '../../util/func';
 
 const DetailFieldBox = ({
     title,
@@ -96,7 +98,7 @@ export const DetailField = ({route}:any) => {
 
     const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
     /** mt_idx 임의입력 수정필요 */
-    usePostQuery('getDetailFieldData',{mt_idx : "17",cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
+    usePostQuery('getDetailFieldData',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
 
     React.useEffect(()=>{
         console.log('test')
@@ -112,6 +114,7 @@ export const DetailField = ({route}:any) => {
     return(
         <View style={{flex:1,}}>
         <BackHeader title="현장세부내용" />
+        <BackHandlerCom />
         <ScrollView style={{flex:1,backgroundColor:colors.WHITE_COLOR}}>
             <View style={{backgroundColor:colors.MAIN_COLOR,padding:20}}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.WHITE_COLOR,marginBottom:3}]}>
@@ -163,7 +166,7 @@ export const DetailField = ({route}:any) => {
                 />
                 <DetailFieldBox
                     title={'대금'}
-                    text={detailFieldInfo.cot_pay_price}
+                    text={`${NumberComma(Number(detailFieldInfo.cot_pay_price))} 만원`}
                     cot_pay_type={detailFieldInfo.cot_pay_type}
                 />
                 <DetailFieldBox
@@ -174,14 +177,18 @@ export const DetailField = ({route}:any) => {
                     title={'담당자'}
                     text={detailFieldInfo.cot_m_name}
                 />
-                <View style={DetailFieldstyle.DetailFieldBox}>
+                <View style={{
+                    ...DetailFieldstyle.DetailFieldBox,
+                    alignItems:'center'
+                }}>
                     <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>연락처</Text>
-                    <TouchableOpacity style={{flexDirection:'row', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5}}
-                    onPress={()=>{alertModalOn(DetailFieldData.data.data.cot_m_num)}}
+                    <TouchableOpacity style={{flexDirection:'row', alignItems:'center', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5}}
+                        onPress={()=>{alertModalOn(DetailFieldData.data.data.cot_m_num)}}
                     >
-                    <Image style={{width:25,height:25}} source={require('../../assets/img/ic_phone.png')}/>
-                    <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.MAIN_COLOR,flexShrink:1}]}>
-                        {detailFieldInfo.cot_m_num}</Text>
+                        <Image style={{width:20,height:20}} source={require('../../assets/img/ic_phone.png')}/>
+                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.MAIN_COLOR,flexShrink:1,marginLeft:5}]}>
+                            {detailFieldInfo.cot_m_num}
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>

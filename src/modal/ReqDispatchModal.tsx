@@ -6,16 +6,18 @@ import { ReqDispatchModalType } from './modalType';
 import { colors, fontStyle } from '../style/style';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../type/routerType';
+import { RequestRouterNavigatorParams } from '../../type/RequestRouterType';
 
 
 export const ReqDispatchModal = ({ //배차 요청 선택 modal
     show,
     hide,
     action,
-    isReplace
+    isReplace,
+    setTabIndex,
 }:ReqDispatchModalType) => {
 
-	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams & RequestRouterNavigatorParams>>();
 
     return(
         <Modal 
@@ -40,7 +42,9 @@ export const ReqDispatchModal = ({ //배차 요청 선택 modal
                 <View style={{flex:1,flexDirection:'row',justifyContent:'space-around',alignItems:'center',width:'100%'}}>
                     <TouchableOpacity style={{backgroundColor:colors.WHITE_COLOR,borderRadius:8,paddingVertical:20,paddingHorizontal:30, justifyContent:'center'}}
                     onPress={()=>{
-                        navigation.navigate('OpenRequest');
+                        navigation.navigate('RequestRouter',{
+                            screen : 'PublicReqStep1'
+                        });
                         hide();
                     }}
                     >
@@ -48,7 +52,12 @@ export const ReqDispatchModal = ({ //배차 요청 선택 modal
                         <Text style={[fontStyle.k_bold,{fontSize:18,color:colors.ORANGE_COLOR,textAlign:'center',marginTop:10}]}>공개배차</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{backgroundColor:colors.WHITE_COLOR,borderRadius:8,paddingVertical:20,paddingHorizontal:30, justifyContent:'center'}}
-                    onPress={()=>{navigation.navigate('AcquaintanceRequest'),hide();}}
+                    onPress={()=>{
+                        if(setTabIndex)setTabIndex(2); 
+                        navigation.navigate('RequestRouter',{
+                            screen : 'AcquaintanceRequestTest'
+                        }),hide();
+                    }}
                     >
                         <Image source={require('../assets/img/ic_op2.png')} style={{width:83,height:80}}/>
                         <Text style={[fontStyle.k_bold,{fontSize:18,color:colors.BLUE_COLOR,textAlign:'center',marginTop:10}]}>지인배차</Text>

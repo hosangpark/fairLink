@@ -38,6 +38,8 @@ import { useAppSelector } from './src/redux/store';
 import { LoadingModal } from './src/modal/LoadingModal';
 import { AcqReqStep1 } from './src/screen/Request/acqReq/AcqReqStep1';
 import { HomeIndex } from './src/screen/home/HomeIndex';
+import { RequestRouter } from './src/screen/Request/RequestRouter';
+import { Board } from './src/screen/Board/Board';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -81,6 +83,16 @@ export const Router = () => {
                     component={HomeIndex}
                     options={{headerShown:false}}
                 />
+                <Stack.Screen 
+                    name={'RequestRouter'}
+                    component={RequestRouter}
+                    options={{headerShown:false}}
+                />
+                {/* <Stack.Screen
+                    name={'Board'}
+                    component={Board}
+                    options={{headerShown:false}}
+                /> */}
 
                 {/** USER  */}
                 <Stack.Screen // 이용약관
@@ -119,7 +131,7 @@ export const Router = () => {
                     component={OpenRequest}
                     options={{headerShown:false}}
                 />
-                <Stack.Screen 
+                {/* <Stack.Screen 
                     name={'AcquaintanceRequest'}
                     component={AcquaintanceRequest}
                     options={{headerShown:false}}
@@ -128,7 +140,7 @@ export const Router = () => {
                     name={'AcqReqStep1'}
                     component={AcqReqStep1}
                     options={{headerShown:false}}
-                />
+                /> */}
 
                  {/** board - 이력 및 현황 */}
                 <Stack.Screen  // 이력 및 현황 - 현장세부내용

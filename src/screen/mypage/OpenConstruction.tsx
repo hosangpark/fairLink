@@ -292,10 +292,6 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
             if(crt_name_arr.length > 0){
                 setTempSelName(crt_name_arr[0].name);
             }
-            // setConsInputInfo({
-            //     ...consInputInfo,
-            //     crt_m_name:crt_name
-            // })
         }
     },[consInputInfo.crt_m_cons_idx])
 
