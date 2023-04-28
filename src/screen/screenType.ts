@@ -42,8 +42,8 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
     equip_year? : string,
 
     //지원자 리스트
-    cat_idx:string,
-    cot_idx:string,
+    cat_idx?:string,
+    cot_idx?:string,
     type?:string,
     met_company?:string,
     mpt_name?:string,

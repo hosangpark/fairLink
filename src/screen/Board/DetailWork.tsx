@@ -21,6 +21,7 @@ import { usePostQuery } from '../../util/reactQuery';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { initialdetailWorkInfo } from '../../component/initialInform';
 import RNFetchBlob from 'rn-fetch-blob';
+import { ImageModal } from '../../modal/ImageModal';
 
 export const DetailWork = ({route}:any) => {
     const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ export const DetailWork = ({route}:any) => {
     const [strOption , setStrOption] = React.useState<string>('');
     const [selectoday , setSelectoday] = React.useState<boolean>(false);
     const [openbox,setOpenbox] = useState<boolean>(false)
-    const [onimage,setOnimage] = useState<boolean>(false)
+    const [show,setshow] = useState<boolean>(false)
     const [onimageUri,setOnimageUri] = useState<string>('')
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
     const [selecttModal, setSelectModal] = React.useState<boolean>(false); //alert 객체 생성 (초기값으로 clear);
@@ -66,15 +67,15 @@ export const DetailWork = ({route}:any) => {
        alertModalOff();
     }
     /**이미지 다운로드 */
-    const ImageDownload = async()=>{
-        await RNFetchBlob.config({
-        addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-        path: `${RNFetchBlob.fs.dirs.DownloadDir}/${onimageUri}`,
-        },
-    }).fetch('GET', onimageUri);
-    }
+    // const ImageDownload = async()=>{
+    //     await RNFetchBlob.config({
+    //     addAndroidDownloads: {
+    //     useDownloadManager: true,
+    //     notification: true,
+    //     path: `${RNFetchBlob.fs.dirs.DownloadDir}/${onimageUri}`,
+    //     },
+    // }).fetch('GET', onimageUri);
+    // }
 
     React.useEffect(()=>{
         dispatch(toggleLoading(DetailWorkDataLoading));
@@ -442,13 +443,14 @@ export const DetailWork = ({route}:any) => {
                         style={[styles.whiteButtonStyle,{flex:1,marginRight:10}]}
                         labelStyle={[styles.whiteButtonLabelStyle,{fontSize:16}]}
                         label={'미리보기'}
-                        action={()=>{setOnimage(true),setOnimageUri(detailWorkInfo.대금관리.bank_file)}}
+                        action={()=>{setshow(true)}}
                         />
                         <CustomButton
                         style={{flex:1}}
                         labelStyle={{fontSize:16}}
                         label={'다운로드'}
-                        action={()=>{ImageDownload}}
+                        // action={()=>{ImageDownload}}
+                        action={()=>{}}
                         />
                     </View>
                 </View>
@@ -498,14 +500,12 @@ export const DetailWork = ({route}:any) => {
             type={alertModal.type}
             action={()=>{}}
         />
-        {onimage &&
-        <TouchableOpacity style={{position:'absolute',width:'100%',height:'100%',backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}
-            onPress={()=>setOnimage(false)}
-        >
-            <Image style={{position:'absolute',right:30,top:30}} source={require('../../assets/img/ic_x.png')}/>
-            <Image resizeMode={'contain'} style={{width:'100%',height:'100%',zIndex:999}} source={{uri:onimageUri}}/>
-        </TouchableOpacity>
-        }
+        <ImageModal
+            show={show}
+            action={()=>{}}
+            hide={()=>{setshow(false)}}
+            imgrl={detailWorkInfo.대금관리.bank_file}
+        />
     </View>
     )
 }

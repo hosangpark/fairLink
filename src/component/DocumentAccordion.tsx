@@ -5,6 +5,7 @@ import { colors, fontStyle, styles } from '../style/style';
 import { NodataView } from './NodataView';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { CustomButton } from './CustomButton';
+import { ImageModal } from '../modal/ImageModal';
 
 
 const Sublistbox = ({
@@ -14,7 +15,7 @@ const Sublistbox = ({
     filecheck,
 }:any)=>{
     const [check,setCheck] = useState(false)
-    const [onimageUri,setOnimageUri] = useState<string>('')
+    const [show,setshow] = useState<boolean>(false)
     return(
     <View key={index}>
         <View style={{flexDirection:'row',alignItems:'center'}}>
@@ -48,7 +49,7 @@ const Sublistbox = ({
             labelStyle={{color : colors.MAIN_COLOR,fontSize:16}}
         />
         :
-        <TouchableOpacity style={{width:92,height:92,marginVertical:20}} onPress={()=>{console.log(fileuri)}}>
+        <TouchableOpacity style={{width:92,height:92,marginVertical:20}} onPress={()=>{setshow(true)}}>
             <Image resizeMode={'cover'} style={{width:'100%',height:'100%'}} source={fileuri==""?
             require('../assets/img/b_menu3_off.png')
             :
@@ -56,6 +57,12 @@ const Sublistbox = ({
             }/>
         </TouchableOpacity>
         }
+        <ImageModal
+            show={show}
+            action={()=>{}}
+            hide={()=>{setshow(false)}}
+            imgrl={fileuri}
+        />
     </View>
     )
 }

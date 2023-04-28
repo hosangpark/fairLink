@@ -72,8 +72,8 @@ export type RouterNavigatorParams = {
         cot_idx:string
     } //지원자현황
     CompanyProfile:{
-        cot_idx:string
-        cat_idx:string
+        cot_idx?:string
+        cat_idx?:string
     } //장비회사프로필
     PilotProfile:undefined //조종사프로필
     ElectronicContract:undefined //전자계약
