@@ -28,7 +28,7 @@ export const BoardCard = ({
 
     const FlowEvent = () =>{
         if(mt_type=='1' && cardtitle=="배차 모집중"){
-            navigation.navigate('Volunteer')
+            navigation.navigate('Volunteer',{cot_idx})
         } else if(mt_type=='3') {
             navigation.navigate('PilotProfile')
         } else {

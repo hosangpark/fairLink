@@ -20,18 +20,18 @@ export type ManagerItemType = { //담당자 아이템 타입
 }
 
 export type FavoriteListItemType = { //userInfo card에 들어가는 정보 
-    like_idx:string,
-    img_url:string,
-    mpt_idx:string,
+    like_idx?:string,
+    img_url?:string,
+    mpt_idx?:string,
     pilot_type?:string,
     good:number,
     company:string,
-    name:string,
+    name?:string,
     score:number,
     score_count:number,
     equip:string,
-    career:string,
-    location:string,
+    career?:string,
+    location?:string,
 
     //배차선택시 들어감
     age ? : number,
@@ -40,6 +40,15 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
     equip_stand2? : string,
     equip_type? : string,
     equip_year? : string,
+
+    //지원자 리스트
+    cat_idx:string,
+    cot_idx:string,
+    type?:string,
+    met_company?:string,
+    mpt_name?:string,
+    mpt_career?:string,
+    mpt_location?:string,
 
 }
 

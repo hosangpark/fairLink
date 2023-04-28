@@ -200,7 +200,6 @@ export const DetailField = ({route}:any) => {
                 </Text>
                 </View>
                 }
-                
                 {mt_type ==='1' ?
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}>

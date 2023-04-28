@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import { ScrollView, View, Text, useWindowDimensions, StyleSheet } from "react-native";
 import { BackHeader } from "../../component/header/BackHeader";
 import { colors, fontStyle, styles } from "../../style/style";
@@ -16,39 +16,47 @@ import { AlertClearType } from "../../modal/modalType";
 import { initialAlert } from "../../modal/AlertModal";
 import { Profile } from "./companyProfileDetail/Profile";
 import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
+import { usePostQuery } from "../../util/reactQuery";
+import { useAppDispatch } from "../../redux/store";
+import { initialConsProfile } from "../../component/initialInform";
+import { toggleLoading } from "../../redux/actions/LoadingAction";
 
 
-const FirstRoute = () => (
+const ProfileRoute = (route:any) => (
     <View style={{ backgroundColor: colors.WHITE_COLOR, flex: 1}}>
-        <Profile />
+        <Profile 
+        profileData={route}
+        />
     </View>
 );
 
-const SecondRoute = () => (
+const DocRoute = (route:any) => (
     <View style={{ backgroundColor: colors.WHITE_COLOR, flex: 1}}>
-        <RequiredDocuments/>
+        <RequiredDocuments
+        DocData={route}
+        />
     </View>
 );
 
-const ThirdRoute = () => (
+const SubRoute = (route:any) => (
     <View style={{ backgroundColor: colors.WHITE_COLOR, flex: 1}}>
-        <Device />
+        <Device 
+        subData={route}
+        />
     </View>
 );
 
-const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-    third: ThirdRoute,
-});
 
-
-export const CompanyProfile = () => {
-
+export const CompanyProfile = ({route}:any) => {
+    const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [tab, setTab] = useState(0);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
-    
+    const [consprofileInfo, setconsprofileInfo] = React.useState<any>(()=>initialConsProfile); //입력정보
+    const {data : consprofileData, isLoading : consprofileDataLoading, isError : consprofileDataError} = 
+    /** mt_idx 임의입력 수정필요 */
+    usePostQuery('getconsprofileData',{mt_idx : "17",cot_idx:route.params.cot_idx,cat_idx:route.params.cat_idx},'cons/cons_order_apply_info.php')
+
     const alertModalOn = ( msg : string, type? : string ) => {
         setAlertModal({
             alert: true,
@@ -62,22 +70,28 @@ export const CompanyProfile = () => {
         setAlertModal(initialAlert)
     }
 
+    React.useEffect(()=>{
+        dispatch(toggleLoading(consprofileDataLoading));
+        if(consprofileData){
+            setconsprofileInfo(consprofileData.data);
+        }
+    },[consprofileData])
     return (
         <SafeAreaView style={{flex:1}}>
             <BackHeader title="장비회사 프로필"/>
             <ScrollView style={{flex:1}}>
                 <ProfileInfoCard
-                    index = '0'
-                    jobType = '차주 겸 조종사' 
-                    userProfileUrl = '' 
-                    userName = '정우성' 
-                    score = {4.4} 
-                    rating = {41} 
-                    recEmpCount = {6} 
-                    location = '경남 진주시' 
-                    age = '42' 
-                    gender = '남' 
-                    phone = '010-1123-1111'
+                    userProfileUrl = {consprofileInfo.data.img_url}
+                    userName = {consprofileInfo.data.name}
+                    age = {consprofileInfo.data.age} 
+                    gender = {consprofileInfo.data.gender} 
+                    location = {consprofileInfo.data.equip}
+                    equip={consprofileInfo.data.equip}
+                    jobType = {consprofileInfo.data.type}
+                    phone = {consprofileInfo.data.hp}
+                    score_count = {consprofileInfo.data.score_count}
+                    score = {consprofileInfo.data.score}
+                    good = {consprofileInfo.data.good}
                 />
                 <View style={{ flexDirection:'row', backgroundColor:colors.WHITE_COLOR, justifyContent:'space-around', alignItems: 'center', }}>
                     <View style={tab === 0 ? TabStyle.tabViewOn : TabStyle.tabViewOff }>
@@ -98,10 +112,10 @@ export const CompanyProfile = () => {
                 </View>
                 {
                     tab === 0
-                    ? FirstRoute()
+                    ? ProfileRoute(consprofileInfo.profile)
                     : tab === 1
-                    ? SecondRoute()
-                    : ThirdRoute()
+                    ? DocRoute(consprofileInfo.doc_check)
+                    : SubRoute(consprofileInfo.sub)
                 }
                 <TouchableOpacity onPress={() => alertModalOn('','test')}>
                     <View style={[styles.buttonStyle, {}]}>

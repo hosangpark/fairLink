@@ -8,17 +8,20 @@ import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/n
 import { CustomAccordion } from '../../component/CustomAccordion';
 import { NodataView } from '../../component/NodataView';
 import { CustomButton } from '../../component/CustomButton';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { usePostMutation } from '../../util/reactQuery';
+import { toggleLoading } from '../../redux/actions/LoadingAction';
+import { monthList } from '../../component/utils/list';
 
 
 export const Board = ({route}:any) => {
     // const mt_type = "2"
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
-    const [strOption,setStrOption] = useState<string>('')
+    const [strOption,setStrOption] = useState<string>('전체')
     const [year,setYear] = useState<string>('')
     const [month,setMonth] = useState<string>('')
     const [listData,setListData] = useState<any>([])
+    const dispatch = useAppDispatch();
 
 const consBoardListMutation = usePostMutation('consBoardList','cons/cons_order_list.php')
 const equipBoardListMutation = usePostMutation('equipBoardList','equip/equip_order_list.php')
@@ -26,6 +29,7 @@ const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_ord
 
   const BoardInfrom = async (): Promise<void> => {
         try {
+            dispatch(toggleLoading(true));
             const idxParams = {
                 // mt_idx : mt_idx,
                 mt_idx : '17',
@@ -41,13 +45,13 @@ const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_ord
             await pilotBoardListMutation.mutateAsync(idxParams)
 
             if(result === 'true'){
-                console.log("result",result)
-                console.log("data",data.data)
-                console.log("msg",msg)
                 setListData(data.data)
+                console.log("result",result)
+                dispatch(toggleLoading(false));
             }
             else{
                 console.log("else",result)
+                dispatch(toggleLoading(false));
             }
         // }
         } catch(err) {
@@ -55,8 +59,7 @@ const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_ord
         }
     };
 
-
-
+    
     useFocusEffect(
         React.useCallback(() => {
         BoardInfrom()
@@ -89,7 +92,7 @@ const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_ord
                     </Text>
                     <CustomSelectBox 
                         defaultText='선택하세요.'
-                        strOptionList={['1월','2월','3월','4월',]}
+                        strOptionList={monthList()}
                         selOption={month}
                         strSetOption={setMonth}
                         buttonStyle={selectBoxStyle.btnStyle}
@@ -105,7 +108,7 @@ const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_ord
                     <CustomSelectBox 
                         defaultText='전체'
                         strOptionList={
-                        mt_type =='1'?
+                        mt_type == '1'?
                         ['전체','배차 모집중','계약진행중','작업중','작업완료']:
                         mt_type == '2'?
                         ['전체','조종사 모집중','현장지원 완료','계약진행중','작업중 / 작업예정','작업완료']
@@ -121,6 +124,8 @@ const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_ord
                     />
                 </View>
             </View>
+            {/* {listData.length > 0 ? }
+            <></> */}
         {
             listData.map((data:{title:string}, i:number) => (
                 <View key={i}>

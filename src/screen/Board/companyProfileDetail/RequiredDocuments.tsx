@@ -1,32 +1,39 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Text, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { colors, fontStyle } from '../../../style/style';
 import { StatusDisplayHeader } from '../../../component/StatusDisplayHeader';
 import { StatusDisplay } from '../../../component/StatusDisplay';
+import { ImageModal } from '../../../modal/ImageModal';
 
-export const RequiredDocuments = () => {
+export const RequiredDocuments = (route:any) => {
 
     return (
-        <ScrollView style={{ backgroundColor: colors.WHITE_COLOR, paddingHorizontal: 20, paddingBottom: 20 }}>
+        <View style={{ backgroundColor: colors.WHITE_COLOR, paddingHorizontal: 20, paddingBottom: 20 }}>
             <View style={{ marginVertical: 20}}>
                 <StatusDisplayHeader category={'차량서류'} />
-                <StatusDisplay name={'건설기계등록증'} type={1}/>
-                <StatusDisplay name={'정기검사 이수'} type={1}/>
-                <StatusDisplay name={'제원표'} type={1}/>
-                <StatusDisplay name={'비파괴검사'} type={1}/>
-                <StatusDisplay name={'보험증서'} type={1}/>
+                {route.DocData.차량서류.map((items:{title:string,file_url:string,file_check:string},i:number)=>{
+                    return(
+                        <StatusDisplay name={items.title} type={items.file_check} key={i} file_url={items.file_url}/>
+                    )
+                })}
             </View>
             <View style={{ marginVertical: 20}}>
                 <StatusDisplayHeader category={'안전교육'} />
-                <StatusDisplay name={'건설업기초보건안전교육'} type={1}/>
-                <StatusDisplay name={'건설기계조종사안전교육'} type={1}/>
+                {route.DocData.안전교육.map((items:{title:string,file_url:string,file_check:string},i:number)=>{
+                    return(
+                        <StatusDisplay name={items.title} type={items.file_check} key={i} file_url={items.file_url}/>
+                    )
+                })}
             </View>
             <View style={{ marginVertical: 20}}>
                 <StatusDisplayHeader category={'자격증'} />
-                <StatusDisplay name={'건설기계조종사면허증'} type={1}/>
-                <StatusDisplay name={'운전면허증(1종)'} type={1}/>
+                {route.DocData.자격증.map((items:{title:string,file_url:string,file_check:string},i:number)=>{
+                    return(
+                        <StatusDisplay name={items.title} type={items.file_check} key={i} file_url={items.file_url}/>
+                    )
+                })}
             </View>
-        </ScrollView>
+        </View>
     )
 }
