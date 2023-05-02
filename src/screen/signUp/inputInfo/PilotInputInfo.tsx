@@ -17,6 +17,8 @@ import { accessoriesConvert, bankList, getEquStaDetailCon, getEquipListConverter
 import { usePostMutation } from '../../../util/reactQuery';
 import messaging from '@react-native-firebase/messaging';
 import { getProfile } from '@react-native-seoul/kakao-login';
+import { useAppDispatch } from '../../../redux/store';
+import { toggleLoading } from '../../../redux/actions/LoadingAction';
 
 interface PilotInputInfoItemType {
     mb_sex_m : boolean,
@@ -38,6 +40,7 @@ interface PilotInputInfoItemType {
 }
 export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
 
+    const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php');
     const signUpPilotMutation = usePostMutation('signUpPilot','member/signup4.php');
@@ -100,10 +103,8 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
 
 
     const saveInfoHandler = async () => { //장비업체 회원가입
-        console.log(sns_id);
-        console.log(inputInfo);
 
-
+        dispatch(toggleLoading(true));
         const pushToken = await messaging().getToken();
         const profile: any = await getProfile();
 
@@ -143,6 +144,7 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
         else{
 
         }
+        dispatch(toggleLoading(false));
     }
 
     const inputCheckHandler = () => {

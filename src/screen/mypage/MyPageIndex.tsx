@@ -27,7 +27,14 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     const pilotmyPageMutation = usePostMutation('pilotmyPage','pilot/mypage_info.php')
 
 
-    const {data:myInfoData,isLoading:myInfoLoading,isError,refetch} = usePostQuery('getMyInfo',{mt_idx:mt_idx},'cons/mypage_info.php');
+    const {data:myInfoData,isLoading:myInfoLoading,isError,refetch} = usePostQuery('getMyInfo',{mt_idx:mt_idx},
+        mt_type === '1'?
+            'cons/mypage_info.php'
+        : mt_type === '2'?
+            'equip/mypage_info.php'
+        :
+            'pilot/mypage_info.php'
+    );
 
     const [myInfo, setMyInfo] = React.useState({
         company : '',
@@ -35,6 +42,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
         name : '',
         position : '',
         require_check : '',
+        profile_check : '',
     })
 
     const alertModalOn = (msg : string, type? : string) => { //alert 켜기
@@ -96,6 +104,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     React.useEffect(()=>{
         dispatch(toggleLoading(myInfoLoading));
         if(myInfoData){
+            console.log(myInfoData.data.data);
             setMyInfo(myInfoData.data.data);
         }
     },[myInfoData])
@@ -144,13 +153,15 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                 </View>
                 :
                 mt_type == '2'?
-                <View style={styles.deepTopBorder}>   
-                    <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
-                        // onPress={() => {navigation.navigate('MyProfile')}}
-                        onPress={()=>{alertModalOn('작성된 프로필이 없습니다. 프로필 작성을 먼저해주세요.','none_profile')}}
-                    >
-                        <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
-                    </TouchableOpacity>
+                <View style={styles.deepTopBorder}>  
+                    {myInfo.profile_check === 'Y' && 
+                        <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
+                            // onPress={() => {navigation.navigate('MyProfile')}}
+                            onPress={()=>{alertModalOn('작성된 프로필이 없습니다. 프로필 작성을 먼저해주세요.','none_profile')}}
+                        >
+                            <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
+                        </TouchableOpacity>
+                    }
                     <TouchableOpacity onPress={()=>{navigation.navigate('FavoriteList',{mt_type:'2'});}}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>장비 현황</Text>

@@ -1,5 +1,6 @@
 import React from 'react';
 import {View ,Text, TouchableOpacity,ImageBackground,Image, Platform} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 
 import { colors, fontStyle, styles } from '../../../style/style';
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
@@ -15,6 +16,10 @@ import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../type/routerType';
+import { KakaoOAuthToken, getProfile, login } from '@react-native-seoul/kakao-login';
+import { updateUserInfo } from '../../../redux/actions/UserInfoReducer';
+import AsyncStorage from '@react-native-community/async-storage';
+import { toggleLoading } from '../../../redux/actions/LoadingAction';
 
 
 type EquPilotRegDocType = {
@@ -79,12 +84,46 @@ export const EquPilotRegDoc = ({memberType,fileCheck,mt_idx,mt_id}:EquPilotRegDo
             
         }
         else if(alertModal.type === 'upload_success'){
-
-
-
-            navigation.replace('Main');
+            signInWithKakao();
         }
     }
+
+    const signInWithKakao = async (): Promise<void> => { //카카오 로그인
+        try {
+            dispatch(toggleLoading(true));
+            const token: KakaoOAuthToken = await login();
+            const pushToken = await messaging().getToken();
+            // console.log('pushToken ? ' ,pushToken);
+            // console.log('accessToken ? ' , token.accessToken);
+            
+            const profile: any = await getProfile();
+
+            // if(profile.id){
+                console.log(profile.id);
+
+                const signInParams = {
+                    sns_id : profile.id ? profile.id : '123',
+                    app_token : pushToken,
+                }
+                const {result,data, msg} = await signInMutation.mutateAsync(signInParams);
+
+                console.log('login info',result,data,msg);
+
+                if(result === 'true'){
+                    navigation.replace('Main');
+                    AsyncStorage.setItem('loginInfo',profile.id);
+                    dispatch(updateUserInfo(data.data));
+                }
+                else{
+                    navigation.navigate('Agreements',{token : profile.id});
+                }
+            dispatch(toggleLoading(false));
+            // }
+        } catch(err) {
+            console.log(err);
+            
+        }
+    };
 
     const uploadImage = async (image : SelImageType) => {
         console.log(image);
@@ -132,8 +171,9 @@ export const EquPilotRegDoc = ({memberType,fileCheck,mt_idx,mt_id}:EquPilotRegDo
             }
         }
         if(flag){
+            dispatch(toggleLoading(true))
             uploadList.forEach((item,index) => {
-                const keyName = `met_file${item.key}`
+                const keyName = memberType === 1 ? `met_file${item.key}` : `mpt_file${item.key}`
                 uploadImageParams = {
                     ...uploadImageParams,
                     [keyName] : {
@@ -147,12 +187,16 @@ export const EquPilotRegDoc = ({memberType,fileCheck,mt_idx,mt_id}:EquPilotRegDo
 
             const {result,data,msg} = await uploadEquDocMutation.mutateAsync(uploadImageParams);
 
+            console.log(result,data,msg);
+            console.log('req params ? ' , uploadImageParams);
+
             if(result === 'true'){
                 alertModalOn('회원가입이 완료되었습니다.','확인','upload_success');
             }
             else{
                 alertModalOn(msg,'확인','');
             }
+            dispatch(toggleLoading(false));
         }
     }
 

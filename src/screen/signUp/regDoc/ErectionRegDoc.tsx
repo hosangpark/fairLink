@@ -15,6 +15,7 @@ import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useAppDispatch } from '../../../redux/store';
 import { updateUserInfo } from '../../../redux/actions/UserInfoReducer';
+import { toggleLoading } from '../../../redux/actions/LoadingAction';
 
 type ErectionRegDocType = {
     memberType : number,
@@ -71,6 +72,7 @@ export const ErectionRegDoc = ({memberType,fileCheck,mt_idx,mt_id}:ErectionRegDo
             setBusRegImage(()=>initialFileType)
         }
         else if(alertModal.type === 'upload_success'){
+            dispatch(toggleLoading(true))
 
             const pushToken = await messaging().getToken();
 
@@ -93,7 +95,7 @@ export const ErectionRegDoc = ({memberType,fileCheck,mt_idx,mt_id}:ErectionRegDo
             else{
                 navigation.navigate('Agreements',{token : mt_id});
             }
-
+            dispatch(toggleLoading(false))
         }
     }
 

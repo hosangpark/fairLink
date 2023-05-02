@@ -9,7 +9,7 @@ import { ErectionRegDoc } from './regDoc/ErectionRegDoc';
 export const RegDocument = ({route}:RegDocumentType) => {
     const {memberType,fileCheck,mt_idx,mt_id} = route.params;
 
-
+    console.log(memberType,fileCheck,mt_idx,mt_id);
 
     return(
         <View style={{flex:1,backgroundColor:colors.WHITE_COLOR}}>

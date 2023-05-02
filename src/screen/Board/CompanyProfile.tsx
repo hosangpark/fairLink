@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { initialConsProfile } from "../../component/initialInform";
 import { toggleLoading } from "../../redux/actions/LoadingAction";
 import { CompanyInfoItemType, CompanyProfileType } from "../screenType";
+import { BackHandlerCom } from "../../component/utils/BackHandlerCom";
 
 
 const ProfileRoute = (route:any) => (
@@ -129,6 +130,7 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
     return (
         <SafeAreaView style={{flex:1}}>
             <BackHeader title="장비회사 프로필"/>
+            <BackHandlerCom />
             <ScrollView style={{flex:1}}>
                 {consprofileInfo &&
                     <ProfileInfoCard

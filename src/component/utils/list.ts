@@ -24,12 +24,12 @@ export const dayList = () => {
 
 export const pilotCareerList = [
     '없음',
-    '1년+',
-    '2년+',
-    '3년+',
-    '5년+',
-    '7년+',
-    '10년+',
+    '1년',
+    '2년',
+    '3년',
+    '5년',
+    '7년',
+    '10년',
 ]
 
 export const bankList = [
@@ -111,7 +111,7 @@ export const accessoriesList :AccessoriesList[] = [ //장비 부속부품
     }
 ]
 
-export const equUploadList = [
+export const equUploadList = [ //장비회사 업로드 리스트 (회원가입)
     {key : '1', name : '사업자등록증'},
     {key : '2', name : '건설기계등록증'},
     {key : '3', name : '자동차등록증'},
@@ -124,16 +124,36 @@ export const equUploadList = [
     {key : '10', name : '장비사진'},
 ]
 
-export const pilotUploadList = [
+export const equProfileUploadList = [ //장비회사 업로드 리스트 (프로필 수정)
+    {key : '1', name : '건설기계등록증'},
+    {key : '2', name : '자동차등록증'},
+    {key : '3', name : '보험증서'},
+    {key : '4', name : '안점검사 합격증명'},
+    {key : '5', name : '장비제원표'},
+    {key : '6', name : '비파괴검사필증'},
+    {key : '7', name : '특수형태근로자안전보건교육'},
+    {key : '8', name : '장비사진'},
+]
+
+export const pilotUploadList = [ //조종사 업로드 리스트 (회원가입 및 프로필 수정)
     {key : '1', name : '건설기계조종사면허증'},
     {key : '2', name : '운전면허증'},
     {key : '3', name : '건설기계조종사 안전교육이수증'},
     {key : '4', name : '건설기초안전보건교육'},
     {key : '5', name : '화물운송종사자 자격증'},
-    {key : '6', name : '이동식 크레인조종교육이수증 또는 기중기운전기능사'},
+    {key : '6', name : `이동식 크레인조종교육이수증\n또는 기중기운전기능사`},
     {key : '7', name : '통장사본'},
 ]
+export const pilotProfileUploadList = [ //조종사 업로드 리스트 (회원가입 및 프로필 수정)
+    {key : '1', name : '건설기계조종사면허증'},
+    {key : '2', name : '운전면허증'},
+    {key : '3', name : '건설기계조종사 안전교육이수증'},
+    {key : '4', name : '건설기초안전보건교육'},
+    {key : '5', name : '화물운송종사자 자격증'},
+    {key : '6', name : `이동식 크레인조종교육이수증\n또는 기중기운전기능사`},
+]
     // '고소작업차(굴절)' : 
+
 export const getEquipListConverter = (equipList:object[]) => { //장비 타입 return
     let tempArray : string[] = [];
 
@@ -184,7 +204,7 @@ export const getEquStaDetailCon = (equipList:object[],key:string,subKey:string) 
 }
 
 
-export const accessoriesConvert = (key: string) => {
+export const accessoriesConvert = (key:string) => {
 
     return accessoriesList[0][key]
 
