@@ -14,6 +14,8 @@ import { getProfile } from '@react-native-seoul/kakao-login';
 import CheckBox from '@react-native-community/checkbox';
 import messaging from '@react-native-firebase/messaging';
 import { usePostMutation } from '../../../util/reactQuery';
+import { useAppDispatch } from '../../../redux/store';
+import { toggleLoading } from '../../../redux/actions/LoadingAction';
 
 
 export const ErectionInputInfo = ({
@@ -21,7 +23,7 @@ export const ErectionInputInfo = ({
     memberType
 }:ErectionInputInfoType) => {
 
-
+    const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
@@ -61,6 +63,7 @@ export const ErectionInputInfo = ({
             alertModalOn('필수항목을 모두 입력하세요.');
         }
         else{
+            dispatch(toggleLoading(true));
             const pushToken = await messaging().getToken();
             const profile: any = await getProfile();
 
@@ -93,8 +96,9 @@ export const ErectionInputInfo = ({
                 });
             }
             else{
-
+                alertModalOn(msg,'');
             }
+            dispatch(toggleLoading(false));
         }
         // else{
             // navigation.navigate('RegDocument',{memberType:memberType})

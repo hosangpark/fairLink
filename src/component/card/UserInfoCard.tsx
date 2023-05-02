@@ -175,7 +175,7 @@ export const UserInfoCard = ({
                 </View>
                 <View style={[styles.cardInfoArea,{backgroundColor:isCheck == index? '#D3E9EB':colors.BACKGROUND_COLOR_GRAY1,borderWidth:1,borderColor:isCheck == index? '#9ACCCF':colors.BORDER_GRAY_COLOR}]}>
                     <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{item.equip}</Text>
-                    <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>경력 {pilotCareerList[Number(item.career)]}</Text>
+                    <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>경력 {pilotCareerList[Number(item.career)]}+</Text>
                 </View>
                 <Text style={[fontStyle.f_light,{fontSize:15,color:colors.FONT_COLOR_BLACK2,marginTop:10}]}>
                     {item.location}

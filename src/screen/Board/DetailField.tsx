@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {SafeAreaView,View,Text,FlatList, ScrollView,Image,TouchableOpacity,StyleSheet} from 'react-native';
+import {SafeAreaView,View,Text,FlatList, ScrollView,Image,TouchableOpacity,StyleSheet, Linking} from 'react-native';
 import { BoardIndexType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../style/style';
@@ -80,29 +80,32 @@ export const DetailField = ({route}:any) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
-
     
     const [detailFieldInfo, setDetailFieldInfo] = React.useState<DetailFieldBoxDataType>(()=>initialdetailFieldInfo); //입력정보
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 
-    const alertModalOn = (strongMsg : string, type? : string) => { //alert 켜기
+    const alertModalOn = (msg:string,type? : string, strongMsg? : string, ) => { //alert 켜기
         setAlertModal({
             alert:true,
-            strongMsg:strongMsg,
-            msg:`로${"\n"}전화연결 하시겠습니까?`,
-            type:'confirm' ,
+            strongMsg:strongMsg ? strongMsg : '',
+            msg:msg,
+            type:type ? type :'' ,
         })
     }
     const alertModalOff = () =>{ //modal 종료
         setAlertModal(initialAlert)
+    }
+    const alertAction = () => {
+        alertModalOff();
+        if(alertModal.type === 'call_confirm'){
+            const tempCallNum = DetailFieldData.data.data.cot_m_num.split('-').join('');
+            Linking.openURL(`tel:${tempCallNum}`);
+        }
     }
 
     const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
     /** mt_idx 임의입력 수정필요 */
     usePostQuery('getDetailFieldData',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
 
-    React.useEffect(()=>{
-        console.log('test')
-    },[])
 
     React.useEffect(()=>{
         dispatch(toggleLoading(DetailFieldDataLoading));
@@ -183,7 +186,9 @@ export const DetailField = ({route}:any) => {
                 }}>
                     <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>연락처</Text>
                     <TouchableOpacity style={{flexDirection:'row', alignItems:'center', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5}}
-                        onPress={()=>{alertModalOn(DetailFieldData.data.data.cot_m_num)}}
+                        onPress={()=>{
+                            alertModalOn(`로 \n전화연결 하시겠습니까?`,'call_confirm',DetailFieldData.data.data.cot_m_num)
+                        }}
                     >
                         <Image style={{width:20,height:20}} source={require('../../assets/img/ic_phone.png')}/>
                         <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.MAIN_COLOR,flexShrink:1,marginLeft:5}]}>
@@ -249,7 +254,7 @@ export const DetailField = ({route}:any) => {
             strongMsg={alertModal.strongMsg}
             hide={alertModalOff}
             type={alertModal.type}
-            action={()=>{}}
+            action={alertAction}
         />
     </View>
     )

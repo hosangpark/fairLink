@@ -28,8 +28,20 @@ export const Auth = () => {
 
 
                 if(result === 'true'){
-                    dispatch(updateUserInfo(data.data));
-                    navigation.replace('Main');
+                    // console.log('auth info ? ' , data.data);
+                    console.log(id);
+                    if(data.data.file_upload === 'N'){
+                        navigation.replace('RegDocument',{
+                            fileCheck:data.data.file_check,
+                            memberType:Number(data.data.mt_type)-1,
+                            mt_idx:data.data.mt_idx,
+                            mt_id:id,
+                        });
+                    }
+                    else{
+                        dispatch(updateUserInfo(data.data));
+                        navigation.replace('Main');
+                    }
                 }
                 else{
                     navigation.navigate('SignIn');

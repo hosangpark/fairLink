@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View ,Image } from 'react-native';
+import { Text, TouchableOpacity, View ,Image, Linking } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
 import { ProfileCardType } from '../componentsType';
 import { StarRating } from '../StarRating';
@@ -24,17 +24,24 @@ export const ProfileInfoCard = ({
 
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
 
-    const alertModalOn = ( msg : string, type? : string) => {
+    const alertModalOn = ( msg : string, type? : string , strongMsg? : string) => {
         setAlertModal({
             alert: true,
-            strongMsg: '',
-            msg: "'조종사 전화번호'로 전화연결하시겠습니까?",
-            type: 'confirm',
+            strongMsg: strongMsg ? strongMsg : '',
+            msg: msg,
+            type: type ? type : '',
         })
     }
 
     const alertModalOff = () => {
         setAlertModal(initialAlert)
+    }
+    const alertAction = () => {
+        alertModalOff();
+        if(alertModal.type === 'call_confirm'){
+            const tempPhone = phone.split('-').join('');
+            Linking.openURL(`tel:${tempPhone}`)
+        }
     }
 
     return (
@@ -74,7 +81,9 @@ export const ProfileInfoCard = ({
                     </View>
                 </View>
                 <View style={{ marginTop: 20, }}>
-                    <TouchableOpacity style={[styles.whiteButtonStyle]} onPress={() => alertModalOn('test')}>
+                    <TouchableOpacity style={[styles.whiteButtonStyle]} onPress={
+                        () => alertModalOn('로 \n전화연결 하시겠습니까?','call_confirm',`[${phone}]`)
+                        }>
                         <View style={{ flexDirection: 'row' , alignItems: 'center'}}>
                             <Image style={{ width: 21, height: 21 }} source={ require('../../assets/img/ic_phone.png') }/>
                             <Text style={[fontStyle.f_medium, {fontSize:18, color:colors.MAIN_COLOR, paddingLeft: 6}]}>{phone}</Text>
@@ -83,9 +92,10 @@ export const ProfileInfoCard = ({
                     <AlertModal 
                         show={alertModal.alert}
                         msg={alertModal.msg}
-                        // action={} // 전화번호 연결
+                        action={alertAction}
                         hide={alertModalOff}
                         type={alertModal.type}
+                        strongMsg={alertModal.strongMsg}
                     />
                 </View>
             </View>

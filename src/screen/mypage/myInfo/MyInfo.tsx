@@ -10,10 +10,11 @@ import { AlertModal, initialAlert } from "../../../modal/AlertModal";
 import { usePostMutation } from "../../../util/reactQuery";
 import { useAppSelector } from "../../../redux/store";
 import { MyInfoDataType, MypageDataType } from "../../../component/componentsType";
+import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
 
 export const MyInfo = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const {mt_type} = useAppSelector(state => state.userInfo);
+    const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
     const [isEditable, setIsEditable] = useState(false);
     const [bgColor, setBgColor] = useState(colors.BACKGROUND_COLOR_GRAY1)
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
@@ -76,7 +77,7 @@ export const MyInfo = () => {
     const InfoInform = async (): Promise<void> => {
         try {
             const idxParams = {
-                mt_idx : '17',
+                mt_idx : mt_idx,
             }
             const {result,data, msg} = 
             mt_type == '1'?  await consInfoMutation.mutateAsync(idxParams)
@@ -155,6 +156,7 @@ export const MyInfo = () => {
     return (
         <>
         <BackHeader title="나의 정보" />
+        <BackHandlerCom />
         <ScrollView ref={scrollViewRef}>
             <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                 <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>프로필 정보</Text>

@@ -17,6 +17,8 @@ import { accessoriesConvert, bankList, getEquStaDetailCon, getEquipListConverter
 import { usePostMutation } from '../../../util/reactQuery';
 import messaging from '@react-native-firebase/messaging';
 import { getProfile } from '@react-native-seoul/kakao-login';
+import { useAppDispatch } from '../../../redux/store';
+import { toggleLoading } from '../../../redux/actions/LoadingAction';
 
 interface EquInputInfoItemType {
     mb_sex_m : boolean,
@@ -41,12 +43,12 @@ interface EquInputInfoItemType {
 }
 export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
 
+    const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php');
     const signUpEquMutation = usePostMutation('signUpEqu','member/signup2.php');
 
-    const [equipMainList, setEquipMianList] = React.useState<object[]>([]);
-
+    const [equipMainList, setEquipMainList] = React.useState<object[]>([]);
     
         
     const [inputInfo, setInputInfo] = React.useState<EquInputInfoItemType>({
@@ -98,7 +100,7 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
     const getEquipList = async () => { //장비 리스트 불러오기
         const {data} = await getEquipListMutation.mutateAsync({});
 
-        setEquipMianList(data.data);
+        setEquipMainList(data.data);
     }
 
     const tempSelAccHandler = (text:string) => { //부속장치 선택했을때 임시 저장
@@ -148,9 +150,8 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
     }
 
     const saveInfoHandler = async () => { //장비업체 회원가입
-        console.log(sns_id);
-        console.log(inputInfo);
 
+        dispatch(toggleLoading(true));
         let met_sub_string = '';
 
         if(inputInfo.met_sub.length > 0){
@@ -186,9 +187,7 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
         }
 
         const {data,msg,result} = await signUpEquMutation.mutateAsync(signUpParams);
-        console.log(result,msg);
-        console.log(data);
-
+        dispatch(toggleLoading(false))
         if(result === 'true'){
             navigation.replace('RegDocument',{
                 fileCheck:data.data.file_check,
@@ -198,8 +197,9 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
             });
         }
         else{
-
+            alertModalOn(msg,'');
         }
+        
     }
 
     const inputCheckHandler = () => {
