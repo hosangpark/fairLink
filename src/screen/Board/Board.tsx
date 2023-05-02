@@ -57,7 +57,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
             dispatch(toggleLoading(true));
             const idxParams = {
                 // mt_idx : mt_idx,
-                mt_idx : "17",
+                mt_idx : mt_idx,
                 year:year,
                 month:Number(month) < 10 ? '0'+month : month,
                 status:'',
