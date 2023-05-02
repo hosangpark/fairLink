@@ -119,6 +119,41 @@ export type RegDocumentType = RouteType & {
     
 }
 
+export interface DocCheckItemType {
+    file_check : string,
+    file_url : string,
+    title : string,
+}
+export type CompanyInfoItemType = {
+    data : {
+        age : number,
+        equip:string,
+        gender : string,
+        good : string,
+        hp : string,
+        img_url : string,
+        mpt_idx : string,
+        name : string,
+        pilot_type : string,
+        score:number,
+        score_count:string,
+        type?:string,
+    },
+    doc_check : {
+        [key:string]:DocCheckItemType[]
+    },
+    profile : {
+        mpt_aspire : string,
+        mpt_career : string,
+        mpt_equip_memo : string,
+        mpt_licence : string,
+    },
+    sub : string[],
+}
+export type CompanyProfileType = RouteType &{ //장비회사 프로필
+
+}
+
 export interface SelImageType {
     uri : string,
     fileName : string,

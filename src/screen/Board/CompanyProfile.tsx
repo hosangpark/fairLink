@@ -16,10 +16,11 @@ import { AlertClearType } from "../../modal/modalType";
 import { initialAlert } from "../../modal/AlertModal";
 import { Profile } from "./companyProfileDetail/Profile";
 import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
-import { usePostQuery } from "../../util/reactQuery";
+import { usePostMutation, usePostQuery } from "../../util/reactQuery";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { initialConsProfile } from "../../component/initialInform";
 import { toggleLoading } from "../../redux/actions/LoadingAction";
+import { CompanyInfoItemType, CompanyProfileType } from "../screenType";
 
 
 const ProfileRoute = (route:any) => (
@@ -47,23 +48,27 @@ const SubRoute = (route:any) => (
 );
 
 
-export const CompanyProfile = ({route}:any) => {
+export const CompanyProfile = ({route}:CompanyProfileType) => {
+    const {cat_idx,cot_idx,mpt_idx} = route.params;
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const {mt_idx} = useAppSelector(state => state.userInfo);
     const [tab, setTab] = useState(0);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
-    const [consprofileInfo, setconsprofileInfo] = React.useState(); //입력정보
-    const {data : consprofileData, isLoading : consprofileDataLoading, isError : consprofileDataError} = 
+    const [consprofileInfo, setconsprofileInfo] = React.useState<CompanyInfoItemType>(); //입력정보
+    // const {data : consprofileData, isLoading : consprofileDataLoading, isError : consprofileDataError} = 
     /** mt_idx 임의입력 수정필요 */
-    usePostQuery('getconsprofileData',{mt_idx : mt_idx,cot_idx:route.params.cot_idx,cat_idx:route.params.cat_idx},'cons/cons_order_apply_info.php')
+    // usePostQuery('getconsprofileData',{mt_idx : mt_idx,cot_idx:route.params.cot_idx,cat_idx:route.params.cat_idx},'cons/cons_order_apply_info.php')
+
+    const getConsProfileMutation1 = usePostMutation('getConsProfile','cons/cons_like_list_info.php');
+    const getConsProfileMutation2 = usePostMutation('getConsProfile2', 'cons/cons_order_apply_info.php');
 
     const alertModalOn = ( msg : string, type? : string ) => {
         setAlertModal({
             alert: true,
             strongMsg: '',
-            msg: '장비업체를 선정 하시겠습니까?',
-            type:'confirm',
+            msg: msg,
+            type:type ? type : '',
         })
     }
 
@@ -71,22 +76,65 @@ export const CompanyProfile = ({route}:any) => {
         setAlertModal(initialAlert)
     }
 
-    React.useEffect(()=>{
-        dispatch(toggleLoading(consprofileDataLoading));
-        if(consprofileData){
-            console.log(consprofileData);
-            setconsprofileInfo(consprofileData.data);
+    const alertAction = () =>{
+        if(alertModal.type ==='error'){
+            navigation.goBack();
         }
-    },[consprofileData])
+        else if(alertModal.type === 'choice_confirm'){
+            navigation.navigate('ElectronicContract')
+        }
+    }
+
+    const getCompanyProfile = async () => {
+        if(mpt_idx){
+            const {data, result, msg} = await getConsProfileMutation1.mutateAsync({ //즐겨찾기 -> 장비회사
+                mt_idx : mt_idx,
+                mpt_idx : mpt_idx,
+            })
+
+            if(result === 'true'){
+                setconsprofileInfo(data);
+            }
+            else{
+                alertModalOn(msg,'error');
+            }
+        }
+        else if(cot_idx && cat_idx){
+            const {data, result, msg} = await getConsProfileMutation2.mutateAsync({ //장비회사 프로필
+                cot_idx : cot_idx,
+                cat_idx : cat_idx,
+                mt_idx : mt_idx,
+            })
+
+            if(result === 'true'){
+                setconsprofileInfo(data);
+            }
+            else{
+                alertModalOn(msg,'error');
+            }
+        }
+    }
+
+    React.useEffect(()=>{
+        getCompanyProfile();
+    },[])
+
+    // React.useEffect(()=>{
+    //     dispatch(toggleLoading(consprofileDataLoading));
+    //     if(consprofileData){
+    //         console.log(consprofileData);
+    //         setconsprofileInfo(consprofileData.data);
+    //     }
+    // },[consprofileData])
     return (
         <SafeAreaView style={{flex:1}}>
             <BackHeader title="장비회사 프로필"/>
             <ScrollView style={{flex:1}}>
-                {/* {consprofileInfo &&
+                {consprofileInfo &&
                     <ProfileInfoCard
                         userProfileUrl = {consprofileInfo.data.img_url}
                         userName = {consprofileInfo.data.name}
-                        age = {consprofileInfo.data.age} 
+                        age = {String(consprofileInfo.data.age)} 
                         gender = {consprofileInfo.data.gender} 
                         location = {consprofileInfo.data.equip}
                         equip={consprofileInfo.data.equip}
@@ -94,9 +142,9 @@ export const CompanyProfile = ({route}:any) => {
                         phone = {consprofileInfo.data.hp}
                         score_count = {consprofileInfo.data.score_count}
                         score = {consprofileInfo.data.score}
-                        good = {consprofileInfo.data.good}
+                        good = {Number(consprofileInfo.data.good)}
                     />
-                } */}
+                }
                 <View style={{ flexDirection:'row', backgroundColor:colors.WHITE_COLOR, justifyContent:'space-around', alignItems: 'center', }}>
                     <View style={tab === 0 ? TabStyle.tabViewOn : TabStyle.tabViewOff }>
                         <TouchableOpacity onPress={() => setTab(0)}>
@@ -114,14 +162,18 @@ export const CompanyProfile = ({route}:any) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                {/* {
-                    tab === 0
-                    ? ProfileRoute(consprofileInfo.profile)
-                    : tab === 1
-                    ? DocRoute(consprofileInfo.doc_check)
-                    : SubRoute(consprofileInfo.sub)
-                } */}
-                <TouchableOpacity onPress={() => alertModalOn('','test')}>
+                {consprofileInfo &&
+                    <>
+                        {
+                            tab === 0
+                            ? ProfileRoute(consprofileInfo.profile)
+                            : tab === 1
+                            ? DocRoute(consprofileInfo.doc_check)
+                            : SubRoute(consprofileInfo.sub)
+                        }
+                    </>
+                }
+                <TouchableOpacity onPress={() => alertModalOn('장비업체를 선정 하시겠습니까?','choice_confirm')}>
                     <View style={[styles.buttonStyle, {}]}>
                         <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>장비회사 선정</Text>
                     </View>
@@ -129,9 +181,10 @@ export const CompanyProfile = ({route}:any) => {
                 <AlertModal 
                     show={alertModal.alert}
                     msg={alertModal.msg}
-                    action={()=>navigation.navigate('ElectronicContract')} // 서류작성_임대계약페이지 만들어지면 연결
+                    // action={()=>} // 서류작성_임대계약페이지 만들어지면 연결
                     hide={alertModalOff}
                     type={alertModal.type}
+                    action={alertAction}
                 />
             </ScrollView>
         </SafeAreaView>

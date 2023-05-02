@@ -121,7 +121,7 @@ export interface BoardCardType {
 }
 
 export interface ProfileCardType {
-    jobType : string,
+    jobType? : string,
     userProfileUrl : string,
     userName:string,
     score:number,
