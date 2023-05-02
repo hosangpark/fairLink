@@ -89,7 +89,8 @@ export const UserInfoCard = ({
                     console.log(item);
                     navigation.navigate('CompanyProfile',{
                         cat_idx:item.cat_idx,
-                        cot_idx:item.cot_idx
+                        cot_idx:item.cot_idx,
+                        mpt_idx:item.mpt_idx,
                     });
                 }
             }
