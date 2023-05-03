@@ -18,15 +18,11 @@ import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
 
 
 const FirstRoute = () => (
-
         <Profile />
-
 );
 
 const SecondRoute = () => (
-
         <RequiredDocuments/>
-
 );
 
 
@@ -98,7 +94,7 @@ export const PilotProfile = () => {
                 <AlertModal 
                     show={alertModal.alert}
                     msg={alertModal.msg}
-                    action={()=>navigation.navigate('ElectronicContract')} // 서류작성_임대계약페이지 만들어지면 연결
+                    action={()=>navigation.navigate('ElectronicContract',{cot_idx:cot_idx,cat_idx:cat_idx})} // 서류작성_임대계약페이지 만들어지면 연결
                     hide={alertModalOff}
                     type={alertModal.type}
                 />

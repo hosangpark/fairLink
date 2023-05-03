@@ -82,7 +82,7 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
             navigation.goBack();
         }
         else if(alertModal.type === 'choice_confirm'){
-            navigation.navigate('ElectronicContract')
+            navigation.navigate('ElectronicContract',{cat_idx:cat_idx,cot_idx:cot_idx})
         }
     }
 
@@ -92,7 +92,6 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
                 mt_idx : mt_idx,
                 mpt_idx : mpt_idx,
             })
-
             if(result === 'true'){
                 setconsprofileInfo(data);
             }
@@ -117,6 +116,7 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
     }
 
     React.useEffect(()=>{
+        console.log(route.params)
         getCompanyProfile();
     },[])
 

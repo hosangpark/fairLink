@@ -16,7 +16,9 @@ import { AlertModal, initialAlert } from '../../modal/AlertModal';
 
 
 export const Volunteer = ({route}:any) => {
+    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+
     const {mt_idx } = useAppSelector(state => state.userInfo);
     const [volunteerList, setVolunteerList] = React.useState<VolunteerListType>(()=>initialVolunteerInfo); //입력정보
     const dispatch = useAppDispatch();
@@ -46,6 +48,8 @@ export const Volunteer = ({route}:any) => {
     }
 
     useEffect(()=>{
+        console.log(route.params.cot_idx)
+        console.log(route.params.cat_idx)
         dispatch(toggleLoading(VolunteerListDataLoading));
         if(VolunteerListData){
             if(VolunteerListData.result === 'true'){

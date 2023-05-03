@@ -50,7 +50,9 @@ export const CustomAccordion = ({
                 equip={item.equip}
                 career={item.career}
                 apply_count={item.apply_count}
+                contract_idx={item.contract_idx}
                 cardtitle={data.title}
+                contract_check={item.contract_check}
               />
             )
           })}
