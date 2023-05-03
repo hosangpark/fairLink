@@ -23,8 +23,8 @@ export const CustomSelectBox = ({
     essential, //필수여부
     isDisable, //selectbox 비활성화 true일때 비활성화
     labelFooter, //name 꼬릿말
+    selIndex,
 }:CustomSelectBoxType) =>{
-
     const citiesDropdownRef = React.useRef<any>();
     const [objList, setObjList] = React.useState<string[]>([]);
 
@@ -52,31 +52,34 @@ export const CustomSelectBox = ({
                         data={strOptionList}
                         onSelect={(selectedItem:string, index) => {
                             if(strSetOption){
-                                if(type){
-                                    strSetOption(selectedItem,type);
+                                if(type && (selIndex || selIndex === 0)) { //array로 관리되는 object 변경시 selIndex 사용
+                                    strSetOption(selectedItem,type,selIndex)
                                 }   
+                                else if(type){
+                                    strSetOption(selectedItem,type);
+                                }
                                 else{
                                     strSetOption(selectedItem);
                                 }
                             }
                         }}
-                        defaultButtonText={(selOption && selOption !== '' &&labelFooter) ? String(selOption)+labelFooter :(selOption && selOption !== '') ? String(selOption) : labelFooter ? defaultText+labelFooter : defaultText}
+                        defaultButtonText={(selOption && selOption !== '' &&labelFooter && selOption !== '없음') ? String(selOption)+labelFooter :(selOption && selOption !== '') ? String(selOption) : labelFooter ? defaultText+labelFooter : defaultText}
                         buttonTextAfterSelection={(selectedItem, index) => {
                             if(selOption && selOption !== ''){
-                                if(labelFooter){
+                                if(labelFooter && selOption !== '없음'){
                                     return String(selOption)+labelFooter;
                                 }
                                 return String(selOption)
                             }
                             else{
-                                if(labelFooter){
+                                if(labelFooter && defaultText !== '없음'){
                                     return defaultText+labelFooter;
                                 }
                                 return defaultText;
                             }
                         }}
                         rowTextForSelection={(item, index) => {
-                            if(labelFooter){
+                            if(labelFooter && item !== '없음'){
                                 return item+labelFooter;
                             }
                             else{

@@ -18,6 +18,7 @@ import { LoadingModal } from '../../../modal/LoadingModal';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
 import { usePostQuery } from '../../../util/reactQuery';
 import { FavoriteListItemType } from '../../screenType';
+import { BackHandlerCom } from '../../../component/utils/BackHandlerCom';
 
 export const FavoriteListIndex = ({route}:any) => {
 
@@ -130,6 +131,7 @@ export const FavoriteListIndex = ({route}:any) => {
     return(
         <View style={{flex:1}}>
             <BackHeader title={mt_type === '1' ? '즐겨찾기 장비 관리' : '장비현황' } />
+            <BackHandlerCom />
             <View style={{paddingHorizontal:20,flex:1}}>
                 <CustomButton 
                     style={{marginVertical:20,}}

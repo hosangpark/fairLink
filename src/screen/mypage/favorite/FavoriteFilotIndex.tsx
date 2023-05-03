@@ -8,6 +8,7 @@ import { BackHeader } from "../../../component/header/BackHeader";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FavoriteSpare } from "./FavoriteSpare";
 import { AffiliationFilot } from "./AffiliationFilot";
+import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
 
 const FirstRoute = () => (
     <ScrollView style={{ flex: 1 }}>
@@ -32,7 +33,7 @@ export const FavoriteFilotIndex = () => {
     const [index, setIndex] = React.useState(0);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
     const [routes] = React.useState([
-        { key: 'first', title: '즐겨찾기 (스페어)' },
+        { key: 'first', title: '즐겨찾기 (스페어) ' },
         { key: 'second', title: '소속 조종사' },
     ]);
 
@@ -53,6 +54,7 @@ export const FavoriteFilotIndex = () => {
 
         <View style={{flex:1}}>
             <BackHeader title="장비회사 프로필"/>
+            <BackHandlerCom />
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}

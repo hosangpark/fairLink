@@ -19,6 +19,35 @@ export type ManagerItemType = { //담당자 아이템 타입
     crt_m_num : string,
 }
 
+export interface mptEquipItemType {
+    mpt_equip_type: string;
+    mpt_equip_stand1: string;
+    mpt_equip_stand2: string;
+}
+
+export type EquipInputInfoType = {
+    mpt_before_profile : string,
+    mpt_profile: tempUploadImageType;
+    mpt_career: string;
+    mpt_equip: mptEquipItemType[];
+    mpt_equip_memo: string;
+    mpt_aspire: string;
+    mpt_file_list: tempUploadImageType[];
+
+    mpt_file1 : string,
+    mpt_file1_check : string,
+    mpt_file2 : string,
+    mpt_file2_check : string,
+    mpt_file3 : string,
+    mpt_file3_check : string,
+    mpt_file4 : string,
+    mpt_file4_check : string,
+    mpt_file5 : string,
+    mpt_file5_check : string,
+    mpt_file6 : string,
+    mpt_file6_check : string,
+}
+
 export type FavoriteListItemType = { //userInfo card에 들어가는 정보 
     like_idx?:string,
     img_url?:string,
@@ -49,7 +78,6 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
     mpt_name?:string,
     mpt_career?:string,
     mpt_location?:string,
-
 }
 
 export type ReqTopInfo = { //배차요청 상단정보 item

@@ -220,7 +220,7 @@ export const AcqReqStep2 = ({route}:AcqReqStep2Type) => {
                             <CustomInputTextBox
                                 containerStyle={{flex:1}}
                                 style={{flex:1}} 
-                                input={pilotCareerList[Number(item.career)]}
+                                input={`${pilotCareerList[Number(item.career)]}+`}
                                 title={'경력'}
                             />
                             <CustomInputTextBox

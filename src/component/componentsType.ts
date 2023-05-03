@@ -54,8 +54,8 @@ export type CustomSelectBoxType = {
     style? : object;
     strOptionList? : string[],
     objOptionList? : ObjectArrayType[], 
-    strSetOption? : (opt : string, type?: string) => void;
-    objSetOption? : (opt : string, type?: string) => void;
+    strSetOption? : (opt : string, type?: string , selIndex? : number) => void;
+    objSetOption? : (opt : string, type?: string, selIndex? : number) => void;
     selOption? : string | ObjectArrayType;
     type? : string,
     defaultText : string;
@@ -67,6 +67,7 @@ export type CustomSelectBoxType = {
     essential? : boolean,
     isDisable? : boolean,
     labelFooter? : string,
+    selIndex? : number , //array로 관리되는 object 변경시 사용
 }
 export type CustomWaveSelectBoxType = {
     style : object,
