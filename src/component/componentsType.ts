@@ -3,6 +3,7 @@ import { FavoriteListItemType } from "../screen/screenType";
 
 export interface NumberObejctType {
     [key: number]: string;
+    [key:string]:string;
 }
 
 export interface BackHeaderType {

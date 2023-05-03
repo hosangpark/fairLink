@@ -6,9 +6,17 @@ import { UserInfoCard } from "../../../component/card/UserInfoCard";
 import { AlertClearType } from "../../../modal/modalType";
 import { AlertModal, initialAlert } from "../../../modal/AlertModal";
 import { NodataView } from "../../../component/NodataView";
+import { usePostQuery } from "../../../util/reactQuery";
+import { useAppSelector } from "../../../redux/store";
 
 export const FavoriteSpare = () => {
+
+    const {mt_idx , mt_type} = useAppSelector(state => state.userInfo);
+    const {data : favData , isLoading:favLoading, isError : favError} = usePostQuery('getEquFavList',{mt_idx:mt_idx,type:'1'},'equip/equip_like_list.php');
+
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
+
+    const [favList, setFavList] = React.useState([]);
 
     const alertModalOn = ( msg : string, type? : string ) => {
         setAlertModal({
@@ -22,6 +30,8 @@ export const FavoriteSpare = () => {
     const alertModalOff = () => {
         setAlertModal(initialAlert)
     }
+
+    
     return (
         <View style={{ margin: 20}}>
             <TouchableOpacity style={{ marginBottom: 30}}>
@@ -37,7 +47,7 @@ export const FavoriteSpare = () => {
             <View style={{marginBottom:30}}>
                 {/* <UserInfoCard 
                     index = '0'
-                    jobType = '0'
+                    // jobType = '0'
                     userProfileUrl = ''
                     empName = '힘찬중기'
                     userName = '정우성'
