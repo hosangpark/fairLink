@@ -118,6 +118,8 @@ export interface BoardCardType {
     career:string
     apply_count:string
     cardtitle:string
+    contract_idx?:string
+    contract_check?:string
 }
 
 export interface ProfileCardType {

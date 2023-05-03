@@ -10,23 +10,27 @@ import { RouterNavigatorParams } from '../../../type/routerType';
 import { VolunteerListType } from '../../component/componentsType';
 import { initialVolunteerInfo } from '../../component/initialInform';
 import { usePostQuery } from '../../util/reactQuery';
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
 
 
 export const Volunteer = ({route}:any) => {
+    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const [volunteerList, setVolunteerList] = React.useState<VolunteerListType>(()=>initialVolunteerInfo); //입력정보
+    const [volunteerList, setVolunteerList] = React.useState<VolunteerListType>(initialVolunteerInfo); //입력정보
     const dispatch = useAppDispatch();
     const {data : VolunteerListData, isLoading : VolunteerListDataLoading, isError : VolunteerListDataError} = 
     /** mt_idx 임의입력 수정필요 */
     usePostQuery('getVolunteerList',{mt_idx : "17",cot_idx:route.params.cot_idx},'cons/cons_order_apply_list.php')
 
     useEffect(()=>{
+        console.log(route.params.cot_idx)
+        console.log(route.params.cat_idx)
         dispatch(toggleLoading(VolunteerListDataLoading));
         if(VolunteerListData){
-            setVolunteerList(VolunteerListData.data);
-            console.log(volunteerList.list)
+            if(VolunteerListData.data.data !== null){
+                setVolunteerList(VolunteerListData.data);
+            }
         }
     },[VolunteerListData])
 
@@ -72,7 +76,6 @@ export const Volunteer = ({route}:any) => {
                     )
                 })}
             </View>
-            
         </ScrollView>
         </View>
     )

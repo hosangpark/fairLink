@@ -200,3 +200,36 @@ export const initialConsProfile = {
             ]
         }
 }
+
+export const initialElectorincInfo ={
+        data:{
+            cct_e_type:"",
+            cct_e_reg_no:"",
+            cct_e_style:"",
+            cct_e_ocrdate2: "2022-01-01~2024-11-30", //보험가입현황
+            cct_e_ocrdate1: "",  //정기검사여부
+            cct_c_name: "",
+            cct_c_location: "",
+            cct_c_manage: "",
+            cct_c_company: "",
+            cct_c_file_check: "Y",
+            cct_start_date: "",
+            cct_end_date: "",
+            cct_pay_price: "",
+            cct_time: "1",
+            cct_pay_check1: "",
+            cct_pay_check2: ""
+        },
+        data1:{
+            company: "",
+            busi_num: "",
+            name: "",
+            birth_num: ""
+        },
+        data2:{
+            company: "",
+            busi_num: "",
+            name: "",
+            birth_num: ""
+        }
+}

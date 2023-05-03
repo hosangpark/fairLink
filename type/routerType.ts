@@ -77,7 +77,12 @@ export type RouterNavigatorParams = {
         mpt_idx?:string,
     } //장비회사프로필
     PilotProfile:undefined //조종사프로필
-    ElectronicContract:undefined //전자계약
+    ElectronicContract:{
+        cot_idx:string
+        cat_idx:string
+        contract_idx:string | undefined
+        route_type:string
+    } //전자계약
     WorkReport:undefined //작업일보작성
     MatchingEquipment:undefined
     MatchingFilot:undefined

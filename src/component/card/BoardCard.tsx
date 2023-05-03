@@ -13,6 +13,8 @@ export const BoardCard = ({
     jobType,
     cat_idx,
     cot_idx,
+    contract_idx,
+    contract_check,
     start_date,
     end_date,
     location,
@@ -123,12 +125,25 @@ export const BoardCard = ({
                     />
                 }
                 {mt_type !=="3" && cardtitle == "계약진행중" &&
+                <>
+                    {contract_check == "Y"?
                     <CustomButton
-                        style={{}}
-                        labelStyle={{fontSize:16}}
-                        label={'계약서 작성(확인)'}
-                        action={()=>{navigation.navigate('ElectronicContract')}}
+                    style={{}}
+                    labelStyle={{fontSize:16}}
+                    label={'계약서 확인'}
+                    action={()=>{navigation.navigate('ElectronicContract',{cot_idx:cot_idx,cat_idx:cat_idx,
+                    contract_idx:contract_idx,route_type:'Info2'})}}
                     />
+                    :
+                    <CustomButton
+                    style={{}}
+                    labelStyle={{fontSize:16}}
+                    label={'계약서 작성'}
+                    action={()=>{navigation.navigate('ElectronicContract',{cot_idx:cot_idx,cat_idx:cat_idx,
+                    contract_idx:contract_idx,route_type:'Info2'})}}
+                    />
+                    }
+                </>
                 }
                 {mt_type !=='3' && cardtitle == "배차 모집중" &&
                     <CustomButton
