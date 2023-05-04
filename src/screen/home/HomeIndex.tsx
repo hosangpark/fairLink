@@ -17,7 +17,7 @@ import { useAppSelector } from '../../redux/store';
 import { usePostQuery } from '../../util/reactQuery';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
 import cusToast from '../../util/toast/CusToast';
-import PushNotification from 'react-native-push-notification'; //push...noti
+// import PushNotification from 'react-native-push-notification'; //push...noti
 import { useNavigationState } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 
@@ -32,7 +32,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 	const {data : reqCheckData , refetch:reqCheckRefetch} = usePostQuery('getConsReqCheck',{mt_idx:mt_idx},'cons/cons_require_check.php');
-
+	const {data : myProfileData, refetch:myProfileRefetch} = usePostQuery('getMyProfileData' , {mt_idx:mt_idx}, 'equip/mypage_info.php');
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
    const [exitApp , setExitApp] = React.useState(false);
@@ -83,143 +83,143 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
   }
 
   /** */
-  const sendLocalNotificationWithSound = (onRemote:any) => {
-    console.log('sendLocalNotificationWithSound', onRemote);
+//   const sendLocalNotificationWithSound = (onRemote:any) => {
+//     console.log('sendLocalNotificationWithSound', onRemote);
 
-    // if (Platform.OS == 'ios') {
-    //   PushNotificationIOS.addNotificationRequest({
-    //     id: onRemote.data.notificationId
-    //       ? onRemote.data.notificationId
-    //       : new Date().toString(),
-    //     title: (onRemote.title),
-    //     subtitle: '',
-    //     body: (onRemote.body ? onRemote.body : onRemote.message),
-    //     sound: 'default',
-    //     // sound: 'buzy1.wav',
-    //   });
-    // } else {
-      PushNotification.localNotification({
-        channelId: onRemote.channelId ?? 'default',
-        id: onRemote.data.notificationId,
-        title: (onRemote.title),
-        message: (onRemote.message),
-        soundName: 'default',
-        playSound: true,
-        // smallIcon: 'ic_stat_ic_notification',
-        color: '#FFFFFF',
-        largeIcon: '',
-        largeIconUrl: '',
-        priority: 'high',
+//     // if (Platform.OS == 'ios') {
+//     //   PushNotificationIOS.addNotificationRequest({
+//     //     id: onRemote.data.notificationId
+//     //       ? onRemote.data.notificationId
+//     //       : new Date().toString(),
+//     //     title: (onRemote.title),
+//     //     subtitle: '',
+//     //     body: (onRemote.body ? onRemote.body : onRemote.message),
+//     //     sound: 'default',
+//     //     // sound: 'buzy1.wav',
+//     //   });
+//     // } else {
+//       PushNotification.localNotification({
+//         channelId: onRemote.channelId ?? 'default',
+//         id: onRemote.data.notificationId,
+//         title: (onRemote.title),
+//         message: (onRemote.message),
+//         soundName: 'default',
+//         playSound: true,
+//         // smallIcon: 'ic_stat_ic_notification',
+//         color: '#FFFFFF',
+//         largeIcon: '',
+//         largeIconUrl: '',
+//         priority: 'high',
 
-        // bigPictureUrl?: string | undefined;
-        // bigLargeIcon?: string | undefined;
-        // bigLargeIconUrl?: string | undefined;
+//         // bigPictureUrl?: string | undefined;
+//         // bigLargeIcon?: string | undefined;
+//         // bigLargeIconUrl?: string | undefined;
 
-        vibrate: true,
-        groupSummary: true,
-        userInfo: onRemote.data,
-        // badge: 0,
-      });
-    // }
-  };
+//         vibrate: true,
+//         groupSummary: true,
+//         userInfo: onRemote.data,
+//         // badge: 0,
+//       });
+//     // }
+//   };
 
 
-const fcmSetting = () => {
-    // if (Platform.OS === 'ios') {
-    //   PushNotificationIOS.setApplicationIconBadgeNumber(0);
-    // }
+// const fcmSetting = () => {
+//     // if (Platform.OS === 'ios') {
+//     //   PushNotificationIOS.setApplicationIconBadgeNumber(0);
+//     // }
 
-    PushNotification.configure({
-        /** firebaseToken */
-      onRegister: function (token:any) {
-        console.log('TOKEN:', token);
-      },
+//     PushNotification.configure({
+//         /** firebaseToken */
+//       onRegister: function (token:any) {
+//         console.log('TOKEN:', token);
+//       },
 
-      // (required) Called when a remote is received or opened, or local notification is opened
-      onNotification: async function (notification:any) {
-        console.log('NOTIFICATION 작동여부:', notification);
-        if (typeof notification.id == 'undefined')
-          notification.id = new Date().toString();
-        if (notification.foreground) {
+//       // (required) Called when a remote is received or opened, or local notification is opened
+//       onNotification: async function (notification:any) {
+//         console.log('NOTIFICATION 작동여부:', notification);
+//         if (typeof notification.id == 'undefined')
+//           notification.id = new Date().toString();
+//         if (notification.foreground) {
 
-          // callScreen(notification);
-          if (notification.userInteraction) {
-            //클릭했을때 -> 팝업말고 바로 이동
+//           // callScreen(notification);
+//           if (notification.userInteraction) {
+//             //클릭했을때 -> 팝업말고 바로 이동
 
-            console.log('포그라운드에서 푸시 클릭했을때.');
-            if (notification.id == '') notification.id = new Date().toString();
-            callScreen(notification, true);
-          } else if (notification.data.title) {
+//             console.log('포그라운드에서 푸시 클릭했을때.');
+//             if (notification.id == '') notification.id = new Date().toString();
+//             callScreen(notification, true);
+//           } else if (notification.data.title) {
 
-            // //채팅방
-            // if (navigationRouteName == 'MessageRoom' &&
-            //   (navigationRoute.params.items.chr_id == notification.data.room_idx ||
-            //     navigationRoute.params.items.room_id == notification.data.room_idx)) {
+//             // //채팅방
+//             // if (navigationRouteName == 'MessageRoom' &&
+//             //   (navigationRoute.params.items.chr_id == notification.data.room_idx ||
+//             //     navigationRoute.params.items.room_id == notification.data.room_idx)) {
 
-            // } else {
-            //   //내부 노티를 써서 일부러 푸시를 띄움
-            //   sendLocalNotificationWithSound(notification);
-            // }
-            sendLocalNotificationWithSound(notification);
-            // process the notification
+//             // } else {
+//             //   //내부 노티를 써서 일부러 푸시를 띄움
+//             //   sendLocalNotificationWithSound(notification);
+//             // }
+//             sendLocalNotificationWithSound(notification);
+//             // process the notification
 
-            console.log('포그라운푸시.', navigationRoute, navigationRouteName);
-          }
-        } else {
-          //백그라운드일때는 터치에만 반응 -> ios앱 푸시 눌러서 앱 켯을때도 여기로 들어옴.
-          console.log(
-            '백그라운드 푸시',
-            notification,
-            navigationRoute,
-            // navigation.dangerouslyGetState().index,
-            // navigation.dangerouslyGetState().index.routes,
-          );
+//             console.log('포그라운푸시.', navigationRoute, navigationRouteName);
+//           }
+//         } else {
+//           //백그라운드일때는 터치에만 반응 -> ios앱 푸시 눌러서 앱 켯을때도 여기로 들어옴.
+//           console.log(
+//             '백그라운드 푸시',
+//             notification,
+//             navigationRoute,
+//             // navigation.dangerouslyGetState().index,
+//             // navigation.dangerouslyGetState().index.routes,
+//           );
 
-          if (notification.userInteraction) {            
-            callScreen(notification, true);
-          }else{
-            // if (Platform.OS === 'ios') {
-            //   PushNotificationIOS.getApplicationIconBadgeNumber(function (number) {
-            //     PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
-            //   });
-            // }
-          }
+//           if (notification.userInteraction) {            
+//             callScreen(notification, true);
+//           }else{
+//             // if (Platform.OS === 'ios') {
+//             //   PushNotificationIOS.getApplicationIconBadgeNumber(function (number) {
+//             //     PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
+//             //   });
+//             // }
+//           }
 
           
-        }
-        // notification.finish(PushNotificationIOS.FetchResult.NoData);
-      },
+//         }
+//         // notification.finish(PushNotificationIOS.FetchResult.NoData);
+//       },
 
-      // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-      onAction: function (notification:any) {
-        console.log('ACTION:', notification.action);
-        console.log('NOTIFICATION:', notification);
+//       // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
+//       onAction: function (notification:any) {
+//         console.log('ACTION:', notification.action);
+//         console.log('NOTIFICATION:', notification);
 
-        // process the action
-      },
+//         // process the action
+//       },
 
-      // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-      onRegistrationError: function (err:any) {
-        console.error(err.message, err);
-      },
+//       // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+//       onRegistrationError: function (err:any) {
+//         console.error(err.message, err);
+//       },
 
-      // IOS ONLY (optional): default: all - Permissions to register.
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
+//       // IOS ONLY (optional): default: all - Permissions to register.
+//       permissions: {
+//         alert: true,
+//         badge: true,
+//         sound: true,
+//       },
 
-      // Should the initial notification be popped automatically
-      // default: true
-      popInitialNotification: true,
-      requestPermissions: true,
-    });
-  }
-  React.useEffect(() => {
-    fcmSetting();
+//       // Should the initial notification be popped automatically
+//       // default: true
+//       popInitialNotification: true,
+//       requestPermissions: true,
+//     });
+//   }
+//   React.useEffect(() => {
+//     fcmSetting();
 
-  }, [])
+//   }, [])
 
 	const alertModalOn = (msg:string, type?:string) => {
 		setAlertModal({
@@ -236,6 +236,9 @@ const fcmSetting = () => {
 		if(alertModal.type === 'none_req_con'){
 			navigation.navigate('OpenConstruction',{isData:false});
 		}
+		if(alertModal.type === 'none_profile'){
+			navigation.navigate('SettingProfile');
+		}
 	}
 	const reqConModalHide = () =>{
 		setReqConModal(false);
@@ -246,14 +249,32 @@ const fcmSetting = () => {
 	}
 
 	const reqConHandler = () => {
-		if(reqCheckData){
-			const reqCheck = reqCheckData.data.data.require_check;
+		console.log(mt_type);
+		if(mt_type === '1'){
+			if(reqCheckData){
+				const reqCheck = reqCheckData.data.data.require_check;
 
-			if(reqCheck === 'Y'){
-				setReqConModal(true)
+				if(reqCheck === 'Y'){
+					setReqConModal(true)
+				}
+				else{
+					alertModalOn(`개설된 현장이 없습니다.\n현장개설을 먼저 해주세요.`,'none_req_con');
+				}
 			}
-			else{
-				alertModalOn(`개설된 현장이 없습니다.\n현장개설을 먼저 해주세요.`,'none_req_con');
+		}
+		else if(mt_type === '2'){
+			if(myProfileData){
+
+				const profileCheck = myProfileData.data.data.profile_check;
+
+
+				if(profileCheck === 'Y'){
+					if(setTabIndex)setTabIndex(2);
+					navigation.navigate('Request');
+				}
+				else{
+					alertModalOn('작성된 프로필 정보가 없습니다.\n프로필 작성을 먼저해주세요.','none_profile');
+				}
 			}
 		}
 	}
@@ -358,7 +379,7 @@ const fcmSetting = () => {
 								</View>
 							</TouchableOpacity>
 						:	
-							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{setReqConModal(true)} }>
+							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{reqConHandler()}}>
 								<View>
 									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>현장</Text>
 									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>지원하기</Text>

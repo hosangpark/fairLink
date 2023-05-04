@@ -11,12 +11,15 @@ import { AcquaintanceRequest } from './acqReq/AcquaintanceRequest';
 import { AcqReqStep2 } from './acqReq/AcqReqStep2';
 import { PublicReqStep1 } from './publicReq/PublicReqStep1';
 import { PublicReqStep2 } from './publicReq/PublicReqStep2';
+import { useAppSelector } from '../../redux/store';
+import { ErecRequstMain } from './ErecRequestMain';
+import { EquipRequestMain } from './EquipRequestMain';
 
 
 export const RequestRouter = ({setTabIndex}:RequestIndexType) => {
 
     const navigation = useNavigation<StackNavigationProp<RequestRouterNavigatorParams & RouterNavigatorParams>>();
-    
+    const {mt_type} = useAppSelector(state => state.userInfo);
     const Stack = createStackNavigator<RequestRouterNavigatorParams & RouterNavigatorParams>();
     const isFocused = useIsFocused();
 
@@ -42,12 +45,14 @@ export const RequestRouter = ({setTabIndex}:RequestIndexType) => {
             gestureEnabled: false,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}
-          initialRouteName={'AcquaintanceRequestTest'}
+          initialRouteName={'RequestMain'}
         >
                 <Stack.Screen 
                     name = "RequestMain"
                     children={
-                        () => <Request/>
+                        () => (
+                            mt_type === '1' ? <ErecRequstMain/> : <EquipRequestMain />
+                        )
                     }   
                     options={{gestureEnabled: Platform.OS == "android" ? false : true,headerShown:false}} 
                 />

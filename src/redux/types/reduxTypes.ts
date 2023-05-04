@@ -14,4 +14,5 @@ export type userInfoType = {
     mt_idx : string,
     mt_name : string,
     mt_type : string //1 : 건설 2 : 장비업체 4 : 조종사
+    location : string,
 }

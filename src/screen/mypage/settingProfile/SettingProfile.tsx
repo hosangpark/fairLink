@@ -37,7 +37,7 @@ type UploadParamsType = {
 }
 
 // 마이페이지 -> 프로필 설정하기 -> 해당 페이지로 이동해야함
-export const SettingProfile = ({route}:any) => {
+export const SettingProfile = () => {
     const dispatch = useAppDispatch();
     const {mt_type, mt_idx} = useAppSelector(state => state.userInfo);
     const reqFileList = pilotProfileUploadList;
@@ -134,6 +134,9 @@ export const SettingProfile = ({route}:any) => {
         else if(alertModal.type === 'doc_change_confirm'){
             setSelImgModal(true);
         }
+        else if(alertModal.type === 'delete_confirm'){
+            deleteImage(String(selImage));
+        }
     }
 
     const checkInputValue = () => {
@@ -163,6 +166,14 @@ export const SettingProfile = ({route}:any) => {
 
                 tempEquipInfo.mpt_equip[index][type] = text;
 
+                if(type === 'mpt_equip_type'){
+                    tempEquipInfo.mpt_equip[index].mpt_equip_stand1 = '';
+                    tempEquipInfo.mpt_equip[index].mpt_equip_stand2 = '';
+                }
+                else if(type === 'mpt_equip_stand1'){
+                    tempEquipInfo.mpt_equip[index].mpt_equip_stand2 = '';
+                }
+
                 setInputInfo({
                     ...tempEquipInfo
                 });
@@ -183,8 +194,6 @@ export const SettingProfile = ({route}:any) => {
                     console.log(data.data);
                     setFileCheck(data.data);
                 }
-
-
             }
         }
     }
@@ -234,6 +243,12 @@ export const SettingProfile = ({route}:any) => {
         tempArray.push(tempObj);
         setUploadList([...tempArray]);
         setSelImage('');
+    }
+    const deleteImage = async (key:string) => {
+        const filterArray = uploadList.filter((el) => el.key !== key);
+
+        setUploadList([...filterArray]);
+        // console.log(filterArray);
     }
 
     const getEquipList = async () => { //장비 리스트 불러오기 및 프로필 정보 불러오기
@@ -433,7 +448,7 @@ export const SettingProfile = ({route}:any) => {
                 </View>
             </View>
             { // (조종사 일 때)
-                route.params.mt_type ==='4'
+                mt_type ==='4'
                 &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>활동지역</Text>
@@ -573,7 +588,7 @@ export const SettingProfile = ({route}:any) => {
                 </View>
             </View>
             { // (조종사 일 때)
-                route.params.mt_type ==='4'
+                mt_type ==='4'
                 &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>소속회사</Text>
@@ -633,7 +648,7 @@ export const SettingProfile = ({route}:any) => {
                 </View>
             }
             { // (조종사 일 때)
-                route.params.mt_type ==='4'
+                mt_type ==='4'
                 &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>계좌정보</Text>

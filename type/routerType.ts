@@ -56,9 +56,7 @@ export type RouterNavigatorParams = {
     };
     EquimentsAdd:undefined;
     EquimentsDetail:undefined;
-    SettingProfile:{
-        mt_type:string
-    };
+    SettingProfile:undefined;
     FavoriteFilotIndex:undefined;
     MyProfile:undefined;
 
@@ -66,6 +64,11 @@ export type RouterNavigatorParams = {
     DetailField:{
         cot_idx:string
     } //현장세부내용
+
+    ScaneDetailField:{
+        cot_idx:string
+    } //장비 - 현장세부내용
+
     DetailWork:{
         cot_idx:string
         cat_idx:string

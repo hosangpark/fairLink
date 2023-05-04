@@ -9,7 +9,6 @@ import { Home } from './testPage/Home';
 import { Video } from './testPage/Video';
 import { Board } from './Board/Board';
 import { Release } from './testPage/Release';
-import { MyPage } from './testPage/MyPage';
 import { HomeIndex } from './home/HomeIndex';
 import { colors, fontStyle } from '../style/style';
 import { MyPageIndex } from './mypage/MyPageIndex';
@@ -168,25 +167,30 @@ export const Main = () => {
                             ),
                     }}
                 />
-                <Tab.Screen 
-                    name="document" 
-                    component={MyPage}
-                    listeners={{
-                        tabPress : (e)=>{
-                            setTabIndex(5);
-                        }
-                    }}
-                    options={{
-                        headerShown:false,
-                        tabBarShowLabel:false,
-                        tabBarIcon: ({color, size}) => (
-                            <View style={{alignItems:'center',justifyContent:'center'}}>
-                                <Image style={{width:25,height:25,resizeMode:'contain'}} source={tabIndex === 5 ? require('../assets/img/b_menu5_on.png') : require('../assets/img/b_menu5_off.png')} />
-                                <Text style={[fontStyle.f_medium,{fontSize:14, color:tabIndex === 5 ? colors.MAIN_COLOR : colors.FONT_COLOR_GRAY,marginTop:5}]}>서류자동화</Text>
-                            </View>
-                            ),
-                    }}
-                />
+                {/* {mt_type !=='1' &&
+                    <Tab.Screen 
+                        name="document" 
+                        component={()=>{return(
+                        <>
+                        </>
+                        )}}
+                        listeners={{
+                            tabPress : (e)=>{
+                                setTabIndex(5);
+                            }
+                        }}
+                        options={{
+                            headerShown:false,
+                            tabBarShowLabel:false,
+                            tabBarIcon: ({color, size}) => (
+                                <View style={{alignItems:'center',justifyContent:'center'}}>
+                                    <Image style={{width:25,height:25,resizeMode:'contain'}} source={tabIndex === 5 ? require('../assets/img/b_menu5_on.png') : require('../assets/img/b_menu5_off.png')} />
+                                    <Text style={[fontStyle.f_medium,{fontSize:14, color:tabIndex === 5 ? colors.MAIN_COLOR : colors.FONT_COLOR_GRAY,marginTop:5}]}>작업일보</Text>
+                                </View>
+                                ),
+                        }}
+                    />
+                } */}
             </Tab.Navigator>
         </SafeAreaView>
     )

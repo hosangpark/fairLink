@@ -60,7 +60,7 @@ export const MatchingFilot = () => {
             alertModalOn('지원되었습니다.')
         }
         if(alertModal.type === ''){ 
-            navigation.navigate('Board',{type:'default'})
+            navigation.navigate('Board')
             }
     }
     

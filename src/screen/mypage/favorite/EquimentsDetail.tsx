@@ -6,6 +6,7 @@ import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../.
 import { FavoriteAddPhone } from './favoriteAddDetail/FavoriteAddPhone';
 import { CustomButton } from '../../../component/CustomButton';
 import { CustomSelectBox } from '../../../component/CustomSelectBox';
+import { BackHandlerCom } from '../../../component/utils/BackHandlerCom';
 
 
 export const EquimentsDetail = () => {
@@ -39,6 +40,7 @@ export const EquimentsDetail = () => {
     return(
         <View style={{flex:1}}>
             <BackHeader title={'장비 세부정보'} />
+            <BackHandlerCom />
             <ScrollView style={{ flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}>
                 <View style={EquimentsDetailstyle.WhiteBox}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:20}]}>

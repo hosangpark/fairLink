@@ -40,6 +40,7 @@ import { AcqReqStep1 } from './src/screen/Request/acqReq/AcqReqStep1';
 import { HomeIndex } from './src/screen/home/HomeIndex';
 import { RequestRouter } from './src/screen/Request/RequestRouter';
 import { Board } from './src/screen/Board/Board';
+import { ScaneDetailField } from './src/screen/Request/ScaneDetailField';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -148,6 +149,13 @@ export const Router = () => {
                     component={DetailField}
                     options={{headerShown:false}}
                 />
+
+                <Stack.Screen 
+                    name={'ScaneDetailField'}
+                    component={ScaneDetailField}
+                    options={{headerShown:false}}
+                />
+
                 <Stack.Screen // 현장지원하기 - 현장세부내용 - 장비 및 조종사 매칭
                     name={'MatchingEquipment'}
                     component={MatchingEquipment}

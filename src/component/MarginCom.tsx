@@ -9,13 +9,14 @@ export const MarginCom = ({
     my,
     isBorder,
     isBorderDeep,
+    isWhiteBorder,
 }:MarginComType) => {
 
     return(
         <View style={{
             marginTop: mt ? mt : 0,
             marginBottom:mb ? mb : 0,
-            borderTopColor:isBorderDeep ? colors.BORDER_GRAY_COLOR1 : colors.BORDER_GRAY_COLOR,
+            borderTopColor:isWhiteBorder ? colors.WHITE_COLOR : isBorderDeep ? colors.BORDER_GRAY_COLOR1 : colors.BORDER_GRAY_COLOR,
             borderTopWidth : isBorder ? 1 : 0
         }} />
     )
