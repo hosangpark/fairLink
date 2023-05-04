@@ -96,6 +96,7 @@ export interface UserInfoCardType {
     index : string,
     action:(e:string)=>void,
     refetch? : () => void;
+    equFavType ? : string, // 1: 스페어 2: 소속조종사
 }
 export interface HeavyEquipmentCardType {
     EquiName : string,

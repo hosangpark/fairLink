@@ -13,7 +13,11 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../../type/routerType';
 import cusToast from '../../../../util/toast/CusToast';
 
-export const FavoriteAddPhone = () => { //즐겨찾기 장비추가 (연락처);
+type FavoriteAddPhone = {
+    equFavType? : string;
+}
+
+export const FavoriteAddPhone = ({equFavType}:FavoriteAddPhone) => { //즐겨찾기 장비추가 (연락처);
 
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -21,8 +25,12 @@ export const FavoriteAddPhone = () => { //즐겨찾기 장비추가 (연락처);
     const [inputPhone , setInputPhone] = React.useState('');
     const [searchLikeList, setSearchLikeList] = React.useState<FavoriteListItemType[]>([]);
 
-    const searchLikeMutation = usePostMutation('getHpSearchLikeList','cons/cons_like_search.php'); //연락처 검색 리스트 불러오기
-    const addFavoriteUserMutation = usePostMutation('addFavoriteUser','cons/cons_like_add.php'); //즐겨찾기 추가
+    const searchLikeMutation = usePostMutation('getHpSearchLikeList',
+        mt_type === '1' ? 'cons/cons_like_search.php' : 'equip/equip_like_search.php'
+    ); //연락처 검색 리스트 불러오기
+    const addFavoriteUserMutation = usePostMutation('addFavoriteUser',
+        mt_type === '1' ? 'cons/cons_like_add.php' : 'equip/equip_like_add.php'
+    ); //즐겨찾기 추가
     
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
@@ -48,10 +56,24 @@ export const FavoriteAddPhone = () => { //즐겨찾기 장비추가 (연락처);
     }
 
     async function addFavoriteUser(mpt_idx : string){//즐겨찾기 추가
-        const params = {
+
+        console.log(mpt_idx);
+
+        let params = {
             mt_idx : mt_idx,
             mpt_idx : mpt_idx,
+            type : '',
         }
+
+        if(mt_type === '2' && equFavType){
+            params = {
+                ...params,
+                type : equFavType,
+            }
+        }
+
+        console.log(params);
+
         dispatch(toggleLoading(true));
         const {result, msg} = await addFavoriteUserMutation.mutateAsync(params);
         dispatch(toggleLoading(false));
@@ -76,7 +98,7 @@ export const FavoriteAddPhone = () => { //즐겨찾기 장비추가 (연락처);
             return;
         }
         const params = {
-            mt_idx : mt_idx,
+            mt_idx : '23',
             type : 'hp',
             search_hp : inputPhone,
         }

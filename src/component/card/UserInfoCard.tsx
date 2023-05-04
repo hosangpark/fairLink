@@ -22,6 +22,7 @@ export const UserInfoCard = ({
     isCheck,
     action, //
     refetch, //list 새로 불러오기
+    equFavType, // 1: 스페어 2: 소속
 }:UserInfoCardType) => {
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -30,7 +31,8 @@ export const UserInfoCard = ({
     const [recEmpModal, setRecEmpModal] = React.useState(false);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
 
-    const delFavUserMutation = usePostMutation('delFavUser','cons/cons_like_del.php'); //즐겨찾기 장비 리스트 삭제
+    const delFavUserMutation = usePostMutation('delFavUser',
+    mt_type === '1'?'cons/cons_like_del.php' : 'equip/equip_like_del.php'); //즐겨찾기 장비 리스트 삭제
 
     const alertModalOn = ( msg : string, type? : string,strongMsg? : string ) => {
         setAlertModal({
@@ -58,9 +60,21 @@ export const UserInfoCard = ({
 
     async function deleteFavUser(){ //즐겨찾기 유저 삭제
 
-        const params = {
+        console.log(item);
+
+        let params = {
             mt_idx : mt_idx,
             like_idx : item.like_idx,
+            type : '',
+            mpt_idx : '',
+        }
+        if(mt_type === '2'){
+            params = {
+                ...params,
+                type : equFavType ? equFavType : '',
+                like_idx : equFavType === '1' ? item.like_idx : '',
+                mpt_idx : equFavType === '2' ? item.mpt_idx ? item.mpt_idx : '' : '',
+            }
         }
         dispatch(toggleLoading(true));
         const {result,msg} = await delFavUserMutation.mutateAsync(params);
@@ -92,6 +106,9 @@ export const UserInfoCard = ({
                         cot_idx:item.cot_idx,
                         mpt_idx:item.mpt_idx,
                     });
+                }
+                else if(mt_type === '2'){
+                    navigation.navigate('PilotProfile');
                 }
             }
         }}>
@@ -149,7 +166,7 @@ export const UserInfoCard = ({
                     </View>
                     <TouchableOpacity style={{zIndex:30,position:'absolute',right:0}} onPress={() => {
                         if(isDelete){
-                            alertModalOn(`님을\n즐겨찾기에서 삭제하시겠습니까?`, 'delete_user_confirm',`${item.company} [${item.name}]`)
+                            alertModalOn(`님을\n즐겨찾기에서 삭제하시겠습니까?`, 'delete_user_confirm',`${item.company ? item.company+' ' : ''}[${item.name}]`)
                         }
                         else if(isFavorite && item.mpt_idx){
                             action(item.mpt_idx);

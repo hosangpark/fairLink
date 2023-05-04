@@ -18,11 +18,15 @@ import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
 
 
 const FirstRoute = () => (
-        <Profile />
+        // <Profile />
+        <>
+        </>
 );
 
 const SecondRoute = () => (
-        <RequiredDocuments/>
+        // <RequiredDocuments/>
+        <>
+        </>
 );
 
 

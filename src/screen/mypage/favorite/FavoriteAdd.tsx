@@ -5,23 +5,31 @@ import { TabView, SceneMap ,TabBar} from 'react-native-tab-view';
 import { colors, fontStyle } from '../../../style/style';
 import { FavoriteAddPhone } from './favoriteAddDetail/FavoriteAddPhone';
 import { WorkHistory } from './favoriteAddDetail/WorkHistory';
+import { BackHandlerCom } from '../../../component/utils/BackHandlerCom';
+import { useAppSelector } from '../../../redux/store';
+import { FavoriteAddType } from '../../screenType';
 
-const FirstRoute = () => (
-    <FavoriteAddPhone />
-  );
-  
-const SecondRoute = () => (
-    <WorkHistory/>
-);
 
-const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-});
+export const FavoriteAdd = ({route}:FavoriteAddType) => {
 
-export const FavoriteAdd = () => {
+    const {equFavType} = route.params; //장비업체일때 type사용
+
+    const {mt_type, mt_idx} = useAppSelector(state => state.userInfo);
 
     const layout = useWindowDimensions();
+
+    const FirstRoute = () => (
+        <FavoriteAddPhone equFavType={equFavType}/>
+      );
+      
+    const SecondRoute = () => (
+        <WorkHistory equFavType={equFavType}/>
+    );
+    
+    const renderScene = SceneMap({
+        first: FirstRoute,
+        second: SecondRoute,
+    });
 
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
@@ -31,7 +39,8 @@ export const FavoriteAdd = () => {
 
     return(
         <View style={{flex:1}}>
-            <BackHeader title={'즐겨찾기 장비 추가'} />
+            <BackHeader title={mt_type === '1' ? '즐겨찾기 장비 추가' : '조종사 추가하기'} />
+            <BackHandlerCom />
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}

@@ -187,6 +187,10 @@ export type ElectronicContractType = RouteType &{ //장비회사 프로필
     mt_idx:string
 }
 
+export type FavoriteAddType = RouteType & {
+    
+}
+
 export interface SelImageType {
     uri : string,
     fileName : string,
