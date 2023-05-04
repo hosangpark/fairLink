@@ -16,7 +16,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 
-import {Platform} from 'react-native';
+import {Platform,Alert} from 'react-native';
 import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 
 import messaging from '@react-native-firebase/messaging';
@@ -49,15 +49,7 @@ const App = () => {
   messaging().setBackgroundMessageHandler(async remoteMessage => { //background push
     console.log('is background', remoteMessage);
   });
-
-  React.useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-      //forground 푸시
-    });
-    return unsubscribe;
-  });
-
+  
 
   React.useEffect(()=>{
     if (Platform.OS === "android") {

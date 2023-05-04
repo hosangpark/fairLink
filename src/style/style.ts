@@ -206,7 +206,7 @@ export const styles = StyleSheet.create({
         flexDirection:'row',borderBottomWidth:1,borderBottomColor:colors.BORDER_GRAY_COLOR,marginBottom:12,paddingBottom:12
     },
     card2Profile:{
-        backgroundColor:colors.BLUE_COLOR2,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR2,paddingVertical:10,paddingHorizontal:15,borderRadius:8,width:110
+        backgroundColor:colors.BLUE_COLOR2,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR2,paddingVertical:10,paddingHorizontal:10,borderRadius:8,width:110
     },
     cardJobArea:{
         position:'absolute',

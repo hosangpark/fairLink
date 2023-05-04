@@ -53,6 +53,9 @@ export const CustomAccordion = ({
                 contract_idx={item.contract_idx}
                 cardtitle={data.title}
                 contract_check={item.contract_check}
+                met_company={item.met_company}
+                mct_company={item.mct_company}
+                match_type={item.match_type}
               />
             )
           })}

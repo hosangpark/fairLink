@@ -19,9 +19,7 @@ import { AlertModal, initialAlert } from '../../modal/AlertModal';
 
 
 export const Board = ({setTabIndex}:BoardIndexType) => {
-    // const mt_type = "2"
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-
 
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const [strOption,setStrOption] = useState<string>('전체');
@@ -31,8 +29,8 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
     const dispatch = useAppDispatch();
 
     const consBoardListMutation = usePostMutation('consBoardList','cons/cons_order_list.php')
-    const equipBoardListMutation = usePostMutation('equipBoardList','equip/equip_order_list.php')
-    const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_order_list.php')
+    const equipBoardListMutation = usePostMutation('equipBoardList','equip/equip_request_list.php')
+    const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_request_list.php')
 
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
@@ -56,13 +54,11 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
         try {
             dispatch(toggleLoading(true));
             const idxParams = {
-                // mt_idx : mt_idx,
-                mt_idx : "17",
+                mt_idx : "16",
                 year:year,
                 month:Number(month) < 10 ? '0'+month : month,
                 status:'',
             }
-            console.log(idxParams);
             const {result,data, msg} = 
             mt_type == '1'?  await consBoardListMutation.mutateAsync(idxParams)
             :
@@ -73,6 +69,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
             if(result === 'true'){
                 setListData(data.data)
                 console.log("result",result)
+
                 
             }
             else{

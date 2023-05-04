@@ -23,15 +23,18 @@ export const BoardCard = ({
     equip,
     career,
     apply_count,
-    cardtitle
+    cardtitle,
+    met_company,
+    mct_company,
+    match_type,
 }:BoardCardType) => {
-    const {mt_type} = useAppSelector(state=>state.userInfo)
+    const {mt_idx,mt_type} = useAppSelector(state=>state.userInfo)
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
     const FlowEvent = () =>{
         if(mt_type=='1' && cardtitle=="배차 모집중"){
             navigation.navigate('Volunteer',{cot_idx})
-        } else if(mt_type=='3') {
+        } else if(mt_type=='4') {
             navigation.navigate('PilotProfile')
         } else {
             navigation.navigate('PilotProfile')
@@ -47,7 +50,7 @@ export const BoardCard = ({
         try {
             const idxParams = {
             /** mt_idx 임의입력 수정필요 */
-                mt_idx : '17',
+                mt_idx : mt_idx,
                 cot_idx:cot_idx,
             }
             const {result,data, msg} = 
@@ -92,31 +95,43 @@ export const BoardCard = ({
                 </View>
                 <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:16}}>
                     <View style={{flex:1,paddingRight:30}}>
-                        <Text style={[fontStyle.f_bold,{fontSize:18,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='3'? 5:8,}]} numberOfLines={1}>
+                        <Text style={[fontStyle.f_bold,{fontSize:18,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='4'? 5:8,}]} numberOfLines={1}>
                             {crt_name}</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='3'? 5:8}]} numberOfLines={1}>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='4'? 5:8}]} numberOfLines={1}>
                             {content}</Text>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='3'? 5:8}]} numberOfLines={1}>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='4'? 5:8}]} numberOfLines={1}>
                             {equip}</Text>
-                        {mt_type=='3' &&
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='3'? 5:8}]} numberOfLines={1}>
+                        {mt_type=='4' &&
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='4'? 5:8}]} numberOfLines={1}>
                             경력 {career}년 +</Text>
                         }
                     </View>
                     <TouchableOpacity style={[styles.card2Profile]} onPress={FlowEvent}>
                         <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
                             {mt_type=='1'? '조종사':mt_type=='2'? '지원자':'장비회사'}</Text>
-                        <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={1}>
-                            {mt_type!=='3'? [apply_count]+'명':'기린중기'}
+                        <Text style={[fontStyle.f_semibold,{fontSize:mt_type!=='4'? 20:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={2}>
+                            {mt_type!=='4'? [apply_count]+'명':[met_company]}
                         </Text>
-                        {mt_type !=='3' ?
+                        {mt_type !=='4' ?
                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {career}년+</Text>
+                        :
+                        <>
+                        {mct_company?
+                        <>
+                        <Text style={[fontStyle.f_medium,{fontSize:14,color:colors.MAIN_COLOR}]}>건설회사</Text>
+                        <Text style={[fontStyle.f_semibold,{fontSize:mt_type!=='4'? 20:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={2}>
+                            {mct_company}
+                        </Text>
+                        </>
                         :
                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.ORANGE_COLOR}]}>선정전</Text>
                         }
+                        </>
+                        }
+                        {}
                     </TouchableOpacity>
                 </View>
-                {mt_type !=="3" && cardtitle == "작업완료" &&
+                {mt_type !=="4" && cardtitle == "작업완료" &&
                     <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
@@ -124,7 +139,7 @@ export const BoardCard = ({
                         action={()=>{navigation.navigate('WorkReport')}}
                     />
                 }
-                {mt_type !=="3" && cardtitle == "계약진행중" &&
+                {mt_type !=="4" && cardtitle == "계약진행중" &&
                 <>
                     {contract_check == "Y"?
                     <CustomButton
@@ -145,7 +160,7 @@ export const BoardCard = ({
                     }
                 </>
                 }
-                {mt_type !=='3' && cardtitle == "배차 모집중" &&
+                {mt_type !=='4' && cardtitle == "배차 모집중" &&
                     <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
@@ -153,11 +168,19 @@ export const BoardCard = ({
                         action={BoardInfrom}
                     />
                 }
-                {mt_type=='3' &&
+                {mt_type=='4' && cardtitle == "현장지원 완료" &&
                     <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
                         label={'지원 취소'}
+                        action={()=>{navigation.navigate('WorkReport')}}
+                    />
+                }
+                {mt_type=='4' && cardtitle == "작업중/작업예정" &&
+                    <CustomButton
+                        style={{}}
+                        labelStyle={{fontSize:16}}
+                        label={'작업일보 작성'}
                         action={()=>{navigation.navigate('WorkReport')}}
                     />
                 }
