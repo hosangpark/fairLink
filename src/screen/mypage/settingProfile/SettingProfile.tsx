@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, View, Text, TextInput, Image, TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, TextInput, Image, TouchableOpacity, ImageBackground, Platform } from "react-native";
 import { BackHeader } from "../../../component/header/BackHeader";
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from "../../../style/style";
 import { CustomSelectBox } from "../../../component/CustomSelectBox";
@@ -9,17 +9,36 @@ import CheckBox from "@react-native-community/checkbox";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
-import { DocCheckItemType, EquipInputInfoType, MyPageIndexType, SelImageType, mptEquipItemType } from "../../screenType";
+import { DocCheckItemType, EquipInputInfoType, MyPageIndexType, SelImageType, mptEquipItemType, tempUploadImageType } from "../../screenType";
 import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
-import { useAppSelector } from "../../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { SelectImageUpload } from "../../../modal/SelectImageUpload";
 import { usePostMutation } from "../../../util/reactQuery";
 import { equProfileUploadList, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, pilotCareerList, pilotProfileUploadList, pilotUploadList } from "../../../component/utils/list";
 import { MarginCom } from "../../../component/MarginCom";
 import { NumberObejctType } from "../../../component/componentsType";
+import { toggleLoading } from "../../../redux/actions/LoadingAction";
+
+type tempUploadImageKeyType = {
+    name : string
+    type : string,
+    tmp_name : string,
+    size : number,
+    key : string,
+}
+
+type UploadParamsType = {
+    mt_idx : string,
+    mpt_profile? : tempUploadImageType,
+    mpt_career? : string,
+    mpt_equip? : string[],
+    mpt_equip_memo? : string,
+    mpt_aspire? : string,
+}
 
 // 마이페이지 -> 프로필 설정하기 -> 해당 페이지로 이동해야함
 export const SettingProfile = ({route}:any) => {
+    const dispatch = useAppDispatch();
     const {mt_type, mt_idx} = useAppSelector(state => state.userInfo);
     const reqFileList = pilotProfileUploadList;
 
@@ -37,7 +56,11 @@ export const SettingProfile = ({route}:any) => {
 
     const getEquipFileListMuataion = usePostMutation('getEquipFileList','equip_file_list.php'); //장비 종류 변경시 파일리스트
     const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php'); //장비 종류 불러오기
-    const getEquipProfileInfo = usePostMutation('getEquipProfileInfo' , 'equip/profile_info.php');
+    const getEquipProfileInfo = usePostMutation('getEquipProfileInfo' , 'equip/profile_info.php'); //프로필 정보 불러오기
+    const updatePorfileInfo = usePostMutation('updatePorfileInfo' , 'equip/profile_info_update.php',true); //프로필 정보 수정하기
+
+    const [selImgModal, setSelImgModal] = React.useState(false);
+    const [selImage, setSelImage] = React.useState('');
 
     const [inputInfo, setInputInfo] = React.useState<EquipInputInfoType>({
         mpt_before_profile : '',
@@ -57,7 +80,6 @@ export const SettingProfile = ({route}:any) => {
         ],
         mpt_equip_memo : '',
         mpt_aspire : '',
-        mpt_file_list : [],
         mpt_file1 : '',
         mpt_file1_check : '0',
         mpt_file2 : '',
@@ -70,8 +92,9 @@ export const SettingProfile = ({route}:any) => {
         mpt_file5_check : '0',
         mpt_file6 : '',
         mpt_file6_check : '0',
-
     });
+
+    const [uploadList, setUploadList] = React.useState<tempUploadImageKeyType[]>([]);
 
     const [fileCheck, setFileCheck] = React.useState<NumberObejctType>()
 
@@ -103,6 +126,14 @@ export const SettingProfile = ({route}:any) => {
 
     const alertModalOff = () => {
         setAlertModal(initialAlert);
+    }
+    const alertAction = () => {
+        if(alertModal.type === 'edit_success'){
+            navigation.goBack();
+        }
+        else if(alertModal.type === 'doc_change_confirm'){
+            setSelImgModal(true);
+        }
     }
 
     const checkInputValue = () => {
@@ -170,7 +201,7 @@ export const SettingProfile = ({route}:any) => {
             ...tempEquipInfo,
         })
     }
-    const uploadProfileImage = async (image : SelImageType) => {
+    const uploadProfileImage = async (image : SelImageType) => { //프로필 이미지 추가
         // setBusRegImage(image);
         setInputInfo({
             ...inputInfo,
@@ -188,8 +219,25 @@ export const SettingProfile = ({route}:any) => {
         //     size : image.fileSize,
         // })
     }
+    const uploadImage = async (image : SelImageType) => {
+        console.log(image);
+        const tempArray = [...uploadList];
+        const tempObj = {
+            // ...image,
+            name : image.fileName,
+            type : 'image/jpg',
+            tmp_name : image.uri,
+            size : image.fileSize,
+            key : selImage,
+        }
+
+        tempArray.push(tempObj);
+        setUploadList([...tempArray]);
+        setSelImage('');
+    }
 
     const getEquipList = async () => { //장비 리스트 불러오기 및 프로필 정보 불러오기
+        dispatch(toggleLoading(true))
         const {data : equipData, result : equipResult, msg : equipMsg} = await getEquipListMutation.mutateAsync({});
         const {data:profileData, result : profileResult, msg : profileMsg} = await getEquipProfileInfo.mutateAsync({mt_idx:mt_idx});
 
@@ -207,6 +255,12 @@ export const SettingProfile = ({route}:any) => {
                 mpt_before_profile : profileData.data.mpt_profile,
                 mpt_career : profileData.data.mpt_career === '' ? '없음' : pilotCareerList[Number(profileData.data.mpt_career)],
                 mpt_equip : [...profileData.data.mpt_equip],
+                mpt_profile : {
+                    size:0,
+                    name : '',
+                    type : '',
+                    uri : '',
+                }
             });
             console.log(profileData);
 
@@ -228,15 +282,116 @@ export const SettingProfile = ({route}:any) => {
                 setFileCheck(fileData.data);
             }
         }
+        dispatch(toggleLoading(false));
+    }
+
+    const settingProfileHandler = async () => { //프로필 설정하기
+        let uploadParams : UploadParamsType ={
+            mt_idx : mt_idx,
+        }
+        
+
+        if(inputInfo.mpt_equip.length === 0){
+            alertModalOn('주특기 장비는 1개 이상 선택해주셔야합니다.');
+        }
+        else if(inputInfo.mpt_equip_memo === ''){
+            alertModalOn('세부경력정보를 기입해주세요.');
+        }
+        else if(inputInfo.mpt_aspire === ''){
+            alertModalOn('나의 포부를 입력해주세요.');
+        }
+        else{
+            let flag = true;
+            for (let key in fileCheck){
+                // console.log(fileCheck[key]);
+                const beforeFileUri = `mpt_file${key}`;
+
+                if(fileCheck[key] === 'Y'){
+                    const filterData = uploadList.filter(el => el.key === key);
+                    if(filterData.length === 0){
+                        const noneData = reqFileList.find(el=> el.key === key);
+                        console.log(noneData);
+                        if(noneData && inputInfo[beforeFileUri] === ''){
+                            alertModalOn(`${noneData.name}을 업로드해주세요.`)
+                            flag = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            inputInfo.mpt_equip.forEach((item,index) => {
+                if(item.mpt_equip_type === ''){
+                    alertModalOn('장비 타입을 선택해주세요.');
+                    flag = false;
+                    return;
+                }
+                else if(item.mpt_equip_stand1 === ''){
+                    alertModalOn('장비 규격을 선택해주세요.');
+                    flag = false;
+                    return;
+                }
+                else if(item.mpt_equip_stand2 === ''){
+                    alertModalOn('장비 세부규격을 선택해주세요.');
+                    flag = false;
+                    return;
+                }
+            })
+
+            if(flag){
+                console.log(inputInfo);
+                console.log(uploadList);
+
+                uploadList.forEach((item,index) => {
+                    const keyName = `mpt_file${item.key}`;
+
+                    uploadParams = {
+                        ...uploadParams,
+                        [keyName] : {
+                            name : item.name,
+                            size : item.size,
+                            uri : Platform.OS === 'android' ? item.tmp_name : item.tmp_name.replace('file://', ''),
+                            type : item.type,
+                        }
+                    }
+                })
+                let equipList : string[] = [];
+
+                inputInfo.mpt_equip.forEach((item,index) => {
+                    const pushEl = `${item.mpt_equip_type}|${item.mpt_equip_stand1}|${item.mpt_equip_stand2}`
+                    equipList.push(pushEl);
+                })
+
+                uploadParams = {
+                    ...uploadParams,
+                    mpt_equip : equipList,
+                    mpt_equip_memo : inputInfo.mpt_equip_memo,
+                    mpt_aspire : inputInfo.mpt_aspire,
+                    mpt_career : String(pilotCareerList.findIndex(el => el === inputInfo.mpt_career)),
+                    mpt_profile : inputInfo.mpt_profile,
+                }
+                console.log(fileCheck);
+                console.log(uploadParams);
+                dispatch(toggleLoading(true))
+                const {data , msg, result} = await updatePorfileInfo.mutateAsync(uploadParams);
+                dispatch(toggleLoading(false))
+
+                if(result === 'true'){
+                    alertModalOn('프로필 설정이 완료되었습니다.','edit_success')
+                }
+                else{
+                    alertModalOn(msg);
+                }
+            }
+        }
+
     }
 
     React.useEffect(()=>{
         getEquipList();
     },[]);
-
     React.useEffect(()=>{
-        console.log(inputInfo);
-    },[inputInfo])
+        console.log(fileCheck);
+    },[fileCheck])
 
 
     return (
@@ -259,11 +414,19 @@ export const SettingProfile = ({route}:any) => {
                             </View>
                         </View>
                         <TouchableOpacity onPress={()=>setProfileImageModal(true)} style={{ flexDirection: 'row', alignItems: 'flex-end'}}>
-                            {inputInfo.mpt_profile.uri === '' ?
+                            {inputInfo.mpt_profile.uri !== '' ? 
+                                <Image style={{ width: 110, height: 110,borderRadius:100}} source={ {uri : inputInfo.mpt_profile.uri} }/>
+                            :   
+                                inputInfo.mpt_before_profile !== '' ?
+                                    <Image style={{ width: 110, height: 110,borderRadius:100}} source={ {uri : inputInfo.mpt_before_profile} }/>
+                                :
+                                <Image style={{ width: 110, height: 110,borderRadius:100}} source={ require('../../../assets/img/profile_default.png') }/>
+                            }
+                            {/* {inputInfo.mpt_before_profile === '' ?
                                 <Image style={{ width: 110, height: 110,borderRadius:100}} source={ require('../../../assets/img/profile_default.png') }/>
                             :
-                                <Image style={{ width: 110, height: 110,borderRadius:100}} source={ {uri : inputInfo.mpt_profile.uri} }/>
-                            }
+                                <Image style={{ width: 110, height: 110,borderRadius:100}} source={ {uri : inputInfo.mpt_before_profile} }/>
+                            } */}
                             <Image style={{ width: 30, height: 30, marginLeft: -30 }} source={ require('../../../assets/img/ic_add_img.png') }/>
                         </TouchableOpacity>
                     </View>
@@ -389,7 +552,6 @@ export const SettingProfile = ({route}:any) => {
                                 numberOfLines={4}
                                 onChangeText={(e)=>inputHandler(e,'mpt_equip_memo')}
                                 value={inputInfo.mpt_equip_memo}
-                                // value={}
                             />
                         </View>
                     </View>
@@ -501,6 +663,7 @@ export const SettingProfile = ({route}:any) => {
                 
                 {  //서류업로드 체크
                     fileCheck && reqFileList.map((data, index) => { //typeerror 고치기
+                        const fileName:string = 'mpt_file'+String(index+1);
                         const keyName:string = 'mpt_file'+String(index+1)+'_check';
                         return(
                             <View style={{ paddingVertical: 10 }} key={index}>
@@ -513,15 +676,42 @@ export const SettingProfile = ({route}:any) => {
                                                     <Text style={[ styles.OrengeStar]}>{ data.name !== '통장사본' ? '*' : null }</Text>
                                                 </Text>
                                             </View>
-                                            <TouchableOpacity onPress={() => alertModalOn('저장된 파일이 있습니다. 변경하시겠습니까?', 'confirm')}>
-                                                <View style={[styles.docImage]}>
-                                                    <View style={{ flexDirection: 'row', width: '100%', height: '100%'}}>
-                                                        <Image style={{ width: '100%', height: '100%',}} source={ require('../../../assets/img/ic_main4.png')}/>
-                                                        <TouchableOpacity onPress={() => alertModalOn(`${data.name}을 삭제하시겠습니까?`, 'confirm')}>
-                                                            <Image style={{ width: 22, height: 22, marginTop: 10, marginLeft: -30, opacity: 2 }} source={ require('../../../assets/img/ic_modify.png')}/>
+
+                                            <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }} onPress={()=>{
+                                                if(inputInfo[keyName] !== '0'){
+                                                    alertModalOn('저장된 서류가 있습니다. \n변경하시겠습니까?','doc_change_confirm');
+                                                }
+                                                else{
+                                                    setSelImgModal(true); 
+                                                }
+                                                
+                                                setSelImage(String(index+1))
+                                            }}>
+                                                <ImageBackground
+                                                style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:undefined? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
+                                                source={uploadList[uploadList.findIndex(el=>el.key === String(index+1))] ? { uri : uploadList[uploadList.findIndex(el=>el.key === String(index+1))].tmp_name}  : inputInfo[fileName] !== '' ? {uri : inputInfo[fileName]} : undefined}
+                                                resizeMode="cover"
+                                                imageStyle={{ borderRadius: 10 }}>
+                                                    {(!uploadList[uploadList.findIndex(el=>el.key === String(index+1))] && inputInfo[fileName] === ''  )&&
+                                                        <Image 
+                                                        style={{ width: 15, height: 15}}
+                                                        source={require('../../../assets/img/ic_add.png')}
+                                                        />
+                                                    }
+                                                    {uploadList.filter((el) => el.key === String(index+1)).length > 0 &&
+                                                        <TouchableOpacity
+                                                            style={{ position:'absolute', right: 10, top: 10 }}
+                                                            onPress={() =>{
+                                                                alertModalOn(`${data.name} 파일을 삭제하시겠습니까?`,'delete_confirm');
+                                                                setSelImage(String(index+1))
+                                                            }}>
+                                                            <Image
+                                                            style={{ width: 25, height: 25 }}
+                                                            source={require('../../../assets/img/ic_modify.png')}
+                                                            />
                                                         </TouchableOpacity>
-                                                    </View>
-                                                </View>
+                                                    }
+                                                </ImageBackground>
                                             </TouchableOpacity>
                                         </>
                                 }
@@ -535,7 +725,7 @@ export const SettingProfile = ({route}:any) => {
                         <Image style={{ width: 16, height: 16,}} source={ require('../../../assets/img/ic_add.png')}/>
                     </View> */}
                 <View style={{ marginVertical: 20,}}>
-                    <TouchableOpacity onPress={checkInputValue}>
+                    <TouchableOpacity onPress={settingProfileHandler}>
                         <View style={[styles.buttonStyle,]}>
                             <Text style={[ styles.buttonLabelStyle,]}>프로필 설정 완료</Text>
                         </View>
@@ -545,9 +735,14 @@ export const SettingProfile = ({route}:any) => {
             <AlertModal 
                 show={alertModal.alert}
                 msg={alertModal.msg}
-                // action={} // 저장일 때 -> 저장 -> "파일이 저장되었습니다.", 삭제일 때 -> 삭제, 설정완료 버튼 클릭 시(필수항목체크 후) -> 마이페이지 이동  
+                action={alertAction} // 저장일 때 -> 저장 -> "파일이 저장되었습니다.", 삭제일 때 -> 삭제, 설정완료 버튼 클릭 시(필수항목체크 후) -> 마이페이지 이동  
                 hide={alertModalOff}
                 type={alertModal.type}
+            />
+            <SelectImageUpload 
+                show={selImgModal}
+                hide={()=>{setSelImgModal(false);}}
+                setImage={uploadImage}
             />
         </ScrollView>
     )

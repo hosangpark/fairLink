@@ -157,7 +157,14 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                     {myInfo.profile_check === 'Y' && 
                         <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
                             // onPress={() => {navigation.navigate('MyProfile')}}
-                            onPress={()=>{alertModalOn('작성된 프로필이 없습니다. 프로필 작성을 먼저해주세요.','none_profile')}}
+                            onPress={()=>{
+                                if(myInfo.profile_check === 'N'){
+                                    alertModalOn('작성된 프로필이 없습니다. 프로필 작성을 먼저해주세요.','none_profile')
+                                }
+                                else{
+                                    navigation.navigate('SettingProfile',{mt_type:mt_type});
+                                }
+                            }}
                         >
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
                         </TouchableOpacity>

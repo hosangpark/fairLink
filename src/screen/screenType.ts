@@ -32,7 +32,6 @@ export type EquipInputInfoType = {
     mpt_equip: mptEquipItemType[];
     mpt_equip_memo: string;
     mpt_aspire: string;
-    mpt_file_list: tempUploadImageType[];
 
     mpt_file1 : string,
     mpt_file1_check : string,
@@ -46,6 +45,9 @@ export type EquipInputInfoType = {
     mpt_file5_check : string,
     mpt_file6 : string,
     mpt_file6_check : string,
+
+    [key:string] : string | tempUploadImageType | mptEquipItemType[],
+    
 }
 
 export type FavoriteListItemType = { //userInfo card에 들어가는 정보 

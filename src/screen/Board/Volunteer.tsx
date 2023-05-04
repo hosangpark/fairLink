@@ -19,7 +19,6 @@ export const Volunteer = ({route}:any) => {
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
-    const {mt_idx } = useAppSelector(state => state.userInfo);
     const [volunteerList, setVolunteerList] = React.useState<VolunteerListType>(()=>initialVolunteerInfo); //입력정보
     const dispatch = useAppDispatch();
     const {data : VolunteerListData, isLoading : VolunteerListDataLoading, isError : VolunteerListDataError} = 
