@@ -51,7 +51,9 @@ export type RouterNavigatorParams = {
     FavoriteList:{
         mt_type:string
     };
-    FavoriteAdd:undefined;
+    FavoriteAdd:{
+        equFavType? : string
+    };
     EquimentsAdd:undefined;
     EquimentsDetail:undefined;
     SettingProfile:{

@@ -36,7 +36,7 @@ export const FavoriteListIndex = ({route}:any) => {
     const [favoriteList, setFavoriteList] = React.useState<FavoriteListItemType[]>([]);
     const Addnavigation = () =>{
         if(mt_type == '1'){
-            navigation.navigate('FavoriteAdd')
+            navigation.navigate('FavoriteAdd',{})
         } else {
             navigation.navigate('EquimentsAdd')
         }

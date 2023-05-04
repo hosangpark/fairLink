@@ -9,18 +9,20 @@ import { NodataView } from "../../../component/NodataView";
 import { usePostQuery } from "../../../util/reactQuery";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { toggleLoading } from "../../../redux/actions/LoadingAction";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
 import { RequestRouterNavigatorParams } from "../../../../type/RequestRouterType";
 import { FavoriteListItemType } from "../../screenType";
+import { MarginCom } from "../../../component/MarginCom";
 
 export const FavoriteSpare = () => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams & RequestRouterNavigatorParams>>();
+    const isFocused = useIsFocused();
 
     const {mt_idx , mt_type} = useAppSelector(state => state.userInfo);
-    const {data : favData , isLoading:favLoading, isError : favError} = usePostQuery('getEquFavList',{mt_idx:'17',type:'1'},'equip/equip_like_list.php');
+    const {data : favData , isLoading:favLoading, isError : favError,refetch : favRefetch} = usePostQuery('getEquFavList',{mt_idx:mt_idx,type:'1'},'equip/equip_like_list.php');
 
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
 
@@ -58,48 +60,42 @@ export const FavoriteSpare = () => {
         }
     },[favData,favLoading,favError])
 
+    React.useEffect(()=>{
+        if(isFocused){
+            favRefetch();
+        }
+    },[isFocused])
+
     
     return (
         <View style={{ margin: 20}}>
-            <TouchableOpacity style={{ marginBottom: 30}}>
+            <TouchableOpacity onPress={()=>{navigation.navigate('FavoriteAdd',{equFavType : '1'})}}>
                 <View style={[styles.buttonStyle]}>
                     <Text style={[styles.buttonLabelStyle]}>조종사 추가하기</Text>
                 </View>
             </TouchableOpacity>
             {
                 // 즐겨찾기 등록 전
-                <NodataView msg={'즐겨찾기 조종사가 없습니다'}/>
             }
-
-            {favList.map((item:FavoriteListItemType,index:number) => {
-                return(
-                    <View style={{marginBottom:30}}>
-                        <UserInfoCard 
-                            index = '0'
-                            item={item}
-                            isDelete = {true}
-                            action={()=>{}}
-                        />
-                    </View>
-                )
-            })}
-
-            
-            <View style={{marginBottom:30}}>
-                {/* <UserInfoCard 
-                    index = '0'
-                    jobType = '0'
-                    userProfileUrl = ''
-                    empName = '힘찬중기'
-                    userName = '정우성'
-                    score = {5}
-                    rating = {41}
-                    recEmpCount = {6}
-                    location = '[경남] 진주시, 사천시, 창원시'
-                    isDelete = {true}
-                    action = {()=>{}}
-                /> */}
-            </View>
+            <MarginCom mt={20} />
+            {favList.length === 0 ?
+                <NodataView msg={'즐겨찾기 조종사가 없습니다'}/>
+                :
+                favList.map((item:FavoriteListItemType,index:number) => {
+                    return(
+                        <View style={{marginBottom:30}} key={index}>
+                            <UserInfoCard 
+                                index = '0'
+                                item={item}
+                                isDelete = {true}
+                                action={()=>{}}
+                                equFavType="1"
+                                refetch={favRefetch}
+                            />
+                        </View>
+                    )
+                })
+            }
             <AlertModal 
             show={alertModal.alert}
                 msg={alertModal.msg}

@@ -510,7 +510,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
             msg={alertModal.msg}
             hide={alertModalOff}
             type={alertModal.type}
-            action={()=>navigation.navigate('Board',{type:'default'})}
+            action={()=>navigation.navigate('Board')}
         />
         <DateTimePickerModal //공사기간 시작일 date picker
             isVisible={startDateModal.show}
