@@ -23,6 +23,7 @@ export const MyInfo = () => {
     const [birth,setBirth] = useState<string>('')
     const [position,setPosition] = useState<string>('')
     const [company,setCompany] = useState<string>('')
+    const [location, setLocation] = useState<string>('');
     const [ceo,setCeo] = useState<string>('')
     const [businessNum,setBusinessNum] = useState<string>('')
     const [phoneNum,setPhoneNum] = useState<string>('')
@@ -95,6 +96,9 @@ export const MyInfo = () => {
                 setPosition(data.data.mct_position)
                 setPhoneNum(data.data.mt_hp)
                 setEmail(data.data.mt_email)
+                if(mt_type === '2'){
+                    setLocation(data.data.met_location);
+                }
                 if(mt_type === '1'){
                     setCompany(data.data.mct_company)
                     setCeo(data.data.mct_ceo)
@@ -211,6 +215,15 @@ export const MyInfo = () => {
                                 editable={isEditable}
                                 value={company}
                                 onChangeText={setCompany}
+                            />
+                        </View>
+                        <View>
+                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>활동 지역</Text>
+                            <TextInput 
+                                style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
+                                editable={isEditable}
+                                value={location}
+                                onChangeText={setLocation}
                             />
                         </View>
                         <View>

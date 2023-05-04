@@ -1,5 +1,6 @@
 import { ImageSourcePropType,KeyboardTypeOptions } from "react-native";
-import { FavoriteListItemType } from "../screen/screenType";
+import { FavoriteListItemType, MyEquListItemType } from "../screen/screenType";
+import { HeavyEquipmentCard } from "./card/HeavyEquipmentCard";
 
 export interface NumberObejctType {
     [key: number]: string;
@@ -98,13 +99,9 @@ export interface UserInfoCardType {
     refetch? : () => void;
     equFavType ? : string, // 1: 스페어 2: 소속조종사
 }
-export interface HeavyEquipmentCardType {
-    EquiName : string,
-    EquiFacturing : string,
-    EquiUrl : string,
-    EquiNumber:string,
-    Device : string,
-    Documents:string,
+
+export type HeavyEquipmentCardType = {
+    item : MyEquListItemType,
     action:()=>void
     action2:()=>void
 }
@@ -208,6 +205,7 @@ export type MarginComType = {
     my? : number,
     isBorder? : boolean,
     isBorderDeep ? : boolean,
+    isWhiteBorder ? : boolean,
 }
 
 export type SelectedEquipmentCardType = {
@@ -254,6 +252,36 @@ export type DetailFieldBoxDataType = {
     cot_pay_etc?:string | null,
     cot_m_name:string,
     cot_m_num:string,
+}
+
+export type EquDetailFieldBoxDataType = { //현장 세부내용 (현장지원 - 현장세부내용 장비)
+    assign_check : string,
+    cot_idx : string,
+    crt_name : string,
+    mct_company : string,
+    crt_location : string,
+    crt_director : string,
+    equip : string,
+    equip_type : string,
+    equip_stand1 : string,
+    equip_stand2 : string,
+    year : string,
+    sub : string[],
+    sub_text : string,
+    cot_content :  string,
+    apply_info : string[],
+    start_date : string,
+    end_date : string,
+    start_time : string,
+    end_time : string,
+    pay_price : string,
+    pay_type : string,
+    pay_date : string,
+    pay_etc : string,
+    m_name : string,
+    m_num : string,
+    my_check : string,
+    my_equip_count : string,
 }
 export type VolunteerListType = { 
     data:{

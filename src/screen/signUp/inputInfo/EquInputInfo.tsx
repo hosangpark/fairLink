@@ -71,6 +71,7 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
         met_sub : [],
     })
     const [tempSelAcc , setTempSelAcc] = React.useState('');
+    const [writeSelAcc, setWriteSelAcc] = React.useState(''); //부속장치 직접입력
 
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
@@ -106,12 +107,15 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
     const tempSelAccHandler = (text:string) => { //부속장치 선택했을때 임시 저장
         setTempSelAcc(text);
     }
+    const writeSelHandler = (text:string) => {
+        setWriteSelAcc(text);
+    } 
 
     const accessoriesAddHandler = () => { //부속장치 추가했을때 이벤트
         if(inputInfo.met_sub.length === 5){
             alertModalOn('부속 장치는 5개까지 선택가능합니다.');
         }
-        else if(tempSelAcc === '기타(직접입력)' || tempSelAcc === ''){
+        else if(tempSelAcc === '기타(직접입력)' && writeSelAcc === ''){
             alertModalOn('부속 장치를 입력해주세요.');
         }
         else{
@@ -119,20 +123,26 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
 
             let flag = true;
             inputInfo.met_sub.forEach((item,index) => {
-                if(tempSelAcc === item){
+                if(tempSelAcc === item || writeSelAcc === item){
+                    console.log(tempSelAcc, writeSelAcc);
                     alertModalOn('이미 선택한 부속 장치 입니다.');
                     flag = false;
                     return;
                 }
             })
             if(flag){
-                tempArray.push(tempSelAcc);
-
+                if(tempSelAcc === '기타(직접입력)'){
+                    tempArray.push(writeSelAcc);
+                }
+                else{
+                    tempArray.push(tempSelAcc);
+                }
                 setInputInfo({
                     ...inputInfo,
                     met_sub : [...tempArray],
                 })
                 setTempSelAcc('');
+                setWriteSelAcc('');
             }
         }
     }
@@ -473,8 +483,8 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
                     </View>
                     {tempSelAcc === '기타(직접입력)' &&
                         <CustomInputTextBox 
-                            input={tempSelAcc}
-                            setInput={(acc : string)=>{ setTempSelAcc(acc)}}
+                            input={writeSelAcc}
+                            setInput={(acc : string)=>{ writeSelHandler(acc)}}
                             action={()=>{}}
                             button=''
                             placeholder='부속 장치를 입력해주세요.'

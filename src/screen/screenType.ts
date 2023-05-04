@@ -25,7 +25,7 @@ export interface mptEquipItemType {
     mpt_equip_stand2: string;
 }
 
-export type EquipInputInfoType = {
+export type EquipInputInfoType = { //장비회사 - 프로필정보 설정 및 수정
     mpt_before_profile : string,
     mpt_profile: tempUploadImageType;
     mpt_career: string;
@@ -46,8 +46,17 @@ export type EquipInputInfoType = {
     mpt_file6 : string,
     mpt_file6_check : string,
 
-    [key:string] : string | tempUploadImageType | mptEquipItemType[],
-    
+    [key:string] : string | tempUploadImageType | mptEquipItemType[]
+}
+export type MyEquListItemType = {
+    idx : string,
+    img : string,
+    device : string,
+    year : string,
+    reg_no : string,
+    sub:string,
+    doc_check:string,
+    doc_color:string,
 }
 
 export type FavoriteListItemType = { //userInfo card에 들어가는 정보 
@@ -80,6 +89,24 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
     mpt_name?:string,
     mpt_career?:string,
     mpt_location?:string,
+}
+
+export type EquipOrderItemType = {
+    apply_cnt : number,
+    assign_check : string,
+    cot_idx : string,
+    crt_content : string,
+    crt_name : string,
+    d_day:string,
+    end_date : string,
+    equip : string,
+    location : string,
+    open_check : string,
+    pay_price : string,
+    pay_type : string,
+    payment : string,
+    public : string,
+    start_date : string,
 }
 
 export type ReqTopInfo = { //배차요청 상단정보 item
@@ -189,6 +216,10 @@ export type ElectronicContractType = RouteType &{ //장비회사 프로필
 
 export type FavoriteAddType = RouteType & {
     
+}
+
+export type ScaneDetailFieldType = RouteType &{ //장비 - 현장세부페이지 타입
+
 }
 
 export interface SelImageType {

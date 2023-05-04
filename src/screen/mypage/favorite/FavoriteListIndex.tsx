@@ -17,7 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { LoadingModal } from '../../../modal/LoadingModal';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
 import { usePostQuery } from '../../../util/reactQuery';
-import { FavoriteListItemType } from '../../screenType';
+import { FavoriteListItemType, MyEquListItemType } from '../../screenType';
 import { BackHandlerCom } from '../../../component/utils/BackHandlerCom';
 
 export const FavoriteListIndex = ({route}:any) => {
@@ -31,9 +31,12 @@ export const FavoriteListIndex = ({route}:any) => {
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
     const deletecard:Array<string> = [];
 
-    const {data:likeData, isLoading:likeLoading ,isError:likeError , refetch : getFavoriteRetch} = usePostQuery('getFavoriteList',{mt_idx:mt_idx},'cons/cons_like_list.php')
+    const {data:likeData, isLoading:likeLoading ,isError:likeError , refetch : getFavoriteRetch} = usePostQuery('getFavoriteList',{mt_idx:mt_idx},
+        mt_type === '1' ? 'cons/cons_like_list.php' : 'equip/equip_info_list.php'
+    );
 
     const [favoriteList, setFavoriteList] = React.useState<FavoriteListItemType[]>([]);
+    const [equList, setEquList] = React.useState<MyEquListItemType[]>([]);
     const Addnavigation = () =>{
         if(mt_type == '1'){
             navigation.navigate('FavoriteAdd',{})
@@ -118,7 +121,12 @@ export const FavoriteListIndex = ({route}:any) => {
         dispatch(toggleLoading(likeLoading));
         if(likeData){
             const bodyData = likeData.data.data;
-            setFavoriteList([...bodyData]);
+            if(mt_type === '1'){
+                setFavoriteList([...bodyData]);
+            }
+            else if(mt_type === '2'){
+                setEquList([...bodyData]);
+            }
         }
     },[likeData,likeLoading])
 
@@ -160,20 +168,15 @@ export const FavoriteListIndex = ({route}:any) => {
                 />
                 :
                 <FlatList 
-                    data={EquiList}
+                    data={equList}
                     style={{}}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item,index})=>{
                         return(
                             <HeavyEquipmentCard
-                                EquiName={item.EquiName}
-                                EquiFacturing={item.EquiFacturing}
-                                EquiUrl={item.EquiUrl}
-                                EquiNumber={item.EquiNumber}
-                                Device={item.Device}
-                                Documents={item.Documents}
+                                item={item}
                                 action={()=>{navigation.navigate('EquimentsDetail')}}
-                                action2={()=>{DeleteListUpdate(item.EquiNumber)}}
+                                action2={()=>{()=>{}}}
                             />
                         )
                     }}

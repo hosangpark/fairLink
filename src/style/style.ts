@@ -13,6 +13,7 @@ export const colors = { //색상 리스트;
     FONT_COLOR_BLACK : '#000000',
     FONT_COLOR_BLACK2 : '#374748',
     FONT_COLOR_BLACK3 : '#191919',
+    FONT_COLOR_BLACK4 : '#333333',
     FONT_COLOR_GRAY : '#A4A4A4',
     FONT_COLOR_RED : '#F51900',
 
@@ -24,6 +25,7 @@ export const colors = { //색상 리스트;
     RED_COLOR : '#FFEAE8',
     RED_COLOR2 : '#FFEEEC',
     RED_COLOR3 : '#F51900',
+    RED_COLOR4 : '#FF5A5A',
     
     SKY_BLUE_COLOR : '#6ECEFF',
     DEPP_SKY_BLUE : '#19D2DB',
@@ -41,6 +43,7 @@ export const colors = { //색상 리스트;
     BORDER_BLUE_COLOR2 : '#D5EFF1',
     BORDER_BLUE_COLOR3 : '#A1D5D8',
     BORDER_BLUE_COLOR4 : '#C6E0E2',
+    BORDER_BLUE_COLOR5 : '#C8EAEC',
     BORDER_RED_COLOR : '#FCC8C1',
     BORDER_RED_COLOR2 : '#F6A197',
     

@@ -58,11 +58,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             navigation.navigate('OpenConstruction',{isData:false});
         }
         else if(alertModal.type === 'none_profile'){
-            if ( mt_type === '2') {
-                navigation.navigate('SettingProfile',{mt_type:'2'});
-            } else if ( mt_type === '4') {
-                navigation.navigate('SettingProfile',{mt_type:'4'});
-            }
+            navigation.navigate('SettingProfile');
         }
     }
     const mypageInform = async (): Promise<void> => {
@@ -162,7 +158,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                                     alertModalOn('작성된 프로필이 없습니다. 프로필 작성을 먼저해주세요.','none_profile')
                                 }
                                 else{
-                                    navigation.navigate('SettingProfile',{mt_type:mt_type});
+                                    navigation.navigate('SettingProfile');
                                 }
                             }}
                         >
