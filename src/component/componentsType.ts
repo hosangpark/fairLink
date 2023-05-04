@@ -121,6 +121,9 @@ export interface BoardCardType {
     cardtitle:string
     contract_idx?:string
     contract_check?:string
+    met_company?:string
+    mct_company?:string
+    match_type?:string
 }
 
 export interface ProfileCardType {
