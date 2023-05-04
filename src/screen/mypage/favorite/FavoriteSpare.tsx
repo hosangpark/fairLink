@@ -7,16 +7,24 @@ import { AlertClearType } from "../../../modal/modalType";
 import { AlertModal, initialAlert } from "../../../modal/AlertModal";
 import { NodataView } from "../../../component/NodataView";
 import { usePostQuery } from "../../../util/reactQuery";
-import { useAppSelector } from "../../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
+import { toggleLoading } from "../../../redux/actions/LoadingAction";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouterNavigatorParams } from "../../../../type/routerType";
+import { RequestRouterNavigatorParams } from "../../../../type/RequestRouterType";
+import { FavoriteListItemType } from "../../screenType";
 
 export const FavoriteSpare = () => {
+    const dispatch = useAppDispatch();
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams & RequestRouterNavigatorParams>>();
 
     const {mt_idx , mt_type} = useAppSelector(state => state.userInfo);
-    const {data : favData , isLoading:favLoading, isError : favError} = usePostQuery('getEquFavList',{mt_idx:mt_idx,type:'1'},'equip/equip_like_list.php');
+    const {data : favData , isLoading:favLoading, isError : favError} = usePostQuery('getEquFavList',{mt_idx:'17',type:'1'},'equip/equip_like_list.php');
 
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
 
-    const [favList, setFavList] = React.useState([]);
+    const [favList, setFavList] = React.useState<FavoriteListItemType[]>([]);
 
     const alertModalOn = ( msg : string, type? : string ) => {
         setAlertModal({
@@ -30,6 +38,25 @@ export const FavoriteSpare = () => {
     const alertModalOff = () => {
         setAlertModal(initialAlert)
     }
+    const alertAction = () =>{
+        if(alertModal.type === 'error'){
+
+        }
+    }
+
+    React.useEffect(()=>{
+        dispatch(toggleLoading(favLoading));
+        if(favError){
+            alertModalOn('즐겨찾기 리스트를 불러오는 도중 오류가 발생했습니다. \n고객센터에 문의해주세요.','error')
+        }
+        else{
+            if(favData){
+                // console.log(favData);
+                console.log(favData.data.data);
+                setFavList([...favData.data.data]);
+            }
+        }
+    },[favData,favLoading,favError])
 
     
     return (
@@ -44,21 +71,20 @@ export const FavoriteSpare = () => {
                 <NodataView msg={'즐겨찾기 조종사가 없습니다'}/>
             }
 
-            <View style={{marginBottom:30}}>
-                {/* <UserInfoCard 
-                    index = '0'
-                    // jobType = '0'
-                    userProfileUrl = ''
-                    empName = '힘찬중기'
-                    userName = '정우성'
-                    score = {5}
-                    rating = {41}
-                    recEmpCount = {6}
-                    location = '[경남] 진주시, 사천시, 창원시'
-                    isDelete = {true}
-                    action={()=>{}}
-                /> */}
-            </View>
+            {favList.map((item:FavoriteListItemType,index:number) => {
+                return(
+                    <View style={{marginBottom:30}}>
+                        <UserInfoCard 
+                            index = '0'
+                            item={item}
+                            isDelete = {true}
+                            action={()=>{}}
+                        />
+                    </View>
+                )
+            })}
+
+            
             <View style={{marginBottom:30}}>
                 {/* <UserInfoCard 
                     index = '0'

@@ -53,7 +53,7 @@ export const FavoriteFilotIndex = () => {
     return (
 
         <View style={{flex:1}}>
-            <BackHeader title="장비회사 프로필"/>
+            <BackHeader title="나의 조종사 관리"/>
             <BackHandlerCom />
             <TabView
                 navigationState={{ index, routes }}
