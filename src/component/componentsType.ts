@@ -323,3 +323,18 @@ export type conssubDataType = {
         
     }
 }
+export type DetailFieldBoxType = {
+    title:string,
+    text?:string,
+    cot_pay_type?:string,
+    cot_career?:string,
+    cot_age?:string,
+    cot_score?:string,
+    cot_goods?:string,
+    cot_start_date?:string,
+    cot_end_date?:string,
+    cot_start_time?:string,
+    cot_end_time?:string,
+    cot_pay_date?:string,
+    cot_pay_etc?:string
+}

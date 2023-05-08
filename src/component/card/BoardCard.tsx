@@ -78,7 +78,7 @@ export const BoardCard = ({
         <TouchableOpacity style={{margin:20}} onPress={()=>
         {
             if(cardtitle=="배차 모집중"){
-                navigation.navigate('DetailField',{cot_idx:cot_idx})
+                navigation.navigate('DetailField',{cot_idx:cot_idx,cat_idx:cat_idx})
             } else {
                 navigation.navigate('DetailWork',{cot_idx:cot_idx,cat_idx:cat_idx})
             }

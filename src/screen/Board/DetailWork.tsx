@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import {SafeAreaView,View,Text,FlatList, ScrollView,StyleSheet, TouchableOpacity, Image} from 'react-native';
-import { BoardIndexType } from '../screenType';
+import { BoardIndexType, DetailWorkType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../style/style';
 import { CustomSelectBox } from '../../component/CustomSelectBox';
@@ -23,7 +23,7 @@ import { initialdetailWorkInfo } from '../../component/initialInform';
 import RNFetchBlob from 'rn-fetch-blob';
 import { ImageModal } from '../../modal/ImageModal';
 
-export const DetailWork = ({route}:any) => {
+export const DetailWork = ({route}:DetailWorkType) => {
     const dispatch = useAppDispatch();
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();

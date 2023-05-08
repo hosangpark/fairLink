@@ -12,7 +12,7 @@ import { AlertClearType } from '../../modal/modalType';
 import { usePostQuery } from '../../util/reactQuery';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
-import { DetailFieldBoxDataType } from '../../component/componentsType';
+import { DetailFieldBoxDataType, DetailFieldBoxType } from '../../component/componentsType';
 import { initialdetailFieldInfo } from '../../component/initialInform';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 import { NumberComma } from '../../util/func';
@@ -31,7 +31,7 @@ const DetailFieldBox = ({
     cot_end_time,
     cot_pay_date,
     cot_pay_etc
-}:any)=>{
+}:DetailFieldBoxType)=>{
     // {title:string,text:string,cot_pay_type?:string,cot_start_date?:string}
     return(
     <View style={DetailFieldstyle.DetailFieldBox}>
@@ -81,7 +81,7 @@ export const DetailField = ({route}:any) => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     
-    const [detailFieldInfo, setDetailFieldInfo] = React.useState<DetailFieldBoxDataType>(()=>initialdetailFieldInfo); //입력정보
+    const [detailFieldInfo, setDetailFieldInfo] = React.useState<DetailFieldBoxDataType>(initialdetailFieldInfo); //입력정보
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 
     const alertModalOn = (msg:string,type? : string, strongMsg? : string, ) => { //alert 켜기
         setAlertModal({
@@ -104,12 +104,23 @@ export const DetailField = ({route}:any) => {
 
     const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
     /** mt_idx 임의입력 수정필요 */
-    usePostQuery('getDetailFieldData',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
+    mt_type == "1" ?
+    usePostQuery('getDetailFieldData1',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
+    :
+    mt_type == "2" ?
+    usePostQuery('getDetailFieldData2',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'equip/equip_order_info.php')
+    :
+    mt_type == "3" ?
+    usePostQuery('getDetailFieldData3',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
+    :
+    usePostQuery('getDetailFieldData4',{mt_idx : mt_idx,cat_idx:route.params.cat_idx},'pilot/pilot_order_info.php')
+
 
 
     React.useEffect(()=>{
+        console.log(DetailFieldData)
         dispatch(toggleLoading(DetailFieldDataLoading));
-        if(DetailFieldData){
+        if (DetailFieldData){
             setDetailFieldInfo(DetailFieldData.data.data);
         }
     },[DetailFieldData])

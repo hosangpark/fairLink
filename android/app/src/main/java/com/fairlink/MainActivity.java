@@ -1,10 +1,10 @@
 package com.fairlink;
 
+
 import android.os.Bundle; 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
@@ -15,6 +15,12 @@ import com.facebook.react.ReactRootView;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.os.Build;
+import android.media.AudioAttributes;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import androidx.core.app.NotificationCompat;
+
 import org.devio.rn.splashscreen.SplashScreen;
 public class MainActivity extends ReactActivity {
 
@@ -22,7 +28,24 @@ public class MainActivity extends ReactActivity {
   protected void onCreate(Bundle savedInstanceState) {
       SplashScreen.show(this);  // here
       super.onCreate(savedInstanceState);
+      
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel notificationChannel = new NotificationChannel("default", "기본", NotificationManager.IMPORTANCE_HIGH);
+      notificationChannel.setShowBadge(true);
+      notificationChannel.setDescription("");
+      AudioAttributes att = new AudioAttributes.Builder()
+              .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+              .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+              .build();
+//      notificationChannel.setSound(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getPackageName() + "/raw/buzi1"), att);
+      notificationChannel.enableVibration(true);
+      notificationChannel.setVibrationPattern(new long[]{400, 400});
+      notificationChannel.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+      NotificationManager manager = getSystemService(NotificationManager.class);
+      manager.createNotificationChannel(notificationChannel);
+    }
       getHashKey();
+
   }
   private void getHashKey(){
     PackageInfo packageInfo = null;
@@ -44,6 +67,7 @@ public class MainActivity extends ReactActivity {
       }
     }
   }
+
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
    * rendering of the component.
