@@ -1,4 +1,5 @@
-import { FavoriteListItemType } from "../src/screen/screenType";
+import { EquDetailFieldBoxDataType } from "../src/component/componentsType";
+import { FavoriteListItemType, MatchingEquipmentItemType } from "../src/screen/screenType";
 
 export type RouterNavigatorParams = {
     /* 인증 */
@@ -75,21 +76,35 @@ export type RouterNavigatorParams = {
         cat_idx:string
     } //작업세부내용
     Volunteer:{
-        cot_idx:string
+        cot_idx?:string,
+        cat_idx?:string,
     } //지원자현황
-    CompanyProfile:{
+    CompanyProfile:{ //장비회사프로필
         cot_idx?:string,
         cat_idx?:string,
         mpt_idx?:string,
-    } //장비회사프로필
-    PilotProfile:undefined //조종사프로필
+    } 
+    PilotProfile:{ //조종사프로필
+        cat_idx?:string,
+        mpt_idx?:string,
+    } 
     ElectronicContract:{
         cot_idx:string
         cat_idx:string
-        contract_idx:string | undefined
-        route_type:string
+        contract_idx? :string | undefined
+        route_type?:string
     } //전자계약
     WorkReport:undefined //작업일보작성
-    MatchingEquipment:undefined
-    MatchingFilot:undefined
+    MatchingEquipment:{ //장비 및 조종사 매칭 (장비 선택)
+        item : EquDetailFieldBoxDataType //건설회사 요구조건 
+    }
+    RequestPilot : {
+        item : EquDetailFieldBoxDataType //건설회사 요구조건
+        selEquip : MatchingEquipmentItemType,
+    }
+    MatchingPilot:{ //장비 및 조종사 매칭 (조종사 선택)
+        item : EquDetailFieldBoxDataType,
+        selEquip : MatchingEquipmentItemType,
+        type : 'normal' | 'favorite',
+    }
 }

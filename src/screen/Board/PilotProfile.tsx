@@ -13,35 +13,33 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AlertModal } from "../../modal/AlertModal";
 import { AlertClearType } from "../../modal/modalType";
 import { initialAlert } from "../../modal/AlertModal";
-import { Profile } from "./companyProfileDetail/Profile";
-import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
+import { Profile } from "./pilotProfileDetail/Profile";
+import { RequiredDocuments } from "./pilotProfileDetail/RequiredDocuments";
 import { BackHandlerCom } from "../../component/utils/BackHandlerCom";
+import { PilotProfileItemType, PilotProfileType } from "../screenType";
+import { usePostQuery } from "../../util/reactQuery";
+import { useAppSelector } from "../../redux/store";
 
 
-const FirstRoute = () => (
-        // <Profile />
-        <>
-        </>
-);
-
-const SecondRoute = () => (
-        // <RequiredDocuments/>
-        <>
-        </>
-);
 
 
-const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-});
 
+export const PilotProfile = ({route}:PilotProfileType) => {
 
-export const PilotProfile = () => {
+    const {cat_idx,mpt_idx} = route.params;
+    const {mt_idx} = useAppSelector(state => state.userInfo);
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [tab, setTab] = useState(0);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
+
+    const [pilotProfile, setPilotProfile] = React.useState<PilotProfileItemType>();
+
+    const {data : profileData, isLoading : profileLoading, isError : profileError} = usePostQuery('getPilotProfile',{
+        mt_idx : mt_idx,
+        mpt_idx : mpt_idx,
+        cat_idx : cat_idx,
+    },'equip/pilot_profile.php');
     
     
     const alertModalOn = ( msg : string, type? : string ) => {
@@ -57,24 +55,60 @@ export const PilotProfile = () => {
         setAlertModal(initialAlert)
     }
 
+    const FirstRoute = () => (
+        <Profile info={pilotProfile?.profile}/>
+    );
+
+    const SecondRoute = () => (
+        <>
+            {pilotProfile &&
+                <RequiredDocuments doc={pilotProfile.doc}/>
+            }
+        </>
+            // <>
+            // </>
+    );
+
+
+    const renderScene = SceneMap({
+        first: FirstRoute,
+        second: SecondRoute,
+    });
+
+    React.useEffect(()=>{
+        if(profileData){
+            // console.log(profileData);
+            if(profileData.result === 'true'){
+                setPilotProfile(profileData.data);
+            }
+            else{
+
+            }
+
+        }
+    },[profileData])
+
     return (
         <SafeAreaView style={{flex:1}}>
             <BackHeader title="조종사 프로필"/>
             <BackHandlerCom />
             <ScrollView style={{flex:1}}>
-                <ProfileInfoCard
-                    index = '0'
-                    jobType = '차주 겸 조종사' 
-                    userProfileUrl = '' 
-                    userName = '정우성' 
-                    score = {4.4} 
-                    rating = {41} 
-                    recEmpCount = {6} 
-                    location = '경남 진주시' 
-                    age = '42' 
-                    gender = '남' 
-                    phone = '010-1123-1111'
+                {pilotProfile &&
+                    <ProfileInfoCard
+                        userProfileUrl = {pilotProfile.data.img_url}
+                        userName = {pilotProfile.data.name}
+                        age = {String(pilotProfile.data.age)} 
+                        gender = {pilotProfile.data.gender} 
+                        location = {pilotProfile.data.location}
+                        equip={pilotProfile.data.equip}
+                        // jobType = {pilotProfile.data.type}
+                        phone = {pilotProfile.data.hp}
+                        score_count = {pilotProfile.data.score_count}
+                        score = {pilotProfile.data.score}
+                        good = {Number(pilotProfile.data.good)}
+                        mpt_idx = {mpt_idx}
                     />
+                }
                 <View style={{ flexDirection:'row', backgroundColor:colors.WHITE_COLOR, justifyContent:'space-around', alignItems: 'center', }}>
                     <View style={tab === 0 ? TabStyle.tabViewOn : TabStyle.tabViewOff }>
                         <TouchableOpacity onPress={() => setTab(0)}>
