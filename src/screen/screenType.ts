@@ -57,6 +57,18 @@ export type MyEquListItemType = {
     sub:string,
     doc_check:string,
     doc_color:string,
+    stand : string,
+}
+
+export type VolunteerTopDataType = { //지원자 리스트 상단 정보
+    crt_name : string,
+    end_date : string,
+    equip : string,
+    start_date : string,
+    sub : string,
+    year : string,
+    start_time? : string,
+    end_time? : string,
 }
 
 export type FavoriteListItemType = { //userInfo card에 들어가는 정보 
@@ -64,7 +76,8 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
     img_url?:string,
     mpt_idx?:string,
     pilot_type?:string,
-    good:number,
+    good:number, //건설업체 지원자리스트 추천기업 count
+    goods?:number,//장비업체 지원자리스트 추천기업 count
     company:string,
     name?:string,
     score:number,
@@ -87,6 +100,8 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
     type?:string,
     met_company?:string,
     mpt_name?:string,
+    mt_name?:string,
+    like_check?:string,
     mpt_career?:string,
     mpt_location?:string,
 }
@@ -118,6 +133,26 @@ export type ReqTopInfo = { //배차요청 상단정보 item
     crt_m_name : string,
     crt_name : string,
     detail_location : string,
+}
+
+export type MatchingEquipmentItemType = { //장비및 조종사 매칭(장비 리스트 아이템 타입)
+    eit_idx : string,
+    eit_reg_no : string,
+    eit_sub : string,
+    eit_year : string,
+    img_url : string,
+}
+
+export type MatchingPilotItemType = {
+    age : number,
+    apply_check : string,
+    career : string,
+    good : string,
+    hp : string,
+    img_url : string,
+    mpt_idx : string,
+    name : string,
+    score : string,
 }
 export interface HomeIndexType {
     setTabIndex? : (tab:number) => void;
@@ -207,6 +242,36 @@ export type CompanyInfoItemType = {
     },
     sub : string[],
 }
+
+export type PilotProfileItemType = {
+    data : {
+        age : number,
+        equip : string,
+        gender : string,
+        good : string,
+        hp : string,
+        img_url : string,
+        location : string,
+        mpt_idx : string,
+        name : string,
+        score : number , 
+        score_count : string,
+    },
+    doc : {
+        [key:string]:{
+            file_check : string,
+            file_url : string,
+            title : string,
+        }[]
+    },
+    profile : {
+        mpt_aspire : string,
+        mpt_career : string,
+        mpt_equip_memo : string,
+        mpt_licence : string,
+    }
+}
+
 export type CompanyProfileType = RouteType &{ //장비회사 프로필
 
 }
@@ -221,6 +286,21 @@ export type FavoriteAddType = RouteType & {
 }
 
 export type ScaneDetailFieldType = RouteType &{ //장비 - 현장세부페이지 타입
+
+}
+
+export type MatchingEquipmentType = RouteType & { //장비 - 장비 및 조종사 매칭1 - 장비 선택
+
+}
+export type ReqeustPilotType = RouteType & { //장비 - 조종사 요청하기
+
+}
+
+export type MatchingPilotType = RouteType & { //장비 - 장비 및 조종사 매칭1 - 조종사 선택
+
+}
+
+export type PilotProfileType = RouteType & { //장비 - 조종사 프로필 조회
 
 }
 

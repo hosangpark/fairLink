@@ -12,7 +12,8 @@ export const CustomAccordion = ({
     action,
 }:CustomAccordionType) => {
   const [open,setOpen] = useState(false)
-  
+
+
     return(
       <View style={{}}>
         <TouchableOpacity 
@@ -35,30 +36,15 @@ export const CustomAccordion = ({
         </TouchableOpacity>
           {open&& data.list!==null?
           <View>
-          {data.list.map((item:any,index)=>{
-            return(
-              <BoardCard
-                key={index}
-                jobType={item.jobType}
-                location={item.location}
-                cot_idx={item.cot_idx}
-                cat_idx={item.cat_idx}
-                start_date={item.start_date}
-                end_date={item.end_date}
-                crt_name={item.crt_name}
-                content={item.content}
-                equip={item.equip}
-                career={item.career}
-                apply_count={item.apply_count}
-                contract_idx={item.contract_idx}
-                cardtitle={data.title}
-                contract_check={item.contract_check}
-                met_company={item.met_company}
-                mct_company={item.mct_company}
-                match_type={item.match_type}
-              />
-            )
-          })}
+            {data.list.map((item:any,index)=>{
+              return(
+                <BoardCard
+                  key={index}
+                  item={item}
+                  title={data.title}
+                />
+              )
+            })}
           </View>
           :
           null

@@ -1,5 +1,5 @@
 import { ImageSourcePropType,KeyboardTypeOptions } from "react-native";
-import { FavoriteListItemType, MyEquListItemType } from "../screen/screenType";
+import { FavoriteListItemType, MatchingEquipmentItemType, MatchingPilotItemType, MyEquListItemType } from "../screen/screenType";
 import { HeavyEquipmentCard } from "./card/HeavyEquipmentCard";
 
 export interface NumberObejctType {
@@ -82,14 +82,6 @@ export type CustomWaveSelectBoxType = {
 
 
 export interface UserInfoCardType {
-    // jobType : string,
-    // userProfileUrl : string,
-    // empName : string,
-    // userName:string,
-    // score:number,
-    // rating:number,
-// recEmpCount:number
-    // location:string,
     item : FavoriteListItemType,
     isDelete: boolean,
     isFavorite?:boolean,
@@ -98,12 +90,16 @@ export interface UserInfoCardType {
     action:(e:string)=>void,
     refetch? : () => void;
     equFavType ? : string, // 1: 스페어 2: 소속조종사
+
+    cat_idx? : string,
+
 }
 
 export type HeavyEquipmentCardType = {
     item : MyEquListItemType,
     action:()=>void
     action2:()=>void
+    refetch?:()=>void;
 }
 export interface BoardCardType {
     jobType?:string,
@@ -137,7 +133,8 @@ export interface ProfileCardType {
     gender : string,
     phone : string,
     index? : string,
-    equip:string
+    equip:string,
+    mpt_idx? : string,
 }
 
 export interface TextBoxType {
@@ -187,16 +184,10 @@ export interface CustomWaveBoxType {
     essential? : boolean,
 }
 export interface PilotInfoCardType {
-    index: string,
-    userName: string,
-    age: number,
-    career: number,
-    phone: string,
-    score: number,
-    recommendation: number,
+    item : MatchingPilotItemType;
     action: ()=>void
-    editable:boolean
-    placeholderTextColor:string
+    // editable:boolean
+    // placeholderTextColor:string
 }
 
 export type MarginComType = {
@@ -208,11 +199,7 @@ export type MarginComType = {
     isWhiteBorder ? : boolean,
 }
 
-export type SelectedEquipmentCardType = {
-    equipNumb : string,
-    year : number,
-    sideEquip : string,
-}
+
 
 export type MypageDataType = { //초기 alert state 타입
     company:string,
@@ -337,4 +324,8 @@ export type DetailFieldBoxType = {
     cot_end_time?:string,
     cot_pay_date?:string,
     cot_pay_etc?:string
+}
+
+export type SelectedEquipmentCardType = { //장비 및 조종사 매칭 장비리스트 카드 타입
+    item : MatchingEquipmentItemType
 }

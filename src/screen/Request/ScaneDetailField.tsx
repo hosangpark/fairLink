@@ -136,10 +136,10 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
     React.useEffect(()=>{
         dispatch(toggleLoading(DetailFieldDataLoading));
         if(DetailFieldData){
-            console.log(DetailFieldData);
             setDetailFieldInfo(DetailFieldData.data.data);
         }
     },[DetailFieldData])
+
 
     return(
         <View style={{flex:1,}}>
@@ -257,7 +257,12 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                             본인 또는 소속 조종사
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={DetailFieldstyle.staticinbox}>
+                    <TouchableOpacity 
+                        style={DetailFieldstyle.staticinbox}
+                        onPress={()=>{
+                            navigation.navigate('MatchingEquipment',{item:detailFieldInfo});
+                        }}
+                    >
                         <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
                             조종사
                         </Text>
@@ -269,7 +274,7 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                 :
                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                     <CustomButton
-                        action={()=>{console.log('수락'),navigation.goBack()}}
+                        action={()=>{navigation.goBack()}}
                         label={'수락'}
                         style={{flex:1,marginRight:10}}
                     />

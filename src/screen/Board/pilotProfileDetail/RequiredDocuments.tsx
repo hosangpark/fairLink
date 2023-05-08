@@ -5,28 +5,52 @@ import { colors, fontStyle } from '../../../style/style';
 import { StatusDisplayHeader } from '../../../component/StatusDisplayHeader';
 import { StatusDisplay } from '../../../component/StatusDisplay';
 
-export const RequiredDocuments = () => {
+type RequiredDocumentsType = {
+    doc : {
+        [key:string]:{
+            file_check? : string,
+            file_url? : string,
+            title? : string,
+        }[]
+    }
+}
+
+export const RequiredDocuments = ({doc}:RequiredDocumentsType) => {
+
+    const [titleList, setTitleList] = React.useState<string[]>([]);
+    const [valueList, setValueList] = React.useState<{ file_check?: string; file_url?: string; title?: string }[][]>([]);
+
+
+    React.useEffect(()=>{
+        const keyList = Object.keys(doc);
+
+        const valueList : { file_check?: string; file_url?: string; title?: string }[][] = [];
+        // console.log(Object.values(doc[keyList[0]]));
+        keyList.map((item) => {
+            valueList.push(doc[item]);
+        })
+
+        setTitleList([...keyList]);
+        setValueList([...valueList]);
+
+
+    },[])
 
     return (
         <View style={{ backgroundColor: colors.WHITE_COLOR, paddingHorizontal: 20, paddingBottom: 20,flex:1 }}>
-            <View style={{ marginVertical: 20}}>
-                <StatusDisplayHeader category={'차량서류'} />
-                <StatusDisplay name={'건설기계등록증'} type={1}/>
-                <StatusDisplay name={'정기검사 이수'} type={1}/>
-                <StatusDisplay name={'제원표'} type={1}/>
-                <StatusDisplay name={'비파괴검사'} type={1}/>
-                <StatusDisplay name={'보험증서'} type={1}/>
-            </View>
-            <View style={{ marginVertical: 20}}>
-                <StatusDisplayHeader category={'안전교육'} />
-                <StatusDisplay name={'건설업기초보건안전교육'} type={1}/>
-                <StatusDisplay name={'건설기계조종사안전교육'} type={1}/>
-            </View>
-            <View style={{ marginVertical: 20}}>
-                <StatusDisplayHeader category={'자격증'} />
-                <StatusDisplay name={'건설기계조종사면허증'} type={1}/>
-                <StatusDisplay name={'운전면허증(1종)'} type={1}/>
-            </View>
+            {titleList.map((titleItem,index) => {
+                return(
+                    <View style={{ marginVertical: 20}}>
+                        <StatusDisplayHeader category={titleItem} />
+                        {valueList[index].map((item,index) => {
+                            console.log(item);
+                            return(
+                                <StatusDisplay name={item.title ? item.title : ''} type={item.file_check ? item.file_check : '1'} file_url={item.file_url ? item.file_url : ''}/>
+                            )
+                        })}
+                    </View>
+                )
+            })}
         </View>
     )
 }

@@ -32,6 +32,17 @@ export const pilotCareerList = [
     '10년',
 ]
 
+export const payDateList = [
+    {key : '0' , name : '직접입력'},
+    {key : '1' , name : '당일지급'},
+    {key : '2' , name : '작업종료 후 3일'},
+    {key : '3' , name : '작업종료 후 7일'},
+    {key : '4' , name : '매월 1일'},
+    {key : '5' , name : '매월 15일'},
+    {key : '6' , name : '매월 25일'},
+    {key : '7' , name : '매월 30일'},
+]
+
 export const bankList = [
     {key : '1', name : '국민은행'},
     {key : '2', name : '기업은행'},

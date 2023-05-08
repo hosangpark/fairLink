@@ -5,6 +5,7 @@ import { ProfileCardType } from '../componentsType';
 import { StarRating } from '../StarRating';
 import { AlertClearType } from '../../modal/modalType';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
+import { RecEmpModal } from '../../modal/RecEmpModal';
 
 
 export const ProfileInfoCard = ({
@@ -19,10 +20,12 @@ export const ProfileInfoCard = ({
     age = '42',
     gender = '남',
     phone = '010-1123-1111',
-    equip
+    equip,
+    mpt_idx,
 }:ProfileCardType) => {
 
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
+    const [recEmpModal, setRecEmpModal] = React.useState(false);
 
     const alertModalOn = ( msg : string, type? : string , strongMsg? : string) => {
         setAlertModal({
@@ -71,11 +74,13 @@ export const ProfileInfoCard = ({
                                 </Text>
                             </View>
                             <View style={{flexDirection:'row'}}>
-                            <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR,borderWidth:1, borderRadius:16, paddingHorizontal:10, paddingVertical:2, borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
-                                {jobType === 'my' ? '차주 겸 조종사' : 
-                                jobType === 'like ' ? '스페어 조종사' :
-                                '장비회사 소속 조종사'}
-                            </Text>
+                            {jobType &&
+                                <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR,borderWidth:1, borderRadius:16, paddingHorizontal:10, paddingVertical:2, borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
+                                    {jobType === 'my' ? '차주 겸 조종사' : 
+                                    jobType === 'like ' ? '스페어 조종사' :
+                                    '장비회사 소속 조종사'}
+                                </Text>
+                            }
                             </View>
                         </View>
                     </View>
@@ -113,11 +118,17 @@ export const ProfileInfoCard = ({
             </View>
         </View>
     </View>
-    <View style={{ margin: 20, position:'relative',}}>
+    <TouchableOpacity style={{ margin: 20, position:'relative',}} onPress={()=>{setRecEmpModal(true)}}>
         <View style={[styles.buttonStyle]}>
             <Text style={[fontStyle.f_medium, {fontSize:16,color:colors.WHITE_COLOR,}]}>총 <Text style={[fontStyle.f_bold, {fontSize: 18, }]}>{good}</Text> 업체가 추천을 해주었어요!</Text>
         </View>
-    </View>
+    </TouchableOpacity>
+    <RecEmpModal 
+        show={recEmpModal}
+        hide={()=>{setRecEmpModal(false)}}
+        action={()=>{}}
+        mpt_idx={mpt_idx ? mpt_idx : ''}
+    />
     </>
     )
 }

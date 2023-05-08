@@ -23,6 +23,7 @@ export const UserInfoCard = ({
     action, //
     refetch, //list 새로 불러오기
     equFavType, // 1: 스페어 2: 소속
+    cat_idx, //장비업체 - 조종사 프로필 조회
 }:UserInfoCardType) => {
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -100,7 +101,6 @@ export const UserInfoCard = ({
             }
             else{
                 if(mt_type === '1'){
-                    console.log(item);
                     navigation.navigate('CompanyProfile',{
                         cat_idx:item.cat_idx,
                         cot_idx:item.cot_idx,
@@ -108,7 +108,8 @@ export const UserInfoCard = ({
                     });
                 }
                 else if(mt_type === '2'){
-                    navigation.navigate('PilotProfile');
+                    console.log(cat_idx);
+                    navigation.navigate('PilotProfile',{cat_idx:cat_idx,mpt_idx : item.mpt_idx});
                 }
             }
         }}>
@@ -154,13 +155,17 @@ export const UserInfoCard = ({
                             <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>
                                 {item.name}
                                 {item.mpt_name}
+                                {item.mt_name}
                                 님</Text>
-                            <View style={{flexDirection:'row',marginTop:5}}>
-                                <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK}]}>{item.score.toFixed(1)}</Text>
+                            <View style={{flexDirection:'row',alignItems:'center',marginTop:8}}>
+                                <View style={{flexDirection:'row',alignItems:'center'}}>
+                                    <Image source={require('../../assets/img/ic_star_sm.png')} style={{width:13,height:13}} />
+                                    <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK,marginLeft:3}]}>{item.score.toFixed(1)}</Text>
+                                </View>
                                 <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK2,marginLeft:5}]}>평가수 {item.score_count}</Text>
                             </View>
-                            <TouchableOpacity style={[styles.cardReqEmpBtn]} onPress={()=>{setRecEmpModal(true)}}>
-                                <Text style={[fontStyle.f_semibold,{fontSize:15,color:colors.WHITE_COLOR}]}>추천기업 {item.good}</Text>
+                            <TouchableOpacity style={[styles.cardReqEmpBtn,{marginTop:8}]} onPress={()=>{setRecEmpModal(true)}}>
+                                <Text style={[fontStyle.f_semibold,{fontSize:15,color:colors.WHITE_COLOR}]}>추천기업 {item.good}{item.goods}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

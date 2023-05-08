@@ -54,7 +54,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
         try {
             dispatch(toggleLoading(true));
             const idxParams = {
-                mt_idx : "16",
+                mt_idx : mt_idx,
                 year:year,
                 month:Number(month) < 10 ? '0'+month : month,
                 status:'',
@@ -65,17 +65,16 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
             mt_type == '2'?  await equipBoardListMutation.mutateAsync(idxParams)
             :
             await pilotBoardListMutation.mutateAsync(idxParams)
+            dispatch(toggleLoading(false));
 
             if(result === 'true'){
                 setListData(data.data)
                 console.log("result",result)
-
-                
+                console.log(data.data);
             }
             else{
                 alertModalOn(msg,'api_error');
             }
-            dispatch(toggleLoading(false));
         // }
         } catch(err) {
             dispatch(toggleLoading(false));
@@ -84,8 +83,9 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
     };
     useFocusEffect(
         React.useCallback(() => {
-        BoardInfrom()
-        return () => {}
+            if(setTabIndex)setTabIndex(3);
+            BoardInfrom()
+            return () => {}
         }, [strOption,year,month]),
     );
 
