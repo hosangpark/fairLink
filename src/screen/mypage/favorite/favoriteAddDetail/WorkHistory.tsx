@@ -8,7 +8,11 @@ import { CustomButton } from '../../../../component/CustomButton';
 import { CustomAccordion2 } from '../../../../component/CustomAccordion2';
 import { CustomInputTextBox } from '../../../../component/CustomInputTextBox';
 
-export const WorkHistory = () => {
+type FavoriteAddPhone = {
+  equFavType? : string;
+}
+
+export const WorkHistory = ({equFavType}:FavoriteAddPhone) => {
     const [userType,setUserType] = useState('3')
     const [year,setYear] = useState<string>('')
     const [month,setMonth] = useState<string>('')

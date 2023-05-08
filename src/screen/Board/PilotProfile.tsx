@@ -15,14 +15,19 @@ import { AlertClearType } from "../../modal/modalType";
 import { initialAlert } from "../../modal/AlertModal";
 import { Profile } from "./companyProfileDetail/Profile";
 import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
+import { BackHandlerCom } from "../../component/utils/BackHandlerCom";
 
 
 const FirstRoute = () => (
-        <Profile />
+        // <Profile />
+        <>
+        </>
 );
 
 const SecondRoute = () => (
-        <RequiredDocuments/>
+        // <RequiredDocuments/>
+        <>
+        </>
 );
 
 
@@ -55,6 +60,7 @@ export const PilotProfile = () => {
     return (
         <SafeAreaView style={{flex:1}}>
             <BackHeader title="조종사 프로필"/>
+            <BackHandlerCom />
             <ScrollView style={{flex:1}}>
                 <ProfileInfoCard
                     index = '0'

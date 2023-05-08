@@ -7,6 +7,7 @@ const defaultState: userInfoType = {
     mt_idx : '',
     mt_name : '',
     mt_type : '',
+    location : '',
 };
 
 export const UserInfo = (state = defaultState, action: any) => {
@@ -19,6 +20,7 @@ export const UserInfo = (state = defaultState, action: any) => {
                 mt_idx : action.mt_idx,
                 mt_name : action.mt_name,
                 mt_type : action.mt_type,
+                location : action.location,
             };
         default:
             return state;

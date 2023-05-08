@@ -22,7 +22,14 @@ export const fetchPostData = async (postData:any, apiUrl : string, formData? :bo
         formData.append('debug_jwt' ,debugKey);
 
         for(let key in postData){
-            formData.append(key,postData[key]);
+            if(Array.isArray(postData[key])){ //배열데이터 formdata처리
+                for (let i = 0; i < postData[key].length; i++) {
+                    formData.append(`${key}[${i}]`, postData[key][i]);
+                  }
+            }
+            else{
+                formData.append(key,postData[key]);
+            }
         }
         const {data} = await axiosInstance.post(apiUrl,formData,config)
     

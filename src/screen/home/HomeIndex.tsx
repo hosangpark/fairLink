@@ -18,6 +18,8 @@ import { usePostQuery } from '../../util/reactQuery';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
 import cusToast from '../../util/toast/CusToast';
 
+import { useNavigationState } from '@react-navigation/native';
+import messaging from '@react-native-firebase/messaging';
 
 type tempItem = {
 	type : number, //리스트타입
@@ -30,7 +32,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 	const {data : reqCheckData , refetch:reqCheckRefetch} = usePostQuery('getConsReqCheck',{mt_idx:mt_idx},'cons/cons_require_check.php');
-
+	const {data : myProfileData, refetch:myProfileRefetch} = usePostQuery('getMyProfileData' , {mt_idx:mt_idx}, 'equip/mypage_info.php');
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
    const [exitApp , setExitApp] = React.useState(false);
@@ -48,6 +50,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
 	
 
+
 	const alertModalOn = (msg:string, type?:string) => {
 		setAlertModal({
 			...alertModal,
@@ -63,6 +66,9 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 		if(alertModal.type === 'none_req_con'){
 			navigation.navigate('OpenConstruction',{isData:false});
 		}
+		if(alertModal.type === 'none_profile'){
+			navigation.navigate('SettingProfile');
+		}
 	}
 	const reqConModalHide = () =>{
 		setReqConModal(false);
@@ -73,14 +79,32 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	}
 
 	const reqConHandler = () => {
-		if(reqCheckData){
-			const reqCheck = reqCheckData.data.data.require_check;
+		console.log(mt_type);
+		if(mt_type === '1'){
+			if(reqCheckData){
+				const reqCheck = reqCheckData.data.data.require_check;
 
-			if(reqCheck === 'Y'){
-				setReqConModal(true)
+				if(reqCheck === 'Y'){
+					setReqConModal(true)
+				}
+				else{
+					alertModalOn(`개설된 현장이 없습니다.\n현장개설을 먼저 해주세요.`,'none_req_con');
+				}
 			}
-			else{
-				alertModalOn(`개설된 현장이 없습니다.\n현장개설을 먼저 해주세요.`,'none_req_con');
+		}
+		else if(mt_type === '2'){
+			if(myProfileData){
+
+				const profileCheck = myProfileData.data.data.profile_check;
+
+
+				if(profileCheck === 'Y'){
+					if(setTabIndex)setTabIndex(2);
+					navigation.navigate('Request');
+				}
+				else{
+					alertModalOn('작성된 프로필 정보가 없습니다.\n프로필 작성을 먼저해주세요.','none_profile');
+				}
 			}
 		}
 	}
@@ -176,7 +200,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 								</View>
 							</TouchableOpacity>
 						:	
-							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{setReqConModal(true)} }>
+							<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.BLUE_COLOR}]} onPress={()=>{reqConHandler()}}>
 								<View>
 									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>현장</Text>
 									<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>지원하기</Text>
