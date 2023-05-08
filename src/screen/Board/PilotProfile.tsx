@@ -23,7 +23,6 @@ import { useAppSelector } from "../../redux/store";
 
 
 
-
 export const PilotProfile = ({route}:PilotProfileType) => {
 
     const {cat_idx,mpt_idx} = route.params;

@@ -249,7 +249,9 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
 
                 {(mt_type === '1' || detailFieldInfo.assign_check === 'N') ?
                 <View style={{flexDirection:'row'}}>
-                    <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}>
+                    <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}
+                    onPress={()=>console.log('1')}
+                    >
                         <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
                             조종사
                         </Text>

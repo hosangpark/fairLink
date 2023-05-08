@@ -173,20 +173,6 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                 </View>
             ))
         }
-        {/* <FlatList
-            data={accordionList}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<NodataView />}
-            // ListFooterComponent={isListLoading ? <LoadingIndicator /> : null}
-            renderItem={({ item,index} ) => (
-              <CustomAccordion
-                title={item}
-                data={items}
-                action={()=>{}}
-                Accordionkey={index}
-            />
-            )}
-          /> */}
         </ScrollView>
         <AlertModal 
             show={alertModal.alert}

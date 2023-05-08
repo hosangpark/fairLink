@@ -110,15 +110,12 @@ export const DetailField = ({route}:any) => {
     mt_type == "2" ?
     usePostQuery('getDetailFieldData2',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'equip/equip_order_info.php')
     :
-    mt_type == "3" ?
-    usePostQuery('getDetailFieldData3',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
-    :
     usePostQuery('getDetailFieldData4',{mt_idx : mt_idx,cat_idx:route.params.cat_idx},'pilot/pilot_order_info.php')
 
 
 
     React.useEffect(()=>{
-        console.log(DetailFieldData)
+        console.log(mt_type)
         dispatch(toggleLoading(DetailFieldDataLoading));
         if (DetailFieldData){
             setDetailFieldInfo(DetailFieldData.data.data);
@@ -209,7 +206,7 @@ export const DetailField = ({route}:any) => {
                 </View>
             </View>
             <View style={[mt_type === '1'? DetailFieldstyle.staticbox : DetailFieldstyle.staticbox2 ]}>
-                {mt_type ==='1' ?
+                {mt_type == '1' ?
                 <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:16}]}>
                     지원하기
                 </Text>
@@ -223,9 +220,11 @@ export const DetailField = ({route}:any) => {
                 </Text>
                 </View>
                 }
-                {mt_type ==='1' ?
+                {mt_type == '1' ?
                 <View style={{flexDirection:'row'}}>
-                    <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}>
+                    <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}
+                        onPress={()=>{console.log('1')}}
+                    >
                         <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
                             조종사
                         </Text>
@@ -233,7 +232,9 @@ export const DetailField = ({route}:any) => {
                             본인 또는 소속 조종사
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={DetailFieldstyle.staticinbox}>
+                    <TouchableOpacity style={DetailFieldstyle.staticinbox}
+                        onPress={()=>console.log('2')}
+                    >
                         <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
                             조종사
                         </Text>

@@ -134,32 +134,55 @@ const fcmSetting = () => {
       onNotification: async function (notification:any) {
         // console.log("navigationRef",navigationRef.current)
         // console.log('NOTIFICATION 작동여부:', notification.channelId);
-        
-        console.log(notification.userInteraction)
-        console.log(notification.id)
-
         if(notification.userInteraction){
           console.log('포그라운드에서 푸시 클릭했을때.');
           console.log(notification.data);
 
-          switch(notification.data.type){
-            case "":
-              // navigationRef.current.navigate('Home')
-              // navigationRef.current.navigate('DetailField',{cot_idx:""})
-              // navigationRef.current.navigate('DetailField',{cat_idx:"16"})
-              navigationRef.current.navigate('ElectronicContract')
+          switch(notification.data.link1){
+            case "Home":
+              navigationRef.current.navigate('Home')
               break;
-            case "Request":
-              navigationRef.current.navigate('AcquaintanceRequestTest')
+            case "DetailField_eq_pi":
+              navigationRef.current.navigate('DetailField',{
+                cat_idx:notification.data.link2.cat_idx,
+                cot_idx:notification.data.link2.cot_idx
+              })
+              break;
+            case "DetailField_eq":
+              navigationRef.current.navigate('DetailField',{
+                cot_idx:notification.data.link2.cot_idx,
+              })
+              break;
+            case "DetailField_pi":
+              navigationRef.current.navigate('DetailField',{
+                cat_idx:notification.data.link2.cat_idx,
+              })
+              break;
+            case "ElectronicContract_eq":
+              navigationRef.current.navigate('ElectronicContract',{
+                route_type:"Info2",
+                contract_idx:notification.data.link2,
+              })
+              break;
+            case "ElectronicContract_cons":
+              navigationRef.current.navigate('ElectronicContract',{
+                route_type:"Info",
+                cat_idx:notification.data.link2.cat_idx,
+                cot_idx:notification.data.link2.cot_idx,
+              })
+              break;
+            case "WorkReport_cons":
+              navigationRef.current.navigate('WorkReport')
               break;
             case "Board":
               navigationRef.current.navigate('Board')
               break;
+            case "Request":
+              navigationRef.current.navigate('Request')
+              break;
           }
 
         } else{
-          console.log(navigationRef)
-
           // if (navigationRouteName == 'MessageRoom' &&
           //     (navigationRoute.params.items.chr_id == notification.data.room_idx ||
           //       navigationRoute.params.items.room_id == notification.data.room_idx)) {
@@ -179,7 +202,6 @@ const fcmSetting = () => {
       onAction: function (notification:any) {
         console.log('ACTION:', notification.action);
         console.log('NOTIFICATION:', notification);
-        // process the action
       },
 
       // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
@@ -195,9 +217,6 @@ const fcmSetting = () => {
       },
       popInitialNotification: true,
       requestPermissions: true,
-
-
-      
       });
 
       messaging().setBackgroundMessageHandler(async remoteMessage => { //background push
