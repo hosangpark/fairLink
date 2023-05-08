@@ -100,7 +100,6 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     React.useEffect(()=>{
         dispatch(toggleLoading(myInfoLoading));
         if(myInfoData){
-            console.log(myInfoData.data.data);
             setMyInfo(myInfoData.data.data);
         }
     },[myInfoData])
@@ -190,7 +189,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
                     </TouchableOpacity>
                     {/* <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {userType:'3'}) }}> */}
-                    <TouchableOpacity onPress={() => {navigation.navigate('MatchingEquipment') }}>
+                    <TouchableOpacity onPress={() => { {/*navigation.navigate('MatchingEquipment')*/} }}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>
