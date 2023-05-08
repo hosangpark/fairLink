@@ -43,9 +43,9 @@ export const DetailWork = ({route}:DetailWorkType) => {
     const {data : DetailWorkData, isLoading : DetailWorkDataLoading, isError : DetailWorkDataError} = 
     /** mt_idx 임의입력 수정필요 */
     mt_type =="1"?
-    usePostQuery('getConsDetailWorkData',{mt_idx : "17", cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx},'cons/cons_order_info2.php')
+    usePostQuery('getConsDetailWorkData',{mt_idx : mt_idx, cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx},'cons/cons_order_info2.php')
     :
-    usePostQuery('getEquipDetailWorkData',{mt_idx : "17", cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx},'equip/equip_order_info2.php')
+    usePostQuery('getEquipDetailWorkData',{mt_idx : mt_idx, cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx},'equip/equip_order_info2.php')
 
 
     const alertModalOn = (strongMsg?:string) => { //alert 켜기

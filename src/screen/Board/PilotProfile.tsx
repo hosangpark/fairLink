@@ -13,20 +13,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AlertModal } from "../../modal/AlertModal";
 import { AlertClearType } from "../../modal/modalType";
 import { initialAlert } from "../../modal/AlertModal";
-import { Profile } from "./companyProfileDetail/Profile";
-import { RequiredDocuments } from "./companyProfileDetail/RequiredDocuments";
+import { Profile } from "./pilotProfileDetail/Profile";
+import { RequiredDocuments } from "./pilotProfileDetail/RequiredDocuments";
 import { BackHandlerCom } from "../../component/utils/BackHandlerCom";
 
 
 const FirstRoute = () => (
-        // <Profile />
-        <>
-        </>
+    <>
+    <Profile />
+    </>
 );
 
 const SecondRoute = () => (
-        // <RequiredDocuments/>
-        <>
+    <>
+    <RequiredDocuments/>
         </>
 );
 

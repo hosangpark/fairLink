@@ -27,6 +27,7 @@ export const BoardCard = ({
     met_company,
     mct_company,
     match_type,
+    pilot_name,
 }:BoardCardType) => {
     const {mt_idx,mt_type} = useAppSelector(state=>state.userInfo)
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -110,7 +111,7 @@ export const BoardCard = ({
                         <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
                             {mt_type=='1'? '조종사':mt_type=='2'? '지원자':'장비회사'}</Text>
                         <Text style={[fontStyle.f_semibold,{fontSize:mt_type!=='4'? 20:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={2}>
-                            {mt_type!=='4'? [apply_count]+'명':[met_company]}
+                            {pilot_name? pilot_name:<>{mt_type!=='4'? [apply_count]+'명':[met_company]}</>}
                         </Text>
                         {mt_type !=='4' ?
                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>경력 {career}년+</Text>

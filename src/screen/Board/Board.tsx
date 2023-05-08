@@ -54,7 +54,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
         try {
             dispatch(toggleLoading(true));
             const idxParams = {
-                mt_idx : "16",
+                mt_idx : mt_idx,
                 year:year,
                 month:Number(month) < 10 ? '0'+month : month,
                 status:'',
@@ -84,6 +84,8 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
     };
     useFocusEffect(
         React.useCallback(() => {
+        console.log(mt_idx)
+        console.log(mt_type)
         BoardInfrom()
         return () => {}
         }, [strOption,year,month]),
@@ -173,20 +175,6 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                 </View>
             ))
         }
-        {/* <FlatList
-            data={accordionList}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<NodataView />}
-            // ListFooterComponent={isListLoading ? <LoadingIndicator /> : null}
-            renderItem={({ item,index} ) => (
-              <CustomAccordion
-                title={item}
-                data={items}
-                action={()=>{}}
-                Accordionkey={index}
-            />
-            )}
-          /> */}
         </ScrollView>
         <AlertModal 
             show={alertModal.alert}

@@ -123,6 +123,7 @@ export interface BoardCardType {
     met_company?:string
     mct_company?:string
     match_type?:string
+    pilot_name?:string
 }
 
 export interface ProfileCardType {

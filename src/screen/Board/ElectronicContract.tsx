@@ -57,9 +57,9 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
     const {data : ElectronicData, isLoading : ElectronicDataLoading, isError : ElectronicDataError} = 
     /** mt_idx 임의입력 수정필요 */
     route_type == 'Info2' ?
-    usePostQuery('getElectronic',{mt_idx : "17",contract_idx:contract_idx},'cons/cons_contract_info2.php')
+    usePostQuery('getElectronic',{mt_idx : mt_idx,contract_idx:contract_idx},'cons/cons_contract_info2.php')
     :
-    usePostQuery('getElectronic',{mt_idx : "17",cot_idx:cot_idx,cat_idx:cat_idx},'cons/cons_contract_info.php')
+    usePostQuery('getElectronic',{mt_idx : mt_idx,cot_idx:cot_idx,cat_idx:cat_idx},'cons/cons_contract_info.php')
 
     const inputHandler = (text:string, type? : string) => { //state input handler
         if(type){
@@ -120,6 +120,9 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
     // },[])
     useEffect(()=>{
     console.log(route)
+    if(mt_type !== '1'){
+        setEditMode('view')
+    }
     dispatch(toggleLoading(ElectronicDataLoading));
     if(ElectronicData){
         console.log(ElectronicData.data)
@@ -263,7 +266,9 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                                 ...Electronic.data,
                                 cct_c_file_check:Electronic.data.cct_c_file_check == "Y" ? "N":"Y"
                             }
-                        })]}>
+                        })]}
+                        disabled={editMode == 'view'}
+                        >
                         <CheckBox 
                         value={Electronic.data.cct_c_file_check == "Y"}
                         onValueChange={()=>{
@@ -275,6 +280,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                             }
                         })
                         }}
+                        disabled={editMode == 'view'}
                         />
                         <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginTop:3}]}>가입완료
                         </Text>
@@ -304,9 +310,9 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,ElectronicContractstyle.DefaultBlackText,]}>사용금액
                     </Text>
-                    <View style={[styles.TextInputBox,{flexDirection:'row',flex:1,alignItems:'center',marginBottom:26}]}>
+                    <View style={[(editMode !== 'view') ?styles.TextInputBox:styles.TextInputFalseBox,{flexDirection:'row',flex:1,alignItems:'center',marginBottom:26}]}>
                         <TextInput
-                        style={[fontStyle.f_regular,{flexShrink:1,paddingHorizontal:10,flex:1,fontSize:16,height:46}]}
+                        style={[fontStyle.f_regular,{flexShrink:1,paddingHorizontal:10,flex:1,fontSize:16,height:46,color:colors.FONT_COLOR_BLACK}]}
                         textAlign={'right'}
                         value={Electronic.data.cct_pay_price}
                         keyboardType={'number-pad'}
@@ -318,8 +324,8 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                                 cct_pay_price:comma(e)
                             }
                         })
-                            // setText(comma(e))
                         }}
+                        editable={editMode == 'view'}
                         />
                         <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginRight:15}]}>원</Text>
                     </View>
@@ -333,7 +339,9 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                                 ...Electronic.data,
                                 cct_time:Electronic.data.cct_time == "1" ? "2":"1"
                             }})
-                        }}>
+                        }}
+                        disabled={editMode == 'view'}
+                        >
                             <CheckBox 
                             value={Electronic.data.cct_time == "1"}
                             onValueChange={()=>{
@@ -344,26 +352,32 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                                 cct_time:Electronic.data.cct_time == "1" ? "2":"1"
                             }})
                             }}
+                            disabled={editMode == 'view'}
                             />
                             <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginTop:3,flexShrink:1}]}>1일 8시간 기준
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{flexDirection:'row',flex:1}} onPress={()=>{
-                            setElectronic({
+                             setElectronic({
                             ...Electronic,
                             data: {
+                                ...Electronic.data,
                                 cct_time:Electronic.data.cct_time == "1" ? "2":"1"
                             }})
-                        }}>
+                        }}
+                        disabled={editMode == 'view'}
+                        >
                             <CheckBox 
                             value={Electronic.data.cct_time == "2"}
                             onValueChange={()=>{
                             setElectronic({
                             ...Electronic,
                             data: {
+                                ...Electronic.data,
                                 cct_time:Electronic.data.cct_time == "1" ? "2":"1"
                             }})
                             }}
+                            disabled={editMode == 'view'}
                             />
                             <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginTop:3,flexShrink:1}]}>월 200시간 기준
                             </Text>

@@ -10,11 +10,35 @@ import { CustomInputTextBox } from '../../component/CustomInputTextBox';
 import { CustomWaveBox } from '../../component/CustomWaveBox';
 import { comma } from '../../component/utils/funcKt';
 import { CustomButton } from '../../component/CustomButton';
+import { usePostQuery } from '../../util/reactQuery';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 
 
-export const WorkReport = () => {
+export const WorkReport = ({route}:any) => {
+    const {cdwt_idx} = route.params;
+    const dispatch = useAppDispatch();
+    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    const [editMode, setEditMode] = React.useState('');
     const [price,setPrice] = useState<SetStateAction<any>>('')
+    const [WorkReport, setWorkReport] = React.useState<any>(); //입력정보
+
+    const {data : WorkReportData, isLoading : WorkReportDataLoading, isError : WorkReportDataError} = 
+    /** mt_idx 임의입력 수정필요 */
+    usePostQuery('getWorkReport',{mt_idx : mt_idx,cdwt_idx:cdwt_idx},'pilot/pilot_work_write.php')
+
+    const inputHandler = (text:string, type? : string) => { //state input handler
+        if(type){
+            console.log(text,type);
+            setWorkReport({
+                ...WorkReport,
+                data:{
+                    ...WorkReport.data,
+                    [type] : text,
+                }
+            })
+        }
+    }
 
     useEffect(()=>{
         {setPrice(comma('7000000'))}
@@ -34,6 +58,17 @@ export const WorkReport = () => {
                         2023.01.01</Text>
                     </View>
                 </View>
+                <CustomInputTextBox
+                    style={{height:46}}
+                    title={'건설기계명'}
+                    essential={true}
+                    containerStyle={styles.SubTitleText}
+                    // input={Electronic.data.cct_c_company}
+                    setInput={inputHandler}
+                    // type={'cct_c_company'}
+                    imgfile={undefined}
+                    editable={editMode !== 'view'}
+                />
                 <View style={[styles.SubTitleText]}>
                     <Text style={[fontStyle.f_semibold,WorkReportstyle.DefaultBlackText]}>건설기계명
                     </Text>

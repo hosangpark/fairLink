@@ -56,6 +56,7 @@ export const CustomAccordion = ({
                 met_company={item.met_company}
                 mct_company={item.mct_company}
                 match_type={item.match_type}
+                pilot_name={item.pilot_name}
               />
             )
           })}
