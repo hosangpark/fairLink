@@ -181,8 +181,10 @@ export type CompanyInfoItemType = {
 export type CompanyProfileType = RouteType &{ //장비회사 프로필
 
 }
-export type ElectronicContractType = RouteType &{ //장비회사 프로필
-    mt_idx:string
+export type ElectronicContractType = RouteType &{ 
+    // mt_idx:string
+}
+export type DetailWorkType = RouteType &{ 
 }
 
 export interface SelImageType {

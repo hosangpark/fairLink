@@ -63,6 +63,7 @@ export type RouterNavigatorParams = {
     /** board */
     DetailField:{
         cot_idx:string
+        cat_idx:string
     } //현장세부내용
     DetailWork:{
         cot_idx:string

@@ -9,7 +9,7 @@
  */
 
 import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
-import React from 'react';
+import React,{createRef} from 'react';
 import { Router } from './Router';
 import SplashScreen from 'react-native-splash-screen';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -19,6 +19,8 @@ import store from './src/redux/store';
 import {Platform,Alert} from 'react-native';
 import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 
+import PushNotification from 'react-native-push-notification'; //push...noti
+import { useNavigationState } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 /**
  * react-native 버전 및 sdk 버전은 git hub readme 참조해주세요. 
@@ -46,9 +48,189 @@ const App = () => {
 
   const [queryClient] = React.useState(()=>new QueryClient);
 
-  messaging().setBackgroundMessageHandler(async remoteMessage => { //background push
-    console.log('is background', remoteMessage);
-  });
+  const navigationRef:React.RefObject<any> = createRef();
+  
+  // const navigationRouteName = routes.length ? routes[routes.length - 1].name : '';
+  // const navigationRoute = routes[routes.length - 1];
+
+
+  const callScreen = (remoteMessage:any, isDirectMove = false) => {
+    console.log('callScreen', remoteMessage.data, isDirectMove)
+    console.log('message', remoteMessage.data, isDirectMove)
+    let message = (remoteMessage.data.message || remoteMessage.data.body);
+    let title = (remoteMessage.data.title);
+
+    // if (remoteMessage.data?.type == 'chat-rev' || remoteMessage.data?.type == 'chat_add') {
+
+    if (isDirectMove) {
+      console.log('111111',remoteMessage)
+      // if (remoteMessage.data?.type == 'chat-rev' || remoteMessage.data?.type == 'chat-send') {
+      //   //채팅수락알림, 메시지도착알림
+      //   navigation.navigate('HomeIndex');
+      // } else if (remoteMessage.data?.type == 'chat_add' || remoteMessage.data?.type == 'product_edit' || remoteMessage.data?.type == 'product_add') {
+      //   //채팅요청알림, 상품금액변경알림
+      //   navigation.navigate('HomeIndex');
+      // } else if (remoteMessage.data?.type == 'review_add') {
+      //   //후기수신
+      //   navigation.navigate('HomeIndex');
+      // }
+    } else {
+      console.log('22222',remoteMessage)
+    }
+  }
+
+  /** */
+  const sendLocalNotificationWithSound = (onRemote:any) => {
+    // if (Platform.OS == 'ios') {
+    //   PushNotificationIOS.addNotificationRequest({
+    //     id: onRemote.data.notificationId
+    //       ? onRemote.data.notificationId
+    //       : new Date().toString(),
+    //     title: (onRemote.title),
+    //     subtitle: '',
+    //     body: (onRemote.body ? onRemote.body : onRemote.message),
+    //     sound: 'default',
+    //     // sound: 'buzy1.wav',
+    //   });
+    // } else {
+      PushNotification.localNotification({
+        channelId: onRemote.channelId ?? 'default',
+        id: onRemote.data.notificationId,
+        title: (onRemote.title),
+        message: (onRemote.message),
+        soundName: 'default',
+        playSound: true,
+        // smallIcon: 'ic_stat_ic_notification',
+        color: '#FFFFFF',
+        largeIcon: '',
+        largeIconUrl: '',
+        priority: 'high',
+
+        // bigPictureUrl?: string | undefined;
+        // bigLargeIcon?: string | undefined;
+        // bigLargeIconUrl?: string | undefined;
+
+        vibrate: true,
+        groupSummary: true,
+        userInfo: onRemote.data,
+        // badge: 0,
+      });
+    // }
+  };
+
+
+const fcmSetting = () => {
+    // if (Platform.OS === 'ios') {
+    //   PushNotificationIOS.setApplicationIconBadgeNumber(0);
+    // }
+
+    PushNotification.configure({
+        /** firebaseToken */
+      onRegister: function (token:any) {
+        console.log('TOKEN:', token);
+      },
+
+      // (required) Called when a remote is received or opened, or local notification is opened
+      onNotification: async function (notification:any) {
+        // console.log("navigationRef",navigationRef.current)
+        // console.log('NOTIFICATION 작동여부:', notification.channelId);
+        
+        console.log(notification.userInteraction)
+        console.log(notification.id)
+
+        if(notification.userInteraction){
+          console.log('포그라운드에서 푸시 클릭했을때.');
+          console.log(notification.data);
+
+          switch(notification.data.type){
+            case "":
+              // navigationRef.current.navigate('Home')
+              // navigationRef.current.navigate('DetailField',{cot_idx:""})
+              // navigationRef.current.navigate('DetailField',{cat_idx:"16"})
+              navigationRef.current.navigate('ElectronicContract')
+              break;
+            case "Request":
+              navigationRef.current.navigate('AcquaintanceRequestTest')
+              break;
+            case "Board":
+              navigationRef.current.navigate('Board')
+              break;
+          }
+
+        } else{
+          console.log(navigationRef)
+
+          // if (navigationRouteName == 'MessageRoom' &&
+          //     (navigationRoute.params.items.chr_id == notification.data.room_idx ||
+          //       navigationRoute.params.items.room_id == notification.data.room_idx)) {
+          // } else {
+          //   //내부 노티를 써서 일부러 푸시를 띄움
+          // }
+          sendLocalNotificationWithSound(notification);
+        }
+
+        // if (notification.id == '') notification.id = new Date().toString();
+        //     callScreen(notification, true);
+          // switch(notification.data.type){
+        
+      },
+
+      // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
+      onAction: function (notification:any) {
+        console.log('ACTION:', notification.action);
+        console.log('NOTIFICATION:', notification);
+        // process the action
+      },
+
+      // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+      onRegistrationError: function (err:any) {
+        console.error(err.message, err);
+      },
+
+      // IOS ONLY (optional): default: all - Permissions to register.
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+      popInitialNotification: true,
+      requestPermissions: true,
+
+
+      
+      });
+
+      messaging().setBackgroundMessageHandler(async remoteMessage => { //background push
+        console.log('is background', remoteMessage);
+      });
+      // // //응용 프로그램이 실행 중이지만 백그라운드에있는 경우
+      messaging().onNotificationOpenedApp(async remoteMessage => {
+      });
+
+      messaging().onMessage(async remoteMessage => {
+          
+          if(Platform.OS == "ios"){
+              // ios 인경우 포그라운드 처리
+          }else{          
+              // 안드로이드 인경우 포그라운드 처리
+              
+              // console.log("remoteMessage",remoteMessage)
+              // console.log("navigationRef",navigationRef)
+          }
+      })
+      //앱 백그라운드 팝업 클릭시 이벤트 !
+      messaging()
+      .getInitialNotification()
+      .then(async remoteMessage => {
+      
+      if (remoteMessage) { 
+      }
+    });
+  }
+
+  React.useEffect(() => {
+    fcmSetting();
+  }, [])
   
 
   React.useEffect(()=>{
@@ -86,7 +268,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <Router />
         </NavigationContainer>
       </Provider>

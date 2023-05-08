@@ -17,9 +17,7 @@ import { useAppSelector } from '../../redux/store';
 import { usePostQuery } from '../../util/reactQuery';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
 import cusToast from '../../util/toast/CusToast';
-import PushNotification from 'react-native-push-notification'; //push...noti
-import { useNavigationState } from '@react-navigation/native';
-import messaging from '@react-native-firebase/messaging';
+
 
 type tempItem = {
 	type : number, //리스트타입
@@ -49,177 +47,6 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
 	
-  const routes = useNavigationState(state => state.routes);
-  // const navigationRouteName = routes.length ? routes[routes.length - 1].name : '';
-  // const navigationRoute = routes[routes.length - 1];
-
-
-  const callScreen = (remoteMessage:any, isDirectMove = false) => {
-    console.log('callScreen', remoteMessage.data, isDirectMove)
-    console.log('message', remoteMessage.data, isDirectMove)
-    let message = (remoteMessage.data.message || remoteMessage.data.body);
-    let title = (remoteMessage.data.title);
-
-    // if (remoteMessage.data?.type == 'chat-rev' || remoteMessage.data?.type == 'chat_add') {
-
-    if (isDirectMove) {
-      console.log('111111',remoteMessage)
-      // if (remoteMessage.data?.type == 'chat-rev' || remoteMessage.data?.type == 'chat-send') {
-      //   //채팅수락알림, 메시지도착알림
-      //   navigation.navigate('HomeIndex');
-      // } else if (remoteMessage.data?.type == 'chat_add' || remoteMessage.data?.type == 'product_edit' || remoteMessage.data?.type == 'product_add') {
-      //   //채팅요청알림, 상품금액변경알림
-      //   navigation.navigate('HomeIndex');
-      // } else if (remoteMessage.data?.type == 'review_add') {
-      //   //후기수신
-      //   navigation.navigate('HomeIndex');
-        
-      // }
-    } else {
-      console.log('22222',remoteMessage)
-
-    }
-
-  }
-
-  /** */
-  const sendLocalNotificationWithSound = (onRemote:any) => {
-    console.log('sendLocalNotificationWithSound', onRemote);
-
-    // if (Platform.OS == 'ios') {
-    //   PushNotificationIOS.addNotificationRequest({
-    //     id: onRemote.data.notificationId
-    //       ? onRemote.data.notificationId
-    //       : new Date().toString(),
-    //     title: (onRemote.title),
-    //     subtitle: '',
-    //     body: (onRemote.body ? onRemote.body : onRemote.message),
-    //     sound: 'default',
-    //     // sound: 'buzy1.wav',
-    //   });
-    // } else {
-      PushNotification.localNotification({
-        channelId: onRemote.channelId ?? 'default',
-        id: onRemote.data.notificationId,
-        title: (onRemote.title),
-        message: (onRemote.message),
-        soundName: 'default',
-        playSound: true,
-        // smallIcon: 'ic_stat_ic_notification',
-        color: '#FFFFFF',
-        largeIcon: '',
-        largeIconUrl: '',
-        priority: 'high',
-
-        // bigPictureUrl?: string | undefined;
-        // bigLargeIcon?: string | undefined;
-        // bigLargeIconUrl?: string | undefined;
-
-        vibrate: true,
-        groupSummary: true,
-        userInfo: onRemote.data,
-        // badge: 0,
-      });
-    // }
-  };
-
-
-const fcmSetting = () => {
-    // if (Platform.OS === 'ios') {
-    //   PushNotificationIOS.setApplicationIconBadgeNumber(0);
-    // }
-
-    PushNotification.configure({
-        /** firebaseToken */
-      onRegister: function (token:any) {
-        console.log('TOKEN:', token);
-      },
-
-      // (required) Called when a remote is received or opened, or local notification is opened
-      onNotification: async function (notification:any) {
-        console.log('NOTIFICATION 작동여부:', notification);
-        if (typeof notification.id == 'undefined')
-          notification.id = new Date().toString();
-        if (notification.foreground) {
-
-          // callScreen(notification);
-          if (notification.userInteraction) {
-            //클릭했을때 -> 팝업말고 바로 이동
-
-            console.log('포그라운드에서 푸시 클릭했을때.');
-            if (notification.id == '') notification.id = new Date().toString();
-            callScreen(notification, true);
-          } else if (notification.data.title) {
-
-            // //채팅방
-            // if (navigationRouteName == 'MessageRoom' &&
-            //   (navigationRoute.params.items.chr_id == notification.data.room_idx ||
-            //     navigationRoute.params.items.room_id == notification.data.room_idx)) {
-
-            // } else {
-            //   //내부 노티를 써서 일부러 푸시를 띄움
-            //   sendLocalNotificationWithSound(notification);
-            // }
-            sendLocalNotificationWithSound(notification);
-            // process the notification
-
-            console.log('포그라운푸시.', navigationRoute, navigationRouteName);
-          }
-        } else {
-          //백그라운드일때는 터치에만 반응 -> ios앱 푸시 눌러서 앱 켯을때도 여기로 들어옴.
-          console.log(
-            '백그라운드 푸시',
-            notification,
-            navigationRoute,
-            // navigation.dangerouslyGetState().index,
-            // navigation.dangerouslyGetState().index.routes,
-          );
-
-          if (notification.userInteraction) {            
-            callScreen(notification, true);
-          }else{
-            // if (Platform.OS === 'ios') {
-            //   PushNotificationIOS.getApplicationIconBadgeNumber(function (number) {
-            //     PushNotificationIOS.setApplicationIconBadgeNumber(number + 1);
-            //   });
-            // }
-          }
-
-          
-        }
-        // notification.finish(PushNotificationIOS.FetchResult.NoData);
-      },
-
-      // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
-      onAction: function (notification:any) {
-        console.log('ACTION:', notification.action);
-        console.log('NOTIFICATION:', notification);
-
-        // process the action
-      },
-
-      // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-      onRegistrationError: function (err:any) {
-        console.error(err.message, err);
-      },
-
-      // IOS ONLY (optional): default: all - Permissions to register.
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
-
-      // Should the initial notification be popped automatically
-      // default: true
-      popInitialNotification: true,
-      requestPermissions: true,
-    });
-  }
-  React.useEffect(() => {
-    fcmSetting();
-
-  }, [])
 
 	const alertModalOn = (msg:string, type?:string) => {
 		setAlertModal({
@@ -311,15 +138,6 @@ const fcmSetting = () => {
 		}
 	},[reqCheckData])
 
-	React.useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-			// fcmSetting()
-			callScreen(remoteMessage)
-      //forground 푸시
-    });
-    return unsubscribe;
-  });
 
 
 
