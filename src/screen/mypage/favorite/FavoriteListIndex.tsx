@@ -177,6 +177,7 @@ export const FavoriteListIndex = ({route}:any) => {
                                 item={item}
                                 action={()=>{navigation.navigate('EquimentsDetail')}}
                                 action2={()=>{()=>{}}}
+                                refetch={getFavoriteRetch}
                             />
                         )
                     }}

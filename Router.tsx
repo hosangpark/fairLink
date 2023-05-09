@@ -30,7 +30,7 @@ import { MyProfile } from './src/screen/mypage/settingProfile/MyProfile';
 import { Auth } from './src/screen/Auth';
 import { JoinInfo } from './src/screen/signUp/JoinInfo';
 import { RegDocument } from './src/screen/signUp/RegDocument';
-import { MatchingFilot } from './src/screen/Board/MatchingFilot';
+import { MatchingPilot } from './src/screen/Board/MatchingPilot';
 import { Request } from './src/screen/Request/Request';
 import { OpenRequest } from './src/screen/Request/OpenRequest';
 import { AcquaintanceRequest } from './src/screen/Request/acqReq/AcquaintanceRequest';
@@ -41,6 +41,7 @@ import { HomeIndex } from './src/screen/home/HomeIndex';
 import { RequestRouter } from './src/screen/Request/RequestRouter';
 import { Board } from './src/screen/Board/Board';
 import { ScaneDetailField } from './src/screen/Request/ScaneDetailField';
+import { RequestPilot } from './src/screen/Board/RequestPilot';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -161,9 +162,14 @@ export const Router = () => {
                     component={MatchingEquipment}
                     options={{headerShown:false}}
                 />
+                <Stack.Screen //조종사 요청하기
+                    name={'RequestPilot'}
+                    component={RequestPilot}
+                    options={{headerShown:false}}
+                />
                 <Stack.Screen
-                    name={'MatchingFilot'}
-                    component={MatchingFilot}
+                    name={'MatchingPilot'}
+                    component={MatchingPilot}
                     options={{headerShown:false}}
                 />
                 <Stack.Screen // 이력 및 현황 - 작업세부내용

@@ -397,22 +397,22 @@ export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요�
                                 <View style={{borderTopWidth:1,borderTopColor:colors.BORDER_GRAY_COLOR,padding:20,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,zIndex:1,borderBottomEndRadius:8}}>
                                     <View>
                                         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>회사명</Text>
-                                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{myInfo?.company}</Text>
+                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,flex:3}]}>회사명</Text>
+                                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,flex:7}]}>{myInfo?.company}</Text>
                                         </View>
                                     </View>
                                     <MarginCom mt={15} />
                                     <View>
                                         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>현장소장</Text>
-                                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{myInfo?.crt_director}</Text>
+                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,flex:3}]}>현장소장</Text>
+                                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,flex:7}]}>{myInfo?.crt_director}</Text>
                                         </View>
                                     </View>
                                     <MarginCom mt={15} />
                                     <View>
                                         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>현장주소</Text>
-                                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{myInfo?.detail_location}</Text>
+                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,flex:3}]}>현장주소</Text>
+                                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,flex:7}]}>{myInfo?.detail_location}</Text>
                                         </View>
                                     </View>
                                 </View>
