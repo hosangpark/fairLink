@@ -20,6 +20,9 @@ export type RouterNavigatorParams = {
     Board:undefined;
     Release:undefined;
     MyPage:undefined;
+    Document:{
+        cdwt_idx?:string,
+    };
 
     /** user */
     SignIn:undefined;
@@ -83,6 +86,7 @@ export type RouterNavigatorParams = {
         mpt_idx?:string,
     } 
     PilotProfile:{ //조종사프로필
+        cot_idx?:string,
         cat_idx?:string,
         mpt_idx?:string,
     } 

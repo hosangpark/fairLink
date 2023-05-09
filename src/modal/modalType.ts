@@ -86,6 +86,19 @@ export type SelectModalType = { //select box있는 modal type
     isDisable? : boolean,
 }
 
+export type PilotWorkModalType = {
+    show : boolean,
+    hide : () => void
+    alertModalOn : (msg:string,type?:string) => void
+}
+
+export type pilotWorkListItemType = {
+    cdwt_idx : string,
+    date : string,
+    crt_name : string,
+    write_check : string,
+}
+
 interface ModalType { //default modal type
     show:boolean;
     hide : () => void;

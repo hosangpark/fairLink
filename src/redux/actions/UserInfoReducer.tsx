@@ -10,5 +10,6 @@ export function updateUserInfo(data: userInfoType) {
         mt_name : data.mt_name,
         mt_type : data.mt_type,
         location : data.location,
+        equip_pilot : data.equip_pilot,
     };
 }

@@ -2,12 +2,12 @@ import React from 'react';
 import {View , ScrollView , KeyboardAvoidingView, Text, TextInput} from 'react-native';
 import { BackHeader } from '../../../component/header/BackHeader';
 import { BackHandlerCom } from '../../../component/utils/BackHandlerCom';
-import { colors, fontStyle, selectBoxStyle2, styles } from '../../../style/style';
+import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../../style/style';
 import { AcqReqStep2Type } from '../../screenType';
 import CheckBox from '@react-native-community/checkbox';
 import { MarginCom } from '../../../component/MarginCom';
 import { CustomSelectBox } from '../../../component/CustomSelectBox';
-import { dayList, pilotCareerList } from '../../../component/utils/list';
+import { ageList, dayList, payDateList, pilotCareerList, pilotCarrerKeyList, scoreList } from '../../../component/utils/list';
 import { CustomInputTextBox } from '../../../component/CustomInputTextBox';
 import { NumberComma } from '../../../util/func';
 import { CustomButton } from '../../../component/CustomButton';
@@ -25,13 +25,17 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
 
     const {mt_idx} = useAppSelector(state => state.userInfo);
     const {firstInputInfo} = route.params;
-    const AcqReqMutation = usePostMutation('acqReq','cons/cons_like_order.php');
+    const AcqReqMutation = usePostMutation('acqReq','cons/cons_open_order.php');
 
     const [inputInfo, setInputInfo] = React.useState({
         cot_pay_type : 'Y',
-        cot_pay_date : '1',
+        cot_pay_date : '0',
         cot_pay_etc : '',
         cot_pay_price : '',
+        cot_career : '0',
+        cot_age : '0',
+        cot_score : '0',
+        cot_goods : '0',
         cot_memo : '',
     })
     const [tempPrice , setTempPrice] = React.useState('');
@@ -66,16 +70,18 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
     }
 
     const acqReqHandler = () => { //지인배차 요청 유효성 체크 및 confirm
-        if(inputInfo.cot_pay_price === ''){
+        if(inputInfo.cot_pay_date === '0' && inputInfo.cot_pay_etc === ''){
+            alertModalOn('지급시기를 입력해주세요.');
+        }
+        else if(inputInfo.cot_pay_price === ''){
             alertModalOn('대금 금액을 입력해주세요.');
         }
         else{
-            alertModalOn(`요구사항에 부합하는\n주변지역 장비업체에게\n공개배차 요청하겠습니까?`);
+            alertModalOn(`요구사항에 부합하는\n주변지역 장비업체에게\n공개배차 요청하겠습니까?`,'req_confirm');
         }
     }
     const acqReqAccess = async () => { //배차요청
-        console.log('firstInpuInfo' , firstInputInfo);
-        console.log('inputInfo ? ' , inputInfo);
+
         try{
             let stringSubList = '';
             const stringPayPrice = inputInfo.cot_pay_price.split(",").join("");;
@@ -128,7 +134,7 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
 
     return(
         <View style={{flex:1}}>
-            <BackHeader title={'지인 배차요청'}/>
+            <BackHeader title={'공개 배차요청'}/>
             <BackHandlerCom />
             <ScrollView style={{flex:1}}>
                 <KeyboardAvoidingView>
@@ -169,25 +175,38 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
                         </View>
                         <MarginCom mt={20} />
                         <View>
-                            <Text style={[fontStyle.f_semibold,{fontSize:15,color:colors.FONT_COLOR_BLACK}]}>지급방식</Text>
-                            <View style={{flexDirection:'row',alignItems:'center',marginTop:5}}>
-                                <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginRight:5}]}>매월</Text>
-                                <CustomSelectBox 
-                                    containerStyle={{width:100}}
-                                    style={{flex:1}}
-                                    defaultText={inputInfo.cot_pay_date}
-                                    labelFooter='일'
-                                    objOptionList={dayList()}
-                                    selOption={inputInfo.cot_pay_date}
-                                    objSetOption={inputHandler}
-                                    type={'cot_pay_date'}
-                                    buttonStyle={selectBoxStyle2.btnStyle}
-                                    buttonTextStyle={selectBoxStyle2.btnTextStyle}
-                                    rowStyle={selectBoxStyle2.rowStyle}
-                                    rowTextStyle={selectBoxStyle2.rowTextStyle}
-                                />
-                            </View>
+                        <Text style={[fontStyle.f_semibold,{fontSize:15,color:colors.FONT_COLOR_BLACK}]}>지급시기</Text>
+                        <MarginCom mt={10} />
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>매월</Text>
+                            <CustomSelectBox
+                                containerStyle={{marginLeft:5,flex:6}} 
+                                style={{flex:1}}
+                                defaultText={payDateList.filter(el=>el.key === inputInfo.cot_pay_date)[0].name}
+                                objOptionList={payDateList}
+                                selOption={payDateList.filter(el=>el.key === inputInfo.cot_pay_date)[0].name}
+                                objSetOption={inputHandler}
+                                type={'cot_pay_date'}
+                                buttonStyle={selectBoxStyle2.btnStyle}
+                                buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                                rowStyle={selectBoxStyle2.rowStyle}
+                                rowTextStyle={selectBoxStyle2.rowTextStyle}
+                            />
+                            <View style={{flex:3}}/>
                         </View>
+                        {inputInfo.cot_pay_date === '0' &&
+                        <View>
+                            <MarginCom mt={10} />
+                            <CustomInputTextBox 
+                                input={inputInfo.cot_pay_etc}
+                                setInput={inputHandler}
+                                type={'cot_pay_etc'}
+                                placeholder='지급시기를 입력해주세요.'
+                                editable
+                            />
+                        </View>
+                        }
+                    </View>
                         <MarginCom mt={20} />
                         <View>
                             <CustomInputTextBox 
@@ -207,6 +226,65 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
                     <View style={[styles.white_box_con]}>
                         <Text style={[fontStyle.f_semibold,{fontSize:20 , color:colors.FONT_COLOR_BLACK}]}>요구경력</Text>
                         <MarginCom mt={20} />
+                        <CustomSelectBox
+                            title={'최소경력'}
+                            containerStyle={{marginLeft:5,flex:6}} 
+                            style={{flex:1}}
+                            defaultText={pilotCarrerKeyList.filter(el=>el.key === inputInfo.cot_career)[0].name}
+                            objOptionList={pilotCarrerKeyList}
+                            selOption={pilotCarrerKeyList.filter(el=>el.key === inputInfo.cot_career)[0].name}
+                            objSetOption={inputHandler}
+                            type={'cot_career'}
+                            buttonStyle={selectBoxStyle.btnStyle}
+                            buttonTextStyle={selectBoxStyle.btnTextStyle}
+                            rowStyle={selectBoxStyle.rowStyle}
+                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                        />
+                        <MarginCom mt={20} />
+                        <CustomSelectBox
+                            title={'연령제한'}
+                            containerStyle={{marginLeft:5,flex:6}} 
+                            style={{flex:1}}
+                            defaultText={ageList.filter(el=>el.key === inputInfo.cot_age)[0].name}
+                            objOptionList={ageList}
+                            selOption={ageList.filter(el=>el.key === inputInfo.cot_age)[0].name}
+                            objSetOption={inputHandler}
+                            type={'cot_age'}
+                            buttonStyle={selectBoxStyle.btnStyle}
+                            buttonTextStyle={selectBoxStyle.btnTextStyle}
+                            rowStyle={selectBoxStyle.rowStyle}
+                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                        />
+                        <MarginCom mt={20} />
+                        <CustomSelectBox
+                            title={'최소평점'}
+                            containerStyle={{marginLeft:5,flex:6}} 
+                            style={{flex:1}}
+                            defaultText={scoreList.filter(el=>el.key === inputInfo.cot_score)[0].name}
+                            objOptionList={scoreList}
+                            selOption={scoreList.filter(el=>el.key === inputInfo.cot_score)[0].name}
+                            objSetOption={inputHandler}
+                            type={'cot_score'}
+                            buttonStyle={selectBoxStyle.btnStyle}
+                            buttonTextStyle={selectBoxStyle.btnTextStyle}
+                            rowStyle={selectBoxStyle.rowStyle}
+                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                        />
+                        <MarginCom mt={20} />
+                        <CustomSelectBox
+                            title={'최소추천수'}
+                            containerStyle={{marginLeft:5,flex:6}} 
+                            style={{flex:1}}
+                            defaultText={pilotCarrerKeyList.filter(el=>el.key === inputInfo.cot_goods)[0].name}
+                            objOptionList={pilotCarrerKeyList}
+                            selOption={pilotCarrerKeyList.filter(el=>el.key === inputInfo.cot_goods)[0].name}
+                            objSetOption={inputHandler}
+                            type={'cot_goods'}
+                            buttonStyle={selectBoxStyle.btnStyle}
+                            buttonTextStyle={selectBoxStyle.btnTextStyle}
+                            rowStyle={selectBoxStyle.rowStyle}
+                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                        />
                         {/* <View style={{flexDirection:'row'}}>
                             <CustomInputTextBox
                                 containerStyle={{flex:1}}

@@ -32,6 +32,34 @@ export const pilotCareerList = [
     '10년',
 ]
 
+export const pilotCarrerKeyList = [
+    {key : '0' , name : '해당없음'},
+    {key : '1' , name : '1년 이상'},
+    {key : '2' , name : '2년 이상'},
+    {key : '3' , name : '3년 이상'},
+    {key : '4' , name : '5년 이상'},
+    {key : '5' , name : '7년 이상'},
+]
+
+export const ageList = [
+    {key : '0', name : '해당없음'},
+    {key : '55', name : '55세 이하'},
+    {key : '60', name : '60세 이하'},
+]
+
+export const scoreList = [
+    {key : '0', name : '해당없음'},
+    {key : '3', name : '3점이상'},
+    {key : '4', name : '4점이상'},
+    {key : '5', name : '5점'},
+]
+export const goodsList = [
+    {key : '0', name :'해당없음'},
+    {key : '1', name : '1개 이상'},
+    {key : '5', name : '5개 이상'},
+    {key : '10' , name : '10개 이상'},
+]
+
 export const payDateList = [
     {key : '0' , name : '직접입력'},
     {key : '1' , name : '당일지급'},
