@@ -49,17 +49,15 @@ export type RouterNavigatorParams = {
     ApplicantStatus:undefined;
     
     /** mypage */
-    MyInfo:{
-        mt_type:string
-    };
-    FavoriteList:{
-        mt_type:string
-    };
+    MyInfo:undefined;
+    FavoriteList:undefined;
     FavoriteAdd:{
         equFavType? : string
     };
     EquimentsAdd:undefined;
-    EquimentsDetail:undefined;
+    EquimentsDetail:{
+        eit_idx:string
+    };
     SettingProfile:undefined;
     FavoriteFilotIndex:undefined;
     MyProfile:undefined;

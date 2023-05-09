@@ -20,7 +20,7 @@ import { usePostQuery } from '../../../util/reactQuery';
 import { FavoriteListItemType, MyEquListItemType } from '../../screenType';
 import { BackHandlerCom } from '../../../component/utils/BackHandlerCom';
 
-export const FavoriteListIndex = ({route}:any) => {
+export const FavoriteListIndex = () => {
 
     const {mt_type , mt_idx} = useAppSelector(state => state.userInfo);
     const dispatch = useAppDispatch();
@@ -146,7 +146,7 @@ export const FavoriteListIndex = ({route}:any) => {
                     action={Addnavigation}
                     label={'장비 추가하기'}
                 />
-                {route.params.mt_type == '1'?
+                {mt_type == '1'?
                 <FlatList 
                     data={favoriteList}
                     style={{marginTop:10}}
@@ -175,7 +175,7 @@ export const FavoriteListIndex = ({route}:any) => {
                         return(
                             <HeavyEquipmentCard
                                 item={item}
-                                action={()=>{navigation.navigate('EquimentsDetail')}}
+                                action={()=>{navigation.navigate('EquimentsDetail',{eit_idx:item.idx})}}
                                 action2={()=>{()=>{}}}
                                 refetch={getFavoriteRetch}
                             />

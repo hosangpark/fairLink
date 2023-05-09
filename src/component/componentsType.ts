@@ -338,3 +338,20 @@ export type DetailFieldBoxType = {
 export type SelectedEquipmentCardType = { //장비 및 조종사 매칭 장비리스트 카드 타입
     item : MatchingEquipmentItemType
 }
+export type EquipDetailDataType = {
+    eit_idx:string,
+    img:string,
+    stand:string,
+    device:string,
+    year:string,
+    reg_no:string,
+    sub:string[],
+    doc_check:string,
+    doc_color:string,
+    file_check: string[],
+    ocr_date1: string,
+    ocr_date2: string,
+    style: string,
+    size: string[],
+    file_list: {link:string,status:string}[]
+}

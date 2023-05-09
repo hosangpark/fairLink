@@ -338,3 +338,17 @@ export interface SelImageType {
     key?:string,
 }
 //user end
+export interface tempUploadImageKeyType {
+    uri : string,
+    name?:string,
+    fileName : string,
+    base64 : string,
+    fileSize: number,
+    height : number,
+    width:number,
+    type:string,
+    key?:string,
+    tmp_name:string
+    size:number
+}
+//user end
