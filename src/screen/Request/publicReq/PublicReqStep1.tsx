@@ -43,7 +43,7 @@ export type PublicReqStep1ItemType = {
     cot_e_year : string //장비 최소연식
 }
 
-export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 step1
+export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //공개 배차요청 step1
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams & RequestRouterNavigatorParams>>();
     const dispatch = useAppDispatch();

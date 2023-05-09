@@ -143,7 +143,7 @@ export type MatchingEquipmentItemType = { //장비및 조종사 매칭(장비 �
     img_url : string,
 }
 
-export type MatchingPilotItemType = {
+export type MatchingPilotItemType = { //장비 및 조종사 매칭 (파일럿 아이템)
     age : number,
     apply_check : string,
     career : string,
@@ -154,6 +154,25 @@ export type MatchingPilotItemType = {
     name : string,
     score : string,
 }
+
+export type PilotWorkInfoType = {
+    cdwt_content : string,
+    cdwt_date : string,
+    cdwt_end_time : string,
+    cdwt_idx : string,
+    cdwt_memo : string,
+    cdwt_price : string,
+    cdwt_price_type : string,
+    cdwt_start_time : string,
+    cons_hp : string,
+    cons_name : string,
+    crt_name : string,
+    equip_name : string,
+    equip_reg_no : string,
+    equip_style : string,
+    pilot_hp : string,
+    pilot_name : string,
+}
 export interface HomeIndexType {
     setTabIndex? : (tab:number) => void;
 }
@@ -162,7 +181,11 @@ export interface RequestIndexType {
     setTabIndex? : (tab:number) => void;
 }
 
+
 export interface MyPageIndexType {
+    setTabIndex? : (tab:number) => void;
+}
+export type DocumentIndexType = RouteType & {
     setTabIndex? : (tab:number) => void;
 }
 export type OpenConstructionType = RouteType & {

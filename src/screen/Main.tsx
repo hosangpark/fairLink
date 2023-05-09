@@ -3,7 +3,7 @@ import {SafeAreaView,View,Text, Image, BackHandler} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused, useNavigation} from '@react-navigation/native';
 import { RouterNavigatorParams } from '../../type/routerType';
 import { Home } from './testPage/Home';
 import { Video } from './testPage/Video';
@@ -18,10 +18,11 @@ import cusToast from '../util/toast/CusToast';
 import { useAppSelector } from '../redux/store';
 import { Request } from './Request/Request';
 import { RequestRouter } from './Request/RequestRouter';
+import { DocumentRouter } from './document/DocumentRouter';
 
 
 export const Main = () => {
-	const {mt_type} = useAppSelector(state => state.userInfo);
+	const {mt_type,equip_pilot} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
 
     /**
@@ -167,13 +168,10 @@ export const Main = () => {
                             ),
                     }}
                 />
-                {/* {mt_type !=='1' &&
+                {((mt_type === '2' && equip_pilot === 'Y') || mt_type === '4') &&
                     <Tab.Screen 
-                        name="document" 
-                        component={()=>{return(
-                        <>
-                        </>
-                        )}}
+                        name="Document" 
+                        component={DocumentRouter}
                         listeners={{
                             tabPress : (e)=>{
                                 setTabIndex(5);
@@ -190,7 +188,7 @@ export const Main = () => {
                                 ),
                         }}
                     />
-                } */}
+                }
             </Tab.Navigator>
         </SafeAreaView>
     )

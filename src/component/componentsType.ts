@@ -31,6 +31,7 @@ export interface CustomAccordionType {
     },
     userType:string
     action : ()=>void,
+    refetch? : ()=>void,
 }
 export interface CustomAccordionType2 {
     title:string,
@@ -42,10 +43,16 @@ export interface CustomAccordionType2 {
 export interface DocumentAccordionType {
     title:string,
     subList:{
-        title:string,
-        file_check:string
-        file_url:string
+        title?:string,
+        file_check?:string
+        file_url?:string,
+        cont_idx? : null | string,
+        pdf_url? : string,
+        write_check? : '',
     }[],
+    allCheck:(type:string,title:string)=>void;
+    checkFileList:string[];
+    checkFileHandler:(uri:string,type:'add'|'del',title:string)=>void;
 }
 
 export interface ObjectArrayType {
@@ -92,6 +99,7 @@ export interface UserInfoCardType {
     equFavType ? : string, // 1: 스페어 2: 소속조종사
 
     cat_idx? : string,
+    cot_idx? : string,
 
 }
 

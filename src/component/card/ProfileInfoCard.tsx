@@ -113,7 +113,7 @@ export const ProfileInfoCard = ({
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
                     <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK, marginRight: 10 }]}>평가 <Text style={{ color: colors.MAIN_COLOR}}>{score_count}</Text> 개</Text>
-                    <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK,}]}>평균 <Text style={{ color: colors.MAIN_COLOR}}>{score.toFixed(1)}</Text></Text>
+                    <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK,}]}>평균 <Text style={{ color: colors.MAIN_COLOR}}>{Number(score).toFixed(1)}</Text></Text>
                 </View>
             </View>
         </View>
