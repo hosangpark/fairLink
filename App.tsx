@@ -183,18 +183,8 @@ const fcmSetting = () => {
           }
 
         } else{
-          // if (navigationRouteName == 'MessageRoom' &&
-          //     (navigationRoute.params.items.chr_id == notification.data.room_idx ||
-          //       navigationRoute.params.items.room_id == notification.data.room_idx)) {
-          // } else {
-          //   //내부 노티를 써서 일부러 푸시를 띄움
-          // }
           sendLocalNotificationWithSound(notification);
         }
-
-        // if (notification.id == '') notification.id = new Date().toString();
-        //     callScreen(notification, true);
-          // switch(notification.data.type){
         
       },
 

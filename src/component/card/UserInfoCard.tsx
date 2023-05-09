@@ -156,7 +156,9 @@ export const UserInfoCard = ({
                                 {item.mpt_name}
                                 님</Text>
                             <View style={{flexDirection:'row',marginTop:5}}>
-                                <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK}]}>{item.score.toFixed(1)}</Text>
+                                <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK}]}>
+                                    {/* {item.score.toFixed(1)} */}
+                                </Text>
                                 <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK2,marginLeft:5}]}>평가수 {item.score_count}</Text>
                             </View>
                             <TouchableOpacity style={[styles.cardReqEmpBtn]} onPress={()=>{setRecEmpModal(true)}}>
