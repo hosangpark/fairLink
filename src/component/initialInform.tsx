@@ -233,3 +233,4 @@ export const initialElectorincInfo ={
             birth_num: ""
         }
 }
+

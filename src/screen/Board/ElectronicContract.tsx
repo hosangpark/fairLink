@@ -57,9 +57,9 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
     const {data : ElectronicData, isLoading : ElectronicDataLoading, isError : ElectronicDataError} = 
     /** mt_idx 임의입력 수정필요 */
     route_type == 'Info2' ?
-    usePostQuery('getElectronic',{mt_idx : mt_idx,contract_idx:contract_idx},'cons/cons_contract_info2.php')
+    usePostQuery('getElectronicInfo2',{mt_idx : mt_idx,contract_idx:contract_idx},'cons/cons_contract_info2.php')
     :
-    usePostQuery('getElectronic',{mt_idx : mt_idx,cot_idx:cot_idx,cat_idx:cat_idx},'cons/cons_contract_info.php')
+    usePostQuery('getElectronicInfo',{mt_idx : mt_idx,cot_idx:cot_idx,cat_idx:cat_idx},'cons/cons_contract_info.php')
 
     const inputHandler = (text:string, type? : string) => { //state input handler
         if(type){
@@ -119,12 +119,11 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
     //     alertModalOn('장비회사가 계약 확인중입니다.', 'test')
     // },[])
     useEffect(()=>{
-    console.log(route)
     if(mt_type !== '1'){
         setEditMode('view')
     }
     dispatch(toggleLoading(ElectronicDataLoading));
-    if(ElectronicData){
+    if(ElectronicData.data){
         console.log(ElectronicData.data)
         if(ElectronicData.data.data !== null){
             setElectronic(ElectronicData.data);

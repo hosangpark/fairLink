@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {Text, View, ScrollView,TouchableOpacity,Image,ImageBackground,StyleSheet} from 'react-native';
+import {Text, View, ScrollView,TouchableOpacity,Image,ImageBackground,StyleSheet,Platform} from 'react-native';
 import { BackHeader } from '../../../component/header/BackHeader';
 import { TabView, SceneMap ,TabBar} from 'react-native-tab-view';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../../style/style';
@@ -7,34 +7,192 @@ import { FavoriteAddPhone } from './favoriteAddDetail/FavoriteAddPhone';
 import { CustomButton } from '../../../component/CustomButton';
 import { CustomSelectBox } from '../../../component/CustomSelectBox';
 import { BackHandlerCom } from '../../../component/utils/BackHandlerCom';
+import { usePostMutation, usePostQuery } from '../../../util/reactQuery';
+import { useAppDispatch, useAppSelector } from '../../../redux/store';
+import { toggleLoading } from '../../../redux/actions/LoadingAction';
+import { EquipDetailDataType, NumberObejctType } from '../../../component/componentsType';
+import { SelImageType, tempUploadImageKeyType, tempUploadImageType } from '../../screenType';
+import { AlertClearType } from '../../../modal/modalType';
+import { AlertModal, initialAlert } from '../../../modal/AlertModal';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouterNavigatorParams } from '../../../../type/routerType';
+import { EquimentsDetailDocList, accessoriesConvert } from '../../../component/utils/list';
+import { SelectImageUpload } from '../../../modal/SelectImageUpload';
 
+type UploadParamsType = {
+    mt_idx : string,
+    eit_idx : string,
+    eit_sub? : string,
+}
 
-export const EquimentsDetail = () => {
-
+export const EquimentsDetail = ({route}:{eit_idx:string}) => {
+    const {eit_idx} = route.params
+    const {mt_type , mt_idx} = useAppSelector(state => state.userInfo);
     const [modify,setModify] = useState<boolean>(false)
     const [guaranteeImage,setguaranteeImage] = useState<undefined>()
-    const [attachment,setAttachment] = useState([
-        {
-            deviceName:'브레이커'
-        },
-        {
-            deviceName:'지게발'
-        },
-        {
-            deviceName:'채바가지'
-        },
-        {
-            deviceName:'쪽바가지'
-        },
-    ])
-    const [equipment, setEquipment] = React.useState<any>({
-        equiInform: '',
-        equiType: '',
-        accessory1: '',
-        accessory2: '',
-        accessory3: '',
-        accessory4: '',
-    })
+    const [selImage, setSelImage] = React.useState('');
+    const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
+    const [equDetail, setEquDetail] = useState<EquipDetailDataType>();
+    const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    const [selImgModal, setSelImgModal] = React.useState(false);
+    const [fileCheck, setFileCheck] = React.useState<NumberObejctType>()
+    const reqFileList = EquimentsDetailDocList;
+    const dispatch = useAppDispatch();
+
+    const {data:EquipDetailData, isLoading:EquipDetailLoading ,isError:EquipDetailError } = usePostQuery('getEquipDetailData',{mt_idx:mt_idx, eit_idx:eit_idx},'equip/equip_info_detail.php');
+    const EquipDetailModify = usePostMutation('getEquipDetailModify' , 'equip/equip_info_update.php',true); //장비세부 정보 수정하기
+
+    const [uploadList, setUploadList] = React.useState<tempUploadImageKeyType[]>([]);
+
+    const uploadImage = async (image : SelImageType) => {
+        console.log(image);
+        const tempArray = [...uploadList];
+        const tempObj = {
+            // ...image,
+            name : image.fileName,
+            type : 'image/jpg',
+            tmp_name : image.uri,
+            size : image.fileSize,
+            key : selImage,
+        }
+
+        tempArray.push(tempObj);
+        setUploadList([...tempArray]);
+        // console.log(tempArray);
+        // console.log(uploadList);
+        setSelImage('');
+    }
+    const deleteImage = async (key:string) => {
+        const filterArray = uploadList.filter((el) => el.key !== key);
+        setUploadList([...filterArray]);
+        // console.log(filterArray);
+        // console.log(uploadList);
+    }
+
+    const alertModalOn = ( msg : string, type? : string) => {
+        setAlertModal({
+            alert: true,
+            strongMsg: '',
+            msg: msg,
+            type: type ? type : '' ,
+        })
+    }
+
+    const alertModalOff = () => {
+        setAlertModal(initialAlert);
+    }
+    const alertAction = () => {
+        if(alertModal.type === 'edit_success'){
+            navigation.goBack();
+        }
+        else if(alertModal.type === 'doc_change_confirm'){
+            setSelImgModal(true);
+        }
+        else if(alertModal.type === 'delete_confirm'){
+            deleteImage(String(selImage));
+        }
+    }
+    // const accessoriesAddHandler = () => { //부속장치 추가했을때 이벤트
+    //     if(equDetail?.sub.length === 5){
+    //         alertModalOn('부속 장치는 5개까지 선택가능합니다.');
+    //     }
+    //     else if(tempSelAcc === '기타(직접입력)' && writeSelAcc === ''){
+    //         alertModalOn('부속 장치를 입력해주세요.');
+    //     }
+    //     else{
+    //         let tempArray : string[] = [...inputInfo.sub];
+
+    //         let flag = true;
+    //         equDetail?.sub.forEach((item,index) => {
+    //             if(tempSelAcc === item || writeSelAcc === item){
+    //                 console.log(tempSelAcc, writeSelAcc);
+    //                 alertModalOn('이미 선택한 부속 장치 입니다.');
+    //                 flag = false;
+    //                 return;
+    //             }
+    //         })
+    //         if(flag){
+    //             if(tempSelAcc === '기타(직접입력)'){
+    //                 tempArray.push(writeSelAcc);
+    //             }
+    //             else{
+    //                 tempArray.push(tempSelAcc);
+    //             }
+    //             setInputInfo({
+    //                 ...inputInfo,
+    //                 sub : [...tempArray],
+    //             })
+    //             setTempSelAcc('');
+    //             setWriteSelAcc('');
+    //         }
+    //     }
+    // }
+
+    const ModifyRequest = async () => { //수정
+        let uploadParams:any = {
+            mt_idx:mt_idx,
+            eit_idx:eit_idx,
+        }
+
+        for (let key in fileCheck){
+            if(fileCheck[key] === 'Y'){
+                const filterData = uploadList.filter(el => el.key === key);
+                if(filterData.length === 0){
+                    const noneData = reqFileList.find(el=> el.key === key);
+                    console.log(noneData);
+                    // if(noneData && equDetail?.file_list[beforeFileUri] === ''){
+                    //     alertModalOn(`${noneData.name}을 업로드해주세요.`)
+                    //     flag = false;
+                    //     break;
+                    // }
+                }
+            } 
+        }
+        uploadList.forEach((item,index) => {
+            const keyName = `eit_file${item.key}`;
+            uploadParams = {
+                ...uploadParams,
+                [keyName] : {
+                    name : item.name,
+                    size : item.size,
+                    uri : Platform.OS === 'android' ? item.tmp_name : item.tmp_name.replace('file://', ''),
+                    type : item.type,
+                }
+            }
+        })
+
+        uploadParams = {
+            ...uploadParams,
+            eit_sub : "채바가지|대바가지",
+            eit_file_del : "",
+        }
+        console.log(uploadParams);
+        dispatch(toggleLoading(true))
+        const {data , msg, result} = await EquipDetailModify.mutateAsync(uploadParams);
+        dispatch(toggleLoading(false))
+
+        if(result === 'true'){
+            alertModalOn('프로필 설정이 완료되었습니다.','edit_success')
+        }
+        else{
+            alertModalOn(msg);
+        }
+        
+    }
+
+
+
+    React.useEffect(()=>{
+        console.log(equDetail)
+        dispatch(toggleLoading(EquipDetailLoading));
+        if(EquipDetailData){
+            setEquDetail(EquipDetailData.data.data);
+        }
+    },[EquipDetailData,EquipDetailLoading])
+    React.useEffect(()=>{
+        console.log('ddd')
+    },[uploadList])
     
 
     return(
@@ -44,15 +202,21 @@ export const EquimentsDetail = () => {
             <ScrollView style={{ flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}>
                 <View style={EquimentsDetailstyle.WhiteBox}>
                 <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:20}]}>
-                    017 미니굴삭기
+                    {equDetail?.device}
                 </Text>
                 <View style={{flexDirection:'row'}}>
-                    <Image style={{width:130,height:130,borderRadius:4,marginRight:20}} source={require('../../../assets/img/no_image.png')}/>
+                    <Image style={{width:130,height:130,borderRadius:4,marginRight:20}}
+                    source={equDetail?.img? {uri:equDetail?.img} :require('../../../assets/img/no_image.png') }
+                    />
                     <View style={{justifyContent:'center',flexShrink:1}}>
                         <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>제작연도</Text>
-                        <Text style={[fontStyle.f_light,EquimentsDetailstyle.boxText2,{marginBottom:20}]}>2018년</Text>
+                        <Text style={[fontStyle.f_light,EquimentsDetailstyle.boxText2,{marginBottom:20}]}>
+                            {equDetail?.year}
+                        </Text>
                         <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>차량번호</Text>
-                        <Text style={[fontStyle.f_light,EquimentsDetailstyle.boxText2]}>경기 12머6040</Text>
+                        <Text style={[fontStyle.f_light,EquimentsDetailstyle.boxText2]}>
+                            {equDetail?.reg_no}
+                        </Text>
                     </View>
                 </View>
                 </View>
@@ -63,27 +227,34 @@ export const EquimentsDetail = () => {
                             정기검사 유효기간
                         </Text>
                         <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginBottom:30}]}>
-                            2021.01.05 ~ 2023.01.04
+                            {equDetail?.ocr_date1}
                         </Text>
                         <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1,{marginBottom:10}]}>
                             보험가입 유효기간
                         </Text>
                         <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,]}>
-                            2021.01.05 ~ 2023.01.04
+                            {equDetail?.ocr_date2}
                         </Text>
                     </View>
                     <View style={{marginBottom:20}}>
                     <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1,{marginBottom:10}]}>
                             어태치먼트
                     </Text>
-                    {attachment.map((item,index)=>{
-                        return(
+                    {equDetail?.sub?.map((item,index)=>{
+                    return(
                     <View style={{flexDirection:'row',marginBottom:10}} key={index}>
-                        <View style={EquimentsDetailstyle.graybox}>
-                            <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1]}>
-                                {item.deviceName}
-                            </Text>
-                        </View>
+                        <CustomSelectBox 
+                            strOptionList={accessoriesConvert('굴착기') ? accessoriesConvert('굴착기') : ['선택하세요.']}
+                            // strOptionList={accessoriesConvert(equDetail.device) ? accessoriesConvert(equDetail.device) : ['선택하세요.']}
+                            selOption={item}
+                            strSetOption={()=>{}}
+                            buttonStyle={selectBoxStyle.btnStyle}
+                            buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                            rowStyle={selectBoxStyle.rowStyle}
+                            rowTextStyle={selectBoxStyle.rowTextStyle}
+                            defaultText={'선택하세요.'}
+                            isDisable={!modify? true:false}
+                        />
                         {modify&&
                         <TouchableOpacity style={{justifyContent:'center',alignItems:'center',paddingHorizontal:10}}
                         onPress={()=>{console.log(index+1)}}
@@ -94,20 +265,21 @@ export const EquimentsDetail = () => {
                     </View>
                         )
                     })}
+                    {modify&&
                     <CustomButton
                         style={[styles.whiteButtonStyle,{height:46}]}
-                        labelStyle={[styles.whiteButtonLabelStyle,{height:46}]}
+                        labelStyle={[styles.whiteButtonLabelStyle]}
                         label={'부속장치 추가'}
-                        action={()=>{setModify(!modify)}}
+                        action={()=>{accessoriesAddHandler}}
                     />
-
+                    }
                     </View>
                     <View style={{marginBottom:30}}>
                     <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1,{marginBottom:10}]}>
                             형식
                     </Text>
                     <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginBottom:10}]}>
-                            HX60AMT
+                            {equDetail?.style}
                     </Text>
                     </View>
                 <View style={{}}>
@@ -115,84 +287,36 @@ export const EquimentsDetail = () => {
                             주요제원
                     </Text>
                     <View style={EquimentsDetailstyle.cardbox}>
-                    <View style={EquimentsDetailstyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1]}>
-                            길이
-                        </Text>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginRight:5}]}>
-                            12360
-                        </Text>
-                        <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>
-                            MM
-                        </Text>
-                        </View>
-                    </View>
-                    <View style={EquimentsDetailstyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1]}>
-                            너비
-                            </Text>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginRight:5}]}>
-                            12360
-                        </Text>
-                        <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>
-                            MM
-                        </Text>
-                        </View>
-                    </View>
-                    <View style={EquimentsDetailstyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1]}>
-                            높이
-                        </Text>
-                         <View style={{flexDirection:'row'}}>
-                        <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginRight:5}]}>
-                            12360
-                        </Text>
-                        <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>
-                            MM
-                        </Text>
-                        </View>
-                    </View>
-                    <View style={EquimentsDetailstyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1]}>
-                            총중량
-                        </Text>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginRight:5}]}>
-                            12360
-                        </Text>
-                        <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>
-                            kg
-                        </Text>
-                        </View>
-                    </View>
-                    <View style={EquimentsDetailstyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1]}>
-                            정격출력
-                        </Text>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginRight:5}]}>
-                            12360
-                        </Text>
-                        <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>
-                            Ps/rpm
-                        </Text>
-                        </View>
-                    </View>
-                    <View style={EquimentsDetailstyle.cardInbox}>
-                        <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1]}>
-                            최대적재량
-                        </Text>
-                        <View style={{flexDirection:'row'}}>
-                        <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginRight:5}]}>
-                            12360
-                        </Text>
-                        <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>
-                            kg
-                        </Text>
-                        </View>
-                    </View>
+                    <Layoutbox
+                        title={"길이"}
+                        text={equDetail?.size[0]}
+                        unit={"MM"}
+                    />
+                    <Layoutbox
+                        title={"너비"}
+                        text={equDetail?.size[1]}
+                        unit={"MM"}
+                    />
+                    <Layoutbox
+                        title={"높이"}
+                        text={equDetail?.size[2]}
+                        unit={"MM"}
+                    />
+                    <Layoutbox
+                        title={"총중량"}
+                        text={equDetail?.size[3]}
+                        unit={"kg"}
+                    />
+                    <Layoutbox
+                        title={"정격출력"}
+                        text={equDetail?.size[4]}
+                        unit={"Ps/rpm"}
+                    />
+                    <Layoutbox
+                        title={"최대적재량"}
+                        text={equDetail?.size[5]}
+                        unit={"kg"}
+                    />
                     </View>
                 </View>
                 </View>
@@ -200,187 +324,85 @@ export const EquimentsDetail = () => {
                 <View style={[styles.TitleText]}>
                     <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>장비서류 업로드</Text>
                 </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>건설기계등록증/차량등록증
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={guaranteeImage}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <Image 
-                        style={{ width: 15, height: 15}}
-                        source={require('../../../assets/img/ic_add.png')}
-                        />
-                        <TouchableOpacity
-                            style={{ position:'absolute', right: 10, top: 10 }}
-                            onPress={() =>{setguaranteeImage}}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ic_modify.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>보험증서
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={guaranteeImage}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <Image 
-                        style={{ width: 15, height: 15}}
-                        source={require('../../../assets/img/ic_add.png')}
-                        />
-                        <TouchableOpacity
-                            style={{ position:'absolute', right: 10, top: 10 }}
-                            onPress={() =>{setguaranteeImage}}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ic_modify.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>비파괴검사필증
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={guaranteeImage}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <Image 
-                        style={{ width: 15, height: 15}}
-                        source={require('../../../assets/img/ic_add.png')}
-                        />
-                        <TouchableOpacity
-                            style={{ position:'absolute', right: 10, top: 10 }}
-                            onPress={() =>{setguaranteeImage}}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ic_modify.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>제원표
-                    <Text style={styles.OrengeStar}>*</Text>
-                    </Text>
-                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={guaranteeImage}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <Image 
-                        style={{ width: 15, height: 15}}
-                        source={require('../../../assets/img/ic_add.png')}
-                        />
-                        <TouchableOpacity
-                            style={{ position:'absolute', right: 10, top: 10 }}
-                            onPress={() =>{setguaranteeImage}}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ic_modify.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>안전검사합격증명서
-                    </Text>
-                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={guaranteeImage}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <Image 
-                        style={{ width: 15, height: 15}}
-                        source={require('../../../assets/img/ic_add.png')}
-                        />
-                        <TouchableOpacity
-                            style={{ position:'absolute', right: 10, top: 10 }}
-                            onPress={() =>{setguaranteeImage}}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ic_modify.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>안전인증서
-                    </Text>
-                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={guaranteeImage}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <Image 
-                        style={{ width: 15, height: 15}}
-                        source={require('../../../assets/img/ic_add.png')}
-                        />
-                        <TouchableOpacity
-                            style={{ position:'absolute', right: 10, top: 10 }}
-                            onPress={() =>{setguaranteeImage}}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ic_modify.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.SubTitleText]}>
-                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10}]}>장비사진
-                    </Text>
-                     <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }}>
-                        <ImageBackground
-                        style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:guaranteeImage? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                        source={guaranteeImage}
-                        resizeMode="cover"
-                        imageStyle={{ borderRadius: 10 }}>
-                        <Image 
-                        style={{ width: 15, height: 15}}
-                        source={require('../../../assets/img/ic_add.png')}
-                        />
-                        <TouchableOpacity
-                            style={{ position:'absolute', right: 10, top: 10 }}
-                            onPress={() =>{setguaranteeImage}}>
-                            <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require('../../../assets/img/ic_modify.png')}
-                            />
-                        </TouchableOpacity>
-                        </ImageBackground>
-                    </TouchableOpacity>
-                </View>
-
+                {  //서류업로드 체크
+                    equDetail?.file_list.map((data, index) => {
+                        const fileName:string = 'mpt_file'+String(index+1);
+                        const keyName:string = 'mpt_file'+String(index+1)+'_check';
+                        return(
+                            <View style={{ paddingVertical: 10 }} key={index}>
+                                <View style={{ flexDirection: 'row'}}>
+                                    <Text style={[fontStyle.f_semibold, { color: colors.FONT_COLOR_BLACK, fontSize: 16, marginRight: 5, marginBottom: 5}]}>{reqFileList[index].name}</Text>
+                                    <Text style={[fontStyle.f_semibold, { fontSize: 16, color: data.status == '0' || data.status == null ? colors.FONT_COLOR_GRAY : data.status !== "1" ? colors.FONT_COLOR_BLACK2 : colors.MAIN_COLOR}]}>
+                                        {data.status == '0' || data.status == null ? '[미등록]' : data.status == '1' ? '[승인중]' : '[승인완료]'}
+                                        <Text style={[ styles.OrengeStar]}>{ reqFileList[index].name !== '통장사본' ? '*' : null }</Text>
+                                    </Text>
+                                </View>
+                                {reqFileList[index].name == '장비사진'?
+                                <Text style={[fontStyle.f_regular, { fontSize: 14,color:colors.MAIN_COLOR,marginBottom:5}]}>번호판이 나온 사진 필수</Text>
+                                :
+                                null
+                                }
+                                <TouchableOpacity style={{ marginRight: 8, width: 100, height: 100 }} onPress={()=>{
+                                    if(data.status == '1'){
+                                        alertModalOn('저장된 서류가 있습니다. \n변경하시겠습니까?','doc_change_confirm');
+                                    }
+                                    else{
+                                        setSelImgModal(true); 
+                                    }
+                                    setSelImage(String(index+1))
+                                }}>
+                                    <ImageBackground
+                                    style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:undefined? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
+                                    source={uploadList[uploadList.findIndex(el=>el.key === String(index+1))] ? { uri : uploadList[uploadList.findIndex(el=>el.key === String(index+1))].tmp_name}  : data.link !== '' ? {uri : data.link} : undefined}
+                                    resizeMode="cover"
+                                    imageStyle={{ borderRadius: 10 }}>
+                                        {(!uploadList[uploadList.findIndex(el=>el.key === String(index+1))] && 
+                                        data.link == ''  )&&
+                                            <Image 
+                                            style={{ width: 15, height: 15}}
+                                            source={require('../../../assets/img/ic_add.png')}
+                                            />
+                                        }
+                                        {uploadList.filter((el) => el.key === String(index+1)).length > 0 &&
+                                            <TouchableOpacity
+                                                style={{ position:'absolute', right: 10, top: 10 }}
+                                                onPress={() =>{
+                                                    alertModalOn(`${reqFileList[index].name} 파일을 삭제하시겠습니까?`,'delete_confirm');
+                                                    setSelImage(String(index+1))
+                                                }}>
+                                                <Image
+                                                style={{ width: 25, height: 25 }}
+                                                source={require('../../../assets/img/ic_modify.png')}
+                                                />
+                                            </TouchableOpacity>
+                                        }
+                                    </ImageBackground>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                })
+                }
                 <CustomButton
-                style={[[modify&& styles.whiteButtonStyle],{height:46}]}
-                labelStyle={[[modify&& styles.whiteButtonLabelStyle],{height:46}]}
-                label={modify?'수정하기':'장비 세부정보 수정 완료'}
-                action={()=>{setModify(!modify)}}
+                style={[[!modify&& styles.whiteButtonStyle],{height:46}]}
+                labelStyle={[[!modify&& styles.whiteButtonLabelStyle]]}
+                label={!modify?'수정하기':'장비 세부정보 수정 완료'}
+                action={()=>{!modify? setModify(!modify) : ModifyRequest()}}
+                // action={()=>{console.log(uploadList)}}
                 />
                 </View>
             </ScrollView>
+            <AlertModal
+                show={alertModal.alert}
+                msg={alertModal.msg}
+                action={alertAction} // 저장일 때 -> 저장 -> "파일이 저장되었습니다.", 삭제일 때 -> 삭제, 설정완료 버튼 클릭 시(필수항목체크 후) -> 마이페이지 이동  
+                hide={alertModalOff}
+                type={alertModal.type}
+            />
+            <SelectImageUpload
+                show={selImgModal}
+                hide={()=>{setSelImgModal(false);}}
+                setImage={uploadImage}
+            />
         </View>
     )
 }
@@ -394,3 +416,21 @@ const EquimentsDetailstyle = StyleSheet.create({
     boxText2:{fontSize:16,color:colors.FONT_COLOR_BLACK2},
     graybox:{height:46,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:4,borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,justifyContent:'center',paddingHorizontal:15,flex:1}
 })
+
+const Layoutbox = ({title,text,unit}:{title:string,text:string | undefined,unit:string})=>{
+    return(
+        <View style={EquimentsDetailstyle.cardInbox}>
+            <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1]}>
+                {title}
+            </Text>
+            <View style={{flexDirection:'row'}}>
+            <Text style={[fontStyle.f_regular,EquimentsDetailstyle.boxText1,{marginRight:5}]}>
+                {text}
+            </Text>
+            <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>
+                {unit}
+            </Text>
+            </View>
+        </View>
+    )
+}

@@ -165,6 +165,16 @@ export const pilotProfileUploadList = [ //조종사 업로드 리스트 (회원�
 ]
     // '고소작업차(굴절)' : 
 
+export const EquimentsDetailDocList = [ //장비 세부정보 서류
+    {key : '1', name : '건설기계등록증/차량등록증'},
+    {key : '2', name : '보험증서'},
+    {key : '3', name : '비파괴검사필증'},
+    {key : '4', name : '제원표'},
+    {key : '5', name : '안전검사합격증명서'},
+    {key : '6', name : `안정인증서`},
+    {key : '7', name : `장비사진`},
+]
+
 export const getEquipListConverter = (equipList:object[]) => { //장비 타입 return
     let tempArray : string[] = [];
 
