@@ -10,6 +10,7 @@ export const CustomAccordion = ({
     data,
     userType,
     action,
+    refetch,
 }:CustomAccordionType) => {
   const [open,setOpen] = useState(false)
 
@@ -42,6 +43,7 @@ export const CustomAccordion = ({
                   key={index}
                   item={item}
                   title={data.title}
+                  refetch={refetch}
                 />
               )
             })}

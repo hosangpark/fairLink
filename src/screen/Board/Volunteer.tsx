@@ -17,6 +17,7 @@ import {FavoriteListItemType} from '../screenType';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 
 export const Volunteer = ({route}:any) => {
+
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 
@@ -25,10 +26,10 @@ export const Volunteer = ({route}:any) => {
     const {data : VolunteerListData, isLoading : VolunteerListDataLoading, isError : VolunteerListDataError} = 
     /** mt_idx 임의입력 수정필요 */
     usePostQuery('getVolunteerList',{
-        mt_idx : '22',
-        cat_idx : '8',
-        // mt_idx : mt_idx,
-        // cat_idx : route.params.cat_idx,
+        // mt_idx : '22',
+        // cat_idx : '8',
+        mt_idx : mt_idx,
+        cat_idx : route.params.cat_idx,
         cot_idx:route.params.cot_idx
     },
     mt_type === '1' ? 'cons/cons_order_apply_list.php' : 'equip/equip_apply_list.php');
@@ -62,6 +63,8 @@ export const Volunteer = ({route}:any) => {
         dispatch(toggleLoading(VolunteerListDataLoading));
         if(VolunteerListData){
             if(VolunteerListData.result === 'true'){
+                console.log({cat_idx : route.params.cat_idx,
+                    cot_idx:route.params.cot_idx})
                 setVolunteerTopData(VolunteerListData.data.data);
                 setVolunteerList([...VolunteerListData.data.list]);
                 setTotalCount(VolunteerListData.data.cnt);
@@ -115,6 +118,7 @@ export const Volunteer = ({route}:any) => {
                                     isFavorite={mt_type === '2' && items.like_check === '1'} // (장비업체일 때 즐겨찾기 on: isFavorite='0', off: isFavorite='1')
                                     action={()=>{}}
                                     cat_idx={route.params.cat_idx}
+                                    cot_idx={route.params.cot_idx}
                                 />
                             </View>
                             )

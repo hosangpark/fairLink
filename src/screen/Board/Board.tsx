@@ -69,8 +69,8 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
 
             if(result === 'true'){
                 setListData(data.data)
-                console.log("result",result)
-                console.log(data.data);
+                // console.log("result",result)
+                // console.log(data.data);
             }
             else{
                 alertModalOn(msg,'api_error');
@@ -160,6 +160,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                     data={listData[i]}
                     userType={mt_type}
                     action={()=>{}}
+                    refetch={BoardInfrom}
                 />
                 :
                 strOption == data.title &&
@@ -168,6 +169,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                     data={listData[i]}
                     userType={mt_type}
                     action={()=>{}}
+                    refetch={BoardInfrom}
                 />
                 }
                 </View>

@@ -28,10 +28,10 @@ export const MatchingEquipment = ({route}:MatchingEquipmentType) => {
 
 
     const {data : equipData, isLoading : equipLoading, isError : equipError} = usePostQuery('getEquipList' , {
-        // mt_idx : mt_idx,
-        // cot_idx : reqInfo.cot_idx,
-        mt_idx : '22',
-        cot_idx : '16',
+        mt_idx : mt_idx,
+        cot_idx : reqInfo.cot_idx,
+        // mt_idx : '22',
+        // cot_idx : '16',
     } , 'equip/equip_order_e_list.php');
 
     const getIsPilotMutation = usePostMutation('getIsPilot','equip/equip_order_p_list.php');
@@ -123,9 +123,16 @@ export const MatchingEquipment = ({route}:MatchingEquipmentType) => {
             }
             else{
                 const bodyData = equipData.data;
-
+                console.log({mt_idx : mt_idx,
+                    cot_idx : reqInfo.cot_idx,});
                 if(equipData.result === 'true'){
-                    setEquipList([...bodyData.data]);
+                    
+                    if(bodyData.data.length === 0){
+                        alertModalOn('선택가능한 장비가 존재하지 않습니다.','goBack');
+                    }
+                    else{
+                        setEquipList([...bodyData.data]);
+                    }
                 }
                 else{
                     alertModalOn(equipData.msg,'goBack');
@@ -133,11 +140,6 @@ export const MatchingEquipment = ({route}:MatchingEquipmentType) => {
             }
         }
     },[equipData,equipLoading,equipError])
-
-    React.useEffect(()=>{
-        console.log(reqInfo);
-    },[])
-
     return (
         <>
             <BackHeader title="장비 및 조종사 매칭" />

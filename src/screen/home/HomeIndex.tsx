@@ -14,12 +14,13 @@ import { LoginIntroModal } from '../../modal/LoginIntroModal';
 import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
 import { CustomButton } from '../../component/CustomButton';
 import { useAppSelector } from '../../redux/store';
-import { usePostQuery } from '../../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
 import cusToast from '../../util/toast/CusToast';
 
 import { useNavigationState } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+import { PilotWorkListModal } from '../../modal/PilotWorkListModal';
 
 type tempItem = {
 	type : number, //리스트타입
@@ -33,6 +34,10 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 	const {data : reqCheckData , refetch:reqCheckRefetch} = usePostQuery('getConsReqCheck',{mt_idx:mt_idx},'cons/cons_require_check.php');
 	const {data : myProfileData, refetch:myProfileRefetch} = usePostQuery('getMyProfileData' , {mt_idx:mt_idx}, 'equip/mypage_info.php');
+	
+	const pilotWorkCheckMutation = usePostMutation('pilotWorkCheck','pilot/pilot_work_check.php');
+	const pilotWorkListMutation = usePostMutation('pilotWorkList' , 'pilot/pilot_work_list.php');
+
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
    const [exitApp , setExitApp] = React.useState(false);
@@ -45,7 +50,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	]
 
 	const [reqConModal, setReqConModal] = React.useState(false);
-
+	const [pilotWorkModal, setPilotWorkModal] = React.useState(false);
 	const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
 	
@@ -106,6 +111,29 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 					alertModalOn('작성된 프로필 정보가 없습니다.\n프로필 작성을 먼저해주세요.','none_profile');
 				}
 			}
+		}
+	}
+
+	const pilotCheckHandler = async () => {
+		const {data,result,msg} = await pilotWorkCheckMutation.mutateAsync({
+			// mt_idx : mt_idx
+			mt_idx : '22'
+		});
+
+		if(result === 'true'){
+			if(data.data.work_check === 'N'){
+				alertModalOn('조종사 또는 차주 및 장비업체만 이용가능한 메뉴입니다.');
+			}
+			else if(data.data.work_check === 'Y'){
+				if(setTabIndex)setTabIndex(5);
+				navigation.navigate('Document',{cdwt_idx:data.data.cdwt_idx});
+			}
+			else{
+				setPilotWorkModal(true);
+			}
+		}
+		else{
+			alertModalOn(msg,'');
 		}
 	}
 
@@ -180,6 +208,13 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				action={alertAction}
 				type={alertModal.type}
 			/>
+			{/* {pilotWorkModal && */}
+				<PilotWorkListModal 
+					show={pilotWorkModal}
+					hide={()=>setPilotWorkModal(false)}
+					alertModalOn={alertModalOn}
+				/>
+			{/* } */}
 			<ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
 				<View style={[styles.bottomBorder,{backgroundColor:colors.WHITE_COLOR,padding:20}]}>
 					<View style={[{flexDirection: 'row', alignItems: 'flex-end'}]}>
@@ -231,12 +266,26 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 							</View>
 						</TouchableOpacity>
 
-						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() => 
-							alertModalOn('해당 서비스는 정식버전 출시 후 오픈예정입니다.')}
-						>
-
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
-							<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text>
+						<TouchableOpacity style={[styles.mainMenu,{backgroundColor:colors.MINT_COLOR}]} onPress={() =>{ 
+							if(mt_type === '1'){
+								alertModalOn('해당 서비스는 정식버전 출시 후 오픈예정입니다.')
+							}
+							else{
+								pilotCheckHandler();
+								
+							}
+						}}>
+							{mt_type === '1'?
+							<View>
+								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서류자동화</Text>
+								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>서비스</Text>
+							</View>
+							:
+							<View>
+								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작업일보</Text>
+								<Text style={[fontStyle.k_bold,{fontSize:18,color:colors.WHITE_COLOR}]}>작성</Text>
+							</View>	
+							}
 							<View style={{alignItems:'flex-end'}}>
 								<Image style={styles.mainMenuImg} source={require('../../assets/img/ic_main4.png')} />
 							</View>
