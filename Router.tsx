@@ -21,7 +21,7 @@ import { PilotProfile } from './src/screen/Board/PilotProfile';
 import { DetailField } from './src/screen/Board/DetailField';
 import { DetailWork } from './src/screen/Board/DetailWork';
 import { Volunteer } from './src/screen/Board/Volunteer';
-import { WorkReport } from './src/screen/Board/WorkReport';
+import { WorkReport } from './src/screen/document/WorkReport';
 import { ElectronicContract } from './src/screen/Board/ElectronicContract';
 import { SettingProfile } from './src/screen/mypage/settingProfile/SettingProfile';
 import { FavoriteFilotIndex } from './src/screen/mypage/favorite/FavoriteFilotIndex';

@@ -17,18 +17,21 @@ import { Profile } from "./pilotProfileDetail/Profile";
 import { RequiredDocuments } from "./pilotProfileDetail/RequiredDocuments";
 import { BackHandlerCom } from "../../component/utils/BackHandlerCom";
 import { PilotProfileItemType, PilotProfileType } from "../screenType";
-import { usePostQuery } from "../../util/reactQuery";
-import { useAppSelector } from "../../redux/store";
+import { usePostMutation, usePostQuery } from "../../util/reactQuery";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { toggleLoading } from "../../redux/actions/LoadingAction";
 
 
 
 
 export const PilotProfile = ({route}:PilotProfileType) => {
 
-    const {cat_idx,mpt_idx} = route.params;
-    const {mt_idx} = useAppSelector(state => state.userInfo);
+    const {cat_idx,mpt_idx,cot_idx} = route.params;
+    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
 
+    const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+
     const [tab, setTab] = useState(0);
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
 
@@ -39,19 +42,55 @@ export const PilotProfile = ({route}:PilotProfileType) => {
         mpt_idx : mpt_idx,
         cat_idx : cat_idx,
     },'equip/pilot_profile.php');
+    const selPilotMutation = usePostMutation('selPilot','equip/pilot_profile_select.php');
     
     
-    const alertModalOn = ( msg : string, type? : string ) => {
+    const alertModalOn = ( msg : string, type? : string,strongMsg? : string ) => {
         setAlertModal({
+            ...alertModal,
             alert: true,
-            strongMsg: '',
-            msg: '장비업체를 선정 하시겠습니까?',
-            type:'confirm',
+            strongMsg: strongMsg ? strongMsg : '',
+            msg: msg,
+            type:type ? type : '',
         })
     }
 
     const alertModalOff = () => {
         setAlertModal(initialAlert)
+    }
+    const alertAction = () => {
+        if(alertModal.type === 'go_cons_contract'){
+            navigation.navigate('ElectronicContract',{cot_idx:cot_idx,cat_idx:cat_idx})
+        }
+        else if(alertModal.type === 'pilot_access_confirm'){
+            selPilotHandler();
+        }
+        else if(alertModal.type === 'sel_success'){
+            navigation.navigate('Board');
+        }
+    }
+
+    const selPilotHandler = async () => {
+        const params = {
+            mt_idx : mt_idx,
+            cat_idx : cat_idx,
+            mpt_idx : mpt_idx,
+        }
+
+        console.log(params);
+
+        dispatch(toggleLoading(true));
+        const {result, msg, data} = await selPilotMutation.mutateAsync(params);
+
+        console.log(result, msg,data);
+        dispatch(toggleLoading(false));
+
+        if(result === 'true'){
+            alertModalOn('지원되었습니다.','sel_success');
+        }
+        else{
+            alertModalOn(msg,'error');
+        }
     }
 
     const FirstRoute = () => (
@@ -64,8 +103,6 @@ export const PilotProfile = ({route}:PilotProfileType) => {
                 <RequiredDocuments doc={pilotProfile.doc}/>
             }
         </>
-            // <>
-            // </>
     );
 
 
@@ -79,6 +116,7 @@ export const PilotProfile = ({route}:PilotProfileType) => {
             // console.log(profileData);
             if(profileData.result === 'true'){
                 setPilotProfile(profileData.data);
+                console.log(profileData.data);
             }
             else{
 
@@ -125,7 +163,16 @@ export const PilotProfile = ({route}:PilotProfileType) => {
                     ? FirstRoute()
                     : SecondRoute()
                 }
-                <TouchableOpacity onPress={() => alertModalOn('','test')}>
+                <TouchableOpacity onPress={() => {
+                    if(mt_type === '1'){
+                        alertModalOn('장비업체를 선정하시겠습니까?','go_cons_contract')
+                    }
+                    else if(mt_type === '2'){
+                        if(pilotProfile){
+                            alertModalOn('조종사와 함께 현장에 지원하시겠습니까?' , 'pilot_access_confirm',`${pilotProfile.data.name}`);
+                        }
+                    }
+                }}>
                     <View style={[styles.buttonStyle, {}]}>
                         <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>조종사 선택 완료</Text>
                     </View>
@@ -133,9 +180,10 @@ export const PilotProfile = ({route}:PilotProfileType) => {
                 <AlertModal 
                     show={alertModal.alert}
                     msg={alertModal.msg}
-                    action={()=>navigation.navigate('ElectronicContract',{cot_idx:cot_idx,cat_idx:cat_idx})} // 서류작성_임대계약페이지 만들어지면 연결
+                    action={alertAction} // 서류작성_임대계약페이지 만들어지면 연결
                     hide={alertModalOff}
                     type={alertModal.type}
+                    strongMsg={alertModal.strongMsg}
                 />
             </ScrollView>
         </SafeAreaView>

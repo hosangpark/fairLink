@@ -24,8 +24,8 @@ export const UserInfoCard = ({
     refetch, //list 새로 불러오기
     equFavType, // 1: 스페어 2: 소속
     cat_idx, //장비업체 - 조종사 프로필 조회
+    cot_idx,
 }:UserInfoCardType) => {
-
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const dispatch = useAppDispatch();
     const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
@@ -61,7 +61,6 @@ export const UserInfoCard = ({
 
     async function deleteFavUser(){ //즐겨찾기 유저 삭제
 
-        console.log(item);
 
         let params = {
             mt_idx : mt_idx,
@@ -90,7 +89,8 @@ export const UserInfoCard = ({
 
         // await alertModalOn('삭제가 완료되었습니다.','delete_success');
     }
-    const item_pilot_type = item.pilot_type? item.pilot_type : item.type
+    const item_pilot_type = item.pilot_type? item.pilot_type : item.type;
+
 
     return (
         <TouchableOpacity style={{width:'100%',position:'relative'}} onPress={()=>{
@@ -108,8 +108,7 @@ export const UserInfoCard = ({
                     });
                 }
                 else if(mt_type === '2'){
-                    console.log(cat_idx);
-                    navigation.navigate('PilotProfile',{cat_idx:cat_idx,mpt_idx : item.mpt_idx});
+                    navigation.navigate('PilotProfile',{cat_idx:cat_idx,mpt_idx : item.mpt_idx,cot_idx :cot_idx});
                 }
             }
         }}>
@@ -160,7 +159,7 @@ export const UserInfoCard = ({
                             <View style={{flexDirection:'row',alignItems:'center',marginTop:8}}>
                                 <View style={{flexDirection:'row',alignItems:'center'}}>
                                     <Image source={require('../../assets/img/ic_star_sm.png')} style={{width:13,height:13}} />
-                                    <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK,marginLeft:3}]}>{item.score.toFixed(1)}</Text>
+                                    <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK,marginLeft:3}]}>{Number(item.score).toFixed(1)}</Text>
                                 </View>
                                 <Text style={[fontStyle.f_regular,{fontSize:14, color:colors.FONT_COLOR_BLACK2,marginLeft:5}]}>평가수 {item.score_count}</Text>
                             </View>

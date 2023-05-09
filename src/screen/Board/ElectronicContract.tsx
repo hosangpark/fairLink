@@ -135,6 +135,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
     return(
         <View style={{flex:1}}>
         <BackHeader title="전자계약" />
+        {ElectronicData &&
         <ScrollView style={{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}>
                 <View style={ElectronicContractstyle.WhiteBox}>
                 <View style={[styles.TitleText]}>
@@ -519,6 +520,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                 }
                 </View>
         </ScrollView>
+        }
         <AlertModal
             show={alertModal.alert}
             msg={alertModal.msg}
