@@ -104,6 +104,9 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
         mt_type === '2' ? {mt_idx : mt_idx,cot_idx:cot_idx} : {mt_idx : mt_idx, cat_idx : cat_idx},
         mt_type === '2' ? 'equip/equip_order_info.php' : 'pilot/pilot_order_info.php'); //장비회사 및 조종사 현장세부내용 출력
 
+    const getOrderMineMutation = usePostMutation('getOrderMine','equip/equip_order_mine.php');
+    const pilotOrderSupportMutation = usePostMutation('pilotOrderSupport' , 'pilot/pilot_order_support.php');
+
     const [detailFieldInfo, setDetailFieldInfo] = React.useState<EquDetailFieldBoxDataType>(); //입력정보
 
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 
@@ -128,10 +131,15 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
             }
             else{
                 Linking.openURL(`tel:${DetailFieldData.data.data.m_num}`);
-
             }
         }
-        if(alertModal.type === 'confirm_A'){
+        else if(alertModal.type === 'confirm_pilot_support'){ //조종사 지원 컨펌
+            pilotOrderSupHandler();
+        }
+        else if(alertModal.type === 'sup_success'){ //조종사 지원 완료
+            navigation.goBack();
+        }
+        else if(alertModal.type === 'confirm_A'){
             console.log(detailFieldInfo)
             if(detailFieldInfo?.my_check == "Y" && detailFieldInfo.my_equip_count == "1"){
                 dispatch(toggleLoading(true));
@@ -151,8 +159,21 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                 navigation.navigate('MatchingEquipment',{item:detailFieldInfo});
             }
         }
-        if(alertModal.type === 'confirm_B'){
+        else if(alertModal.type === 'confirm_B'){
             navigation.navigate('MatchingEquipment',{item:detailFieldInfo});
+        }
+    }
+
+    const pilotOrderSupHandler = async () => {
+        dispatch(toggleLoading(true));
+        const {result, msg} = await pilotOrderSupportMutation.mutateAsync({mt_idx:mt_idx,cat_idx:cat_idx});
+        dispatch(toggleLoading(false));
+
+        if(result === 'true'){
+            alertModalOn('현장지원이 완료되었습니다.','sup_success');
+        }
+        else{
+            alertModalOn(msg,'');
         }
     }
 
@@ -231,10 +252,17 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                         title={'지급일'}
                         pay_date={detailFieldInfo.pay_date}
                     />
-                    <DetailFieldBox
-                        title={'담당자'}
-                        text={detailFieldInfo.crt_director}
-                    />
+                    {mt_type === '2' ?
+                        <DetailFieldBox
+                            title={'담당자'}
+                            text={detailFieldInfo.crt_director}
+                        />
+                    :
+                        <DetailFieldBox
+                            title={'담당자'}
+                            text={detailFieldInfo.m_name}
+                        />
+                    }
                     <View style={{
                         ...DetailFieldstyle.DetailFieldBox,
                         alignItems:'center'
@@ -256,7 +284,7 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                         <View>
                             <DetailFieldBox
                                 title={'장비회사'}
-                                // text={detailFieldInfo.}
+                                text={detailFieldInfo.e_name}
                             />
                             <View style={{
                                 ...DetailFieldstyle.DetailFieldBox,
@@ -265,12 +293,12 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                                 <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>연락처</Text>
                                 <TouchableOpacity style={{flexDirection:'row', alignItems:'center', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5}}
                                     onPress={()=>{
-                                        alertModalOn(`로 \n전화연결 하시겠습니까?`,'call_confirm',DetailFieldData.data.data.m_num)
+                                        alertModalOn(`로 \n전화연결 하시겠습니까?`,'call_confirm',DetailFieldData.data.data.e_num)
                                     }}
                                 >
                                     <Image style={{width:20,height:20}} source={require('../../assets/img/ic_phone.png')}/>
                                     <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.MAIN_COLOR,flexShrink:1,marginLeft:5}]}>
-                                        {detailFieldInfo.m_num}
+                                        {detailFieldInfo.e_num}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -282,67 +310,79 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
             </ScrollView>
         }
         {detailFieldInfo &&
-            <View style={[(mt_type === '1' || detailFieldInfo.assign_check === 'N')? DetailFieldstyle.staticbox : DetailFieldstyle.staticbox2, ]}>
-                
-                {(mt_type === '1' || detailFieldInfo.assign_check === 'N') ?
-                <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:16}]}>
-                    지원하기
-                </Text>
+            <>
+                {mt_type === '4' ? 
+                    <TouchableOpacity onPress={()=>{
+                        alertModalOn('지원하시겠습니까?', 'confirm_pilot_support');
+                    }}>
+                        <View style={[styles.buttonStyle, {bottom: 0, width: '100%', height:58, zIndex: 2,borderRadius:0 }]}>
+                            <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold]}>지원하기</Text>
+                        </View>
+                    </TouchableOpacity>
                 :
-                <View style={{alignItems:'center'}}>
-                <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.MAIN_COLOR,marginBottom:6}]}>
-                    지명배차
-                </Text>
-                <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:16}]}>
-                    (대상자 : 강범수 님)
-                </Text>
-                </View>
-                }
+                <View style={[(mt_type === '1' || detailFieldInfo.assign_check === 'N')? DetailFieldstyle.staticbox : DetailFieldstyle.staticbox2, ]}>
+                    {(mt_type === '1' || detailFieldInfo.assign_check === 'N') ?
+                    <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:16}]}>
+                        지원하기
+                    </Text>
+                    :
+                    <View style={{alignItems:'center'}}>
+                    <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.MAIN_COLOR,marginBottom:6}]}>
+                        지명배차
+                    </Text>
+                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:16}]}>
+                        (대상자 : 강범수 님)
+                    </Text>
+                    </View>
+                    }
 
-                {((mt_type === '1' || detailFieldInfo.assign_check === 'N' ) && mt_type !== '4') ?
-                <View style={{flexDirection:'row'}}>
-                    <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}
-                        onPress={()=>{
-                            alertModalOn(`해당 현장에 '직접조종하기'로 \n지원하시겠습니까?`,'confirm_A')
-                        }}
-                    >
-                        <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
-                            조종사
-                        </Text>
-                        <Text style={[fontStyle.f_regular,{color:colors.FONT_COLOR_BLACK2,fontSize:15}]}>
-                            본인 또는 소속 조종사
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={DetailFieldstyle.staticinbox}
-                        onPress={()=>{
-                            alertModalOn('해당 현장에 장비만 지원하시겠습니까?','confirm_B')
-                        }}
-                    >
-                        <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
-                            조종사
-                        </Text>
-                        <Text style={[fontStyle.f_regular,{color:colors.FONT_COLOR_BLACK2,fontSize:15}]}>
-                            스페어 조종사
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                :
-                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                    <CustomButton
-                        action={()=>{navigation.goBack()}}
-                        label={'수락'}
-                        style={{flex:1,marginRight:10}}
-                    />
-                    <CustomButton
-                        action={()=>{navigation.navigate('Main')}}
-                        label={'거절'}
-                        style={{...styles.whiteButtonStyle,flex:1}}
-                        labelStyle={styles.whiteButtonLabelStyle}
-                    />
+                    {((mt_type === '1' || detailFieldInfo.assign_check === 'N' )) ?
+                    <View style={{flexDirection:'row'}}>
+                        <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}
+                            onPress={()=>{
+                                alertModalOn(`해당 현장에 '직접조종하기'로 \n지원하시겠습니까?`,'confirm_A')
+                            }}
+                        >
+                            <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
+                                조종사
+                            </Text>
+                            <Text style={[fontStyle.f_regular,{color:colors.FONT_COLOR_BLACK2,fontSize:15}]}>
+                                본인 또는 소속 조종사
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={DetailFieldstyle.staticinbox}
+                            onPress={()=>{
+                                alertModalOn('해당 현장에 장비만 지원하시겠습니까?','confirm_B')
+                            }}
+                        >
+                            <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
+                                조종사
+                            </Text>
+                            <Text style={[fontStyle.f_regular,{color:colors.FONT_COLOR_BLACK2,fontSize:15}]}>
+                                스페어 조종사
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                        <CustomButton
+                            action={()=>{navigation.goBack()}}
+                            label={'수락'}
+                            style={{flex:1,marginRight:10}}
+                        />
+                        <CustomButton
+                            action={()=>{navigation.goBack();}}
+                            label={'거절'}
+                            style={{...styles.whiteButtonStyle,flex:1}}
+                            labelStyle={styles.whiteButtonLabelStyle}
+                        />
+                    </View>
+                    }
                 </View>
                 }
-            </View>
+                
+            </>
         }
         </View>
         <AlertModal
