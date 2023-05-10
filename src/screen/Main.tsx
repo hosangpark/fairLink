@@ -25,7 +25,7 @@ import { PilotWorkListModal } from '../modal/PilotWorkListModal';
 
 
 export const Main = () => {
-	const {mt_type,equip_pilot} = useAppSelector(state => state.userInfo);
+	const {mt_idx,mt_type,equip_pilot} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
 	const pilotWorkCheckMutation = usePostMutation('pilotWorkCheck','pilot/pilot_work_check.php');
 
@@ -55,8 +55,8 @@ export const Main = () => {
 
     const pilotCheckHandler = async () => {
 		const {data,result,msg} = await pilotWorkCheckMutation.mutateAsync({
-			// mt_idx : mt_idx
-			mt_idx : '22'
+			mt_idx : mt_idx
+			// mt_idx : '22'
 		});
 
 		if(result === 'true'){

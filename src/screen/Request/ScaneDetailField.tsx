@@ -103,7 +103,8 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
     usePostQuery('getDetailFieldData',
         mt_type === '2' ? {mt_idx : mt_idx,cot_idx:cot_idx} : {mt_idx : mt_idx, cat_idx : cat_idx},
         mt_type === '2' ? 'equip/equip_order_info.php' : 'pilot/pilot_order_info.php'); //장비회사 및 조종사 현장세부내용 출력
-
+        
+    const getOrderMineMutation = usePostMutation('getOrderMine','equip/equip_order_mine.php');
     const [detailFieldInfo, setDetailFieldInfo] = React.useState<EquDetailFieldBoxDataType>(); //입력정보
 
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 
