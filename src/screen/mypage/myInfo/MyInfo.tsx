@@ -203,7 +203,7 @@ export const MyInfo = () => {
                 </View>
             </View>
             { /* 건설, 장비 */
-                mt_type !== '3'
+                mt_type !== '4'
                 &&
                 <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>회사 정보</Text>

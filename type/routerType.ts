@@ -97,7 +97,9 @@ export type RouterNavigatorParams = {
         contract_idx? :string | undefined
         route_type?:string
     } //전자계약
-    WorkReport:undefined //작업일보작성
+    WorkReport:{
+        cdwt_idx  : string,
+    } //작업일보작성
     MatchingEquipment:{ //장비 및 조종사 매칭 (장비 선택)
         item : EquDetailFieldBoxDataType | undefined//건설회사 요구조건 
     }

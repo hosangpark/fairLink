@@ -2,7 +2,7 @@ import React from 'react';
 
 import {View,Text,ScrollView} from 'react-native';
 import { BackHeader } from '../../component/header/BackHeader';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { usePostMutation } from '../../util/reactQuery';
 import { CustomSelectBox } from '../../component/CustomSelectBox';
 import { getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, locationList } from '../../component/utils/list';
@@ -12,8 +12,12 @@ import { MarginCom } from '../../component/MarginCom';
 import { DispatchCard } from '../../component/card/DispatchCard';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
 import { EquipOrderItemType } from '../screenType';
+import { useIsFocused } from '@react-navigation/native';
+import { toggleLoading } from '../../redux/actions/LoadingAction';
 
 export const EquipRequestMain = () => {
+
+    const dispatch = useAppDispatch();
 
     const {mt_idx, mt_type,location:mt_location} = useAppSelector(state => state.userInfo);
 
@@ -32,6 +36,8 @@ export const EquipRequestMain = () => {
     const [page, setPage] = React.useState(1);
     const [equipMainList, setEquipMainList] = React.useState<object[]>([]); //장비리스트
     const [orderList, setOrderList] = React.useState<EquipOrderItemType[]>([]);
+
+    const isFocused = useIsFocused();
 
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
@@ -64,7 +70,9 @@ export const EquipRequestMain = () => {
     }
 
     const getEquipList = async () => { //장비 리스트 불러오기
+        dispatch(toggleLoading(true))
         const {data} = await getEquipListMutation.mutateAsync({});
+        dispatch(toggleLoading(false))
 
         setEquipMainList(data.data);
     }
@@ -77,8 +85,9 @@ export const EquipRequestMain = () => {
             price_type : inputInfo.price_type === '일대' ? 'Y' : 'N'
         }
 
+        dispatch(toggleLoading(true));
         const {data , result, msg} = await getEquOrderListMutation.mutateAsync(params);
-
+        dispatch(toggleLoading(false));
         console.log(params);
         console.log(data.data);
         if(result === 'true'){
@@ -92,8 +101,13 @@ export const EquipRequestMain = () => {
     }
 
     React.useEffect(()=>{
-        getEquipList();
-    },[])
+        if(isFocused){
+            getEquipList();
+            if(inputInfo.stand2 !== ''){
+                getEquipOrderList();
+            }
+        }
+    },[isFocused])
 
     React.useEffect(()=>{
         if(inputInfo.type !== ''){
