@@ -278,6 +278,10 @@ export type EquDetailFieldBoxDataType = { //현장 세부내용 (현장지원 - 
     m_num : string,
     my_check : string,
     my_equip_count : string,
+
+    //조종사 업체일때,
+    e_name : string, //장비회사 이름
+    e_num : string, //장비회사 전화번호
 }
 export type VolunteerListType = { 
     data:{
