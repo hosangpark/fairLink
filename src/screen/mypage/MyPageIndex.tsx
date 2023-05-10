@@ -116,7 +116,9 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
             <ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
                 <View style={{padding:20}}>
                     <View style={[{backgroundColor:colors.MAIN_COLOR,borderRadius:8,padding:20}]}>
-                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3}]}>{myInfo.company}</Text>
+                        {mt_type !== '4' &&
+                            <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.WHITE_COLOR,marginBottom:3}]}>{myInfo.company}</Text>
+                        }
                         <Text style={[fontStyle.f_semibold,{fontSize:24,color:colors.WHITE_COLOR,marginBottom:7}]}>{myInfo.name} {myInfo.position}님</Text>
                         <Text style={[fontStyle.f_regular,{fontSize:18 , color:colors.WHITE_COLOR}]}>{myInfo.hp}</Text>
                     </View>
@@ -136,11 +138,11 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 현장</Text>  
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
-                        onPress={()=>{navigation.navigate('FavoriteList',{mt_type:'1'});}}
+                        onPress={()=>{navigation.navigate('FavoriteList');}}
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>즐겨찾기 장비 관리</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {mt_type:'1'})}}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo')}}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>
@@ -184,7 +186,14 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                 <View style={styles.deepTopBorder}>   
                     <TouchableOpacity style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}
                         // onPress={()=>{navigation.navigate('MyProfile')}}
-                        onPress={()=>{alertModalOn('작성된 프로필이 없습니다. 프로필 작성을 먼저해주세요.', 'none_profile')}}
+                        onPress={()=>{
+                            if(myInfo.profile_check === 'N'){
+                                alertModalOn('작성된 프로필이 없습니다. 프로필 작성을 먼저해주세요.','none_profile')
+                            }
+                            else{
+                                navigation.navigate('SettingProfile');
+                            }
+                        }}
                     >
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
                     </TouchableOpacity>

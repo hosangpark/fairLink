@@ -225,7 +225,6 @@ export const MyProfile = () => {
                         numberOfLines={4}
                         editable={isEditable}
                         onChange={(e) => console.log(e.nativeEvent.text)}
-                        // value={}
                     />
                 </View>
             </View>

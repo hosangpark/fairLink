@@ -34,6 +34,12 @@ export const DocumentRouter = ({setTabIndex,route}:DocumentIndexType) => {
           }
       }, [isFocused]);
 
+    React.useEffect(()=>{
+        if(!cdwt_idx){
+            navigation.goBack();
+        }
+    },[])
+
     return(
         <Stack.Navigator
           screenOptions={{

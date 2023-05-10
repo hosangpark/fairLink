@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RequestRouterNavigatorParams } from '../../../type/RequestRouterType';
 import { RouterNavigatorParams } from '../../../type/routerType';
+import { useAppSelector } from '../../redux/store';
 
 type dispatchItemType = {
     item : EquipOrderItemType
@@ -16,6 +17,7 @@ type dispatchItemType = {
 
 export const DispatchCard = ({item}:dispatchItemType) => { //공개배차, 지명배차 카드
 
+    const {mt_type} = useAppSelector(state => state.userInfo);
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
     const navigation = useNavigation<StackNavigationProp<RequestRouterNavigatorParams & RouterNavigatorParams>>();
 
@@ -34,13 +36,24 @@ export const DispatchCard = ({item}:dispatchItemType) => { //공개배차, 지�
     }
 
     const goDetail = () => {
+        console.log(item);
         if(item.assign_check === 'Y'){
-            navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
+            if(mt_type === '2'){
+                navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
+            }
+            else{
+                navigation.navigate('ScaneDetailField',{cat_idx : item.cat_idx});
+            }
         }
         else{
             console.log(item.open_check);
             if(item.open_check === 'N'){ //개발완료되면 변경하기
-                navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
+                if(mt_type === '2'){
+                    navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
+                }
+                else{
+                    navigation.navigate('ScaneDetailField',{cat_idx : item.cat_idx});
+                }
             }
             else{
                 alertModalOn('요구조건에 부합하는 보유장비가 없어\n지원이 불가능합니다,','');
@@ -120,12 +133,12 @@ export const DispatchCard = ({item}:dispatchItemType) => { //공개배차, 지�
                 </View>
             </TouchableOpacity>
             <AlertModal 
-                    show={alertModal.alert}
-                    msg={alertModal.msg}
-                    type={alertModal.type}
-                    hide={()=>{setAlertModal(()=>initialAlert)}}
-                    action={alertAction}
-                />
+                show={alertModal.alert}
+                msg={alertModal.msg}
+                type={alertModal.type}
+                hide={()=>{setAlertModal(()=>initialAlert)}}
+                action={alertAction}
+            />
         </View>
     )
 }
