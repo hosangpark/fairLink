@@ -157,7 +157,7 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
         }
     }
 
-    const startTimeHandler = (time : Date) => { //작업기간 시작일 선택 handler
+    const startTimeHandler = (time : Date) => { //작업시간 시작시각 선택 handler
         console.log(time);
         const hour = time.getHours() < 10 ? '0'+time.getHours() : time.getHours();
         const min = time.getMinutes() < 10 ? '0'+time.getMinutes() : time.getMinutes();
@@ -169,7 +169,7 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
         
     }
 
-    const endTimeHandler = (time : Date) => { //작업기간 시작일 선택 handler
+    const endTimeHandler = (time : Date) => { //작업시간 종료시각 선택 handler
         const hour = time.getHours() < 10 ? '0'+time.getHours() : time.getHours();
         const min = time.getMinutes() < 10 ? '0'+time.getMinutes() : time.getMinutes();
         setEndTimeModal(false);

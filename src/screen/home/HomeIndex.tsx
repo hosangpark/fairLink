@@ -213,6 +213,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 					show={pilotWorkModal}
 					hide={()=>setPilotWorkModal(false)}
 					alertModalOn={alertModalOn}
+					setTabIndex={setTabIndex}
 				/>
 			{/* } */}
 			<ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>

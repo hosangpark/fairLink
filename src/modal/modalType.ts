@@ -90,6 +90,7 @@ export type PilotWorkModalType = {
     show : boolean,
     hide : () => void
     alertModalOn : (msg:string,type?:string) => void
+    setTabIndex? : (index:number) => void;
 }
 
 export type pilotWorkListItemType = {

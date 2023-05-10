@@ -16,7 +16,8 @@ import { RouterNavigatorParams } from '../../type/routerType';
 export const PilotWorkListModal = ({
     show,
     hide,
-    alertModalOn
+    alertModalOn,
+    setTabIndex,
 } :PilotWorkModalType) => {
 
     const {mt_idx} = useAppSelector(state => state.userInfo);
@@ -85,6 +86,7 @@ export const PilotWorkListModal = ({
                                 <TouchableOpacity 
                                     style={[styles.border,{padding:15,borderRadius:8,marginBottom:15,flexDirection:'row'}]}
                                     onPress={()=>{
+                                        if(setTabIndex)setTabIndex(5);
                                         navigation.navigate('Document',{cdwt_idx:item.cdwt_idx});
                                         hide();
                                     }}

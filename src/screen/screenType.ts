@@ -32,6 +32,12 @@ export type EquipInputInfoType = { //장비회사 - 프로필정보 설정 및 �
     mpt_equip: mptEquipItemType[];
     mpt_equip_memo: string;
     mpt_aspire: string;
+    mpt_location:string;
+    mpt_vank : string;
+    mpt_vank_num : string;
+    mpt_c_check : string,
+    mpt_c_name : string,
+    mpt_c_ceo : string,
 
     mpt_file1 : string,
     mpt_file1_check : string,
@@ -109,7 +115,8 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
 export type EquipOrderItemType = {
     apply_cnt : number,
     assign_check : string,
-    cot_idx : string,
+    cot_idx? : string, //장비회사일때
+    cat_idx? : string, //조종사회사일때
     crt_content : string,
     crt_name : string,
     d_day:string,

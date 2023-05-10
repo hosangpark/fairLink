@@ -19,27 +19,62 @@ import { useAppSelector } from '../redux/store';
 import { Request } from './Request/Request';
 import { RequestRouter } from './Request/RequestRouter';
 import { DocumentRouter } from './document/DocumentRouter';
+import { usePostMutation } from '../util/reactQuery';
+import { AlertModal, initialAlert } from '../modal/AlertModal';
+import { PilotWorkListModal } from '../modal/PilotWorkListModal';
 
 
 export const Main = () => {
 	const {mt_type,equip_pilot} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
-
-    /**
-     * 
-     *  test page는 bottom navigator를 위한 테스트 페이지입니다.
-     * 
-     *  페이지가 만들어지면 하나씩 지워주시면 됩니다.
-     * 
-     */
-
-    //type - stackNavigationProp에 routerNavigatorPrams를 종속시킵니다.
+	const pilotWorkCheckMutation = usePostMutation('pilotWorkCheck','pilot/pilot_work_check.php');
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>(); //router 이동시 사용
 
     const Tab = createBottomTabNavigator();
 
     const [tabIndex, setTabIndex] = useState(1);
+
+	const [pilotWorkModal, setPilotWorkModal] = React.useState(false);
+    const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
+
+	const alertModalOn = (msg:string, type?:string) => {
+		setAlertModal({
+			...alertModal,
+			alert:true,
+			msg:msg,
+			type:type?type : '',
+		})
+	}
+	const alertModalOff = () => {
+		setAlertModal(()=>initialAlert);
+	}
+	const alertAction = () => {
+
+    }
+
+    const pilotCheckHandler = async () => {
+		const {data,result,msg} = await pilotWorkCheckMutation.mutateAsync({
+			// mt_idx : mt_idx
+			mt_idx : '22'
+		});
+
+		if(result === 'true'){
+			if(data.data.work_check === 'N'){
+				alertModalOn('조종사 또는 차주 및 장비업체만 이용가능한 메뉴입니다.');
+			}
+			else if(data.data.work_check === 'Y'){
+				if(setTabIndex)setTabIndex(5);
+				navigation.navigate('Document',{cdwt_idx:data.data.cdwt_idx});
+			}
+			else{
+				setPilotWorkModal(true);
+			}
+		}
+		else{
+			alertModalOn(msg,'');
+		}
+	}
 
     
 
@@ -67,6 +102,19 @@ export const Main = () => {
             justifyContent: 'center',
             // alignItems:'center',
         }}>
+            <PilotWorkListModal 
+                show={pilotWorkModal}
+                hide={()=>setPilotWorkModal(false)}
+                alertModalOn={alertModalOn}
+                setTabIndex={setTabIndex}
+            />
+            <AlertModal 
+				show={alertModal.alert}
+				hide={alertModalOff}
+				msg={alertModal.msg}
+				action={alertAction}
+				type={alertModal.type}
+			/>
             <Tab.Navigator
                 screenOptions={
                     {   
@@ -174,7 +222,8 @@ export const Main = () => {
                         component={DocumentRouter}
                         listeners={{
                             tabPress : (e)=>{
-                                setTabIndex(5);
+                                e.preventDefault();
+                                pilotCheckHandler();
                             }
                         }}
                         options={{
