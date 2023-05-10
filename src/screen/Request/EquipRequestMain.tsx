@@ -17,7 +17,7 @@ export const EquipRequestMain = () => {
 
     const {mt_idx, mt_type,location:mt_location} = useAppSelector(state => state.userInfo);
 
-    const getEquOrderListMutation = usePostMutation('getEquOrderList','equip/equip_order_list.php');
+    const getEquOrderListMutation = usePostMutation('getEquOrderList',mt_type === '2' ? 'equip/equip_order_list.php' : 'pilot/pilot_order_list.php');
     const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php');
 
     const initialInputInfo = {
@@ -80,6 +80,7 @@ export const EquipRequestMain = () => {
         const {data , result, msg} = await getEquOrderListMutation.mutateAsync(params);
 
         console.log(params);
+        console.log(data.data);
         if(result === 'true'){
             setOrderList([...data.data]);
         }

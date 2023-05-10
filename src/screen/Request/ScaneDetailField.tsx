@@ -97,12 +97,12 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
-    const {cot_idx} = route.params;
+    const {cot_idx,cat_idx} = route.params;
 
     const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
-    usePostQuery('getDetailFieldData',{mt_idx : mt_idx,cot_idx:cot_idx},'equip/equip_order_info.php')
-    
-    const getOrderMineMutation = usePostMutation('getOrderMine','equip/equip_order_mine.php');
+    usePostQuery('getDetailFieldData',
+        mt_type === '2' ? {mt_idx : mt_idx,cot_idx:cot_idx} : {mt_idx : mt_idx, cat_idx : cat_idx},
+        mt_type === '2' ? 'equip/equip_order_info.php' : 'pilot/pilot_order_info.php'); //장비회사 및 조종사 현장세부내용 출력
 
     const [detailFieldInfo, setDetailFieldInfo] = React.useState<EquDetailFieldBoxDataType>(); //입력정보
 
@@ -161,6 +161,7 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
     React.useEffect(()=>{
         dispatch(toggleLoading(DetailFieldDataLoading));
         if(DetailFieldData){
+            console.log(DetailFieldData);
             setDetailFieldInfo(DetailFieldData.data.data);
         }
     },[DetailFieldData])
@@ -250,6 +251,32 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                             </Text>
                         </TouchableOpacity>
                     </View>
+                    
+                    {mt_type === '4' &&
+                        <View>
+                            <DetailFieldBox
+                                title={'장비회사'}
+                                // text={detailFieldInfo.}
+                            />
+                            <View style={{
+                                ...DetailFieldstyle.DetailFieldBox,
+                                alignItems:'center'
+                            }}>
+                                <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>연락처</Text>
+                                <TouchableOpacity style={{flexDirection:'row', alignItems:'center', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5}}
+                                    onPress={()=>{
+                                        alertModalOn(`로 \n전화연결 하시겠습니까?`,'call_confirm',DetailFieldData.data.data.m_num)
+                                    }}
+                                >
+                                    <Image style={{width:20,height:20}} source={require('../../assets/img/ic_phone.png')}/>
+                                    <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.MAIN_COLOR,flexShrink:1,marginLeft:5}]}>
+                                        {detailFieldInfo.m_num}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    }
+
                 </View>
                 
             </ScrollView>
@@ -272,7 +299,7 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                 </View>
                 }
 
-                {(mt_type === '1' || detailFieldInfo.assign_check === 'N') ?
+                {((mt_type === '1' || detailFieldInfo.assign_check === 'N' ) && mt_type !== '4') ?
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}
                         onPress={()=>{

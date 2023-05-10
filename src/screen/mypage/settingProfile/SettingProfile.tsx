@@ -14,10 +14,11 @@ import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { SelectImageUpload } from "../../../modal/SelectImageUpload";
 import { usePostMutation } from "../../../util/reactQuery";
-import { equProfileUploadList, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, pilotCareerList, pilotProfileUploadList, pilotUploadList } from "../../../component/utils/list";
+import { bankList, equProfileUploadList, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, pilotCareerList, pilotProfileUploadList, pilotUploadList } from "../../../component/utils/list";
 import { MarginCom } from "../../../component/MarginCom";
 import { NumberObejctType } from "../../../component/componentsType";
 import { toggleLoading } from "../../../redux/actions/LoadingAction";
+import { CustomInputTextBox } from "../../../component/CustomInputTextBox";
 
 type tempUploadImageKeyType = {
     name : string
@@ -34,6 +35,12 @@ type UploadParamsType = {
     mpt_equip? : string[],
     mpt_equip_memo? : string,
     mpt_aspire? : string,
+    mpt_c_name? : string,
+    mpt_c_ceo? : string,
+    mpt_c_check? : string,
+    mpt_location? : string,
+    mpt_vank? :string,
+    mpt_vank_num? : string,
 }
 
 // 마이페이지 -> 프로필 설정하기 -> 해당 페이지로 이동해야함
@@ -56,8 +63,9 @@ export const SettingProfile = () => {
 
     const getEquipFileListMuataion = usePostMutation('getEquipFileList','equip_file_list.php'); //장비 종류 변경시 파일리스트
     const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php'); //장비 종류 불러오기
-    const getEquipProfileInfo = usePostMutation('getEquipProfileInfo' , 'equip/profile_info.php'); //프로필 정보 불러오기
-    const updatePorfileInfo = usePostMutation('updatePorfileInfo' , 'equip/profile_info_update.php',true); //프로필 정보 수정하기
+    const getProfileInfo = usePostMutation('getProfileInfo' , mt_type === '2' ? 'equip/profile_info.php' : 'pilot/pilot_profile_info.php'); //프로필 정보 불러오기
+    const updatePorfileInfo = usePostMutation('updatePorfileInfo' , mt_type === '2' ? 'equip/profile_info_update.php' : 'pilot/pilot_profile_update.php',true); //프로필 정보 수정하기
+    const searchCompanyMutaion = usePostMutation('searchCompany','pilot/profile_company_search.php');
 
     const [selImgModal, setSelImgModal] = React.useState(false);
     const [selImage, setSelImage] = React.useState('');
@@ -78,7 +86,15 @@ export const SettingProfile = () => {
                 mpt_equip_stand2 : '',
             }
         ],
+        mpt_location : '', //조종사 프로필일때,
+        mpt_vank : '',
+        mpt_vank_num : '',
         mpt_equip_memo : '',
+
+        mpt_c_check : 'Y',
+        mpt_c_name : '',
+        mpt_c_ceo : '',
+
         mpt_aspire : '',
         mpt_file1 : '',
         mpt_file1_check : '0',
@@ -94,6 +110,7 @@ export const SettingProfile = () => {
         mpt_file6_check : '0',
     });
 
+    const [searchText,setSearchText] = React.useState<string>('');
     const [uploadList, setUploadList] = React.useState<tempUploadImageKeyType[]>([]);
 
     const [fileCheck, setFileCheck] = React.useState<NumberObejctType>()
@@ -191,7 +208,6 @@ export const SettingProfile = () => {
                     }
 
                     const {data,result,msg} = await getEquipFileListMuataion.mutateAsync(params);
-                    console.log(data.data);
                     setFileCheck(data.data);
                 }
             }
@@ -229,7 +245,6 @@ export const SettingProfile = () => {
         // })
     }
     const uploadImage = async (image : SelImageType) => {
-        console.log(image);
         const tempArray = [...uploadList];
         const tempObj = {
             // ...image,
@@ -248,13 +263,34 @@ export const SettingProfile = () => {
         const filterArray = uploadList.filter((el) => el.key !== key);
 
         setUploadList([...filterArray]);
-        // console.log(filterArray);
     }
 
-    const getEquipList = async () => { //장비 리스트 불러오기 및 프로필 정보 불러오기
+    const searchCompanyHandler = async () => {
+        if(searchText === ''){
+            alertModalOn('회사명 또는 사업자등록번호를 입력해주세요.');
+        }
+        else{
+            dispatch(toggleLoading(true));
+            const {data, result, msg} = await searchCompanyMutaion.mutateAsync({search_txt:searchText});
+            dispatch(toggleLoading(false));
+
+            if(result === 'true'){
+                setInputInfo({
+                    ...inputInfo,
+                    mpt_c_ceo:data.data.mpt_c_ceo,
+                    mpt_c_name : data.data.mpt_c_name,
+                })
+            }
+            else{
+                alertModalOn(msg);
+            }
+        }
+    }
+
+    const getProfileWithEquipList = async () => { //장비 리스트 불러오기 및 프로필 정보 불러오기
         dispatch(toggleLoading(true))
         const {data : equipData, result : equipResult, msg : equipMsg} = await getEquipListMutation.mutateAsync({});
-        const {data:profileData, result : profileResult, msg : profileMsg} = await getEquipProfileInfo.mutateAsync({mt_idx:mt_idx});
+        const {data:profileData, result : profileResult, msg : profileMsg} = await getProfileInfo.mutateAsync({mt_idx:mt_idx});
 
         if(equipResult === 'false'){
             alertModalOn(equipMsg,'error');
@@ -275,12 +311,11 @@ export const SettingProfile = () => {
                     name : '',
                     type : '',
                     uri : '',
-                }
+                },
+                mpt_c_check : profileData.data.mpt_c_check === '' ? 'Y' : profileData.data.mpt_c_check,
             });
-            console.log(profileData);
 
             if(profileData.data.mpt_equip.length > 0 ){ //체크해야할 파일 리스트
-
                 let tempEquArray : string[] = [];
                 profileData.data.mpt_equip.map((item:mptEquipItemType,index:number) => {
                     const pushEl = `${item.mpt_equip_type}|${item.mpt_equip_stand1}|${item.mpt_equip_stand2}`
@@ -315,17 +350,35 @@ export const SettingProfile = () => {
         else if(inputInfo.mpt_aspire === ''){
             alertModalOn('나의 포부를 입력해주세요.');
         }
+        else if(mt_type === '4' && inputInfo.mpt_c_check === 'Y' && inputInfo.mpt_c_name === ''){
+            alertModalOn('소속회사 검색을 해주세요.');
+        }
         else{
+            if(mt_type === '4'){
+                uploadParams = {
+                    ...uploadParams,
+                    mpt_c_check : inputInfo.mpt_c_check,
+                    mpt_c_ceo : inputInfo.mpt_c_ceo,
+                    mpt_c_name : inputInfo.mpt_c_name,
+                    mpt_location : inputInfo.mpt_location,
+                    mpt_vank : inputInfo.mpt_vank,
+                    mpt_vank_num : inputInfo.mpt_vank_num,
+                }
+            }
+            if(inputInfo.mpt_profile.uri !== ''){
+                uploadParams = {
+                    ...uploadParams,
+                    mpt_profile : inputInfo.mpt_profile,
+                }
+            }
             let flag = true;
             for (let key in fileCheck){
-                // console.log(fileCheck[key]);
                 const beforeFileUri = `mpt_file${key}`;
 
                 if(fileCheck[key] === 'Y'){
                     const filterData = uploadList.filter(el => el.key === key);
                     if(filterData.length === 0){
                         const noneData = reqFileList.find(el=> el.key === key);
-                        console.log(noneData);
                         if(noneData && inputInfo[beforeFileUri] === ''){
                             alertModalOn(`${noneData.name}을 업로드해주세요.`)
                             flag = false;
@@ -353,8 +406,6 @@ export const SettingProfile = () => {
             })
 
             if(flag){
-                console.log(inputInfo);
-                console.log(uploadList);
 
                 uploadList.forEach((item,index) => {
                     const keyName = `mpt_file${item.key}`;
@@ -382,10 +433,9 @@ export const SettingProfile = () => {
                     mpt_equip_memo : inputInfo.mpt_equip_memo,
                     mpt_aspire : inputInfo.mpt_aspire,
                     mpt_career : String(pilotCareerList.findIndex(el => el === inputInfo.mpt_career)),
-                    mpt_profile : inputInfo.mpt_profile,
+                    // 
                 }
-                console.log(fileCheck);
-                console.log(uploadParams);
+
                 dispatch(toggleLoading(true))
                 const {data , msg, result} = await updatePorfileInfo.mutateAsync(uploadParams);
                 dispatch(toggleLoading(false))
@@ -402,11 +452,8 @@ export const SettingProfile = () => {
     }
 
     React.useEffect(()=>{
-        getEquipList();
+        getProfileWithEquipList();
     },[]);
-    React.useEffect(()=>{
-        console.log(fileCheck);
-    },[fileCheck])
 
 
     return (
@@ -437,11 +484,6 @@ export const SettingProfile = () => {
                                 :
                                 <Image style={{ width: 110, height: 110,borderRadius:100}} source={ require('../../../assets/img/profile_default.png') }/>
                             }
-                            {/* {inputInfo.mpt_before_profile === '' ?
-                                <Image style={{ width: 110, height: 110,borderRadius:100}} source={ require('../../../assets/img/profile_default.png') }/>
-                            :
-                                <Image style={{ width: 110, height: 110,borderRadius:100}} source={ {uri : inputInfo.mpt_before_profile} }/>
-                            } */}
                             <Image style={{ width: 30, height: 30, marginLeft: -30 }} source={ require('../../../assets/img/ic_add_img.png') }/>
                         </TouchableOpacity>
                     </View>
@@ -458,8 +500,9 @@ export const SettingProfile = () => {
                             <CustomSelectBox 
                                 defaultText='선택하세요.'
                                 strOptionList={['영흥', '삼천포', '본사', '여수',]}
-                                selOption={strOption}
-                                strSetOption={setStrOption}
+                                selOption={inputInfo.mpt_location}
+                                strSetOption={inputHandler}
+                                type={'mpt_location'}
                                 buttonStyle={selectBoxStyle.btnStyle}
                                 buttonTextStyle={selectBoxStyle2.btnTextStyle}
                                 rowStyle={selectBoxStyle.rowStyle}
@@ -598,9 +641,8 @@ export const SettingProfile = () => {
                             <View style={{ flexDirection: 'row'}}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1}}>
                                     <CheckBox
-                                        disabled={false}
-                                        value={isChecked}
-                                        onValueChange={() => handleCheck()}
+                                        value={inputInfo.mpt_c_check === 'Y'}
+                                        onValueChange={()=>{inputHandler('Y','mpt_c_check')}}
                                         tintColors={{ true: colors.MAIN_COLOR }}
                                         style={{ width: 20, height: 20, marginVertical: 6, marginRight: 12 }}
                                     />
@@ -608,9 +650,8 @@ export const SettingProfile = () => {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1}}>
                                     <CheckBox
-                                        disabled={false}
-                                        value={!isChecked}
-                                        onValueChange={() => handleCheck()}
+                                        value={inputInfo.mpt_c_check === 'N'}
+                                        onValueChange={() => inputHandler('N','mpt_c_check')}
                                         tintColors={{ true: colors.MAIN_COLOR }}
                                         style={{ width: 20, height: 20, marginVertical: 6, marginRight: 12 }}
                                     />
@@ -618,29 +659,43 @@ export const SettingProfile = () => {
                                 </View>
                             </View>
                             {   
-                                isChecked &&
+                                inputInfo.mpt_c_check === 'Y' &&
                                 <View>
                                     <Text style={[ styles.textLabel, fontStyle.f_semibold, { marginTop: 15 }]}>회사 검색</Text>
                                     <View style={{ position: 'relative'}}>
-                                        <TouchableOpacity onPressIn={handlePressIn} onPressOut={handlePressOut}>
                                             <TextInput 
                                                 placeholder='회사명 또는 사업자등록번호로 검색' 
-                                                placeholderTextColor={colors.BORDER_GRAY_COLOR3} 
+                                                placeholderTextColor={colors.BORDER_GRAY_COLOR3}
+                                                value={searchText}
+                                                onChangeText={setSearchText}
+                                                onSubmitEditing={searchCompanyHandler} 
                                                 style={[fontStyle.f_light, { fontSize: 16 , borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingLeft: 15, paddingRight: 45}]}
                                             />
-                                            <Image 
-                                                source={ isPressed ? require('../../../assets/img/ic_search_g.png') : require('../../../assets/img/ic_search.png')} 
-                                                style={{position: 'absolute', width: 20, height: 20, top: 15, right: 15,}}
-                                            />
+                                            <TouchableOpacity onPress={searchCompanyHandler} style={{position: 'absolute', width: 20, height: 20, top: 15, right: 15,}}>
+                                                <Image
+                                                    style={{width:20,height:20}} 
+                                                    source={ isPressed ? require('../../../assets/img/ic_search_g.png') : require('../../../assets/img/ic_search.png')} 
+                                                />
                                         </TouchableOpacity>
                                     </View>
                                     <View style={{paddingVertical: 10}}>
                                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>회사명</Text>
-                                        <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15}}/>
+                                        <TextInput
+                                            editable={false}
+                                            value={inputInfo.mpt_c_name} 
+                                            style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15,color:colors.FONT_COLOR_BLACK,fontSize:16}}
+                                            placeholder="회사검색을 해주세요."
+                                            placeholderTextColor={colors.BORDER_GRAY_COLOR}
+                                        />
                                     </View>
                                     <View style={{paddingVertical: 10}}>
                                         <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>대표자</Text>
-                                        <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15}}/>
+                                        <TextInput 
+                                            editable={false} 
+                                            value={inputInfo.mpt_c_ceo}
+                                            style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15,color:colors.FONT_COLOR_BLACK,fontSize:16}}
+                                            placeholder="회사검색을 해주세요."
+                                            placeholderTextColor={colors.BORDER_GRAY_COLOR}/>
                                     </View>
                                 </View>
                             }
@@ -654,21 +709,34 @@ export const SettingProfile = () => {
                     <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>계좌정보</Text>
                     <View style={{ paddingVertical: 10 }}>
                         <View style={{ marginBottom: 15 }}>
-                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>은행명<Text style={[ styles.OrengeStar]}>*</Text></Text>
                             <CustomSelectBox 
-                                defaultText='선택하세요.'
-                                strOptionList={['국민','기업','농협','신한','산업','우리','한국씨티','하나','SC제일','경남','광주','대구','도이치','부산','산림조합중앙회','저축','새마을금고','수협','신협','우체국','전북','제주','케이뱅크','토스뱅크',]}
-                                selOption={strOption}
-                                strSetOption={setStrOption}
+                                objOptionList={bankList}
+                                objSetOption={inputHandler}
+                                type={'mpt_vank'}
+                                selOption={bankList.filter(el=>el.key === inputInfo.mpt_vank)[0] ? bankList.filter(el=>el.key === inputInfo.mpt_vank)[0].name : ''}
                                 buttonStyle={selectBoxStyle.btnStyle}
-                                buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                                buttonTextStyle={selectBoxStyle.btnTextStyle}
                                 rowStyle={selectBoxStyle.rowStyle}
                                 rowTextStyle={selectBoxStyle.rowTextStyle}
+                                defaultText='주거래은행을 선택해주세요.'
+                                title={'주거래은행'}
+                                essential
                             />
-                            <View style={{paddingVertical: 10}}>
-                                <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>계좌번호</Text>
-                                <TextInput style={{borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingHorizontal: 15}}/>
-                            </View>
+                        
+                            <CustomInputTextBox 
+                                containerStyle={{marginTop:20}}
+                                action={()=>{}}
+                                button=''
+                                editable
+                                placeholder="계좌번호를 입력해주세요. ( '-' 포함 )"
+                                placeholderTextColor={colors.GRAY_COLOR}
+                                input={inputInfo.mpt_vank_num}
+                                setInput={inputHandler}
+                                title='계좌번호'
+                                type="mpt_vank_num"
+                                essential
+                                inputType='number-pad'
+                            />
                         </View>
                     </View>
                 </View>
@@ -686,7 +754,7 @@ export const SettingProfile = () => {
                                         <>
                                             <View style={{ flexDirection: 'row'}}>
                                                 <Text style={[fontStyle.f_semibold, { color: colors.FONT_COLOR_BLACK, fontSize: 16, marginRight: 5, marginBottom: 5}]}>{data.name}</Text>
-                                                <Text style={[fontStyle.f_semibold, { fontSize: 16, color: statusType === 0 ? colors.FONT_COLOR_GRAY : statusType === 1 ? colors.FONT_COLOR_BLACK2 : colors.MAIN_COLOR}]}>
+                                                <Text style={[fontStyle.f_semibold, { fontSize: 16, color: inputInfo[keyName] === '0' ? colors.FONT_COLOR_GRAY : inputInfo[keyName] === '1' ? colors.FONT_COLOR_BLACK2 : colors.MAIN_COLOR}]}>
                                                     {inputInfo[keyName] === '0' ? '[미등록]' : inputInfo[keyName] === '1' ? '[승인중]' : '[승인완료]'}
                                                     <Text style={[ styles.OrengeStar]}>{ data.name !== '통장사본' ? '*' : null }</Text>
                                                 </Text>

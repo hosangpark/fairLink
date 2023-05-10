@@ -69,7 +69,8 @@ export type RouterNavigatorParams = {
     } //현장세부내용
 
     ScaneDetailField:{
-        cot_idx:string
+        cot_idx?:string,
+        cat_idx?:string,
     } //장비 - 현장세부내용
 
     DetailWork:{
