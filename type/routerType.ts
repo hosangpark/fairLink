@@ -99,7 +99,7 @@ export type RouterNavigatorParams = {
     } //전자계약
     WorkReport:undefined //작업일보작성
     MatchingEquipment:{ //장비 및 조종사 매칭 (장비 선택)
-        item : EquDetailFieldBoxDataType //건설회사 요구조건 
+        item : EquDetailFieldBoxDataType | undefined//건설회사 요구조건 
     }
     RequestPilot : {
         item : EquDetailFieldBoxDataType //건설회사 요구조건

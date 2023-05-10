@@ -112,6 +112,21 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				}
 			}
 		}
+		else if(mt_type === '4'){
+			if(myProfileData){
+
+				const profileCheck = myProfileData.data.data.profile_check;
+
+
+				if(profileCheck === 'Y'){
+					if(setTabIndex)setTabIndex(2);
+					navigation.navigate('Request');
+				}
+				else{
+					alertModalOn('작성된 프로필 정보가 없습니다.\n프로필 작성을 먼저해주세요.','none_profile');
+				}
+			}
+		}
 	}
 
 	const pilotCheckHandler = async () => {

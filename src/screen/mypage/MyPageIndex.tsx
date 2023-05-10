@@ -64,7 +64,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     const mypageInform = async (): Promise<void> => {
         try {
             const idxParams = {
-                mt_idx : '17',
+                mt_idx : mt_idx,
             }
             const {result,data, msg} = 
             mt_type == '1'?  await consmyPageMutation.mutateAsync(idxParams)
@@ -75,6 +75,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
 
             if(result === 'true'){
                 setMypageData(data.data)
+                console.log(data.data)
             }
             else{
             }

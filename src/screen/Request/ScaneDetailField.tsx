@@ -9,7 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { AlertModal,initialAlert } from '../../modal/AlertModal';
 import { AlertClearType } from '../../modal/modalType';
-import { usePostQuery } from '../../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { DetailFieldBoxDataType, EquDetailFieldBoxDataType } from '../../component/componentsType';
@@ -114,11 +114,12 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
             msg:msg,
             type:type ? type :'' ,
         })
-    }
+    } 
+
     const alertModalOff = () =>{ //modal 종료
         setAlertModal(initialAlert)
     }
-    const alertAction = () => {
+    const alertAction = async() => {
         alertModalOff();
         if(alertModal.type === 'call_confirm'){
             const tempCallNum = DetailFieldData.data.data.m_num.split('-').join('');
@@ -130,11 +131,33 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
 
             }
         }
+        if(alertModal.type === 'confirm_A'){
+            console.log(detailFieldInfo)
+            if(detailFieldInfo?.my_check == "Y" && detailFieldInfo.my_equip_count == "1"){
+                dispatch(toggleLoading(true));
+                const params = {
+                    mt_idx : mt_idx,
+                    cot_idx : cot_idx,
+                }
+                const {data , result, msg} = await getOrderMineMutation.mutateAsync(params);
+                dispatch(toggleLoading(false));
+                if(result == 'true'){
+                    alertModalOn(msg)
+                    navigation.navigate('Board');
+                } else {
+                    alertModalOn(msg)
+                }
+            }else{
+                navigation.navigate('MatchingEquipment',{item:detailFieldInfo});
+            }
+        }
+        if(alertModal.type === 'confirm_B'){
+            navigation.navigate('MatchingEquipment',{item:detailFieldInfo});
+        }
     }
 
     
     /** mt_idx 임의입력 수정필요 */
-
     React.useEffect(()=>{
         dispatch(toggleLoading(DetailFieldDataLoading));
         if(DetailFieldData){
@@ -279,7 +302,9 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                 {((mt_type === '1' || detailFieldInfo.assign_check === 'N' ) && mt_type !== '4') ?
                 <View style={{flexDirection:'row'}}>
                     <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}
-                    onPress={()=>console.log('1')}
+                        onPress={()=>{
+                            alertModalOn(`해당 현장에 '직접조종하기'로 \n지원하시겠습니까?`,'confirm_A')
+                        }}
                     >
                         <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
                             조종사
@@ -291,7 +316,7 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                     <TouchableOpacity 
                         style={DetailFieldstyle.staticinbox}
                         onPress={()=>{
-                            navigation.navigate('MatchingEquipment',{item:detailFieldInfo});
+                            alertModalOn('해당 현장에 장비만 지원하시겠습니까?','confirm_B')
                         }}
                     >
                         <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
@@ -346,7 +371,7 @@ const DetailFieldstyle = StyleSheet.create({
     DetailFieldText:{
         fontSize:16,color:colors.FONT_COLOR_BLACK,flexShrink:1
     },
-    staticbox:{alignItems:'center',marginHorizontal:20,backgroundColor:colors.BLUE_COLOR4,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR4,paddingHorizontal:20,paddingVertical:16},
-    staticbox2:{alignItems:'center',marginHorizontal:20,backgroundColor:colors.WHITE_COLOR,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR4,paddingHorizontal:20,paddingVertical:16},
+    staticbox:{alignItems:'center',marginHorizontal:20,backgroundColor:colors.BLUE_COLOR4,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR4,paddingHorizontal:20,paddingVertical:16,marginBottom:10},
+    staticbox2:{alignItems:'center',marginHorizontal:20,backgroundColor:colors.WHITE_COLOR,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR4,paddingHorizontal:20,paddingVertical:16,marginBottom:10},
     staticinbox:{flex:1,paddingHorizontal:10,paddingVertical:13,backgroundColor:colors.WHITE_COLOR,borderRadius:4,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR3,alignItems:'center'}
 })

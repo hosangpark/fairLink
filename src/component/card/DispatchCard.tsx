@@ -36,7 +36,6 @@ export const DispatchCard = ({item}:dispatchItemType) => { //공개배차, 지�
     }
 
     const goDetail = () => {
-        console.log(item);
         if(item.assign_check === 'Y'){
             if(mt_type === '2'){
                 navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
