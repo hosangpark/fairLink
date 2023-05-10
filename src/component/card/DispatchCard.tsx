@@ -34,18 +34,19 @@ export const DispatchCard = ({item}:dispatchItemType) => { //공개배차, 지�
     }
 
     const goDetail = () => {
-        if(item.assign_check === 'Y'){
-            navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
-        }
-        else{
-            console.log(item.open_check);
-            if(item.open_check === 'N'){ //개발완료되면 변경하기
-                navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
-            }
-            else{
-                alertModalOn('요구조건에 부합하는 보유장비가 없어\n지원이 불가능합니다,','');
-            }
-        }
+        navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
+        // if(item.assign_check === 'Y'){
+        //     navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
+        // }
+        // else{
+        //     console.log(item.open_check);
+        //     if(item.open_check === 'N'){ //개발완료되면 변경하기
+        //         navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
+        //     }
+        //     else{
+        //         alertModalOn('요구조건에 부합하는 보유장비가 없어\n지원이 불가능합니다,','');
+        //     }
+        // }
     }
 
     const isAssicnCheck = item.assign_check === 'Y';

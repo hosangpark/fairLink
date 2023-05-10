@@ -44,21 +44,6 @@ export const OpenRequest = () => {
                         action={()=>{}}
                     /> */}
                 </View>
-                <View style={{ marginVertical: 15 }}>                
-                    {/* <UserInfoCard 
-                        index="2"
-                        empName='힘찬중기'
-                        jobType='1'
-                        location='[경남]'
-                        rating={23}
-                        score={5}
-                        recEmpCount={64}
-                        userName='김경태'
-                        userProfileUrl=''
-                        isDelete={false}
-                        action={()=>{}}
-                    /> */}
-                </View>
             </View>
         </ScrollView>
     )
