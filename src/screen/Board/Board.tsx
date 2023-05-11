@@ -101,7 +101,7 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
                     </Text>
                     <CustomSelectBox 
                         defaultText='선택하세요.'
-                        strOptionList={['2020','2021','2022','2023',]}
+                        strOptionList={['2020','2021','2022','2023']}
                         selOption={year}
                         strSetOption={setYear}
                         buttonStyle={selectBoxStyle.btnStyle}
