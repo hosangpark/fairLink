@@ -44,6 +44,7 @@ export const BoardCard = ({
     title,
     refetch,
 }:BoardCardType) => {
+    console.log(item);
     const dispatch = useAppDispatch();
     const {mt_idx,mt_type} = useAppSelector(state=>state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();

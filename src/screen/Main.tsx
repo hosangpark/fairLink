@@ -61,7 +61,8 @@ export const Main = () => {
 
 		if(result === 'true'){
 			if(data.data.work_check === 'N'){
-				alertModalOn('조종사 또는 차주 및 장비업체만 이용가능한 메뉴입니다.');
+				alertModalOn('작성가능한 작업일보가 존재하지 않습니다.');
+				// alertModalOn('조종사 또는 차주 및 장비업체만 이용가능한 메뉴입니다.');
 			}
 			else if(data.data.work_check === 'Y'){
 				if(setTabIndex)setTabIndex(5);
