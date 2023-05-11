@@ -26,8 +26,6 @@ export const Volunteer = ({route}:any) => {
     const {data : VolunteerListData, isLoading : VolunteerListDataLoading, isError : VolunteerListDataError} = 
     /** mt_idx 임의입력 수정필요 */
     usePostQuery('getVolunteerList',{
-        // mt_idx : '22',
-        // cat_idx : '8',
         mt_idx : mt_idx,
         cat_idx : route.params.cat_idx,
         cot_idx:route.params.cot_idx

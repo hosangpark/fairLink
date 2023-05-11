@@ -302,6 +302,41 @@ export type PilotProfileItemType = {
     }
 }
 
+export type ContractItemType = {
+    data : {
+        cot_idx : string,
+        cat_idx : string,
+        cct_e_type: string,
+        cct_e_reg_no: string,
+        cct_e_style: string,
+        cct_e_ocrdate2: string,
+        cct_e_ocrdate1: string,
+        cct_c_name: string,
+        cct_c_location: string,
+        cct_c_manage: string,
+        cct_c_company: string,
+        cct_c_file_check: string,
+        cct_start_date: string,
+        cct_end_date: string,
+        cct_pay_price: string,
+        cct_time: string,
+        cct_pay_check1: string,
+        cct_pay_check2: string
+    },
+    data1 : {
+        company: string,
+        busi_num: string,
+        name: string,
+        birth_num: string,
+    },
+    data2 : {
+        company: string,
+        busi_num: string,
+        name: string,
+        birth_num: string,
+    }
+}
+
 export type CompanyProfileType = RouteType &{ //장비회사 프로필
 
 }

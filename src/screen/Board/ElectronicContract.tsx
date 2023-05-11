@@ -1,6 +1,6 @@
 import React,{useState,useEffect, SetStateAction} from 'react';
 import {SafeAreaView,View,Text,FlatList, ScrollView,StyleSheet,TouchableOpacity,Image,ImageBackground} from 'react-native';
-import { BoardIndexType, ElectronicContractType } from '../screenType';
+import { BoardIndexType, ContractItemType, ElectronicContractType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../style/style';
 import { CustomButton } from '../../component/CustomButton';
@@ -17,7 +17,7 @@ import { AlertModal,initialAlert } from '../../modal/AlertModal';
 import { AlertClearType } from '../../modal/modalType';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
-import { usePostQuery } from '../../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { initialElectorincInfo } from '../../component/initialInform';
 
@@ -31,7 +31,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
     const [editMode, setEditMode] = React.useState('');
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
 
-    const [Electronic, setElectronic] = React.useState<any>(()=>initialElectorincInfo); //입력정보
+    const [Electronic, setElectronic] = React.useState<ContractItemType>(initialElectorincInfo); //입력정보
 
     const [startDateModal, setStartDateModal] = React.useState({ //공시기간 시작일 modal
         show:false,
@@ -60,6 +60,8 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
     usePostQuery('getElectronicInfo2',{mt_idx : mt_idx,contract_idx:contract_idx},'cons/cons_contract_info2.php')
     :
     usePostQuery('getElectronicInfo',{mt_idx : mt_idx,cot_idx:cot_idx,cat_idx:cat_idx},'cons/cons_contract_info.php')
+
+    const contractAdd = usePostMutation('getcontractAdd' , 'cons/cons_contract_add.php'); //프로필 정보 불러오기
 
     const inputHandler = (text:string, type? : string) => { //state input handler
         if(type){
@@ -114,6 +116,40 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
         }
     }
 
+    const Contracthandler = async()=>{
+        let param = {
+            mt_idx:mt_idx,
+            cot_idx:Electronic.data.cot_idx,
+            cat_idx:Electronic.data.cat_idx,
+            cct_e_type:Electronic.data.cct_e_type,
+            cct_e_reg_no:Electronic.data.cct_e_reg_no,
+            cct_e_style:Electronic.data.cct_e_style,
+            cct_e_ocrdate2:Electronic.data.cct_e_ocrdate2,
+            cct_e_ocrdate1:Electronic.data.cct_e_ocrdate1,
+            cct_c_name:Electronic.data.cct_c_name,
+            cct_c_location:Electronic.data.cct_c_location,
+            cct_c_manage:Electronic.data.cct_c_manage,
+            cct_c_company:Electronic.data.cct_c_company,
+            cct_c_file_check:Electronic.data.cct_c_file_check,
+            cct_start_date:Electronic.data.cct_start_date,
+            cct_end_date:Electronic.data.cct_end_date,
+            cct_pay_price:Electronic.data.cct_pay_price,
+            cct_time:Electronic.data.cct_time,
+            cct_pay_check1:Electronic.data.cct_pay_check1,
+            cct_pay_check2:Electronic.data.cct_pay_check2,
+        }
+        if(alertModal.type == 'check'){
+            navigation.navigate('Board')
+        } else {
+            const {data, result , msg } = await contractAdd.mutateAsync(param);
+            if(result == 'true'){
+                alertModalOn(msg,'check')
+            } else {
+                alertModalOn(msg,'check')
+            }
+        }
+    }
+
     /** 이미 신청된 경우 */
     // useEffect(()=>{
     //     alertModalOn('장비회사가 계약 확인중입니다.', 'test')
@@ -123,7 +159,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
         setEditMode('view')
     }
     dispatch(toggleLoading(ElectronicDataLoading));
-    if(ElectronicData.data){
+    if(ElectronicData){
         console.log(ElectronicData.data)
         if(ElectronicData.data.data !== null){
             setElectronic(ElectronicData.data);
@@ -325,7 +361,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                             }
                         })
                         }}
-                        editable={editMode == 'view'}
+                        editable={editMode !== 'view'}
                         />
                         <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginRight:15}]}>원</Text>
                     </View>
@@ -525,7 +561,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
             msg={alertModal.msg}
             hide={alertModalOff}
             type={alertModal.type}
-            action={()=>navigation.navigate('Board')}
+            action={Contracthandler}
         />
         <DateTimePickerModal //공사기간 시작일 date picker
             isVisible={startDateModal.show}

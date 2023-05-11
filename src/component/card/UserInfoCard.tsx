@@ -112,11 +112,11 @@ export const UserInfoCard = ({
                 }
             }
         }}>
-            {   item_pilot_type? 
+            {   item_pilot_type ? 
                 <View style={[styles.cardJobArea,{borderColor: item.pilot_type === 'Y' ? colors.BLUE_COLOR : colors.ORANGE_COLOR,zIndex:11}]}>
                     <Text style={[fontStyle.f_medium,{fontSize:15, color:item.pilot_type === 'Y' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
-                        {item_pilot_type === 'Y'||'my' ? '차주 겸 조종사' : 
-                         item_pilot_type === 'N'||'like' ? '스페어 조종사' :
+                        {item_pilot_type === 'Y'|| item_pilot_type ===  'my' ? '차주 겸 조종사' : 
+                         item_pilot_type === 'N'|| item_pilot_type ===  'like' ? '스페어 조종사' :
                         '장비회사 소속 조종사'}
                     </Text>
                 </View>
