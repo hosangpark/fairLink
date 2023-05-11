@@ -115,6 +115,8 @@ export const BoardCard = ({
             if(title === '조종사 모집중' || title === '현장지원 완료'){
                 console.log(item);
                 navigation.navigate('Volunteer' , {cat_idx : item?.cat_idx,cot_idx:item?.cot_idx})
+            } else {
+                navigation.navigate('PilotProfile',{cat_idx:item?.cat_idx,cot_idx:item?.cot_idx,mpt_idx:item.mpt_idx})
             }
         }
         else if(mt_type=='4') {
@@ -201,19 +203,32 @@ export const BoardCard = ({
                         <View>
                             <TouchableOpacity style={[styles.card2Profile]} onPress={FlowEvent}>
                                 <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
-                                    {mt_type == '1'? 
-                                        title === '배차 모집중' ? '지원자' : '조종사'
-                                    :
-                                        (title === '조종사 모집중' || title === '현장지원 완료') ? '지원자' : '조종사'
+                                    {mt_type === '1' &&
+                                        [
+                                        title === '배차 모집중' ? 
+                                        '지원자' : '조종사'
+                                        ]
+                                    }
+                                    {mt_type === '2' &&
+                                        [title === '조종사 모집중' ? 
+                                        '지원자' : '조종사']
+                                    }
+                                    {mt_type === '4' &&
+                                        [title === '현장지원 완료' ? 
+                                        '장비회사' : '건설회사']
                                     }
                                 </Text>
                                 <Text style={[fontStyle.f_semibold,{fontSize:mt_type!=='4'? 20:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={2}>
-                                    {mt_type === '1' ? 
+                                    {mt_type === '1' &&
                                         title === '배차 모집중' ? [item.apply_count]+'명': item.pilot_name 
-                                    :
-                                        (title === '조종사 모집중' || title === '현장지원 완료') ? [item.apply_count]+'명':  item.pilot_name
-                                    // mt_type!=='4'? [item.apply_count]+'명':[item.met_company]
-                                    
+                                    }
+                                    {mt_type === '2' &&
+                                        title === '조종사 모집중' ? 
+                                        [item.apply_count]+'명':  item.pilot_name
+                                    }
+                                    {mt_type === '4' &&
+                                        title === '현장지원 완료' ? 
+                                        [item.met_company] : item.pilot_name 
                                     }
                                 </Text>
                                 {mt_type !=='4' ?

@@ -215,10 +215,12 @@ export const initialConsProfile = {
 
 export const initialElectorincInfo ={
         data:{
+            cot_idx:"",
+            cat_idx:"",
             cct_e_type:"",
             cct_e_reg_no:"",
             cct_e_style:"",
-            cct_e_ocrdate2: "2022-01-01~2024-11-30", //보험가입현황
+            cct_e_ocrdate2: "", //보험가입현황
             cct_e_ocrdate1: "",  //정기검사여부
             cct_c_name: "",
             cct_c_location: "",

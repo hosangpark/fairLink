@@ -82,7 +82,7 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
             navigation.goBack();
         }
         else if(alertModal.type === 'choice_confirm'){
-            navigation.navigate('ElectronicContract',{cat_idx:cat_idx,cot_idx:cot_idx})
+            navigation.navigate('ElectronicContract',{cat_idx:cat_idx,cot_idx:cot_idx,route_type:'Info'})
         }
     }
 
