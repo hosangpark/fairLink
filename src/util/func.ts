@@ -1,6 +1,8 @@
 // import axios from "axios";
 // import { baseUrl } from "./axiosQuery";
 
+import { SceduleListItemType } from "../screen/Board/DetailWork";
+
 
 
 //현재 날짜 구하기 yyyy-mm-dd
@@ -331,6 +333,55 @@ export const secTimeConverter = (sec:string) => { // ms -> hh,mm,ss
         second,
     }
 }
+
+export function chunk(data:SceduleListItemType[] = [], size = 1) {
+    const arr: SceduleListItemType[][] = [];
+
+    let beforeArray = [...data];
+
+    const loofCount = Number(beforeArray[0].yoil_num);
+
+    for(let l = 1; l<=loofCount; l++){
+        const empObj = {
+            cwt_idx: '',
+            date: '',
+            status: '',
+            reason: '',
+            holiday: '',
+            yoil : '',
+            yoil_num : '',
+            fulldate : '',
+        }
+        beforeArray = [{...empObj},...beforeArray];
+    }
+
+
+      
+    for (let i = 0; i < data.length; i += size) {
+        let tempArray : SceduleListItemType[] = beforeArray.slice(i, i + size);
+
+
+
+        // if(tempArray.length < size){
+        //     for (let j=tempArray.length; j<=size-1; j++){
+        //         tempArray.push({
+        //             cwt_idx: '',
+        //             date: '',
+        //             status: '',
+        //             reason: '',
+        //             holiday: ''
+
+        //         })
+        //     }
+        // }
+
+        
+        
+        arr.push(tempArray);
+    }
+  
+    return arr;
+  }
 
 // export const downloadFile = (url:string,fileName:string) => { //파일 다운로드
 //     axios.get(`${baseUrl}file/file_download.php`,{params:{file:url,file_name:fileName}, responseType: 'blob',})

@@ -44,7 +44,6 @@ export const BoardCard = ({
     title,
     refetch,
 }:BoardCardType) => {
-    console.log(item);
     const dispatch = useAppDispatch();
     const {mt_idx,mt_type} = useAppSelector(state=>state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -100,7 +99,6 @@ export const BoardCard = ({
                 navigation.navigate('Volunteer',{cot_idx : item?.cot_idx, cat_idx:item?.cat_idx})
             }
             else if(title === '계약진행중'){
-                console.log(item);
                 navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx})
             }
             else if(title === '작업중' || title === '작업완료'){
@@ -119,8 +117,9 @@ export const BoardCard = ({
                 navigation.navigate('PilotProfile',{cat_idx:item?.cat_idx,cot_idx:item?.cot_idx,mpt_idx:item.mpt_idx})
             }
         }
-        else if(mt_type=='4') {
-            navigation.navigate('PilotProfile',{cat_idx : item?.cat_idx})
+        else if(mt_type==='4') {
+            // console.log(item);
+            // navigation.navigate('PilotProfile',{cat_idx : item?.cat_idx})
         } else {
             console.log(item);
             navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx})

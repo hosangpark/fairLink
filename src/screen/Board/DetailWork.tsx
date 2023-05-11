@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {SafeAreaView,View,Text,FlatList, ScrollView,StyleSheet, TouchableOpacity, Image, Share} from 'react-native';
+import {SafeAreaView,View,Text,FlatList, ScrollView,StyleSheet, TouchableOpacity, Image, Share, Linking} from 'react-native';
 import { BoardIndexType, DetailWorkType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../style/style';
@@ -17,12 +17,17 @@ import { DocumentAccordion } from '../../component/DocumentAccordion';
 import { User1DocumentList, User2DocumentList, User3DocumentList } from '../../component/UserDocumentList';
 import { CustomPhoneCall } from '../../component/CustomPhoneCall';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { usePostQuery } from '../../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { initialdetailWorkInfo } from '../../component/initialInform';
+import * as RNFS from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 import { ImageModal } from '../../modal/ImageModal';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
+import { chunk } from '../../util/func';
+import { MarginCom } from '../../component/MarginCom';
+import { workList } from '../../component/utils/list';
+import cusToast from '../../util/toast/CusToast';
 
 type shareFileList = {
     document_equip : string[],
@@ -31,18 +36,30 @@ type shareFileList = {
     document_dailywork : string[] ,
 }
 
+export type SceduleListItemType = {
+    cwt_idx : string,
+    date : string,
+    status : string,
+    reason : string,
+    holiday : string,
+    yoil : string,
+    yoil_num : string,
+    fulldate : string,
+}
+
 export const DetailWork = ({route}:DetailWorkType) => {
     const dispatch = useAppDispatch();
     const {mt_idx,mt_type, mt_name} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const [strOption , setStrOption] = React.useState<string>('');
-    const [selectoday , setSelectoday] = React.useState<boolean>(false);
+    const [dayStatus , setDayStatus] = React.useState<string>(''); //일정
     const [openbox,setOpenbox] = useState<boolean>(false)
     const [show,setshow] = useState<boolean>(false)
-    const [onimageUri,setOnimageUri] = useState<string>('')
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert); //alert 객체 생성 (초기값으로 clear);
     const [selecttModal, setSelectModal] = React.useState<boolean>(false); //alert 객체 생성 (초기값으로 clear);
-    const selectModalOn = (msg : string,strongMsg?:string, type? : string) => { //alert 켜기
+
+    const [tempCallNumber, setTempCallNumber] = React.useState('');
+
+    const selectModalOn = () => { //alert 켜기
         setSelectModal(true)
     }
     const [shareFileUrlInfo, setShareFileUrlInfo] = useState<shareFileList>({
@@ -54,23 +71,26 @@ export const DetailWork = ({route}:DetailWorkType) => {
     const [checkFileList, setCheckFileList] = useState<string[]>([]);
 
     const [detailWorkInfo, setDetailWorkInfo] = React.useState<any>(()=>initialdetailWorkInfo); //입력정보
+    
+    const [scaduleList, setScaduleList] = React.useState<SceduleListItemType[][]>([]);
+    const [selectDayItem, setSelectDayItem] = React.useState<SceduleListItemType>();
 
 
 
-    const {data : DetailWorkData, isLoading : DetailWorkDataLoading, isError : DetailWorkDataError} = 
-    /** mt_idx 임의입력 수정필요 */
-    mt_type =="1"?
-    usePostQuery('getConsDetailWorkData',{mt_idx : mt_idx, cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx},'cons/cons_order_info2.php')
-    :
-    usePostQuery('getEquipDetailWorkData',{mt_idx : mt_idx, cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx},'equip/equip_order_info2.php')
+    const {data : DetailWorkData, isLoading : DetailWorkDataLoading, isError : DetailWorkDataError ,refetch : DetailRefetch} = 
+    usePostQuery('getConsDetailWorkData',
+        {mt_idx : '17', cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx}, 
+        mt_type === '1' ? 'cons/cons_order_info2.php' : mt_type === '2' ?'equip/equip_order_info2.php' : 'pilot/pilot_order_info2.php' 
+    )
 
+    const updateConsWorkDateMutation = usePostMutation('updateConsWorkDate','cons/cons_work_date_update.php');
 
-    const alertModalOn = (strongMsg?:string) => { //alert 켜기
+    const alertModalOn = (msg:string, type?:string , strongMsg?:string) => { //alert 켜기
         setAlertModal({
             alert:true,
             strongMsg:strongMsg? strongMsg:'',
-            msg:`로${"\n"}전화연결 하시겠습니까?`,
-            type:'confirm' ,
+            msg:msg,
+            type:type ? type : ''
         })
     }
     const alertModalOff = () =>{ //modal 종료
@@ -78,23 +98,67 @@ export const DetailWork = ({route}:DetailWorkType) => {
         setSelectModal(false)
     }
     const alertAction = () => { //alert 확인 눌렀을때 발생할 action
-       if(alertModal.type === ''){ //alert Type이 지정되어있을때 발생할 이벤트
-            //....... some logic
+       if(alertModal.type === 'call_confirm'){ //alert Type이 지정되어있을때 발생할 이벤트
+            const tempCallNum = tempCallNumber.split('-').join('');
+            if(tempCallNum.length < 1){
+                Linking.openURL(`tel:${tempCallNum}`);
+            }
+            else{
+                Linking.openURL(`tel:${tempCallNumber}`);
+            }
        } 
        alertModalOff();
     }
     /**이미지 다운로드 */
-    // const ImageDownload = async()=>{
-    //     await RNFetchBlob.config({
-    //     addAndroidDownloads: {
-    //     useDownloadManager: true,
-    //     notification: true,
-    //     path: `${RNFetchBlob.fs.dirs.DownloadDir}/${onimageUri}`,
-    //     },
-    // }).fetch('GET', onimageUri);
-    // }
+    const ImageDownload = async()=>{
+        if(detailWorkInfo.price.bank_file !== ''){
+            cusToast('통장사본 다운로드가 시작되었습니다.');
+            console.log(detailWorkInfo.price.bank_file);
+            await RNFetchBlob.config({
+                addAndroidDownloads: {
+                useDownloadManager: true,
+                notification: true,
+                path: `${RNFetchBlob.fs.dirs.DownloadDir}/통장사본01`,
+                },
+            }).fetch('GET', detailWorkInfo.price.bank_file, {
+                'Content-Type': 'multipart/form-data',
+            });
+        }
+        else{
+            cusToast('통장사본이 존재하지 않습니다.');
+        }
+    }
+
+
+
+    const updateDate = async () => { //일정변경
+        // console.log(dayStatus);
+        const dayStatusCode = workList.findIndex(el=>el === dayStatus);
+
+        console.log(dayStatusCode);
+
+        const params = {
+            mt_idx : '17',
+            cwt_idx : selectDayItem?.cwt_idx,
+            status : dayStatusCode === 0 ? 'Y' : 'N',
+            reason : dayStatusCode === 0 ? '' : String(dayStatusCode),
+        }
+        console.log(params);
+
+        const {data,result,msg} = await updateConsWorkDateMutation.mutateAsync(params)
+
+        if(result === 'true'){
+            DetailRefetch();
+            setSelectModal(false);
+        }
+        else{
+            console.log(msg);
+        }
+
+    }
 
     const checkFileHandler = (uri : string, type : 'add' | 'del',title:string) => { //파일선택 (uri)
+        console.log(uri,type,title);
         const keyName = title === '장비(차량) 서류' ? 'document_equip' :
                         title === '자격 및 기타 서류' ? 'document_qualification' : 
                         title === '계약 서류' ? 'document_contract' : 
@@ -104,9 +168,12 @@ export const DetailWork = ({route}:DetailWorkType) => {
                 ...shareFileUrlInfo,
                 [keyName] : [...shareFileUrlInfo[keyName], uri]
             });
+            console.log({
+                ...shareFileUrlInfo,
+                [keyName] : [...shareFileUrlInfo[keyName], uri]
+            })
+
             setCheckFileList([...checkFileList,uri]);
-            console.log(shareFileUrlInfo);
-            console.log(checkFileList);
         }
         else{
             const delFilterArray = checkFileList.filter(el => el !== uri);
@@ -122,6 +189,8 @@ export const DetailWork = ({route}:DetailWorkType) => {
 
     const allCheck = (type:string,title:string) => { //파일 전체 선택 (uri);
 
+        console.log(type,title);
+
         const keyName = title === '장비(차량) 서류' ? 'document_equip' :
                         title === '자격 및 기타 서류' ? 'document_qualification' : 
                         title === '계약 서류' ? 'document_contract' : 
@@ -131,9 +200,12 @@ export const DetailWork = ({route}:DetailWorkType) => {
         let shareTempObj:shareFileList = shareFileUrlInfo;
 
         if(detailWorkInfo[type].length > 0){
-            detailWorkInfo[type].forEach((item) => {
-                if(item.file_url !== ''){
+            detailWorkInfo[type].forEach((item:any) => {
+                if(item.file_url && item.file_url !== ''){
                     allFileArray.push(item.file_url);
+                }
+                if(item.pdf_url && item.pdf_url !== ''){
+                    allFileArray.push(item.pdf_url);
                 }
             })
         }
@@ -147,9 +219,6 @@ export const DetailWork = ({route}:DetailWorkType) => {
     }
 
     const shareDocument = () => { //선택파일 공유하기
-        console.log(shareFileUrlInfo);
-
-
         let shareInfo:{ [key:string] : {name:string,url:string}[] } = {
             '장비(차량) 서류' : [],
             '자격 및 기타 서류' : [],
@@ -193,8 +262,9 @@ export const DetailWork = ({route}:DetailWorkType) => {
                 case 'document_dailywork' : 
                 if(shareFileUrlInfo[key].length > 0) {
                     shareFileUrlInfo[key].forEach((item) => {
-                        const nameFilter = detailWorkInfo.document_dailywork.filter((el:{title:string,file_url:string,file_check:string}) => el.file_url === item);
-                        shareInfo['작업일보'] = [...shareInfo['작업일보'], {name : nameFilter[0].title , url : nameFilter[0].file_url}]
+                        console.log(item);
+                        const nameFilter = detailWorkInfo.document_dailywork.filter((el:{cdwt_date:string,pdf_url:string,file_check:string}) => el.pdf_url === item);
+                        shareInfo['작업일보'] = [...shareInfo['작업일보'], {name : nameFilter[0].cdwt_date+' 작업일보' , url : nameFilter[0].pdf_url}];
                         flag = true;
                     })
                 }
@@ -202,7 +272,12 @@ export const DetailWork = ({route}:DetailWorkType) => {
             }
         }
         if(flag){
-            let shareMent = `페어링크 ${mt_name}님께서 ${detailWorkInfo.info?.crt_name}작업의 서류를 공유해주셨습니다. \n\n`;
+            console.log(detailWorkInfo);
+            let shareMent = detailWorkInfo.info?.crt_name ? 
+                            `페어링크 ${mt_name}님께서 ${detailWorkInfo.info?.crt_name}작업의 서류를 공유해주셨습니다. \n\n`
+                            :
+                            `페어링크 ${mt_name}님께서 ${detailWorkInfo.contents?.crt_name}작업의 서류를 공유해주셨습니다. \n\n`
+                            ;
             const shareKeyList = Object.keys(shareInfo);
 
             shareKeyList.map((title,index) => {
@@ -232,24 +307,42 @@ export const DetailWork = ({route}:DetailWorkType) => {
     React.useEffect(()=>{
         dispatch(toggleLoading(DetailWorkDataLoading));
         if(DetailWorkData){
-            const tempObj = {
-                info : { ...DetailWorkData.data.data['작업정보'] },
-                contents : { ...DetailWorkData.data.data['작업개요'] },
-                schedule : { ...DetailWorkData.data.data['작업일정관리'] },
-                equip : { ...DetailWorkData.data.data['투입장비'] },
-                pilot : { ...DetailWorkData.data.data['투입조종사'] },
-                price : { ...DetailWorkData.data.data['대금관리'] },
-                document_equip : [...DetailWorkData.data.data['서류관리-장비(차량) 서류']],
-                document_qualification : [...DetailWorkData.data.data['서류관리-자격 및 기타 서류']],
-                document_contract : [{...DetailWorkData.data.data['서류관리-계약서류']}],
-                document_dailywork : DetailWorkData.data.data['서류관리-작업일보'] !== null ? [...DetailWorkData.data.data['서류관리-작업일보']] : [],
+            console.log(DetailWorkData);
+            if(mt_type === '2' || mt_type === '1'){
+                const tempObj = {
+                    info : { ...DetailWorkData.data.data['작업정보'] },
+                    contents : mt_type === '1' ? {...DetailWorkData.data.data['작업내용']} : { ...DetailWorkData.data.data['작업개요'] },
+                    schedule : { ...DetailWorkData.data.data['작업일정관리'] },
+                    equip : { ...DetailWorkData.data.data['투입장비'] },
+                    pilot : { ...DetailWorkData.data.data['투입조종사'] },
+                    price : { ...DetailWorkData.data.data['대금관리'] },
+                    document_equip : [...DetailWorkData.data.data['서류관리-장비(차량) 서류']],
+                    document_qualification : [...DetailWorkData.data.data['서류관리-자격 및 기타 서류']],
+                    document_contract : [{...DetailWorkData.data.data['서류관리-계약서류']}],
+                    document_dailywork : DetailWorkData.data.data['서류관리-작업일보'] !== null ? [...DetailWorkData.data.data['서류관리-작업일보']] : [],
+                }
+                setDetailWorkInfo(tempObj);
+
+                if(mt_type === '1'){
+                    // console.log(tempObj.schedule.list);
+
+                    const sliceList = chunk(tempObj.schedule.list,7);
+                    setScaduleList([...sliceList]);
+                }
             }
-            setDetailWorkInfo(tempObj);
+            else{
+                const tempObj = {
+                    info : { ...DetailWorkData.data.data['작업정보'] },
+                    contents : { ...DetailWorkData.data.data['작업개요'] },
+                    equip : { ...DetailWorkData.data.data['투입장비']},
+                    price : { ...DetailWorkData.data.data['대금관리'] },
+                    document_dailywork : DetailWorkData.data.data['서류관리-작업일보'] !== null ? [...DetailWorkData.data.data['서류관리-작업일보']] : [],
+                }
+                setDetailWorkInfo(tempObj);
+            }
+            // setDetailWorkInfo(tempObj);
         }
     },[DetailWorkData])
-
-
-
     
     return(
         <View style={{flex:1}}>
@@ -288,7 +381,10 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     </View>
                     <CustomPhoneCall
                         phonenumber={detailWorkInfo.info?.crt_m_num}
-                        alertModalOn={()=>alertModalOn(detailWorkInfo.info?.crt_m_num)}
+                        alertModalOn={()=>{
+                            setTempCallNumber(detailWorkInfo.info?.crt_m_num);
+                            alertModalOn(`로\n전화연결하시겠습니까?`,'call_confirm',`${detailWorkInfo.info?.crt_m_num}`)
+                        }}
                     />
                 </View>
             </View>
@@ -340,7 +436,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
                 }
                 {mt_type=='1'&&
                 <View style={{marginBottom:30}}>
-                    <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>schedule</Text>
+                    <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>작업일정관리</Text>
                     <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                         <View style={[DetailWorkStyle.dateday]}>
                             <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.FONT_COLOR_BLACK2}]}>
@@ -365,33 +461,65 @@ export const DetailWork = ({route}:DetailWorkType) => {
                                 토</Text></View>
                     </View>
 
-                    <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                        <DateBox action={()=>selectModalOn('테스트')}/>
-                        <DateBox action={()=>selectModalOn('테스트')}/>
-                        <DateBox action={()=>selectModalOn('테스트')}/>
-                        <DateBox action={()=>selectModalOn('테스트')}/>
-                        <DateBox action={()=>selectModalOn('테스트')}/>
-                        <DateBox action={()=>selectModalOn('테스트')}/>
-                        <DateBox action={()=>selectModalOn('테스트')}/>
-                    </View>
+                    {scaduleList.map((item,index) => {
+                        return(
+                            <View key={`row-${index}`} style={{flexDirection:'row',justifyContent:item.length === 7 ? 'space-between' : 'flex-start',flexWrap:'wrap',marginBottom:10,alignItems:'flex-start',flex:1}}>
+                                {item.map((listItem,listIndex) => {
+                                    return(
+                                        listItem.status === 'Y' ? 
+                                        <TouchableOpacity key={listIndex} style={{alignItems:'center',flex:1,maxWidth:45,borderWidth:1,borderColor:colors.WHITE_COLOR,borderRadius:8}} onPress={()=>{
+                                            if(listItem.holiday === 'N'){
+                                                setSelectDayItem(listItem);
+                                                setSelectModal(true);
+                                            }
+                                        }}>
+                                            <View style={[DetailWorkStyle.dateon,{flex:1,maxHeight:50}]}>
+                                                <Text style={[fontStyle.f_medium,DetailWorkStyle.dateonText]}>{listItem.date}</Text>
+                                            </View>
+                                            <Text style={[fontStyle.f_medium,DetailWorkStyle.dateonText]}>작업일</Text>
+                                        </TouchableOpacity>
+                                        : listItem.status === 'N' ?
+                                        <TouchableOpacity key={listIndex} style={{alignItems:'center',flex:1,maxWidth:45,borderWidth:1,borderColor:colors.WHITE_COLOR,borderRadius:8}} onPress={()=>{
+                                            if(listItem.holiday === 'N'){
+                                                setSelectDayItem(listItem);
+                                                setSelectModal(true);
+                                            }
+                                        }}>
+                                            <View style={[DetailWorkStyle.dateoff,{flex:1,maxHeight:50}]}>
+                                                <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>{listItem.date}</Text>
+                                            </View>
+                                            <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>{listItem.reason === '' ? '휴무' : workList[Number(listItem.reason)]}</Text>
+                                        </TouchableOpacity>
+                                        :
+                                        <View key={listIndex} style={{alignItems:'center',flex:1,maxWidth:45,borderWidth:1,borderColor:colors.WHITE_COLOR,borderRadius:8}}>
+                                            
+                                        </View>
+                                    )
+                                })}
+                            </View>
+                        )
+                    })}
                     <View style={{backgroundColor:colors.WHITE_COLOR}}>
                     <SelectModal
                         date='2023.03.01'
                         bigTitle='작업일정관리'
                         defaultText='선택하세요.'
-                        strOptList={['작업일','휴무','기상악화','기타사유']}
-                        strSetOption={setStrOption}
+                        strOptList={workList}
+                        strSetOption={setDayStatus}
+                        selOption={dayStatus}
                         btnLabel="일정변경"
-                        action={()=>{}}
+                        action={()=>{updateDate();}}
                         show={selecttModal}
-                        hide={alertModalOff}
+                        hide={()=>{setSelectModal(false)}}
                         style={{width:'100%',backgroundColor:colors.WHITE_COLOR,borderRadius:8}}
+                        refetch={DetailRefetch}
+                        item={selectDayItem}
                     />
                     </View>
                 </View>
                 }
                 <Text style={[fontStyle.f_semibold,DetailWorkStyle.boxText1,{marginBottom:10}]}>투입장비</Text>
-                {mt_type !== '2' ?
+                {mt_type === '1' ?
                 <View style={DetailWorkStyle.cardbox}>
                     <WorkLayoutbox
                         title={'장비명'}
@@ -400,7 +528,12 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     />
                     <WorkLayoutbox
                         title={'규격'}
-                        text={detailWorkInfo.equip?.stand1 +"\n"+detailWorkInfo.equip?.stand2}
+                        text={detailWorkInfo.equip?.stand1}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'세부규격'}
+                        text={detailWorkInfo.equip?.stand2}
                         boxfontstyle={fontStyle.f_light}
                     />
                     <WorkLayoutbox
@@ -420,10 +553,13 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     />
                     <CustomPhoneCall
                         phonenumber={detailWorkInfo.equip?.hp}
-                        alertModalOn={()=>alertModalOn(detailWorkInfo.equip?.hp)}
+                        alertModalOn={()=>{
+                            setTempCallNumber(detailWorkInfo.equip?.hp);
+                            alertModalOn(`로\n전화연결하시겠습니까?`,'call_confirm',detailWorkInfo.equip?.hp)
+                        }}
                     />
                 </View>
-                :
+                : mt_type === '2' ?
                 <View style={{borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,borderRadius:8,flexDirection:'row',marginBottom:30}}>
                     <Image style={{width:125,height:125}} source={require('../../assets/img/no_image.png')}/>
                     <View style={{flex:1,paddingHorizontal:15,justifyContent:'center',borderLeftColor:colors.BORDER_GRAY_COLOR}}>
@@ -443,6 +579,41 @@ export const DetailWork = ({route}:DetailWorkType) => {
                             boxfontstyle={fontStyle.f_light}
                         />
                     </View>
+                </View>
+                :
+                <View style={DetailWorkStyle.cardbox}>
+                    <WorkLayoutbox
+                        title={'장비명'}
+                        text={detailWorkInfo.equip?.e_type}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'규격'}
+                        text={detailWorkInfo.equip?.e_stand1 +"\n"+detailWorkInfo.equip?.e_stand2}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'사업자명'}
+                        text={detailWorkInfo.equip?.met_company}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'사업자등록번호'}
+                        text={detailWorkInfo.equip?.met_busi_num}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <WorkLayoutbox
+                        title={'대표자명'}
+                        text={detailWorkInfo.equip?.met_ceo}
+                        boxfontstyle={fontStyle.f_light}
+                    />
+                    <CustomPhoneCall
+                        phonenumber={detailWorkInfo.equip?.met_hp}
+                        alertModalOn={()=>{
+                            setTempCallNumber(detailWorkInfo.equip?.met_hp);
+                            alertModalOn(`로\n 전화연결하시겠습니까?`,'call_confirm',detailWorkInfo.equip?.met_hp)
+                        }}
+                    />
                 </View>
                 }
                 {mt_type == '1'?
@@ -471,7 +642,10 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     />
                     <CustomPhoneCall
                         phonenumber={detailWorkInfo.pilot?.hp}
-                        alertModalOn={()=>alertModalOn(detailWorkInfo.pilot?.hp)}
+                        alertModalOn={()=>{
+                            setTempCallNumber(detailWorkInfo.pilot?.hp);
+                            alertModalOn(`로\n전화연결하시겠습니까?`,'call_confirm',detailWorkInfo.pilot?.hp)
+                        }}
                     />
                 </View>
                 </>
@@ -612,8 +786,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
                         style={{flex:1}}
                         labelStyle={{fontSize:16}}
                         label={'다운로드'}
-                        // action={()=>{ImageDownload}}
-                        action={()=>{}}
+                        action={()=>{ImageDownload()}}
                         />
                     </View>
                 </View>
@@ -626,7 +799,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
                         <Text style={[fontStyle.f_regular,DetailWorkStyle.MaincolorText]}>전체선택</Text>
                     </TouchableOpacity> */}
                 </View>
-                {mt_type == "1" &&
+                {mt_type === "1" &&
                 <User1DocumentList
                     items1={detailWorkInfo['document_equip']}
                     items2={detailWorkInfo['document_qualification']}
@@ -637,7 +810,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     checkFileHandler={checkFileHandler}
                 />
                 }
-                {mt_type == "2" &&
+                {mt_type === "2" &&
                 <User2DocumentList
                     items1={detailWorkInfo['document_equip']}
                     items2={detailWorkInfo['document_qualification']}
@@ -648,13 +821,13 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     checkFileHandler={checkFileHandler}
                 />
                 }
-                {mt_type == "3" &&
-                <User3DocumentList
-                    items1={detailWorkInfo['document_dailywork']}
-                    allCheck={allCheck}
-                    checkFileList={checkFileList}
-                    checkFileHandler={checkFileHandler}
-                />
+                {mt_type === "4" &&
+                    <User3DocumentList
+                        items1={detailWorkInfo['document_dailywork']}
+                        allCheck={allCheck}
+                        checkFileList={checkFileList}
+                        checkFileHandler={checkFileHandler}
+                    />
                 }
                 <CustomButton
                     style={{flex:1,marginRight:10}}
@@ -670,7 +843,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
             strongMsg={alertModal.strongMsg}
             hide={alertModalOff}
             type={alertModal.type}
-            action={()=>{}}
+            action={alertAction}
         />
         <ImageModal
             show={show}
@@ -683,38 +856,33 @@ export const DetailWork = ({route}:DetailWorkType) => {
 }
 
 
-const DateBox = ({action}:{action:(e:string)=>void})=>{
-    const [selectoday,setSelectoday] = useState<boolean>(false)
-    return(
-    // <TouchableOpacity style={{alignItems:'center',flex:1,borderWidth:1,borderColor:selectoday? colors.FONT_COLOR_BLACK:colors.WHITE_COLOR,borderRadius:8}} onPress={()=>setSelectoday(!selectoday)}>
-    //     <View style={[DetailWorkStyle.dateoff]}>
-    //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>2/26</Text>
-    // </View>
-    //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>휴무</Text>
-    // </TouchableOpacity>
+// const DateBox = ({action}:{action:(e:string)=>void})=>{
+//     const [selectoday,setSelectoday] = useState<boolean>(false)
+//     return(
+//     // <TouchableOpacity style={{alignItems:'center',flex:1,borderWidth:1,borderColor:selectoday? colors.FONT_COLOR_BLACK:colors.WHITE_COLOR,borderRadius:8}} onPress={()=>setSelectoday(!selectoday)}>
+//     //     <View style={[DetailWorkStyle.dateoff]}>
+//     //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>2/26</Text>
+//     // </View>
+//     //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>휴무</Text>
+//     // </TouchableOpacity>
 
-    <TouchableOpacity style={{alignItems:'center',flex:1,borderWidth:1,borderColor:selectoday? colors.FONT_COLOR_BLACK2:colors.WHITE_COLOR,borderRadius:8}} onPress={()=>action('테스트')}>
-        <View style={[DetailWorkStyle.dateon]}>
-        <Text style={[fontStyle.f_medium,DetailWorkStyle.dateonText]}>2/26</Text>
-    </View>
-        <Text style={[fontStyle.f_medium,DetailWorkStyle.dateonText]}>작업일</Text>
-    </TouchableOpacity>
+    
 
-    // <TouchableOpacity style={{alignItems:'center',flex:1}}>
-    //     <View style={[DetailWorkStyle.dateoff]}>
-    //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>2/26</Text>
-    // </View>
-    //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>기상악화</Text>
-    // </TouchableOpacity>
+//     // <TouchableOpacity style={{alignItems:'center',flex:1}}>
+//     //     <View style={[DetailWorkStyle.dateoff]}>
+//     //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>2/26</Text>
+//     // </View>
+//     //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateoffText]}>기상악화</Text>
+//     // </TouchableOpacity>
 
-    // <TouchableOpacity style={{alignItems:'center',flex:1}}>
-    //     <View style={[DetailWorkStyle.date]}>
-    //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateText]}>2/26</Text>
-    // </View>
-    //     <Text></Text>
-    // </TouchableOpacity>
-    )
-}
+//     // <TouchableOpacity style={{alignItems:'center',flex:1}}>
+//     //     <View style={[DetailWorkStyle.date]}>
+//     //     <Text style={[fontStyle.f_medium,DetailWorkStyle.dateText]}>2/26</Text>
+//     // </View>
+//     //     <Text></Text>
+//     // </TouchableOpacity>
+//     )
+// }
 
 const WorkLayoutbox = ({title,text,boxfontstyle}:{title:string,text:string,boxfontstyle:object})=>{
     return(
@@ -733,10 +901,10 @@ const DetailWorkStyle = StyleSheet.create({
     boxText1:{fontSize:16,color:colors.FONT_COLOR_BLACK,flex:2},
     boxText2:{fontSize:16,color:colors.FONT_COLOR_BLACK,flex:3,flexShrink:1,textAlign:'right'},
     boxText3:{fontSize:18,color:colors.FONT_COLOR_BLACK},
-    dateday:{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,width:50,height:30,justifyContent:'center',alignItems:'center',marginBottom:10,borderRadius:4},
+    dateday:{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,flex:1,height:30,justifyContent:'center',alignItems:'center',marginBottom:10,borderRadius:4,marginRight:3},
     date:{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,width:50,height:50,justifyContent:'center',alignItems:'center',marginBottom:10,borderRadius:8},
-    dateon:{backgroundColor:colors.BLUE_COLOR3,width:50,height:50,justifyContent:'center',alignItems:'center',marginBottom:10,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR3},
-    dateoff:{backgroundColor:colors.RED_COLOR,width:50,height:50,justifyContent:'center',alignItems:'center',marginBottom:10,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_RED_COLOR},
+    dateon:{backgroundColor:colors.BLUE_COLOR3,height:50,justifyContent:'center',alignItems:'center',marginBottom:10,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_BLUE_COLOR3},
+    dateoff:{backgroundColor:colors.RED_COLOR,height:50,justifyContent:'center',alignItems:'center',marginBottom:10,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_RED_COLOR},
     dateText:{fontSize:14,color:colors.FONT_COLOR_GRAY},
     dateonText:{fontSize:14,color:colors.MAIN_COLOR},
     dateoffText:{fontSize:14,color:colors.FONT_COLOR_RED},

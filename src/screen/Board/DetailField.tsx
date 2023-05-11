@@ -105,7 +105,7 @@ export const DetailField = ({route}:any) => {
     const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
     /** mt_idx 임의입력 수정필요 */
     mt_type == "1" ?
-    usePostQuery('getDetailFieldData1',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
+    usePostQuery('getDetailFieldData1',{mt_idx : '17',cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
     :
     mt_type == "2" ?
     usePostQuery('getDetailFieldData2',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'equip/equip_order_info.php')
@@ -205,6 +205,7 @@ export const DetailField = ({route}:any) => {
                     </TouchableOpacity>
                 </View>
             </View>
+            {mt_type !== '1' &&
             <View style={[mt_type === '1'? DetailFieldstyle.staticbox : DetailFieldstyle.staticbox2 ]}>
                 {mt_type == '1' ?
                 <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:16}]}>
@@ -259,6 +260,7 @@ export const DetailField = ({route}:any) => {
                 </View>
                 }
             </View>
+            }
         </ScrollView>
         <AlertModal
             show={alertModal.alert}
