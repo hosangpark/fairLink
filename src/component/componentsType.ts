@@ -21,7 +21,7 @@ export interface CustomButtonType {
 }
 export interface CustomPhoneCallType {
     phonenumber:string
-    alertModalOn: (e:string)=>void
+    alertModalOn: ()=>void
 }
 export interface CustomAccordionType {
     data:{
@@ -49,6 +49,8 @@ export interface DocumentAccordionType {
         cont_idx? : null | string,
         pdf_url? : string,
         write_check? : '',
+        cdwt_date?:string,
+        cdwt_idx?:string,
     }[],
     allCheck:(type:string,title:string)=>void;
     checkFileList:string[];

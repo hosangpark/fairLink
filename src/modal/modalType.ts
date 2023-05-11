@@ -1,3 +1,4 @@
+import { SceduleListItemType } from "../screen/Board/DetailWork";
 import { SelImageType } from "../screen/screenType";
 
 
@@ -84,6 +85,8 @@ export type SelectModalType = { //select box있는 modal type
     labelFooter? : string,
     selOption? : string,
     isDisable? : boolean,
+    item? : SceduleListItemType,
+    refetch : () => void;
 }
 
 export type PilotWorkModalType = {
@@ -140,4 +143,13 @@ export type ImageModalType = {
     hide:()=>void,
     imgrl : string,
 }
+export type PdfViewerModalType = { 
+    show:boolean
+    action:()=>void
+    hide:()=>void,
+    pdfUrl : string,
+    setSelPdfUrl : (url:string) =>void;
+}
+
+
 

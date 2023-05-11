@@ -32,6 +32,14 @@ export const pilotCareerList = [
     '10년',
 ]
 
+export const workList = [
+    '작업일',
+    '기상악화',
+    '공정지연',
+    '휴무',
+    '기타사유',
+]
+
 export const pilotCarrerKeyList = [
     {key : '0' , name : '해당없음'},
     {key : '1' , name : '1년 이상'},
@@ -254,7 +262,6 @@ export const getEquStaDetailCon = (equipList:object[],key:string,subKey:string) 
 
 
 export const accessoriesConvert = (key:string) => {
-
     return accessoriesList[0][key]
 
 }

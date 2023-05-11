@@ -96,8 +96,8 @@ const App = () => {
       PushNotification.localNotification({
         channelId: onRemote.channelId ?? 'default',
         id: onRemote.data.notificationId,
-        title: (onRemote.title),
-        message: (onRemote.message),
+        title: (onRemote.data.title),
+        message: (onRemote.data.message),
         soundName: 'default',
         playSound: true,
         // smallIcon: 'ic_stat_ic_notification',

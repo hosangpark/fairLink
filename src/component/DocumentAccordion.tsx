@@ -11,6 +11,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../type/routerType';
 import { DocumentRouterNavigatorParams } from '../../type/DocumentRouterType';
 import { MarginCom } from './MarginCom';
+import { useAppSelector } from '../redux/store';
+import { PdfViewerModal } from '../modal/PdfViewerModal';
 
 type SublistBoxType = {
     bigTitle : string,
@@ -19,7 +21,9 @@ type SublistBoxType = {
     fileuri? : string,
     filecheck? : string,
     checkFileList : string[],
-    checkFileHandler : (uri:string, type : 'add'|'del',title:string) => void, 
+    checkFileHandler : (uri:string, type : 'add'|'del',title:string) => void,
+    cdwt_idx? : string,
+    cdwt_date? : string,
 }
 
 const Sublistbox = ({
@@ -110,12 +114,15 @@ export const DocumentAccordion = ({
     checkFileHandler,
 }:DocumentAccordionType) => {
 
+    const {mt_type} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams & DocumentRouterNavigatorParams>>();
 
-     const [openbox,setOpenbox] = useState(false);
+    const [openbox,setOpenbox] = useState(false);
+    const [pdfViewerModal, setPdfViewerModal] =React.useState(false);
+    const [selPdfUrl, setSelPdfUrl] = React.useState('');
 
     React.useEffect(()=>{
-        if(title === '계약 서류'){
+        if(title === '계약 서류' || title === '작업일보'){
             console.log(subList);
         }
     },[])
@@ -139,7 +146,7 @@ export const DocumentAccordion = ({
                     <View style={{padding:20, alignItems:'center',justifyContent:'center'}}>
                         <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{`작성된 작업일보가 없습니다.\n 작업일보를 작성해주세요.`}</Text>
                         <CustomButton
-                            action={()=>{navigation.navigate('Document')}}
+                            action={()=>{navigation.navigate('Document',{cdwt_idx : ''})}}
                             label={'작성하기'}
                             style={{backgroundColor : colors.WHITE_COLOR,
                             borderRadius:4,
@@ -152,6 +159,66 @@ export const DocumentAccordion = ({
                             }}
                             labelStyle={{color : colors.MAIN_COLOR,fontSize:16}}
                         />
+                    </View>
+                : mt_type === '1' && title === '작업일보' ? 
+                    subList.length === 0 ? 
+                        <View style={[DocumnetStyle.documentBoxinBox]}>
+                            <Text>작성된 작업일보가 존재하지 않습니다.</Text>
+                        </View>
+                    :
+                    <View>
+                        {PdfViewerModal &&
+                            <PdfViewerModal 
+                                show={pdfViewerModal}
+                                hide={()=>{setPdfViewerModal(false)}}
+                                action={()=>{}}
+                                pdfUrl={selPdfUrl}
+                                setSelPdfUrl={setSelPdfUrl}
+                            />
+                        }
+                        <View style={[DocumnetStyle.documentBoxinBox]}>
+                            <TouchableOpacity 
+                            onPress={()=>{
+                                const keyName = 'document_dailywork'
+
+                                allCheck(keyName,title)
+                            }}
+                            style={{marginBottom:20}}
+                            >
+                                <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.MAIN_COLOR,textAlign:'right'}]}>전체선택</Text>
+                            </TouchableOpacity>
+                            {subList.map((item,index) => {
+                                return(
+                                    <View style={{flexDirection:'row',alignItems:'center', justifyContent:'space-between', marginBottom:20}} key={index}>
+                                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                                            <TouchableOpacity onPress={()=>{
+                                                console.log(item.pdf_url);
+                                                const isCheck = checkFileList.filter(el=>el === item.pdf_url).length !== 0;
+                                                if(item.pdf_url && title){
+                                                    if(isCheck){
+                                                        checkFileHandler(item.pdf_url,'del',title);
+                                                    }
+                                                    else{
+                                                        checkFileHandler(item.pdf_url,'add',title)
+                                                    }
+                                                }
+                                            }}>
+                                                <Image style={{width:20,height:20,marginRight:10}} source={checkFileList.filter(el=>el === item.pdf_url).length !== 0 ?require('../assets/img/ic_check_on.png'):require('../assets/img/ic_check_off.png')}/>
+                                            </TouchableOpacity>
+                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{item.cdwt_date} 작업일지</Text>
+                                        </View>
+                                        <TouchableOpacity onPress={()=>{
+                                            if(item.pdf_url){
+                                                setSelPdfUrl(item.pdf_url);
+                                                setPdfViewerModal(true);
+                                            }
+                                        }}>
+                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.MAIN_COLOR}]}>보기</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )
+                            })}
+                        </View>
                     </View>
                 :
                     <View style={[DocumnetStyle.documentBoxinBox]}>
@@ -168,22 +235,24 @@ export const DocumentAccordion = ({
                         <MarginCom mb={5} />
                         {subList.map((item,index)=>{
                         return(
-                        <Sublistbox
-                            bigTitle={title}
-                            title={item.title}
-                            filecheck={item.file_check}
-                            fileuri={item.file_url}
-                            key={index}
-                            checkFileList={checkFileList}
-                            checkFileHandler={checkFileHandler}
-                        />
+                            <Sublistbox
+                                bigTitle={title}
+                                title={item.title}
+                                filecheck={item.file_check}
+                                fileuri={item.file_url}
+                                key={index}
+                                checkFileList={checkFileList}
+                                checkFileHandler={checkFileHandler}
+                            />
                         )
-                    })}
+                        })}
                     </View>
+                    
+                    
                 }
             </>
             :
-            <View style={{padding:20, justifyContent:'center',alignItems:'center'}}>
+            <View style={[DocumnetStyle.documentBoxinBox]}>
                 {subList[0].cont_idx === null ?
                     <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>작성된 계약 서류가 존재하지 않습니다.</Text>
                 :   
