@@ -19,6 +19,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../type/routerType';
 import { EquimentsDetailDocList, accessoriesConvert } from '../../../component/utils/list';
 import { SelectImageUpload } from '../../../modal/SelectImageUpload';
+import { equUploadList } from '../../../component/utils/list';
+import { CustomInputTextBox } from '../../../component/CustomInputTextBox';
+import { MarginCom } from '../../../component/MarginCom';
 
 type UploadParamsType = {
     mt_idx : string,
@@ -30,19 +33,22 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
     const {eit_idx} = route.params
     const {mt_type , mt_idx} = useAppSelector(state => state.userInfo);
     const [modify,setModify] = useState<boolean>(false)
-    const [guaranteeImage,setguaranteeImage] = useState<undefined>()
     const [selImage, setSelImage] = React.useState('');
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(() => initialAlert);
     const [equDetail, setEquDetail] = useState<EquipDetailDataType>();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [selImgModal, setSelImgModal] = React.useState(false);
     const [fileCheck, setFileCheck] = React.useState<NumberObejctType>()
-    const reqFileList = EquimentsDetailDocList;
+    const [tempSelAcc , setTempSelAcc] = React.useState('');
+    const [writeSelAcc, setWriteSelAcc] = React.useState(''); //부속장치 직접입력
+    const reqFileList = equUploadList;
     const dispatch = useAppDispatch();
+
+    const [subList, setsubList] = useState<any>([])
 
     const {data:EquipDetailData, isLoading:EquipDetailLoading ,isError:EquipDetailError } = usePostQuery('getEquipDetailData',{mt_idx:mt_idx, eit_idx:eit_idx},'equip/equip_info_detail.php');
     const EquipDetailModify = usePostMutation('getEquipDetailModify' , 'equip/equip_info_update.php',true); //장비세부 정보 수정하기
-
+    const getEquipFileListMuataion = usePostMutation('getEquipFileList','equip_file_list.php'); //장비 종류 변경시 파일리스트
     const [uploadList, setUploadList] = React.useState<tempUploadImageKeyType[]>([]);
 
     const uploadImage = async (image : SelImageType) => {
@@ -93,62 +99,57 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
             deleteImage(String(selImage));
         }
     }
-    // const accessoriesAddHandler = () => { //부속장치 추가했을때 이벤트
-    //     if(equDetail?.sub.length === 5){
-    //         alertModalOn('부속 장치는 5개까지 선택가능합니다.');
-    //     }
-    //     else if(tempSelAcc === '기타(직접입력)' && writeSelAcc === ''){
-    //         alertModalOn('부속 장치를 입력해주세요.');
-    //     }
-    //     else{
-    //         let tempArray : string[] = [...inputInfo.sub];
 
-    //         let flag = true;
-    //         equDetail?.sub.forEach((item,index) => {
-    //             if(tempSelAcc === item || writeSelAcc === item){
-    //                 console.log(tempSelAcc, writeSelAcc);
-    //                 alertModalOn('이미 선택한 부속 장치 입니다.');
-    //                 flag = false;
-    //                 return;
-    //             }
-    //         })
-    //         if(flag){
-    //             if(tempSelAcc === '기타(직접입력)'){
-    //                 tempArray.push(writeSelAcc);
-    //             }
-    //             else{
-    //                 tempArray.push(tempSelAcc);
-    //             }
-    //             setInputInfo({
-    //                 ...inputInfo,
-    //                 sub : [...tempArray],
-    //             })
-    //             setTempSelAcc('');
-    //             setWriteSelAcc('');
-    //         }
-    //     }
-    // }
+    const tempSelAccHandler = (text:string) => { //부속장치 선택했을때 임시 저장
+        setTempSelAcc(text);
+    }
+    const accessoriesAddHandler = () => { //부속장치 추가했을때 이벤트
+        if(subList.length === 5){
+            alertModalOn('부속 장치는 5개까지 선택가능합니다.');
+        }
+        else if(tempSelAcc === '기타(직접입력)' && writeSelAcc === ''){
+            alertModalOn('부속 장치를 입력해주세요.');
+        }
+        else{
+            let tempArray : string[] = [...subList];
 
-    const ModifyRequest = async () => { //수정
+            let flag = true;
+            subList.forEach((item,index) => {
+                if(tempSelAcc === item || writeSelAcc === item){
+                    console.log(tempSelAcc, writeSelAcc);
+                    alertModalOn('이미 선택한 부속 장치 입니다.');
+                    flag = false;
+                    return;
+                }
+            })
+            if(flag){
+                if(tempSelAcc === '기타(직접입력)'){
+                    tempArray.push(writeSelAcc);
+                }
+                else{
+                    tempArray.push(tempSelAcc);
+                }
+                setsubList([...tempArray])
+                setTempSelAcc('');
+                setWriteSelAcc('');
+            }
+        }
+    }
+    const deleteAccHandler = (index:number) => { //부속장치 삭제
+        let tempArray : string[] = [...subList];;
+        if(tempArray[index]){
+            tempArray.splice(index,1);
+
+            setsubList([...tempArray])
+        }
+    }
+
+    const ModifyRequest = async () => { //수정요청
         let uploadParams:any = {
             mt_idx:mt_idx,
             eit_idx:eit_idx,
         }
 
-        for (let key in fileCheck){
-            if(fileCheck[key] === 'Y'){
-                const filterData = uploadList.filter(el => el.key === key);
-                if(filterData.length === 0){
-                    const noneData = reqFileList.find(el=> el.key === key);
-                    console.log(noneData);
-                    // if(noneData && equDetail?.file_list[beforeFileUri] === ''){
-                    //     alertModalOn(`${noneData.name}을 업로드해주세요.`)
-                    //     flag = false;
-                    //     break;
-                    // }
-                }
-            } 
-        }
         uploadList.forEach((item,index) => {
             const keyName = `eit_file${item.key}`;
             uploadParams = {
@@ -162,9 +163,14 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
             }
         })
 
+        let tempEquArray:string[] = []
+        for (let i = 0; i<subList.length; i++){
+            tempEquArray.push(subList[i])
+        }
+
         uploadParams = {
             ...uploadParams,
-            eit_sub : "채바가지|대바가지",
+            eit_sub : tempEquArray.join("|"),
             eit_file_del : "",
         }
         console.log(uploadParams);
@@ -184,14 +190,13 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
 
 
     React.useEffect(()=>{
-        console.log(equDetail)
         dispatch(toggleLoading(EquipDetailLoading));
         if(EquipDetailData){
             setEquDetail(EquipDetailData.data.data);
+            setsubList(EquipDetailData.data.data.sub)
         }
     },[EquipDetailData,EquipDetailLoading])
     React.useEffect(()=>{
-        console.log('ddd')
     },[uploadList])
     
 
@@ -240,38 +245,56 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
                     <Text style={[fontStyle.f_semibold,EquimentsDetailstyle.boxText1,{marginBottom:10}]}>
                             어태치먼트
                     </Text>
-                    {equDetail?.sub?.map((item,index)=>{
+                    {subList.map((item:string,index:number)=>{
                     return(
-                    <View style={{flexDirection:'row',marginBottom:10}} key={index}>
-                        <CustomSelectBox 
-                            strOptionList={accessoriesConvert('굴착기') ? accessoriesConvert('굴착기') : ['선택하세요.']}
-                            // strOptionList={accessoriesConvert(equDetail.device) ? accessoriesConvert(equDetail.device) : ['선택하세요.']}
-                            selOption={item}
-                            strSetOption={()=>{}}
-                            buttonStyle={selectBoxStyle.btnStyle}
-                            buttonTextStyle={selectBoxStyle2.btnTextStyle}
-                            rowStyle={selectBoxStyle.rowStyle}
-                            rowTextStyle={selectBoxStyle.rowTextStyle}
-                            defaultText={'선택하세요.'}
-                            isDisable={!modify? true:false}
-                        />
-                        {modify&&
-                        <TouchableOpacity style={{justifyContent:'center',alignItems:'center',paddingHorizontal:10}}
-                        onPress={()=>{console.log(index+1)}}
-                        >
-                            <Image style={{width:20,height:20}} source={require('../../../assets/img/ic_circle_x.png')}/>
-                        </TouchableOpacity>
-                        }
+                    <View key={index}>
+                        <MarginCom mt={10} />
+                        <View style={[styles.TextInputFalseBox,{flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingHorizontal:20,paddingVertical:15,}]}>
+                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{item}</Text>
+                            {modify&&
+                            <TouchableOpacity onPress={()=>{deleteAccHandler(index)}}>
+                                <Image source={require('../../../assets/img/ic_circle_x.png')} style={{width:20,height:20}}/>
+                            </TouchableOpacity>
+                            }
+                        </View>
                     </View>
                         )
                     })}
                     {modify&&
+                    <>
+                    <View style={{marginVertical:10}}>
+                    <CustomSelectBox 
+                        strOptionList={accessoriesConvert('굴착기') ? accessoriesConvert('굴착기') : ['선택하세요.']}
+                        // strOptionList={accessoriesConvert(equDetail.device) ? accessoriesConvert(equDetail.device) : ['선택하세요.']}  
+                        selOption={tempSelAcc}
+                        strSetOption={tempSelAccHandler}
+                        buttonStyle={selectBoxStyle.btnStyle}
+                        buttonTextStyle={selectBoxStyle2.btnTextStyle}
+                        rowStyle={selectBoxStyle.rowStyle}
+                        rowTextStyle={selectBoxStyle.rowTextStyle}
+                        isDisable={!modify? true:false}
+                        defaultText={'부속 장비 선택'}
+                    />
+                    </View>
+                    {tempSelAcc === '기타(직접입력)' &&
+                        <CustomInputTextBox 
+                            input={writeSelAcc}
+                            setInput={(acc : string)=>{ setWriteSelAcc(acc)}}
+                            action={()=>{}}
+                            button=''
+                            placeholder='부속 장치를 입력해주세요.'
+                            editable
+                            placeholderTextColor={colors.FONT_COLOR_GRAY}
+                            containerStyle={{flex:1,marginTop:5}}
+                        />
+                    }
                     <CustomButton
                         style={[styles.whiteButtonStyle,{height:46}]}
                         labelStyle={[styles.whiteButtonLabelStyle]}
                         label={'부속장치 추가'}
-                        action={()=>{accessoriesAddHandler}}
+                        action={accessoriesAddHandler}
                     />
+                    </>
                     }
                     </View>
                     <View style={{marginBottom:30}}>
@@ -326,8 +349,6 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
                 </View>
                 {  //서류업로드 체크
                     equDetail?.file_list.map((data, index) => {
-                        const fileName:string = 'mpt_file'+String(index+1);
-                        const keyName:string = 'mpt_file'+String(index+1)+'_check';
                         return(
                             <View style={{ paddingVertical: 10 }} key={index}>
                                 <View style={{ flexDirection: 'row'}}>
