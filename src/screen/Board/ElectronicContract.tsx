@@ -155,16 +155,18 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
     //     alertModalOn('장비회사가 계약 확인중입니다.', 'test')
     // },[])
     useEffect(()=>{
-    if(mt_type !== '1'){
-        setEditMode('view')
-    }
-    dispatch(toggleLoading(ElectronicDataLoading));
-    if(ElectronicData){
-        console.log(ElectronicData.data)
-        if(ElectronicData.data.data !== null){
-            setElectronic(ElectronicData.data);
+        if(mt_type !== '1'){
+            setEditMode('view')
         }
-    }
+        dispatch(toggleLoading(ElectronicDataLoading));
+        if(ElectronicData){
+            console.log(ElectronicData.data)
+            if(ElectronicData.data.result == 'true'){
+                setElectronic(ElectronicData.data);
+            } else {
+                
+            }
+        }
     },[ElectronicData])
 
     return(

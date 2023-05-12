@@ -480,7 +480,9 @@ export type MatchingPilotType = RouteType & { //장비 - 장비 및 조종사 �
 }
 
 export type PilotProfileType = RouteType & { //장비 - 조종사 프로필 조회
+}
 
+export type EquimentsDetailType = RouteType & { //장비 - 조종사 프로필 조회
 }
 
 export interface SelImageType {
@@ -498,7 +500,7 @@ export interface tempUploadImageKeyType {
     uri : string,
     name?:string,
     fileName : string,
-    base64 : string,
+    base64? : string,
     fileSize: number,
     height : number,
     width:number,

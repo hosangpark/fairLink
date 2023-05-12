@@ -54,6 +54,7 @@ export const Auth = () => {
             else{
                 navigation.replace('SignIn');
             }
+            
         })
     }
 
