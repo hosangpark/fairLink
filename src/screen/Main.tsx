@@ -77,24 +77,6 @@ export const Main = () => {
 		}
 	}
 
-    
-
-    // function testNavi(path:keyof RouterNavigatorParams){ //이동해야할 path가 존재한다면 RouterNavigatorParams에 추가해주세요.
-        
-    //     navigation.navigate(path); //지정한 이름을가진 스택으로 이동
-    //     //navigation.push('Home'); 
-    //     //navigation.reset('Home'); 스택초기화후 이동
-    //     //navigation.goBack(); 뒤로가기
-    //     //navigation.popToTop() 최상위 스택으로 이동
-        
-    //     /* 
-
-    //     그외 navigation 옵션은  
-    //         https://reactnavigation.org/docs/navigation-prop/
-    //     참고
-    //     */
-    // }
-
     return (
         <SafeAreaView
         style={{
@@ -190,7 +172,7 @@ export const Main = () => {
                                 <Image style={{width:25,height:25,resizeMode:'contain'}} source={tabIndex === 3 ? require('../assets/img/b_menu3_on.png') : require('../assets/img/b_menu3_off.png')} />
                                 <Text style={[fontStyle.f_medium,{fontSize:14, color:tabIndex === 3 ? colors.MAIN_COLOR : colors.FONT_COLOR_GRAY,marginTop:5}]}>이력 및 현황</Text>
                             </View>
-                            ),
+                        ),
                     }}
                 />
                 <Tab.Screen 

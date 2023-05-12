@@ -648,7 +648,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     checkFileHandler={checkFileHandler}
                 />
                 }
-                {mt_type == "3" &&
+                {mt_type == "4" &&
                 <User3DocumentList
                     items1={detailWorkInfo['document_dailywork']}
                     allCheck={allCheck}

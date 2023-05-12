@@ -147,10 +147,14 @@ export interface ProfileCardType {
 }
 
 export interface TextBoxType {
-    boldText?: string,
-    subText: string,
-    rightText: string,
-    type: number,
+    push_idx:string // 1: 일반 , 2:팝업, 3:링크
+    type : string
+    date : string
+    title :string
+    content :string
+    link1:string,
+    link2:string,
+    link3:string
 }
 
 export interface CustomInputTextBoxType {

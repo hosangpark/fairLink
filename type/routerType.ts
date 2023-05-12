@@ -64,8 +64,8 @@ export type RouterNavigatorParams = {
 
     /** board */
     DetailField:{
-        cot_idx:string
-        cat_idx:string
+        cot_idx?:string
+        cat_idx?:string
     } //현장세부내용
 
     ScaneDetailField:{
@@ -92,8 +92,8 @@ export type RouterNavigatorParams = {
         mpt_idx?:string,
     } 
     ElectronicContract:{
-        cot_idx:string
-        cat_idx:string
+        cot_idx?:string
+        cat_idx?:string
         contract_idx? :string | undefined
         route_type?:string
     } //전자계약

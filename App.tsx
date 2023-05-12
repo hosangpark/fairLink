@@ -43,44 +43,7 @@ import messaging from '@react-native-firebase/messaging';
  * 
  */
 
-
-const App = () => {
-
-  const [queryClient] = React.useState(()=>new QueryClient);
-
-  const navigationRef:React.RefObject<any> = createRef();
-  
-  // const navigationRouteName = routes.length ? routes[routes.length - 1].name : '';
-  // const navigationRoute = routes[routes.length - 1];
-
-
-  const callScreen = (remoteMessage:any, isDirectMove = false) => {
-    console.log('callScreen', remoteMessage.data, isDirectMove)
-    console.log('message', remoteMessage.data, isDirectMove)
-    let message = (remoteMessage.data.message || remoteMessage.data.body);
-    let title = (remoteMessage.data.title);
-
-    // if (remoteMessage.data?.type == 'chat-rev' || remoteMessage.data?.type == 'chat_add') {
-
-    if (isDirectMove) {
-      console.log('111111',remoteMessage)
-      // if (remoteMessage.data?.type == 'chat-rev' || remoteMessage.data?.type == 'chat-send') {
-      //   //채팅수락알림, 메시지도착알림
-      //   navigation.navigate('HomeIndex');
-      // } else if (remoteMessage.data?.type == 'chat_add' || remoteMessage.data?.type == 'product_edit' || remoteMessage.data?.type == 'product_add') {
-      //   //채팅요청알림, 상품금액변경알림
-      //   navigation.navigate('HomeIndex');
-      // } else if (remoteMessage.data?.type == 'review_add') {
-      //   //후기수신
-      //   navigation.navigate('HomeIndex');
-      // }
-    } else {
-      console.log('22222',remoteMessage)
-    }
-  }
-
-  /** */
-  const sendLocalNotificationWithSound = (onRemote:any) => {
+const sendLocalNotificationWithSound = (onRemote:any) => {
     // if (Platform.OS == 'ios') {
     //   PushNotificationIOS.addNotificationRequest({
     //     id: onRemote.data.notificationId
@@ -96,8 +59,8 @@ const App = () => {
       PushNotification.localNotification({
         channelId: onRemote.channelId ?? 'default',
         id: onRemote.data.notificationId,
-        title: (onRemote.title),
-        message: (onRemote.message),
+        title: (onRemote.data.title),
+        message: (onRemote.data.message),
         soundName: 'default',
         playSound: true,
         // smallIcon: 'ic_stat_ic_notification',
@@ -105,11 +68,9 @@ const App = () => {
         largeIcon: '',
         largeIconUrl: '',
         priority: 'high',
-
         // bigPictureUrl?: string | undefined;
         // bigLargeIcon?: string | undefined;
         // bigLargeIconUrl?: string | undefined;
-
         vibrate: true,
         groupSummary: true,
         userInfo: onRemote.data,
@@ -117,6 +78,19 @@ const App = () => {
       });
     // }
   };
+
+  messaging().setBackgroundMessageHandler(async notification => { //background push
+    sendLocalNotificationWithSound(notification)
+    console.log('is background', notification);
+  });
+
+
+const App = () => {
+
+const [queryClient] = React.useState(()=>new QueryClient);
+
+const navigationRef:React.RefObject<any> = createRef();
+  
 
 
 const fcmSetting = () => {
@@ -135,8 +109,8 @@ const fcmSetting = () => {
         // console.log("navigationRef",navigationRef.current)
         // console.log('NOTIFICATION 작동여부:', notification.channelId);
         if(notification.userInteraction){
-          console.log('포그라운드에서 푸시 클릭했을때.');
-          console.log(notification.data);
+          // console.log('포그라운드에서 푸시 클릭했을때.');
+          // console.log(notification.data);
 
           switch(notification.data.link1){
             case "Home":
@@ -144,7 +118,6 @@ const fcmSetting = () => {
               break;
             case "DetailField_eq_pi":
               navigationRef.current.navigate('DetailField',{
-                cat_idx:notification.data.link2.cat_idx,
                 cot_idx:notification.data.link2.cot_idx
               })
               break;
@@ -160,19 +133,21 @@ const fcmSetting = () => {
               break;
             case "ElectronicContract_eq":
               navigationRef.current.navigate('ElectronicContract',{
-                route_type:"Info2",
                 contract_idx:notification.data.link2,
+                route_type:"Info2",
               })
               break;
             case "ElectronicContract_cons":
               navigationRef.current.navigate('ElectronicContract',{
                 route_type:"Info",
                 cat_idx:notification.data.link2.cat_idx,
-                cot_idx:notification.data.link2.cot_idx,
+                cot_idx:notification.data.link3.cot_idx,
               })
               break;
             case "WorkReport_cons":
-              navigationRef.current.navigate('WorkReport')
+              navigationRef.current.navigate('WorkReport',{
+                cdwt_idx:notification.data.link2.cdwt_idx
+              })
               break;
             case "Board":
               navigationRef.current.navigate('Board')
@@ -209,32 +184,6 @@ const fcmSetting = () => {
       requestPermissions: true,
       });
 
-      messaging().setBackgroundMessageHandler(async remoteMessage => { //background push
-        console.log('is background', remoteMessage);
-      });
-      // // //응용 프로그램이 실행 중이지만 백그라운드에있는 경우
-      messaging().onNotificationOpenedApp(async remoteMessage => {
-      });
-
-      messaging().onMessage(async remoteMessage => {
-          
-          if(Platform.OS == "ios"){
-              // ios 인경우 포그라운드 처리
-          }else{          
-              // 안드로이드 인경우 포그라운드 처리
-              
-              // console.log("remoteMessage",remoteMessage)
-              // console.log("navigationRef",navigationRef)
-          }
-      })
-      //앱 백그라운드 팝업 클릭시 이벤트 !
-      messaging()
-      .getInitialNotification()
-      .then(async remoteMessage => {
-      
-      if (remoteMessage) { 
-      }
-    });
   }
 
   React.useEffect(() => {

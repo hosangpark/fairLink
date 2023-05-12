@@ -3,7 +3,7 @@ import {ScrollView, TouchableOpacity, View,Image,BackHandler,Alert} from 'react-
 import {Text} from 'react-native';
 import { styles, fontStyle, colors, swiperStyles } from '../../style/style';
 import { TextBox } from '../../component/TextBox';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import Swiper from 'react-native-swiper';
@@ -13,7 +13,7 @@ import { HomeIndexType } from '../screenType';
 import { LoginIntroModal } from '../../modal/LoginIntroModal';
 import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
 import { CustomButton } from '../../component/CustomButton';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
 import cusToast from '../../util/toast/CusToast';
@@ -21,16 +21,16 @@ import cusToast from '../../util/toast/CusToast';
 import { useNavigationState } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import { PilotWorkListModal } from '../../modal/PilotWorkListModal';
+import { toggleLoading } from '../../redux/actions/LoadingAction';
+import { TextBoxType } from '../../component/componentsType';
 
-type tempItem = {
-	type : number, //리스트타입
-	subText : string, //이벤트이름
-}
+
 
 export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
 	// const [userType,setUserType] = useState('1')
 	const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
+	const dispatch = useAppDispatch();
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 	const {data : reqCheckData , refetch:reqCheckRefetch} = usePostQuery('getConsReqCheck',{mt_idx:mt_idx},'cons/cons_require_check.php');
 	const {data : myProfileData, refetch:myProfileRefetch} = usePostQuery('getMyProfileData' , {mt_idx:mt_idx}, 'equip/mypage_info.php');
@@ -40,21 +40,36 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
-   const [exitApp , setExitApp] = React.useState(false);
+	const [exitApp , setExitApp] = React.useState(false);
 
-	const tempListDate = [
-		{type : 1, subText : '굴삭기' },
-		{type : 2, subText : '크레인' },
-		{type : 3, subText : '굴삭기 2' },
-		{type : 1, subText : '굴삭기' },
-	]
+	const EventList = usePostMutation('getEventListEventList' , 'home_event_list.php');
+	const [tempListDate,settempListDate] = useState([
+		{
+			push_idx : "1", 
+			type : '굴삭기',
+			date:"05.10",
+			title:"굴삭기",
+			content:"content",
+			link1:"link1",
+			link2:"link1",
+			link3:"link1",
+		},
+	])
 
 	const [reqConModal, setReqConModal] = React.useState(false);
 	const [pilotWorkModal, setPilotWorkModal] = React.useState(false);
 	const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
 	
+	const getEventList = async() =>{
+			dispatch(toggleLoading(true));
+			const {data, result, msg} = await EventList.mutateAsync({mt_idx:mt_idx});
+			dispatch(toggleLoading(false));
 
+			if(result === 'true'){
+					settempListDate(data.data);
+			}
+	}
 
 	const alertModalOn = (msg:string, type?:string) => {
 		setAlertModal({
@@ -205,8 +220,12 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 		}
 	},[reqCheckData])
 
-
-
+	useFocusEffect(
+		React.useCallback(() => {
+				getEventList()
+				return () => {}
+		}, []),
+	);
 
 	return (
 		<View style={{flex:1}}>
@@ -310,13 +329,18 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				</View>
 				<View style={[{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY2,padding:20}]}>
 					<Text style={[fontStyle.k_bold, { color: colors.MAIN_COLOR, fontSize: 20, marginBottom: 10 }]}>주요 이벤트</Text>
-					{tempListDate.map((item:tempItem,index:number) => {
+					{tempListDate.slice(0, 5).map((item:TextBoxType,index:number) => {
 						return(
 							<View key={index}>
 								<TextBox 
+									push_idx={item.push_idx}
 									type={item.type}
-									subText={item.subText}
-									rightText={item.type === 1 ? 'dfd' : item.type === 2 ? 'afdasdf' : '121321'}
+									date={item.date}
+									title={item.title}
+									content={item.content}
+									link1={item.link1}
+									link2={item.link2}
+									link3={item.link3}
 								/>
 							</View>
 						)

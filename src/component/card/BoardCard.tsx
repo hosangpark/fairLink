@@ -30,6 +30,7 @@ export interface BoardCardItemType {
     met_company : string, //회사 이름
     mct_company : string,  //회사이름
     mpt_idx? : string,
+    match_type? : string //장비&건설 검토상태
 }
 
 type BoardCardType = {
@@ -44,7 +45,6 @@ export const BoardCard = ({
     title,
     refetch,
 }:BoardCardType) => {
-    console.log(item);
     const dispatch = useAppDispatch();
     const {mt_idx,mt_type} = useAppSelector(state=>state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -120,10 +120,10 @@ export const BoardCard = ({
             }
         }
         else if(mt_type=='4') {
-            navigation.navigate('PilotProfile',{cat_idx : item?.cat_idx})
-        } else {
-            console.log(item);
-            navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx})
+            console.log(item.cat_idx)
+            console.log(item.cot_idx)
+            console.log(item.mpt_idx)
+            navigation.navigate('PilotProfile',{cat_idx : item.cat_idx})
         }
     }
 
@@ -243,6 +243,16 @@ export const BoardCard = ({
                                             </Text>
                                         </>
                                     :
+                                    item.match_type == "Y"?
+                                        <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.ORANGE_COLOR}]}>
+                                            건설회사{'\n'}검토중
+                                        </Text>
+                                        :
+                                        item.match_type == "N"?
+                                        <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.ORANGE_COLOR}]}>
+                                            장비회사{'\n'}검토중
+                                        </Text>
+                                        :
                                         <Text style={[fontStyle.f_medium,{fontSize:15,color:colors.ORANGE_COLOR}]}>선정전</Text>
                                     }
                                 </>
