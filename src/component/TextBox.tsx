@@ -20,51 +20,51 @@ export const TextBox = ({
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const FlowEvent = ()=>{
         if(type == 'link'){
-            console.log('withoutFeedback')
-        //   switch(link1){
-        //     case "Home":
-        //       navigation.navigate('Home')
-        //       break;
-        //     case "DetailField_eq_pi":
-        //       navigation.navigate('DetailField',{
-        //         cot_idx:link2
-        //       })
-        //       break;
-        //     case "DetailField_eq":
-        //       navigation.navigate('DetailField',{
-        //         cot_idx:link2
-        //       })
-        //       break;
-        //     case "DetailField_pi":
-        //       navigation.navigate('DetailField',{
-        //         cat_idx:link2,
-        //       })
-        //       break;
-        //     case "ElectronicContract_eq":
-        //       navigation.navigate('ElectronicContract',{
-        //         route_type:"Info2",
-        //         contract_idx:link2
-        //       })
-        //       break;
-        //     case "ElectronicContract_cons":
-        //       navigation.navigate('ElectronicContract',{
-        //         route_type:"Info",
-        //         cat_idx:link2,
-        //         cot_idx:link3,
-        //       })
-        //       break;
-        //     case "WorkReport_cons":
-        //       navigation.navigate('WorkReport',{
-        //         cdwt_idx:link2
-        //       })
-        //       break;
-        //     case "Board":
-        //       navigation.navigate('Board')
-        //       break;
-        //     case "Request":
-        //       navigation.navigate('Request')
-        //       break;
-        //   }
+          switch(link1){
+            case "Home":
+              navigation.navigate('Home')
+              break;
+            case "DetailField_eq_pi":
+              navigation.navigate('DetailField',{
+                cot_idx:link2
+              })
+              break;
+            case "DetailField_eq":
+              navigation.navigate('DetailField',{
+                cot_idx:link2
+              })
+              break;
+            case "DetailField_pi":
+              navigation.navigate('DetailField',{
+                cat_idx:link2,
+              })
+              break;
+            case "ElectronicContract_eq":
+                console.log('pdf_View')
+            //   navigation.navigate('ElectronicContract',{
+            //     route_type:"Info2",
+            //     contract_idx:link2
+            //   })
+              break;
+            case "ElectronicContract_cons":
+              navigation.navigate('ElectronicContract',{
+                route_type:"Info",
+                cat_idx:link2,
+                cot_idx:link3,
+              })
+              break;
+            case "WorkReport_cons":
+              navigation.navigate('WorkReport',{
+                cdwt_idx:link2
+              })
+              break;
+            case "Board":
+              navigation.navigate('Board')
+              break;
+            case "Request":
+              navigation.navigate('Request')
+              break;
+          }
 
         }
     }

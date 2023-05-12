@@ -11,25 +11,26 @@ import { usePostMutation, usePostQuery } from '../../../util/reactQuery';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
 import { EquipDetailDataType, NumberObejctType } from '../../../component/componentsType';
-import { SelImageType, tempUploadImageKeyType, tempUploadImageType } from '../../screenType';
+import { EquimentsDetailType, SelImageType,  tempUploadImageType } from '../../screenType';
 import { AlertClearType } from '../../../modal/modalType';
 import { AlertModal, initialAlert } from '../../../modal/AlertModal';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../type/routerType';
-import { EquimentsDetailDocList, accessoriesConvert } from '../../../component/utils/list';
+import { accessoriesConvert, equProfileUploadList } from '../../../component/utils/list';
 import { SelectImageUpload } from '../../../modal/SelectImageUpload';
-import { equUploadList } from '../../../component/utils/list';
 import { CustomInputTextBox } from '../../../component/CustomInputTextBox';
 import { MarginCom } from '../../../component/MarginCom';
 
-type UploadParamsType = {
-    mt_idx : string,
-    eit_idx : string,
-    eit_sub? : string,
+type tempUploadImageKeyType = {
+    name : string,
+    type : string,
+    tmp_name : string,
+    size : number,
+    key : string,
 }
 
-export const EquimentsDetail = ({route}:{eit_idx:string}) => {
+export const EquimentsDetail = ({route}:EquimentsDetailType) => {
     const {eit_idx} = route.params
     const {mt_type , mt_idx} = useAppSelector(state => state.userInfo);
     const [modify,setModify] = useState<boolean>(false)
@@ -41,20 +42,20 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
     const [fileCheck, setFileCheck] = React.useState<NumberObejctType>()
     const [tempSelAcc , setTempSelAcc] = React.useState('');
     const [writeSelAcc, setWriteSelAcc] = React.useState(''); //부속장치 직접입력
-    const reqFileList = equUploadList;
+    const reqFileList = equProfileUploadList;
     const dispatch = useAppDispatch();
 
-    const [subList, setsubList] = useState<any>([])
+    const [subList, setsubList] = useState<string[]>([])
+    const [docList, setdocList] = useState<{key:string,name:string}[]>([])
 
+    const getEquipDocMutaion = usePostMutation('getEquipDoc' , 'equip/equip_file_list.php');//장비 종류 변경시 파일리스트
     const {data:EquipDetailData, isLoading:EquipDetailLoading ,isError:EquipDetailError } = usePostQuery('getEquipDetailData',{mt_idx:mt_idx, eit_idx:eit_idx},'equip/equip_info_detail.php');
     const EquipDetailModify = usePostMutation('getEquipDetailModify' , 'equip/equip_info_update.php',true); //장비세부 정보 수정하기
-    const getEquipFileListMuataion = usePostMutation('getEquipFileList','equip_file_list.php'); //장비 종류 변경시 파일리스트
     const [uploadList, setUploadList] = React.useState<tempUploadImageKeyType[]>([]);
 
     const uploadImage = async (image : SelImageType) => {
-        console.log(image);
         const tempArray = [...uploadList];
-        const tempObj = {
+        const tempObj:tempUploadImageKeyType = {
             // ...image,
             name : image.fileName,
             type : 'image/jpg',
@@ -74,6 +75,21 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
         setUploadList([...filterArray]);
         // console.log(filterArray);
         // console.log(uploadList);
+    }
+
+    const loadEquipDocList = async (type:string,stand1:string,stand2:string) => { //장비서류 불러오기
+        const params = {
+            eit_type : type,
+            eit_stand1 : stand1,
+            eit_stand2 : stand2,
+        }
+        dispatch(toggleLoading(true));
+        const {data, result, msg} = await getEquipDocMutaion.mutateAsync(params);
+        dispatch(toggleLoading(false));
+        if(result === 'true'){
+            setFileCheck(data.data);
+            console.log(data.data)
+        }
     }
 
     const alertModalOn = ( msg : string, type? : string) => {
@@ -111,10 +127,10 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
             alertModalOn('부속 장치를 입력해주세요.');
         }
         else{
-            let tempArray : string[] = [...subList];
+            let tempArray = [...subList];
 
             let flag = true;
-            subList.forEach((item,index) => {
+            subList.forEach((item:string,index:number) => {
                 if(tempSelAcc === item || writeSelAcc === item){
                     console.log(tempSelAcc, writeSelAcc);
                     alertModalOn('이미 선택한 부속 장치 입니다.');
@@ -136,7 +152,7 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
         }
     }
     const deleteAccHandler = (index:number) => { //부속장치 삭제
-        let tempArray : string[] = [...subList];;
+        let tempArray = [...subList];;
         if(tempArray[index]){
             tempArray.splice(index,1);
 
@@ -186,7 +202,10 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
         }
         
     }
-
+    const newArr = ()=>{
+        let Arr = equProfileUploadList.filter(x => EquipDetailData.data.data.file_check.includes(x.key))
+        setdocList(Arr)
+    }
 
 
     React.useEffect(()=>{
@@ -194,11 +213,10 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
         if(EquipDetailData){
             setEquDetail(EquipDetailData.data.data);
             setsubList(EquipDetailData.data.data.sub)
+            newArr()
+            console.log(docList)
         }
     },[EquipDetailData,EquipDetailLoading])
-    React.useEffect(()=>{
-    },[uploadList])
-    
 
     return(
         <View style={{flex:1}}>
@@ -285,7 +303,7 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
                             placeholder='부속 장치를 입력해주세요.'
                             editable
                             placeholderTextColor={colors.FONT_COLOR_GRAY}
-                            containerStyle={{flex:1,marginTop:5}}
+                            containerStyle={{flex:1,marginTop:0,marginBottom:10}}
                         />
                     }
                     <CustomButton
@@ -352,13 +370,13 @@ export const EquimentsDetail = ({route}:{eit_idx:string}) => {
                         return(
                             <View style={{ paddingVertical: 10 }} key={index}>
                                 <View style={{ flexDirection: 'row'}}>
-                                    <Text style={[fontStyle.f_semibold, { color: colors.FONT_COLOR_BLACK, fontSize: 16, marginRight: 5, marginBottom: 5}]}>{reqFileList[index].name}</Text>
+                                    <Text style={[fontStyle.f_semibold, { color: colors.FONT_COLOR_BLACK, fontSize: 16, marginRight: 5, marginBottom: 5}]}>{docList[index].name}</Text>
                                     <Text style={[fontStyle.f_semibold, { fontSize: 16, color: data.status == '0' || data.status == null ? colors.FONT_COLOR_GRAY : data.status !== "1" ? colors.FONT_COLOR_BLACK2 : colors.MAIN_COLOR}]}>
                                         {data.status == '0' || data.status == null ? '[미등록]' : data.status == '1' ? '[승인중]' : '[승인완료]'}
-                                        <Text style={[ styles.OrengeStar]}>{ reqFileList[index].name !== '통장사본' ? '*' : null }</Text>
+                                        <Text style={[ styles.OrengeStar]}>{docList[index].name !== '통장사본' ? '*' : null }</Text>
                                     </Text>
                                 </View>
-                                {reqFileList[index].name == '장비사진'?
+                                {docList[index].name == '장비사진'?
                                 <Text style={[fontStyle.f_regular, { fontSize: 14,color:colors.MAIN_COLOR,marginBottom:5}]}>번호판이 나온 사진 필수</Text>
                                 :
                                 null

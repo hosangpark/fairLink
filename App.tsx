@@ -132,10 +132,11 @@ const fcmSetting = () => {
               })
               break;
             case "ElectronicContract_eq":
-              navigationRef.current.navigate('ElectronicContract',{
-                contract_idx:notification.data.link2,
-                route_type:"Info2",
-              })
+              console.log('pdf View')
+              // navigationRef.current.navigate('ElectronicContract',{
+              //   contract_idx:notification.data.link2,
+              //   route_type:"Info2",
+              // })
               break;
             case "ElectronicContract_cons":
               navigationRef.current.navigate('ElectronicContract',{
