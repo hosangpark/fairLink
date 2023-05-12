@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../type/routerType';
 import { PdfViewerModal } from '../modal/PdfViewerModal';
+import { AlertModal, initialAlert } from '../modal/AlertModal';
 
 export const TextBox = ({
     push_idx, // 1: 일반 , 2:팝업, 3:링크
@@ -21,6 +22,7 @@ export const TextBox = ({
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [pdfViewerModal, setPdfViewerModal] =React.useState(false);
     const [selPdfUrl, setSelPdfUrl] = React.useState('');
+    const [alertModal, setAlertModal] = React.useState(false);
 
     const FlowEvent = ()=>{
         if(type == 'link'){
@@ -45,16 +47,16 @@ export const TextBox = ({
               break;
             case "ElectronicContract_eq":
                 console.log('pdf_View')
+                // link : 빈값 = 팝업 날짜 내용
                 // {
                 // if(item.webview_url){
                 //     setSelPdfUrl(item.webview_url);
                 //     setPdfViewerModal(true);
                 // }
-            
-            //   navigation.navigate('ElectronicContract',{
-            //     route_type:"Info2",
-            //     contract_idx:link2
-            //   })
+              //   navigation.navigate('ElectronicContract',{
+              //     route_type:"Info2",
+              //     contract_idx:link2
+              //   })
               break;
             case "ElectronicContract_cons":
               navigation.navigate('ElectronicContract',{
@@ -76,6 +78,8 @@ export const TextBox = ({
               break;
           }
 
+        }else{
+          setAlertModal(true)
         }
     }
     return(
@@ -85,7 +89,9 @@ export const TextBox = ({
                     <Text style={[fontStyle.f_medium,{ color: colors.FONT_COLOR_BLACK, fontSize: 16}]}>
                         {date}
                     </Text>
-                    <Text style={[fontStyle.f_regular,{ color: colors.FONT_COLOR_BLACK, fontSize: 16, marginLeft:10}]}>
+                    <Text style={[fontStyle.f_regular,{ color: colors.FONT_COLOR_BLACK, fontSize: 16, marginLeft:10}]}
+                    numberOfLines={1}
+                    >
                       {title}</Text>
                 </View>
                 <Text style={[fontStyle.f_medium,{ 
@@ -105,6 +111,12 @@ export const TextBox = ({
                     setSelPdfUrl={setSelPdfUrl}
                 />
             }
+            <AlertModal
+                show={alertModal}
+                msg={title}
+                title={content}
+                hide={()=>setAlertModal(false)}
+            />
         </TouchableWithoutFeedback>
     )
 }
