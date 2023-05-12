@@ -204,6 +204,9 @@ export const DetailWork = ({route}:DetailWorkType) => {
                 if(item.file_url && item.file_url !== ''){
                     allFileArray.push(item.file_url);
                 }
+                if(item.webview_url && item.webview_url !== ''){
+                    allFileArray.push(item.webview_url);
+                }
                 if(item.pdf_url && item.pdf_url !== ''){
                     allFileArray.push(item.pdf_url);
                 }
@@ -263,8 +266,8 @@ export const DetailWork = ({route}:DetailWorkType) => {
                 if(shareFileUrlInfo[key].length > 0) {
                     shareFileUrlInfo[key].forEach((item) => {
                         console.log(item);
-                        const nameFilter = detailWorkInfo.document_dailywork.filter((el:{cdwt_date:string,pdf_url:string,file_check:string}) => el.pdf_url === item);
-                        shareInfo['작업일보'] = [...shareInfo['작업일보'], {name : nameFilter[0].cdwt_date+' 작업일보' , url : nameFilter[0].pdf_url}];
+                        const nameFilter = detailWorkInfo.document_dailywork.filter((el:{cdwt_date:string,webview_url:string,file_check:string}) => el.webview_url === item);
+                        shareInfo['작업일보'] = [...shareInfo['작업일보'], {name : nameFilter[0].cdwt_date+' 작업일보' , url : nameFilter[0].webview_url}];
                         flag = true;
                     })
                 }

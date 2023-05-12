@@ -4,6 +4,7 @@ import {ActivityIndicator, View,TouchableOpacity,Image,Text} from 'react-native'
 import Modal from 'react-native-modal'
 import { colors, fontStyle } from '../style/style';
 import Pdf from 'react-native-pdf';
+import WebView from 'react-native-webview';
 export const PdfViewerModal = ({
     show,
     action,
@@ -17,29 +18,32 @@ export const PdfViewerModal = ({
         return(
             <>
                 {pdfUrl !== '' &&
-                    <Pdf
-                        trustAllCerts={false}
-                        source={{uri:pdfUrl}}
-                        onLoadComplete={(numberOfPages,filePath) => {
-                            if(isError){
-                                setIsError(false);
-                            }
-                            console.log(`Number of pages: ${numberOfPages}`);
-                        }}
-                        key={pdfUrl}
-                        onPageChanged={(page,numberOfPages) => {
-                            console.log(`Current page: ${page}`);
-                        }}
-                        onError={(error) => {
-                            setIsError(true);
-                            console.log(error);
-                        }}
-                        onPressLink={(uri) => {
-                            console.log(`Link pressed: ${uri}`);
-                        }}
+                <WebView 
+                    source={{uri:pdfUrl}}
+                />
+                    // <Pdf
+                    //     trustAllCerts={false}
+                    //     source={{uri:pdfUrl}}
+                    //     onLoadComplete={(numberOfPages,filePath) => {
+                    //         if(isError){
+                    //             setIsError(false);
+                    //         }
+                    //         console.log(`Number of pages: ${numberOfPages}`);
+                    //     }}
+                    //     key={pdfUrl}
+                    //     onPageChanged={(page,numberOfPages) => {
+                    //         console.log(`Current page: ${page}`);
+                    //     }}
+                    //     onError={(error) => {
+                    //         setIsError(true);
+                    //         console.log(error);
+                    //     }}
+                    //     onPressLink={(uri) => {
+                    //         console.log(`Link pressed: ${uri}`);
+                    //     }}
 
-                        style={{flex:9,backgroundColor:colors.WHITE_COLOR}}
-                    />
+                    //     style={{flex:9,backgroundColor:colors.WHITE_COLOR}}
+                    // />
                 }
             </>
         )

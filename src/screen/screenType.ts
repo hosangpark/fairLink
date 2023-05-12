@@ -82,12 +82,12 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
     img_url?:string,
     mpt_idx?:string,
     pilot_type?:string,
-    good:number, //건설업체 지원자리스트 추천기업 count
-    goods?:number,//장비업체 지원자리스트 추천기업 count
-    company:string,
+    good:number | string, //건설업체 지원자리스트 추천기업 count
+    goods?:number | string,//장비업체 지원자리스트 추천기업 count
+    company?:string,
     name?:string,
     score:number,
-    score_count:number,
+    score_count:number | string,
     equip:string,
     career?:string,
     location?:string,
@@ -269,6 +269,24 @@ export type initialdetailWorkInfoType = { //작업세부내용 type
     }[] //서류관리-작업일보,
     [key:string]:any
 }
+
+export type HistoryItemType = {
+    cat_idx : string,
+    content:string,
+    crt_name : string,
+    end_date : string,
+    pilot_info : {
+        career : string,
+        equip : string,
+        good : string,
+        img_url : string,
+        location : string,
+        mpt_idx : string,
+        mt_name : string,
+        score : number,
+        score_count : string
+    }
+}
 export interface HomeIndexType {
     setTabIndex? : (tab:number) => void;
 }
@@ -383,6 +401,13 @@ export type PilotProfileItemType = {
             title : string,
         }[]
     },
+    doc_check : {
+        [key:string]:{
+            file_check : string,
+            file_url : string,
+            title : string,
+        }[]
+    }
     profile : {
         mpt_aspire : string,
         mpt_career : string,

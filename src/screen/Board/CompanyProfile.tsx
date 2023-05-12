@@ -50,7 +50,7 @@ const SubRoute = (route:any) => (
 
 
 export const CompanyProfile = ({route}:CompanyProfileType) => {
-    const {cat_idx,cot_idx,mpt_idx} = route.params;
+    const {cat_idx,cot_idx,mpt_idx,isBtn} = route.params;
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const {mt_idx} = useAppSelector(state => state.userInfo);
@@ -92,6 +92,8 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
                 mt_idx : mt_idx,
                 mpt_idx : mpt_idx,
             })
+            console.log(data);
+
             if(result === 'true'){
                 setconsprofileInfo(data);
             }
@@ -105,7 +107,6 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
                 cat_idx : cat_idx,
                 mt_idx : mt_idx,
             })
-
             if(result === 'true'){
                 setconsprofileInfo(data);
             }
@@ -140,7 +141,7 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
                         gender = {consprofileInfo.data.gender} 
                         location = {consprofileInfo.data.equip}
                         equip={consprofileInfo.data.equip}
-                        jobType = {consprofileInfo.data.type}
+                        jobType = {consprofileInfo.data.pilot_type}
                         phone = {consprofileInfo.data.hp}
                         score_count = {consprofileInfo.data.score_count}
                         score = {consprofileInfo.data.score}
@@ -175,11 +176,13 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
                         }
                     </>
                 }
-                <TouchableOpacity onPress={() => alertModalOn('장비업체를 선정 하시겠습니까?','choice_confirm')}>
-                    <View style={[styles.buttonStyle, {}]}>
-                        <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>장비회사 선정</Text>
-                    </View>
-                </TouchableOpacity>
+                {isBtn &&
+                    <TouchableOpacity onPress={() => alertModalOn('장비업체를 선정 하시겠습니까?','choice_confirm')}>
+                        <View style={[styles.buttonStyle, {}]}>
+                            <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>장비회사 선정</Text>
+                        </View>
+                    </TouchableOpacity>
+                }
                 <AlertModal 
                     show={alertModal.alert}
                     msg={alertModal.msg}

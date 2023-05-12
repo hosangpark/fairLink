@@ -99,13 +99,14 @@ export const BoardCard = ({
                 navigation.navigate('Volunteer',{cot_idx : item?.cot_idx, cat_idx:item?.cat_idx})
             }
             else if(title === '계약진행중'){
-                navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx})
+                navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx,isBtn:false})
             }
             else if(title === '작업중' || title === '작업완료'){
                 navigation.navigate('CompanyProfile',{
                     cat_idx:item.cat_idx,
                     cot_idx:item.cot_idx,
                     mpt_idx:item.mpt_idx,
+                    isBtn : false,
                 });
             }
         } 
@@ -114,7 +115,7 @@ export const BoardCard = ({
                 console.log(item);
                 navigation.navigate('Volunteer' , {cat_idx : item?.cat_idx,cot_idx:item?.cot_idx})
             } else {
-                navigation.navigate('PilotProfile',{cat_idx:item?.cat_idx,cot_idx:item?.cot_idx,mpt_idx:item.mpt_idx})
+                navigation.navigate('PilotProfile',{cat_idx:item?.cat_idx,cot_idx:item?.cot_idx,mpt_idx:item.mpt_idx,isBtn:false})
             }
         }
         else if(mt_type==='4') {
@@ -122,7 +123,7 @@ export const BoardCard = ({
             // navigation.navigate('PilotProfile',{cat_idx : item?.cat_idx})
         } else {
             console.log(item);
-            navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx})
+            navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx,isBtn:false})
         }
     }
 

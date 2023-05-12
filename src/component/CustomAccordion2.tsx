@@ -12,6 +12,7 @@ export const CustomAccordion2 = ({
     data,
     subtitle,
     action,
+    favAction,
 }:CustomAccordionType2) => {
   const [open,setOpen] = useState(false)
   
@@ -35,28 +36,16 @@ export const CustomAccordion2 = ({
           }
         </TouchableOpacity>
           {open&&
-          <View>
-          {data.map((item:any,index)=>{
-            return(
-              <View style={{padding:20}} key={index}>
-                {/* <UserInfoCard
-                  index={item.index}
-                  empName={item.empName}
-                  jobType={item.jobType}
-                  location={item.location}
-                  rating={item.rating}
-                  recEmpCount={item.recEmpCount}
-                  score={item.score}
-                  userName={item.userName}
-                  userProfileUrl={item.userProfileUrl}
-                  isDelete={false}
-                  isFavorite={'0'}
-                  action={()=>{}}
-                /> */}
-              </View>
-            )
-          })}
-          </View>
+            <View style={{padding:20}}>
+              <UserInfoCard
+                item={data.pilot_info}
+                isDelete={false}
+                isFavorite
+                action={favAction ? favAction : ()=>{}}
+                index='0'
+                cat_idx={data.cat_idx}
+              />
+            </View>
           }
 
 

@@ -26,6 +26,7 @@ import { toggleLoading } from "../../redux/actions/LoadingAction";
 
 export const PilotProfile = ({route}:PilotProfileType) => {
 
+
     const {cat_idx,mpt_idx,cot_idx} = route.params;
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
 
@@ -37,11 +38,14 @@ export const PilotProfile = ({route}:PilotProfileType) => {
 
     const [pilotProfile, setPilotProfile] = React.useState<PilotProfileItemType>();
 
-    const {data : profileData, isLoading : profileLoading, isError : profileError} = usePostQuery('getPilotProfile',{
+    const {data : profileData, isLoading : profileLoading, isError : profileError} = usePostQuery('getPilotProfile',cat_idx ? {
         mt_idx : mt_idx,
         mpt_idx : mpt_idx,
         cat_idx : cat_idx,
-    },'equip/pilot_profile.php');
+    } : {
+        mt_idx : mt_idx,
+        mpt_idx : mpt_idx,
+    },cat_idx ? 'equip/pilot_profile.php' : 'equip/equip_like_list_info.php');
     const selPilotMutation = usePostMutation('selPilot','equip/pilot_profile_select.php');
     
     
@@ -100,7 +104,7 @@ export const PilotProfile = ({route}:PilotProfileType) => {
     const SecondRoute = () => (
         <>
             {pilotProfile &&
-                <RequiredDocuments doc={pilotProfile.doc}/>
+                <RequiredDocuments doc={cat_idx ? pilotProfile.doc : pilotProfile.doc_check}/>
             }
         </>
     );
@@ -112,7 +116,17 @@ export const PilotProfile = ({route}:PilotProfileType) => {
     });
 
     React.useEffect(()=>{
+        dispatch(toggleLoading(profileLoading));
+        console.log(cat_idx ? {
+            mt_idx : mt_idx,
+            mpt_idx : mpt_idx,
+            cat_idx : cat_idx,
+        } : {
+            mt_idx : mt_idx,
+            mpt_idx : mpt_idx,
+        })
         if(profileData){
+            console.log(profileData);
             // console.log(profileData);
             if(profileData.result === 'true'){
                 setPilotProfile(profileData.data);
@@ -123,7 +137,7 @@ export const PilotProfile = ({route}:PilotProfileType) => {
             }
 
         }
-    },[profileData])
+    },[profileData,profileLoading])
 
     return (
         <SafeAreaView style={{flex:1}}>

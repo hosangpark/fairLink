@@ -1,5 +1,5 @@
 import { ImageSourcePropType,KeyboardTypeOptions } from "react-native";
-import { FavoriteListItemType, MatchingEquipmentItemType, MatchingPilotItemType, MyEquListItemType } from "../screen/screenType";
+import { FavoriteListItemType, HistoryItemType, MatchingEquipmentItemType, MatchingPilotItemType, MyEquListItemType } from "../screen/screenType";
 import { HeavyEquipmentCard } from "./card/HeavyEquipmentCard";
 
 export interface NumberObejctType {
@@ -36,9 +36,10 @@ export interface CustomAccordionType {
 export interface CustomAccordionType2 {
     title:string,
     subtitle:string,
-    data:object[],
+    data:HistoryItemType,
     userType:string
     action : ()=>void,
+    favAction? : (mpt_idx:string)=>void,
 }
 export interface DocumentAccordionType {
     title:string,
@@ -51,6 +52,7 @@ export interface DocumentAccordionType {
         write_check? : '',
         cdwt_date?:string,
         cdwt_idx?:string,
+        webview_url?:string,
     }[],
     allCheck:(type:string,title:string)=>void;
     checkFileList:string[];
@@ -103,6 +105,7 @@ export interface UserInfoCardType {
     cat_idx? : string,
     cot_idx? : string,
 
+    isBtn? : boolean,
 }
 
 export type HeavyEquipmentCardType = {

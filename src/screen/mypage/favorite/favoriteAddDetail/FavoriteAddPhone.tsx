@@ -89,7 +89,6 @@ export const FavoriteAddPhone = ({equFavType}:FavoriteAddPhone) => { //즐겨찾
                 alertModalOn(msg,'error');
             }
         }
-
     }
 
     async function getSearchHpLike(){ //휴대폰검색
@@ -98,7 +97,7 @@ export const FavoriteAddPhone = ({equFavType}:FavoriteAddPhone) => { //즐겨찾
             return;
         }
         const params = {
-            mt_idx : '23',
+            mt_idx : mt_idx,
             type : 'hp',
             search_hp : inputPhone,
         }
