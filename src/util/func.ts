@@ -354,34 +354,25 @@ export function chunk(data:SceduleListItemType[] = [], size = 1) {
         }
         beforeArray = [{...empObj},...beforeArray];
     }
-
-
       
     for (let i = 0; i < data.length; i += size) {
         let tempArray : SceduleListItemType[] = beforeArray.slice(i, i + size);
-
-
-
-        // if(tempArray.length < size){
-        //     for (let j=tempArray.length; j<=size-1; j++){
-        //         tempArray.push({
-        //             cwt_idx: '',
-        //             date: '',
-        //             status: '',
-        //             reason: '',
-        //             holiday: ''
-
-        //         })
-        //     }
-        // }
-
-        
-        
         arr.push(tempArray);
     }
   
     return arr;
-  }
+}
+
+export function sliceArray(data:string[] = [] , size =1){
+    const arr : string[][] = [];
+
+    for (let i = 0; i < data.length; i += size) {
+        let tempArray : string[] = data.slice(i, i + size);
+        arr.push(tempArray);
+    }
+    
+    return arr;
+}
 
 // export const downloadFile = (url:string,fileName:string) => { //파일 다운로드
 //     axios.get(`${baseUrl}file/file_download.php`,{params:{file:url,file_name:fileName}, responseType: 'blob',})

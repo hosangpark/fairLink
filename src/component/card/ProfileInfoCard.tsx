@@ -75,9 +75,9 @@ export const ProfileInfoCard = ({
                             </View>
                             <View style={{flexDirection:'row'}}>
                             {jobType &&
-                                <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR,borderWidth:1, borderRadius:16, paddingHorizontal:10, paddingVertical:2, borderColor:jobType === '1' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
-                                    {jobType === 'my' ? '차주 겸 조종사' : 
-                                    jobType === 'like ' ? '스페어 조종사' :
+                                <Text style={[fontStyle.f_medium,{fontSize:15, color:jobType === 'Y' ? colors.BLUE_COLOR : colors.ORANGE_COLOR,borderWidth:1, borderRadius:16, paddingHorizontal:10, paddingVertical:2, borderColor:jobType === 'Y' ? colors.BLUE_COLOR : colors.ORANGE_COLOR}]}>
+                                    {jobType === 'Y' ? '차주 겸 조종사' : 
+                                    // jobType === 'like ' ? '스페어 조종사' :
                                     '장비회사 소속 조종사'}
                                 </Text>
                             }

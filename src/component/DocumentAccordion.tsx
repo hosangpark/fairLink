@@ -192,24 +192,23 @@ export const DocumentAccordion = ({
                                     <View style={{flexDirection:'row',alignItems:'center', justifyContent:'space-between', marginBottom:20}} key={index}>
                                         <View style={{flexDirection:'row',alignItems:'center'}}>
                                             <TouchableOpacity onPress={()=>{
-                                                console.log(item.pdf_url);
-                                                const isCheck = checkFileList.filter(el=>el === item.pdf_url).length !== 0;
-                                                if(item.pdf_url && title){
+                                                const isCheck = checkFileList.filter(el=>el === item.webview_url).length !== 0;
+                                                if(item.webview_url && title){
                                                     if(isCheck){
-                                                        checkFileHandler(item.pdf_url,'del',title);
+                                                        checkFileHandler(item.webview_url,'del',title);
                                                     }
                                                     else{
-                                                        checkFileHandler(item.pdf_url,'add',title)
+                                                        checkFileHandler(item.webview_url,'add',title)
                                                     }
                                                 }
                                             }}>
-                                                <Image style={{width:20,height:20,marginRight:10}} source={checkFileList.filter(el=>el === item.pdf_url).length !== 0 ?require('../assets/img/ic_check_on.png'):require('../assets/img/ic_check_off.png')}/>
+                                                <Image style={{width:20,height:20,marginRight:10}} source={checkFileList.filter(el=>el === item.webview_url).length !== 0 ?require('../assets/img/ic_check_on.png'):require('../assets/img/ic_check_off.png')}/>
                                             </TouchableOpacity>
                                             <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{item.cdwt_date} 작업일지</Text>
                                         </View>
                                         <TouchableOpacity onPress={()=>{
-                                            if(item.pdf_url){
-                                                setSelPdfUrl(item.pdf_url);
+                                            if(item.webview_url){
+                                                setSelPdfUrl(item.webview_url);
                                                 setPdfViewerModal(true);
                                             }
                                         }}>

@@ -146,8 +146,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
 	const pilotCheckHandler = async () => {
 		const {data,result,msg} = await pilotWorkCheckMutation.mutateAsync({
-			// mt_idx : mt_idx
-			mt_idx : '22'
+			mt_idx : mt_idx,
 		});
 
 		if(result === 'true'){

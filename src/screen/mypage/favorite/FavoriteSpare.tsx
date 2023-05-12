@@ -53,7 +53,7 @@ export const FavoriteSpare = () => {
         }
         else{
             if(favData){
-                // console.log(favData);
+                console.log(favData);
                 console.log(favData.data.data);
                 setFavList([...favData.data.data]);
             }
@@ -91,6 +91,7 @@ export const FavoriteSpare = () => {
                                 action={()=>{}}
                                 equFavType="1"
                                 refetch={favRefetch}
+                                isBtn={false}
                             />
                         </View>
                     )

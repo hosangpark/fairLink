@@ -121,7 +121,7 @@ export const MyInfo = () => {
     const ModyfiInform = async (): Promise<void> => {
         try {
             const idxParams = {
-                mt_idx : '17',
+                mt_idx : mt_idx,
                 mt_name: name,
                 mct_position: position,
                 mct_ceo: ceo,

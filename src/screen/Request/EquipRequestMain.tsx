@@ -88,8 +88,6 @@ export const EquipRequestMain = () => {
         dispatch(toggleLoading(true));
         const {data , result, msg} = await getEquOrderListMutation.mutateAsync(params);
         dispatch(toggleLoading(false));
-        console.log(params);
-        console.log(data.data);
         if(result === 'true'){
             setOrderList([...data.data]);
         }

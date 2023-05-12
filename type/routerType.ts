@@ -85,11 +85,13 @@ export type RouterNavigatorParams = {
         cot_idx?:string,
         cat_idx?:string,
         mpt_idx?:string,
+        isBtn : boolean,
     } 
     PilotProfile:{ //조종사프로필
         cot_idx?:string,
         cat_idx?:string,
         mpt_idx?:string,
+        isBtn : boolean,
     } 
     ElectronicContract:{
         cot_idx?:string
