@@ -78,44 +78,8 @@ export const FavoriteListIndex = () => {
     const alertModalOff = () => {
         setAlertModal(initialAlert)
     }
-
-    // useEffect(()=>{console.log(route)},[])
     
-    const EquiList = [
-        {
-            EquiName:'017 미니굴삭기',
-            EquiFacturing:'2018년식',
-            EquiUrl:'',
-            EquiNumber:'541',
-            Device:'브레키어 외 2개',
-            Documents:'완비',
-        },
-        {
-            EquiName:'018 미니굴삭기',
-            EquiFacturing:'2019년식',
-            EquiUrl:'',
-            EquiNumber:'623',
-            Device:'채바가지',
-            Documents:'1건 누락',
-        },
-        {
-            EquiName:'017 미니굴삭기',
-            EquiFacturing:'2018년식',
-            EquiUrl:'',
-            EquiNumber:'5115',
-            Device:'브레키어 외 2개',
-            Documents:'완비',
-        },
-        {
-            EquiName:'018 미니굴삭기',
-            EquiFacturing:'2019년식',
-            EquiUrl:'',
-            EquiNumber:'62346',
-            Device:'채바가지',
-            Documents:'1건 누락',
-        },
 
-    ]
 
     React.useEffect(()=>{
         dispatch(toggleLoading(likeLoading));

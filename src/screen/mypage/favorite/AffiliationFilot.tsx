@@ -91,7 +91,7 @@ export const AffiliationFilot = () => {
                                 action={()=>{}}
                                 equFavType="2"
                                 refetch={favRefetch}
-
+                                isBtn={false}
                             />
                         </View>
                     )

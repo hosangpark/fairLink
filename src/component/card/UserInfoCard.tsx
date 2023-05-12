@@ -93,10 +93,8 @@ export const UserInfoCard = ({
     const item_pilot_type = item.pilot_type? item.pilot_type : item.type;
 
 
-    return (
+    return ( 
         <TouchableOpacity style={{width:'100%',position:'relative'}} onPress={()=>{
-            // console.log('dddd');
-            // console.log(mt_type);
             if(isCheck){
                 
             }
@@ -110,7 +108,6 @@ export const UserInfoCard = ({
                     });
                 }
                 else if(mt_type === '2'){
-                    console.log(item);
                     navigation.navigate('PilotProfile',{cat_idx:cat_idx,mpt_idx : item.mpt_idx,cot_idx :cot_idx,isBtn:isBtn ? isBtn : false});
                 }
             }

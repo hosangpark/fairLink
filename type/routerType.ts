@@ -80,6 +80,7 @@ export type RouterNavigatorParams = {
     Volunteer:{
         cot_idx?:string,
         cat_idx?:string,
+        isBtn?:boolean,
     } //지원자현황
     CompanyProfile:{ //장비회사프로필
         cot_idx?:string,

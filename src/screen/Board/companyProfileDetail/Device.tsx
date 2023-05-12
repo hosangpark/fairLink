@@ -16,7 +16,7 @@ export const Device = (route:{subData : string[]}) => {
                     <View key={index} style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',flex:1}}>
                         {item.map((listItem,listIndex) => {
                             return(
-                                <View style={{justifyContent:'center',alignItems:'center',flex:1 }}>
+                                <View style={{justifyContent:'center',alignItems:'center',flex:1 }} key={listIndex}>
                                     <Image style={{width:184,height:134, borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 8,}} source={require('../../../assets/img/ic_main1.png')} />
                                     <Text>{listItem}</Text>
                                 </View>

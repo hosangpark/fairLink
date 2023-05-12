@@ -16,6 +16,8 @@ import { DetailFieldBoxDataType, DetailFieldBoxType } from '../../component/comp
 import { initialdetailFieldInfo } from '../../component/initialInform';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 import { NumberComma } from '../../util/func';
+import { pilotCareerList } from '../../component/utils/list';
+import { ageList } from '../../component/utils/list';
 
 const DetailFieldBox = ({
     title,
@@ -48,8 +50,8 @@ const DetailFieldBox = ({
         }
         {title == '지원가능' &&
         <Text style={[fontStyle.f_regular,DetailFieldstyle.DetailFieldText,{lineHeight:25}]}>
-            경력 {cot_career} 년 이상 {'\n'}
-            연령 {cot_age}세 미만 {'\n'}
+            경력 {pilotCareerList[Number(cot_career)]} {`\n`}
+            연령 {ageList.filter(el=>el.key === cot_age).length>0 ? ageList.filter(el=>el.key === cot_age)[0].name : ''} {`\n`}
             평점 {cot_score == '0'? '무관': cot_score + '이상'} {'\n'}
             추천수 {cot_goods == '0'? '무관': cot_goods + '이상'}
         </Text>
@@ -105,7 +107,7 @@ export const DetailField = ({route}:any) => {
     const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
     /** mt_idx 임의입력 수정필요 */
     mt_type == "1" ?
-    usePostQuery('getDetailFieldData1',{mt_idx : '17',cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
+    usePostQuery('getDetailFieldData1',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'cons/cons_order_info1.php')
     :
     mt_type == "2" ?
     usePostQuery('getDetailFieldData2',{mt_idx : mt_idx,cot_idx:route.params.cot_idx},'equip/equip_order_info.php')

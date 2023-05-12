@@ -26,11 +26,8 @@ export const Auth = () => {
                 }
                 const {result,data, msg} = await signInMutation.mutateAsync(signInParams);
 
-                console.log('pushToken ? ' , pushToken);
 
                 if(result === 'true'){
-                    // console.log('auth info ? ' , data.data);
-                    console.log(id);
                     if(data.data.file_upload === 'N'){
                         navigation.replace('RegDocument',{
                             fileCheck:data.data.file_check,

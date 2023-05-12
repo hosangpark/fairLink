@@ -338,29 +338,28 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
 
                     {((mt_type === '1' || detailFieldInfo.assign_check === 'N' )) ?
                     <View style={{flexDirection:'row'}}>
-                        <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}
-                            onPress={()=>{
-                                alertModalOn(`해당 현장에 '직접조종하기'로 \n지원하시겠습니까?`,'confirm_A')
-                            }}
-                        >
-                            <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
-                                조종사
-                            </Text>
-                            <Text style={[fontStyle.f_regular,{color:colors.FONT_COLOR_BLACK2,fontSize:15}]}>
-                                본인 또는 소속 조종사
-                            </Text>
-                        </TouchableOpacity>
+                        {detailFieldInfo.my_check ==='Y' &&
+                            <TouchableOpacity style={[DetailFieldstyle.staticinbox,{marginRight:20}]}
+                                onPress={()=>{
+                                    alertModalOn(`해당 현장에 '직접조종하기'로 \n지원하시겠습니까?`,'confirm_A')
+                                }}
+                            >
+                                <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:16}]}>
+                                    직접조종하기
+                                </Text>
+                                <Text style={[fontStyle.f_regular,{color:colors.FONT_COLOR_BLACK2,fontSize:15}]}>
+                                    
+                                </Text>
+                            </TouchableOpacity>
+                        }
                         <TouchableOpacity 
                             style={DetailFieldstyle.staticinbox}
                             onPress={()=>{
                                 alertModalOn('해당 현장에 장비만 지원하시겠습니까?','confirm_B')
                             }}
                         >
-                            <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:20}]}>
-                                조종사
-                            </Text>
-                            <Text style={[fontStyle.f_regular,{color:colors.FONT_COLOR_BLACK2,fontSize:15}]}>
-                                스페어 조종사
+                            <Text style={[fontStyle.f_semibold,{color:colors.MAIN_COLOR,fontSize:16}]}>
+                                조종사에게 맡기기
                             </Text>
                         </TouchableOpacity>
                     </View>

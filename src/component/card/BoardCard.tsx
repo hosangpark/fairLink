@@ -31,6 +31,7 @@ export interface BoardCardItemType {
     mct_company : string,  //회사이름
     mpt_idx? : string,
     match_type? : string //장비&건설 검토상태
+    cdwt_idx?:string,
 }
 
 type BoardCardType = {
@@ -48,7 +49,7 @@ export const BoardCard = ({
     const dispatch = useAppDispatch();
     const {mt_idx,mt_type} = useAppSelector(state=>state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const deleteOrderMutation = usePostMutation('deleteOrder' , 'equip/equip_request_cancel.php');
+    const deleteOrderMutation = usePostMutation('deleteOrder' , mt_type === '2' ? 'equip/equip_request_cancel.php' : 'pilot/pilot_request_cancel.php');
 
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
@@ -97,7 +98,8 @@ export const BoardCard = ({
     const FlowEvent = () =>{
         if(mt_type=='1' ){
             if(title=="배차 모집중"){
-                navigation.navigate('Volunteer',{cot_idx : item?.cot_idx, cat_idx:item?.cat_idx})
+                console.log('dd');
+                navigation.navigate('Volunteer',{cot_idx : item?.cot_idx, cat_idx:item?.cat_idx,isBtn:true})
             }
             else if(title === '계약진행중'){
                 navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx,isBtn:false})
@@ -114,15 +116,18 @@ export const BoardCard = ({
         else if(mt_type === '2'){
             if(title === '조종사 모집중' || title === '현장지원 완료'){
                 console.log(item);
-                navigation.navigate('Volunteer' , {cat_idx : item?.cat_idx,cot_idx:item?.cot_idx})
+                navigation.navigate('Volunteer' , {cat_idx : item?.cat_idx,cot_idx:item?.cot_idx,isBtn : title === '조종사 모집중'})
             } else {
                 navigation.navigate('PilotProfile',{cat_idx:item?.cat_idx,cot_idx:item?.cot_idx,mpt_idx:item.mpt_idx,isBtn:false})
             }
         }
 
         else if(mt_type==='4') {
-            console.log(item);
-            navigation.navigate('PilotProfile',{cat_idx : item?.cat_idx})
+            if(title === '현장지원 완료'){
+                return;
+            }
+            // console.log(item);
+            // navigation.navigate('PilotProfile',{cat_idx : item?.cat_idx,isBtn:false})
         } else {
             console.log(item);
             navigation.navigate('PilotProfile', {cat_idx : item?.cat_idx,cot_idx:item.cot_idx,isBtn:false})
@@ -199,11 +204,11 @@ export const BoardCard = ({
                                 {item.equip}</Text>
                             {mt_type=='4' &&
                             <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:mt_type=='4'? 5:8}]} numberOfLines={1}>
-                                경력 {pilotCareerList[Number(item.career)]}+</Text>
+                                경력 {pilotCareerList[Number(item.career)]}</Text>
                             }
                         </View>
                         <View>
-                            <TouchableOpacity style={[styles.card2Profile]} onPress={FlowEvent}>
+                            <TouchableOpacity disabled={mt_type === '4'}  style={[styles.card2Profile]} onPress={FlowEvent}>
                                 <Text style={[fontStyle.f_regular,{fontSize:14,color:colors.MAIN_COLOR}]}>
                                     {mt_type === '1' &&
                                         [
@@ -221,16 +226,11 @@ export const BoardCard = ({
                                     }
                                 </Text>
                                 <Text style={[fontStyle.f_semibold,{fontSize:mt_type!=='4'? 20:16,color:colors.FONT_COLOR_BLACK,marginBottom:8}]} numberOfLines={2}>
-                                    {mt_type === '1' &&
-                                        title === '배차 모집중' ? [item.apply_count]+'명': item.pilot_name 
-                                    }
-                                    {mt_type === '2' &&
-                                        title === '조종사 모집중' ? 
-                                        [item.apply_count]+'명':  item.pilot_name
-                                    }
+                                    {mt_type === '1' && [title === '배차 모집중' ? [item.apply_count]+'명': item.pilot_name ]}
+                                    {mt_type === '2' && [title === '조종사 모집중' ? [item.apply_count]+'명':  item.pilot_name ]}
                                     {mt_type === '4' &&
-                                        title === '현장지원 완료' ? 
-                                        [item.met_company] : item.pilot_name 
+                                        [title === '현장지원 완료' ? 
+                                        [item.met_company] : item.pilot_name] 
                                     }
                                 </Text>
                                 {mt_type !=='4' ?
@@ -305,7 +305,7 @@ export const BoardCard = ({
                             style={{}}
                             labelStyle={{fontSize:16}}
                             label={'모집 취소'}
-                            action={BoardInfrom}
+                            action={()=>{alertModalOn('모집 취소 하시겠습니까?','delete_confirm')}}
                         />
                     }
                     {mt_type=='4' && title == "현장지원 완료" &&
@@ -313,7 +313,7 @@ export const BoardCard = ({
                             style={{}}
                             labelStyle={{fontSize:16}}
                             label={'지원 취소'}
-                            action={()=>{navigation.navigate('Document',{cdwt_idx:''})}}
+                            action={()=>{alertModalOn('지원 취소 하시겠습니까?','delete_confirm')}}
                         />
                     }
                     {mt_type=='4' && title == "작업중/작업예정" &&
@@ -321,7 +321,7 @@ export const BoardCard = ({
                             style={{}}
                             labelStyle={{fontSize:16}}
                             label={'작업일보 작성'}
-                            action={()=>{navigation.navigate('Document',{cdwt_idx:''})}}
+                            action={()=>{navigation.navigate('Document',{cdwt_idx:item.cdwt_idx})}}
                         />
                     }
                 </View>

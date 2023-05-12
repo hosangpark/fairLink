@@ -166,8 +166,8 @@ const fcmSetting = () => {
 
       // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
       onAction: function (notification:any) {
-        console.log('ACTION:', notification.action);
-        console.log('NOTIFICATION:', notification);
+        // console.log('ACTION:', notification.action);
+        // console.log('NOTIFICATION:', notification);
       },
 
       // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
