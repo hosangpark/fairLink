@@ -25,6 +25,7 @@ export const UserInfoCard = ({
     equFavType, // 1: 스페어 2: 소속
     cat_idx, //장비업체 - 조종사 프로필 조회
     cot_idx,
+    isBtn, //장비회사 프로필 및 조종사 프로필 들어갈때 선정버튼 여부 (true : 출력 false : 미출력)
 }:UserInfoCardType) => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const dispatch = useAppDispatch();
@@ -105,10 +106,12 @@ export const UserInfoCard = ({
                         cat_idx:item.cat_idx,
                         cot_idx:item.cot_idx,
                         mpt_idx:item.mpt_idx,
+                        isBtn : isBtn ? isBtn : false,
                     });
                 }
                 else if(mt_type === '2'){
-                    navigation.navigate('PilotProfile',{cat_idx:cat_idx,mpt_idx : item.mpt_idx,cot_idx :cot_idx});
+                    console.log(item);
+                    navigation.navigate('PilotProfile',{cat_idx:cat_idx,mpt_idx : item.mpt_idx,cot_idx :cot_idx,isBtn:isBtn ? isBtn : false});
                 }
             }
         }}>

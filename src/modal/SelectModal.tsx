@@ -22,9 +22,9 @@ export const SelectModal = ({
     btnLabel = '확인',
     style,
     type,
-    selOption
+    selOption,
+    item,
 }:SelectModalType) =>{
-
 
     return(
         <Modal 
@@ -38,9 +38,9 @@ export const SelectModal = ({
             onBackdropPress={hide}
         >
             <View style={[modalStyle.modalWrapper ,modalStyle.loginIntroModal,style]}>
-                {date &&
+                {item &&
                     <View style={{width:'100%'}}>
-                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK2}]}>{date}</Text>
+                        <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK2}]}>{item.fulldate}</Text>
                     </View>
                 }
                 {bigTitle &&

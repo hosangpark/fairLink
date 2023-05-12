@@ -108,7 +108,7 @@ export const WorkReport = ({cdwt_idx}:{cdwt_idx:string}) => {
     const writePilotWorkHandler = async () => { //작업일보 작성
 
         const params = {
-            mt_idx : '22',
+            mt_idx : mt_idx,
             cdwt_idx : cdwt_idx,
             cdwt_content : inputInfo.cdwt_content,
             cdwt_start_time : inputInfo.cdwt_start_time,
@@ -145,7 +145,6 @@ export const WorkReport = ({cdwt_idx}:{cdwt_idx:string}) => {
         else{
             writePilotWorkHandler();
         }
-
     }
 
     React.useEffect(()=>{
@@ -165,7 +164,7 @@ export const WorkReport = ({cdwt_idx}:{cdwt_idx:string}) => {
                 })
             }  
             else{
-                alertModalOn('비정상적인 접근입니다.','load_error')
+                // alertModalOn('비정상적인 접근입니다.','load_error')
             }
         }
     },[WorkReportData,WorkReportDataLoading,WorkReportDataError])

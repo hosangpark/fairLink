@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserInfoCard } from "../../../component/card/UserInfoCard";
 import { NodataView } from "../../../component/NodataView";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
 import { RequestRouterNavigatorParams } from "../../../../type/RequestRouterType";
@@ -20,6 +20,7 @@ export const AffiliationFilot = () => {
 
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams & RequestRouterNavigatorParams>>();
+    const isFocusded = useIsFocused();
 
     const {mt_idx , mt_type} = useAppSelector(state => state.userInfo);
     const {data : favData , isLoading:favLoading, isError : favError, refetch : favRefetch} = usePostQuery('getEquFavList',{mt_idx:mt_idx,type:'2'},'equip/equip_like_list.php');
@@ -59,6 +60,12 @@ export const AffiliationFilot = () => {
             }
         }
     },[favData,favLoading,favError])
+
+    React.useEffect(()=>{
+        if(isFocusded){
+            favRefetch();
+        }
+    },[isFocusded])
 
     return (
         <View style={{ margin: 20}}>

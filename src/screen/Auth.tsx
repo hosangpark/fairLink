@@ -14,7 +14,7 @@ export const Auth = () => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const signInMutation = usePostMutation('signIn','member/login.php'); //로그인 mutation
-
+ 
     const userAuth = async () => {
         const pushToken = await messaging().getToken();
 
@@ -26,6 +26,7 @@ export const Auth = () => {
                 }
                 const {result,data, msg} = await signInMutation.mutateAsync(signInParams);
 
+                console.log('pushToken ? ' , pushToken);
 
                 if(result === 'true'){
                     // console.log('auth info ? ' , data.data);
@@ -41,7 +42,7 @@ export const Auth = () => {
                     else{
                         dispatch(updateUserInfo(data.data));
                         // dispatch(updateUserInfo({"file_check": [], "file_upload": "Y", "location": "영흥", "mt_idx": "17", "mt_name": "name", "mt_type": "1"})); // 건설업자 로그인
-                        // dispatch(updateUserInfo({"file_check": [], "file_upload": "Y", "location": "영흥", "mt_idx": "21", "mt_name": "name", "mt_type": "2"})); // 장비업체 로그인
+                        // dispatch(updateUserInfo({"file_check": [], "file_upload": "Y", "location": "영흥", "mt_idx": "23", "mt_name": "name", "mt_type": "2"})); // 장비업체 로그인
                         // dispatch(updateUserInfo({"file_check": [], "file_upload": "Y", "location": "영흥", "mt_idx": "84", "mt_name": "name", "mt_type": "4"})); // 조종사 로그인
                         navigation.replace('Main');
                     }

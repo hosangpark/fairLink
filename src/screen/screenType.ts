@@ -82,12 +82,12 @@ export type FavoriteListItemType = { //userInfo card에 들어가는 정보
     img_url?:string,
     mpt_idx?:string,
     pilot_type?:string,
-    good:number, //건설업체 지원자리스트 추천기업 count
-    goods?:number,//장비업체 지원자리스트 추천기업 count
-    company:string,
+    good:number | string, //건설업체 지원자리스트 추천기업 count
+    goods?:number | string,//장비업체 지원자리스트 추천기업 count
+    company?:string,
     name?:string,
     score:number,
-    score_count:number,
+    score_count:number | string,
     equip:string,
     career?:string,
     location?:string,
@@ -179,6 +179,113 @@ export type PilotWorkInfoType = {
     equip_style : string,
     pilot_hp : string,
     pilot_name : string,
+}
+
+export type initialdetailWorkInfoType = { //작업세부내용 type
+    info : { //작업정보
+        crt_company : string,
+        crt_director : string,
+        crt_location : string,
+        crt_m_name : string ,
+        crt_m_num : string ,
+        crt_name : string,
+    },
+    contents: { //작업내용
+        crt_name: string,
+        content: string,
+        date: string,
+        species: string,
+        start_date : string,
+        end_date : string,
+    },
+    schedule?: { //작업일정관리
+        count: number,
+        list: {
+            cwt_idx : string,
+            date : string,
+            status : string,
+            reason : string,
+            holiday : string,
+        }[],
+    },
+    equip: { //투입장비
+        equip_name: string,
+        stand1: string,
+        stand2: string,
+        company: string,
+        busi_num: string,
+        ceo: string,
+        hp: string,
+        e_type : string,
+        e_stand1 : string,
+        e_stand2 : string,
+        met_company : string,
+        met_busi_num : string,
+        met_ceo : string,
+        met_hp : string,
+        e_name : string,
+        e_year : string,
+        e_num : string,
+    },
+    pilot: { //투입조종사
+        name: string,
+        career: string,
+        score: number,
+        good: number,
+        hp: string
+    },
+    price: { //대금관리
+        all_price: number,
+        date: string,
+        price_type: string,
+        price: string,
+        check_price: string,
+        pay_date: string,
+        met_bank: string,
+        met_bank_num: string,
+        met_vholder: string,
+        bank_file: string
+    },
+    document_equip: {//서류관리-장비(차량) 서류
+            title: string,
+            file_url: string,
+            file_check: string
+    }[],
+    document_qualification: {
+        title: string,
+        file_url: string,
+        file_check: string
+    }[],
+    document_contract: {
+        const_idx : string,
+        write_check: string,
+        pdf_url : string,
+    }[], //서류관리-계약서류
+    document_dailywork: {
+        cdwt_idx : string,
+        cdwt_date : string,
+        write_check : string,
+        pdf_url : string,
+    }[] //서류관리-작업일보,
+    [key:string]:any
+}
+
+export type HistoryItemType = {
+    cat_idx : string,
+    content:string,
+    crt_name : string,
+    end_date : string,
+    pilot_info : {
+        career : string,
+        equip : string,
+        good : string,
+        img_url : string,
+        location : string,
+        mpt_idx : string,
+        mt_name : string,
+        score : number,
+        score_count : string
+    }
 }
 export interface HomeIndexType {
     setTabIndex? : (tab:number) => void;
@@ -294,6 +401,13 @@ export type PilotProfileItemType = {
             title : string,
         }[]
     },
+    doc_check : {
+        [key:string]:{
+            file_check : string,
+            file_url : string,
+            title : string,
+        }[]
+    }
     profile : {
         mpt_aspire : string,
         mpt_career : string,
