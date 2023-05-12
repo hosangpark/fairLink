@@ -27,7 +27,7 @@ import { toggleLoading } from "../../redux/actions/LoadingAction";
 export const PilotProfile = ({route}:PilotProfileType) => {
 
 
-    const {cat_idx,mpt_idx,cot_idx} = route.params;
+    const {cat_idx,mpt_idx,cot_idx,isBtn} = route.params;
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
 
     const dispatch = useAppDispatch();
@@ -72,6 +72,9 @@ export const PilotProfile = ({route}:PilotProfileType) => {
         else if(alertModal.type === 'sel_success'){
             navigation.navigate('Board');
         }
+        else if(alertModal.type === 'error'){
+            navigation.goBack();
+        }
     }
 
     const selPilotHandler = async () => {
@@ -81,12 +84,10 @@ export const PilotProfile = ({route}:PilotProfileType) => {
             mpt_idx : mpt_idx,
         }
 
-        console.log(params);
 
         dispatch(toggleLoading(true));
         const {result, msg, data} = await selPilotMutation.mutateAsync(params);
 
-        console.log(result, msg,data);
         dispatch(toggleLoading(false));
 
         if(result === 'true'){
@@ -97,7 +98,7 @@ export const PilotProfile = ({route}:PilotProfileType) => {
         }
     }
 
-    const FirstRoute = () => (
+const FirstRoute = () => (
         <Profile info={pilotProfile?.profile}/>
     );
 
@@ -117,23 +118,12 @@ export const PilotProfile = ({route}:PilotProfileType) => {
 
     React.useEffect(()=>{
         dispatch(toggleLoading(profileLoading));
-        console.log(cat_idx ? {
-            mt_idx : mt_idx,
-            mpt_idx : mpt_idx,
-            cat_idx : cat_idx,
-        } : {
-            mt_idx : mt_idx,
-            mpt_idx : mpt_idx,
-        })
         if(profileData){
-            console.log(profileData);
-            // console.log(profileData);
             if(profileData.result === 'true'){
                 setPilotProfile(profileData.data);
-                console.log(profileData.data);
             }
             else{
-
+                alertModalOn(profileData.msg,'error');
             }
 
         }
@@ -177,20 +167,22 @@ export const PilotProfile = ({route}:PilotProfileType) => {
                     ? FirstRoute()
                     : SecondRoute()
                 }
-                <TouchableOpacity onPress={() => {
-                    if(mt_type === '1'){
-                        alertModalOn('장비업체를 선정하시겠습니까?','go_cons_contract')
-                    }
-                    else if(mt_type === '2'){
-                        if(pilotProfile){
-                            alertModalOn('조종사와 함께 현장에 지원하시겠습니까?' , 'pilot_access_confirm',`${pilotProfile.data.name}`);
+                {isBtn &&
+                    <TouchableOpacity onPress={() => {
+                        if(mt_type === '1'){
+                            alertModalOn('장비업체를 선정하시겠습니까?','go_cons_contract')
                         }
-                    }
-                }}>
-                    <View style={[styles.buttonStyle, {}]}>
-                        <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>조종사 선택 완료</Text>
-                    </View>
-                </TouchableOpacity>
+                        else if(mt_type === '2'){
+                            if(pilotProfile){
+                                alertModalOn('조종사와 함께 현장에 지원하시겠습니까?' , 'pilot_access_confirm',`${pilotProfile.data.name}`);
+                            }
+                        }
+                    }}>
+                        <View style={[styles.buttonStyle, {}]}>
+                            <Text style={[styles.buttonLabelStyle, fontStyle.f_semibold, ]}>조종사 선택 완료</Text>
+                        </View>
+                    </TouchableOpacity>
+                }
                 <AlertModal 
                     show={alertModal.alert}
                     msg={alertModal.msg}

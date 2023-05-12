@@ -204,10 +204,10 @@ export const DetailWork = ({route}:DetailWorkType) => {
                 if(item.file_url && item.file_url !== ''){
                     allFileArray.push(item.file_url);
                 }
-                if(item.webview_url && item.webview_url !== ''){
+                else if(item.webview_url && item.webview_url !== ''){
                     allFileArray.push(item.webview_url);
                 }
-                if(item.pdf_url && item.pdf_url !== ''){
+                else if(item.pdf_url && item.pdf_url !== ''){
                     allFileArray.push(item.pdf_url);
                 }
             })

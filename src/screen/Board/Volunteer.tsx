@@ -117,7 +117,7 @@ export const Volunteer = ({route}:any) => {
                                     action={()=>{}}
                                     cat_idx={route.params.cat_idx}
                                     cot_idx={route.params.cot_idx}
-                                    isBtn={true}
+                                    isBtn={route.params.isBtn}
                                 />
                             </View>
                             )

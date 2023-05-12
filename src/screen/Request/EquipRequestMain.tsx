@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { usePostMutation } from '../../util/reactQuery';
 import { CustomSelectBox } from '../../component/CustomSelectBox';
 import { getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, locationList } from '../../component/utils/list';
-import { selectBoxStyle, styles } from '../../style/style';
+import { colors, fontStyle, selectBoxStyle, styles } from '../../style/style';
 import { FlatList } from 'react-native-gesture-handler';
 import { MarginCom } from '../../component/MarginCom';
 import { DispatchCard } from '../../component/card/DispatchCard';
@@ -209,16 +209,26 @@ export const EquipRequestMain = () => {
                 </View>
                 <MarginCom mt={20} />
                 <View style={{paddingHorizontal:20}}>
-                    {orderList.map((item:EquipOrderItemType,index:number) => {
-                        return(
-                            <View key={index}>
-                                <DispatchCard 
-                                    item={item}
-                                />
-                                <MarginCom mb={20} />
+                    {inputInfo.stand2 !== '' &&
+                        <>
+                        {orderList.length === 0 ? 
+                            <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+                                <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>생성된 현장이 존재하지 않습니다.</Text>
                             </View>
-                        )
-                    })}
+                        :
+                            orderList.map((item:EquipOrderItemType,index:number) => {
+                                return(
+                                    <View key={index}>
+                                        <DispatchCard 
+                                            item={item}
+                                        />
+                                        <MarginCom mb={20} />
+                                    </View>
+                                )
+                            })
+                        }
+                        </>
+                    }
                     
                 </View>
             </ScrollView>

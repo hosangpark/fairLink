@@ -20,6 +20,8 @@ export const PdfViewerModal = ({
                 {pdfUrl !== '' &&
                 <WebView 
                     source={{uri:pdfUrl}}
+                    bounces={true}
+                    
                 />
                     // <Pdf
                     //     trustAllCerts={false}

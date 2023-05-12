@@ -46,7 +46,7 @@ export const DispatchCard = ({item}:dispatchItemType) => { //공개배차, 지�
         }
         else{
             console.log(item.open_check);
-            if(item.open_check === 'N'){ //개발완료되면 변경하기
+            if(item.open_check === "Y"){ //개발완료되면 변경하기
                 if(mt_type === '2'){
                     navigation.navigate('ScaneDetailField',{cot_idx : item.cot_idx});
                 }

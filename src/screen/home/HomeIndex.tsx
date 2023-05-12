@@ -328,22 +328,26 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				</View>
 				<View style={[{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY2,padding:20}]}>
 					<Text style={[fontStyle.k_bold, { color: colors.MAIN_COLOR, fontSize: 20, marginBottom: 10 }]}>주요 이벤트</Text>
-					{tempListDate.slice(0, 5).map((item:TextBoxType,index:number) => {
-						return(
-							<View key={index}>
-								<TextBox 
-									push_idx={item.push_idx}
-									type={item.type}
-									date={item.date}
-									title={item.title}
-									content={item.content}
-									link1={item.link1}
-									link2={item.link2}
-									link3={item.link3}
-								/>
-							</View>
-						)
-					})}
+					{tempListDate.length === 0 ?
+						<Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>생성된 주요 이벤트가 없습니다.</Text>
+					:
+						tempListDate.slice(0, 5).map((item:TextBoxType,index:number) => {
+							return(
+								<View key={index}>
+									<TextBox 
+										push_idx={item.push_idx}
+										type={item.type}
+										date={item.date}
+										title={item.title}
+										content={item.content}
+										link1={item.link1}
+										link2={item.link2}
+										link3={item.link3}
+									/>
+								</View>
+							)
+						})
+					}
 					{/* <TextBox 
 						type={2}
 						boldText = '03.03'

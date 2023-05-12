@@ -22,7 +22,7 @@ export const MatchingEquipment = ({route}:MatchingEquipmentType) => {
     const dispatch = useAppDispatch();
     const {item : reqInfo} = route.params; //건설회사 요구조건이 담긴 item
     const {mt_idx} = useAppSelector(state => state.userInfo);
-
+    console.log(mt_idx);
     const [selectedItems, setSelectedItems] = useState<number | undefined>(); //선택된 장비 key
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 

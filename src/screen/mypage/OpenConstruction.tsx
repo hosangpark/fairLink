@@ -23,6 +23,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import cusToast from '../../util/toast/CusToast';
 import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
+import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 
 
 export const OpenConstruction = ({route}:OpenConstructionType) => {
@@ -313,6 +314,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
     return (
         <View style={{flex:1}}>
             <BackHeader title={editMode !== 'write' ? '나의 현장' : '현장개설하기'} />
+            <BackHandlerCom />
             <ScrollView style={{ flex:1,backgroundColor:colors.WHITE_COLOR}}>
                 <View style={{paddingHorizontal:20,paddingTop:30,paddingBottom:25}}>
                 <View style={[styles.TitleText]}>

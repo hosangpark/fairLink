@@ -54,13 +54,12 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
         try {
             dispatch(toggleLoading(true));
             const idxParams = {
-                // mt_idx : mt_idx,
-                mt_idx : '17',
+                mt_idx : mt_idx,
+                // mt_idx : '17',
                 year:year,
                 month:Number(month) < 10 ? '0'+month : month,
                 status:strOption === '전체' ? '' : '',
             }
-            console.log(idxParams);
 
             const {result,data, msg} = 
             mt_type == '1'?  await consBoardListMutation.mutateAsync(idxParams)
@@ -72,11 +71,8 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
 
             if(result === 'true'){
                 setListData(data.data)
-                console.log("result",result)
-                console.log(data.data);
             }
             else{
-                console.log(result,msg);
                 alertModalOn(msg,'api_error');
             }
         // }
