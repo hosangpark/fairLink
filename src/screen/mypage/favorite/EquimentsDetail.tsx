@@ -142,7 +142,7 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
                 if(tempSelAcc === '기타(직접입력)'){
                     tempArray.push(writeSelAcc);
                 }
-                else{
+                else if(tempSelAcc !== ""){
                     tempArray.push(tempSelAcc);
                 }
                 setsubList([...tempArray])
@@ -155,7 +155,6 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
         let tempArray = [...subList];;
         if(tempArray[index]){
             tempArray.splice(index,1);
-
             setsubList([...tempArray])
         }
     }
@@ -165,6 +164,8 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
             mt_idx:mt_idx,
             eit_idx:eit_idx,
         }
+
+        let aaa = false
 
         uploadList.forEach((item,index) => {
             const keyName = `eit_file${item.key}`;
@@ -177,7 +178,15 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
                     type : item.type,
                 }
             }
+            if(equDetail?.file_list[index].link == "" && item.tmp_name ==""){
+                aaa = true
+                return
+            }
+            // if(item.key == docList[docList.findIndex(i=>i.key === item.key)].key){
+            //     return aaa
+            // }
         })
+        console.log(uploadList)
 
         let tempEquArray:string[] = []
         for (let i = 0; i<subList.length; i++){
@@ -189,18 +198,21 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
             eit_sub : tempEquArray.join("|"),
             eit_file_del : "",
         }
-        console.log(uploadParams);
-        dispatch(toggleLoading(true))
-        const {data , msg, result} = await EquipDetailModify.mutateAsync(uploadParams);
-        dispatch(toggleLoading(false))
 
-        if(result === 'true'){
-            alertModalOn('프로필 설정이 완료되었습니다.','edit_success')
+        if(aaa){
+            dispatch(toggleLoading(true))
+            const {data , msg, result} = await EquipDetailModify.mutateAsync(uploadParams);
+            dispatch(toggleLoading(false))
+
+            if(result === 'true'){
+                alertModalOn('프로필 설정이 완료되었습니다.','edit_success')
+            }
+            else{
+                alertModalOn(msg);
+            }
+        } else {
+            alertModalOn('필수 서류를 등록해주세요.');
         }
-        else{
-            alertModalOn(msg);
-        }
-        
     }
     const newArr = ()=>{
         let Arr = equProfileUploadList.filter(x => EquipDetailData.data.data.file_check.includes(x.key))
@@ -214,7 +226,6 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
             setEquDetail(EquipDetailData.data.data);
             setsubList(EquipDetailData.data.data.sub)
             newArr()
-            console.log(docList)
         }
     },[EquipDetailData,EquipDetailLoading])
 
@@ -282,8 +293,8 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
                     <>
                     <View style={{marginVertical:10}}>
                     <CustomSelectBox 
-                        strOptionList={accessoriesConvert('굴착기') ? accessoriesConvert('굴착기') : ['선택하세요.']}
-                        // strOptionList={accessoriesConvert(equDetail.device) ? accessoriesConvert(equDetail.device) : ['선택하세요.']}  
+                        // strOptionList={accessoriesConvert('굴착기') ? accessoriesConvert('굴착기') : ['선택하세요.']}
+                        strOptionList={accessoriesConvert(`${equDetail?.device}`) ? accessoriesConvert(`${equDetail?.device}`) : ['기타(직접입력)']}  
                         selOption={tempSelAcc}
                         strSetOption={tempSelAccHandler}
                         buttonStyle={selectBoxStyle.btnStyle}
@@ -388,26 +399,28 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
                                     else{
                                         setSelImgModal(true); 
                                     }
-                                    setSelImage(String(index+1))
-                                }}>
+                                    setSelImage(docList[index].key)
+                                }}
+                                disabled={!modify}
+                                >
                                     <ImageBackground
                                     style={{ flex: 1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1,borderRadius:5,justifyContent:'center',alignItems:'center',borderWidth:undefined? 0:1,borderColor:colors.BORDER_GRAY_COLOR }}
-                                    source={uploadList[uploadList.findIndex(el=>el.key === String(index+1))] ? { uri : uploadList[uploadList.findIndex(el=>el.key === String(index+1))].tmp_name}  : data.link !== '' ? {uri : data.link} : undefined}
+                                    source={uploadList[uploadList.findIndex(el=>el.key === docList[index].key)] ? { uri : uploadList[uploadList.findIndex(el=>el.key === docList[index].key)].tmp_name}  : data.link !== '' ? {uri : data.link} : undefined}
                                     resizeMode="cover"
                                     imageStyle={{ borderRadius: 10 }}>
-                                        {(!uploadList[uploadList.findIndex(el=>el.key === String(index+1))] && 
+                                        {(!uploadList[uploadList.findIndex(el=>el.key === docList[index].key)] && 
                                         data.link == ''  )&&
                                             <Image 
                                             style={{ width: 15, height: 15}}
                                             source={require('../../../assets/img/ic_add.png')}
                                             />
                                         }
-                                        {uploadList.filter((el) => el.key === String(index+1)).length > 0 &&
+                                        {uploadList.filter((el) => el.key === docList[index].key).length > 0 &&
                                             <TouchableOpacity
                                                 style={{ position:'absolute', right: 10, top: 10 }}
                                                 onPress={() =>{
                                                     alertModalOn(`${reqFileList[index].name} 파일을 삭제하시겠습니까?`,'delete_confirm');
-                                                    setSelImage(String(index+1))
+                                                    setSelImage(docList[index].key)
                                                 }}>
                                                 <Image
                                                 style={{ width: 25, height: 25 }}
