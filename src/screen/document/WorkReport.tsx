@@ -145,7 +145,6 @@ export const WorkReport = ({cdwt_idx}:{cdwt_idx:string}) => {
         else{
             writePilotWorkHandler();
         }
-
     }
 
     React.useEffect(()=>{
@@ -165,7 +164,7 @@ export const WorkReport = ({cdwt_idx}:{cdwt_idx:string}) => {
                 })
             }  
             else{
-                alertModalOn('비정상적인 접근입니다.','load_error')
+                // alertModalOn('비정상적인 접근입니다.','load_error')
             }
         }
     },[WorkReportData,WorkReportDataLoading,WorkReportDataError])

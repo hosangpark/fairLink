@@ -180,6 +180,95 @@ export type PilotWorkInfoType = {
     pilot_hp : string,
     pilot_name : string,
 }
+
+export type initialdetailWorkInfoType = { //작업세부내용 type
+    info : { //작업정보
+        crt_company : string,
+        crt_director : string,
+        crt_location : string,
+        crt_m_name : string ,
+        crt_m_num : string ,
+        crt_name : string,
+    },
+    contents: { //작업내용
+        crt_name: string,
+        content: string,
+        date: string,
+        species: string,
+        start_date : string,
+        end_date : string,
+    },
+    schedule?: { //작업일정관리
+        count: number,
+        list: {
+            cwt_idx : string,
+            date : string,
+            status : string,
+            reason : string,
+            holiday : string,
+        }[],
+    },
+    equip: { //투입장비
+        equip_name: string,
+        stand1: string,
+        stand2: string,
+        company: string,
+        busi_num: string,
+        ceo: string,
+        hp: string,
+        e_type : string,
+        e_stand1 : string,
+        e_stand2 : string,
+        met_company : string,
+        met_busi_num : string,
+        met_ceo : string,
+        met_hp : string,
+        e_name : string,
+        e_year : string,
+        e_num : string,
+    },
+    pilot: { //투입조종사
+        name: string,
+        career: string,
+        score: number,
+        good: number,
+        hp: string
+    },
+    price: { //대금관리
+        all_price: number,
+        date: string,
+        price_type: string,
+        price: string,
+        check_price: string,
+        pay_date: string,
+        met_bank: string,
+        met_bank_num: string,
+        met_vholder: string,
+        bank_file: string
+    },
+    document_equip: {//서류관리-장비(차량) 서류
+            title: string,
+            file_url: string,
+            file_check: string
+    }[],
+    document_qualification: {
+        title: string,
+        file_url: string,
+        file_check: string
+    }[],
+    document_contract: {
+        const_idx : string,
+        write_check: string,
+        pdf_url : string,
+    }[], //서류관리-계약서류
+    document_dailywork: {
+        cdwt_idx : string,
+        cdwt_date : string,
+        write_check : string,
+        pdf_url : string,
+    }[] //서류관리-작업일보,
+    [key:string]:any
+}
 export interface HomeIndexType {
     setTabIndex? : (tab:number) => void;
 }

@@ -43,7 +43,7 @@ export const HeavyEquipmentCard = ({
         if(alertModal.type === 'none_idx' || alertModal.type === 'refetch' || alertModal.type === 'del_success'){
             if(refetch) refetch();
         }
-        else if(alertModal.type === 'none_mt_idx'){
+        else if(alertModal.type === 'none_mt_idx_move'){
             navigation.navigate('Main');
         }
         else if(alertModal.type === 'delete_confirm'){
@@ -56,7 +56,7 @@ export const HeavyEquipmentCard = ({
             alertModalOn('존재하지 않는 장비입니다.','none_idx');
         }
         else if(mt_idx === ''){
-            alertModalOn('비정상적인 접근입니다.','none_mt_idx');
+            alertModalOn('비정상적인 접근입니다.','none_mt_idx_move');
         }
         else{
             dispatch(toggleLoading(true));

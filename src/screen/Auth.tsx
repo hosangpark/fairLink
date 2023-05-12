@@ -14,7 +14,7 @@ export const Auth = () => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const signInMutation = usePostMutation('signIn','member/login.php'); //로그인 mutation
-
+ 
     const userAuth = async () => {
         const pushToken = await messaging().getToken();
 
@@ -26,6 +26,7 @@ export const Auth = () => {
                 }
                 const {result,data, msg} = await signInMutation.mutateAsync(signInParams);
 
+                console.log('pushToken ? ' , pushToken);
 
                 if(result === 'true'){
                     // console.log('auth info ? ' , data.data);
