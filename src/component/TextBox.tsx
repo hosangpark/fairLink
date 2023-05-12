@@ -6,6 +6,8 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../type/routerType';
+import { PdfViewerModal } from '../modal/PdfViewerModal';
+import { AlertModal, initialAlert } from '../modal/AlertModal';
 
 export const TextBox = ({
     push_idx, // 1: 일반 , 2:팝업, 3:링크
@@ -18,6 +20,10 @@ export const TextBox = ({
     link3
 }:TextBoxType) => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    const [pdfViewerModal, setPdfViewerModal] =React.useState(false);
+    const [selPdfUrl, setSelPdfUrl] = React.useState('');
+    const [alertModal, setAlertModal] = React.useState(false);
+
     const FlowEvent = ()=>{
         if(type == 'link'){
           switch(link1){
@@ -41,10 +47,16 @@ export const TextBox = ({
               break;
             case "ElectronicContract_eq":
                 console.log('pdf_View')
-            //   navigation.navigate('ElectronicContract',{
-            //     route_type:"Info2",
-            //     contract_idx:link2
-            //   })
+                // link : 빈값 = 팝업 날짜 내용
+                // {
+                // if(item.webview_url){
+                //     setSelPdfUrl(item.webview_url);
+                //     setPdfViewerModal(true);
+                // }
+              //   navigation.navigate('ElectronicContract',{
+              //     route_type:"Info2",
+              //     contract_idx:link2
+              //   })
               break;
             case "ElectronicContract_cons":
               navigation.navigate('ElectronicContract',{
@@ -66,25 +78,45 @@ export const TextBox = ({
               break;
           }
 
+        }else{
+          setAlertModal(true)
         }
     }
     return(
         <TouchableWithoutFeedback onPress={FlowEvent}>
-            <View style={[styles.textBox, {borderColor: colors.BORDER_BLUE_COLOR, backgroundColor: colors.WHITE_COLOR}]}>
-                <View style={{ flexDirection: 'row', alignItems:'center'}}>
+            <View style={[styles.textBox, {borderColor: colors.BORDER_BLUE_COLOR, backgroundColor: colors.WHITE_COLOR,alignItems:'center'}]}>
+                <View style={{ flexDirection: 'row', alignItems:'center',flex:1,overflow:'hidden',marginRight:5}}>
                     <Text style={[fontStyle.f_medium,{ color: colors.FONT_COLOR_BLACK, fontSize: 16}]}>
                         {date}
                     </Text>
-                    <Text style={[fontStyle.f_regular,{ color: colors.FONT_COLOR_BLACK, fontSize: 16, marginLeft:10}]}>{title}</Text>
+                    <Text style={[fontStyle.f_regular,{ color: colors.FONT_COLOR_BLACK, fontSize: 16, marginLeft:10}]}
+                    numberOfLines={1}
+                    >
+                      {title}</Text>
                 </View>
                 <Text style={[fontStyle.f_medium,{ 
                     color: (push_idx == "1") ? colors.GRAY_COLOR : (push_idx == "2") ? colors.MAIN_COLOR : (push_idx == "3") ? colors.LIGHT_BLUE_COLOR : colors.FONT_COLOR_BLACK2, 
                     fontSize: 16,
-                    justifyContent: 'flex-end' 
+                    justifyContent: 'flex-end'
                 }]}>
                     {content}
                 </Text>
             </View>
+            {PdfViewerModal &&
+                <PdfViewerModal 
+                    show={pdfViewerModal}
+                    hide={()=>{setPdfViewerModal(false)}}
+                    action={()=>{}}
+                    pdfUrl={selPdfUrl}
+                    setSelPdfUrl={setSelPdfUrl}
+                />
+            }
+            <AlertModal
+                show={alertModal}
+                msg={title}
+                title={content}
+                hide={()=>setAlertModal(false)}
+            />
         </TouchableWithoutFeedback>
     )
 }

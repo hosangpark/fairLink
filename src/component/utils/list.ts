@@ -134,6 +134,7 @@ type AccessoriesList = {
     '펌프카': string[];
     '지게차': string[];
     '고소작업대': string[];
+    '물차기': string[];
   }
 
 export const accessoriesList :AccessoriesList[] = [ //장비 부속부품
@@ -149,12 +150,15 @@ export const accessoriesList :AccessoriesList[] = [ //장비 부속부품
             '지게발',
             '기타(직접입력)'
         ],
-        '덤프트럭' : [],
+        '덤프트럭' : ['기타(직접입력)'],
         '고소작업차' : ['기타(직접입력)'],
         '크레인' : ['기타(직접입력)'],
         '펌프카' : ['기타(직접입력)'],
         '지게차' : ['기타(직접입력)'],
-        '고소작업대' : []
+        '고소작업대' : [],
+        '물차기':[
+            '기타(직접입력)'
+        ]
     }
 ]
 

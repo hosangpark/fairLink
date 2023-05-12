@@ -328,7 +328,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				</View>
 				<View style={[{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY2,padding:20}]}>
 					<Text style={[fontStyle.k_bold, { color: colors.MAIN_COLOR, fontSize: 20, marginBottom: 10 }]}>주요 이벤트</Text>
-					{tempListDate.slice(0, 5).map((item:TextBoxType,index:number) => {
+					{tempListDate.map((item:TextBoxType,index:number) => {
 						return(
 							<View key={index}>
 								<TextBox 
