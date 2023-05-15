@@ -34,6 +34,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 	const {data : reqCheckData , refetch:reqCheckRefetch} = usePostQuery('getConsReqCheck',{mt_idx:mt_idx},'cons/cons_require_check.php');
 	const {data : myProfileData, refetch:myProfileRefetch} = usePostQuery('getMyProfileData' , {mt_idx:mt_idx}, 'equip/mypage_info.php');
+	const {data : PilotProfileData, refetch:PilotProfileRefetch} = usePostQuery('getPilotProfileData' , {mt_idx:mt_idx}, 'pilot/mypage_info.php');
 	
 	const pilotWorkCheckMutation = usePostMutation('pilotWorkCheck','pilot/pilot_work_check.php');
 	const pilotWorkListMutation = usePostMutation('pilotWorkList' , 'pilot/pilot_work_list.php');
@@ -128,10 +129,10 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 			}
 		}
 		else if(mt_type === '4'){
-			if(myProfileData){
+			console.log(PilotProfileData.data.data)
+			if(PilotProfileData){
 
-				const profileCheck = myProfileData.data.data.profile_check;
-
+				const profileCheck = PilotProfileData.data.data.profile_check;
 
 				if(profileCheck === 'Y'){
 					if(setTabIndex)setTabIndex(2);
@@ -151,7 +152,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
 		if(result === 'true'){
 			if(data.data.work_check === 'N'){
-				alertModalOn('조종사 또는 차주 및 장비업체만 이용가능한 메뉴입니다.');
+				alertModalOn('작성가능한 작업일보가 없습니다.');
 			}
 			else if(data.data.work_check === 'Y'){
 				if(setTabIndex)setTabIndex(5);
@@ -328,7 +329,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				</View>
 				<View style={[{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY2,padding:20}]}>
 					<Text style={[fontStyle.k_bold, { color: colors.MAIN_COLOR, fontSize: 20, marginBottom: 10 }]}>주요 이벤트</Text>
-					{tempListDate.length === 0 ?
+						{tempListDate.length === 0 ?
 						<Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>생성된 주요 이벤트가 없습니다.</Text>
 						:
 						tempListDate.map((item:TextBoxType,index:number) => {

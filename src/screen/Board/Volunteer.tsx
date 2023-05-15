@@ -24,7 +24,6 @@ export const Volunteer = ({route}:any) => {
     // const [volunteerList, setVolunteerList] = React.useState<VolunteerListType>(()=>initialVolunteerInfo); //입력정보
     const dispatch = useAppDispatch();
     const {data : VolunteerListData, isLoading : VolunteerListDataLoading, isError : VolunteerListDataError} = 
-    /** mt_idx 임의입력 수정필요 */
     usePostQuery('getVolunteerList',{
         mt_idx : mt_idx,
         cat_idx : route.params.cat_idx,

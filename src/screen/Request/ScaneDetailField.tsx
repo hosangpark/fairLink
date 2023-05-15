@@ -17,6 +17,7 @@ import { initialdetailFieldInfo } from '../../component/initialInform';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 import { NumberComma } from '../../util/func';
 import { pilotCareerList } from '../../component/utils/list';
+import { phone_numeric } from '../../component/utils/funcKt';
 
 type DetailFieldBoxType = {
     title ? : string,
@@ -178,7 +179,6 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
     }
 
     
-    /** mt_idx 임의입력 수정필요 */
     React.useEffect(()=>{
         dispatch(toggleLoading(DetailFieldDataLoading));
         if(DetailFieldData){
@@ -270,12 +270,12 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                         <Text style={[fontStyle.f_semibold,,DetailFieldstyle.DetailFieldTitle]}>연락처</Text>
                         <TouchableOpacity style={{flexDirection:'row', alignItems:'center', borderRadius:8,borderWidth:1,borderColor:colors.MAIN_COLOR,paddingHorizontal:10,paddingVertical:5}}
                             onPress={()=>{
-                                alertModalOn(`로 \n전화연결 하시겠습니까?`,'call_confirm',DetailFieldData.data.data.m_num)
+                                alertModalOn(`로 \n전화연결 하시겠습니까?`,'call_confirm',phone_numeric(DetailFieldData.data.data.m_num))
                             }}
                         >
                             <Image style={{width:20,height:20}} source={require('../../assets/img/ic_phone.png')}/>
                             <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.MAIN_COLOR,flexShrink:1,marginLeft:5}]}>
-                                {detailFieldInfo.m_num}
+                                {phone_numeric(detailFieldInfo.m_num)}
                             </Text>
                         </TouchableOpacity>
                     </View>

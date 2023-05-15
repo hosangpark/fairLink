@@ -50,7 +50,7 @@ export interface DocumentAccordionType {
         file_url?:string,
         cont_idx? : null | string,
         pdf_url? : string,
-        write_check? : '',
+        write_check? : string,
         cdwt_date?:string,
         cdwt_idx?:string,
         webview_url?:string,
