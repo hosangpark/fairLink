@@ -7,7 +7,7 @@ import { AcqReqStep2Type } from '../../screenType';
 import CheckBox from '@react-native-community/checkbox';
 import { MarginCom } from '../../../component/MarginCom';
 import { CustomSelectBox } from '../../../component/CustomSelectBox';
-import { ageList, dayList, payDateList, pilotCareerList, pilotCarrerKeyList, scoreList } from '../../../component/utils/list';
+import { ageList, dayList, goodsList, payDateList, pilotCareerList, pilotCarrerKeyList, scoreList } from '../../../component/utils/list';
 import { CustomInputTextBox } from '../../../component/CustomInputTextBox';
 import { NumberComma } from '../../../util/func';
 import { CustomButton } from '../../../component/CustomButton';
@@ -37,7 +37,9 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
         cot_score : '0',
         cot_goods : '0',
         cot_memo : '',
+        ...firstInputInfo,
     })
+    console.log(firstInputInfo);
     const [tempPrice , setTempPrice] = React.useState('');
 
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
@@ -275,9 +277,9 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
                             title={'최소추천수'}
                             containerStyle={{marginLeft:5,flex:6}} 
                             style={{flex:1}}
-                            defaultText={pilotCarrerKeyList.filter(el=>el.key === inputInfo.cot_goods)[0].name}
-                            objOptionList={pilotCarrerKeyList}
-                            selOption={pilotCarrerKeyList.filter(el=>el.key === inputInfo.cot_goods)[0].name}
+                            defaultText={goodsList.filter(el=>el.key === inputInfo.cot_goods)[0].name}
+                            objOptionList={goodsList}
+                            selOption={goodsList.filter(el=>el.key === inputInfo.cot_goods)[0].name}
                             objSetOption={inputHandler}
                             type={'cot_goods'}
                             buttonStyle={selectBoxStyle.btnStyle}
@@ -285,35 +287,6 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
                             rowStyle={selectBoxStyle.rowStyle}
                             rowTextStyle={selectBoxStyle.rowTextStyle}
                         />
-                        {/* <View style={{flexDirection:'row'}}>
-                            <CustomInputTextBox
-                                containerStyle={{flex:1}}
-                                style={{flex:1}} 
-                                input={pilotCareerList[Number(item.career)]}
-                                title={'경력'}
-                            />
-                            <CustomInputTextBox
-                                containerStyle={{flex:1,marginLeft:10}}
-                                style={{flex:1}} 
-                                input={item.score.toFixed(1)}
-                                title={'평점'}
-                            />
-                        </View>
-                        <MarginCom mt={20} />
-                        <View style={{flexDirection:'row'}}>
-                            <CustomInputTextBox
-                                containerStyle={{flex:1}}
-                                style={{flex:1}} 
-                                input={`만 ${item.age}세`}
-                                title={'연령'}
-                            />
-                            <CustomInputTextBox
-                                containerStyle={{flex:1,marginLeft:10}}
-                                style={{flex:1}} 
-                                input={`${item.score_count}`}
-                                title={'추천수'}
-                            />
-                        </View> */}
                     </View>
                     <MarginCom mt={10} />
                     <View style={[styles.white_box_con]}>
@@ -326,6 +299,7 @@ export const PublicReqStep2 = ({route}:AcqReqStep2Type) => {
                             placeholder='ex) 열정적이고 매사에 적극적인 분 선호합니다.'
                             placeholderTextColor={colors.BORDER_GRAY_COLOR3}
                             onChangeText={(e)=>{inputHandler(e,'cot_memo')}}
+                            value={inputInfo.cot_memo}
                         />
                         <MarginCom mt={30} />
                         <CustomButton 

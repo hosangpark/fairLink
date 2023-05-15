@@ -49,15 +49,10 @@ export const AffiliationFilot = () => {
 
     React.useEffect(()=>{
         dispatch(toggleLoading(favLoading));
-        if(favError){
-            alertModalOn('즐겨찾기 리스트를 불러오는 도중 오류가 발생했습니다. \n고객센터에 문의해주세요.','error')
-        }
-        else{
-            if(favData){
-                // console.log(favData);
-                console.log(favData.data.data);
-                setFavList([...favData.data.data]);
-            }
+        if(favData){
+            // console.log(favData);
+            console.log(favData.data.data);
+            setFavList([...favData.data.data]);
         }
     },[favData,favLoading,favError])
 

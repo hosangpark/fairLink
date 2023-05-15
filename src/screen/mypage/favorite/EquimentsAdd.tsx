@@ -130,6 +130,9 @@ export const EquimentsAdd = () => {
         if(inputInfo.sub.length === 5){
             alertModalOn('부속 장치는 5개까지 선택가능합니다.');
         }
+        else if(tempSelAcc === ''){
+            alertModalOn('부속장치를 선택해주세요.');
+        }
         else if(tempSelAcc === '기타(직접입력)' && writeSelAcc === ''){
             alertModalOn('부속 장치를 입력해주세요.');
         }

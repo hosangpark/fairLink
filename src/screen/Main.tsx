@@ -19,7 +19,7 @@ import { useAppSelector } from '../redux/store';
 import { Request } from './Request/Request';
 import { RequestRouter } from './Request/RequestRouter';
 import { DocumentRouter } from './document/DocumentRouter';
-import { usePostMutation } from '../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../util/reactQuery';
 import { AlertModal, initialAlert } from '../modal/AlertModal';
 import { PilotWorkListModal } from '../modal/PilotWorkListModal';
 
@@ -27,6 +27,7 @@ import { PilotWorkListModal } from '../modal/PilotWorkListModal';
 export const Main = () => {
 	const {mt_idx,mt_type,equip_pilot} = useAppSelector(state => state.userInfo);
     const isFocused = useIsFocused();
+	const {data : reqCheckData , refetch:reqCheckRefetch} = usePostQuery('getConsReqCheck',{mt_idx:mt_idx},'cons/cons_require_check.php');
 	const pilotWorkCheckMutation = usePostMutation('pilotWorkCheck','pilot/pilot_work_check.php');
 
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>(); //router 이동시 사용
@@ -50,7 +51,35 @@ export const Main = () => {
 		setAlertModal(()=>initialAlert);
 	}
 	const alertAction = () => {
+        if(alertModal.type === 'none_req_con'){
+			navigation.navigate('OpenConstruction',{isData:false});
+		}
+		if(alertModal.type === 'none_profile'){
+			navigation.navigate('SettingProfile');
+		}
+    }
 
+    const erectionCheckHandler = async () => {
+        if(mt_type === '1'){
+			if(reqCheckData){
+				const reqCheck = reqCheckData.data.data.require_check;
+
+				if(reqCheck === 'Y'){
+					// setReqConModal(true)
+                    navigation.navigate('RequestRouter',{
+                        screen:'RequestMain'
+                    });
+				}
+				else{
+					alertModalOn(`개설된 현장이 없습니다.\n현장개설을 먼저 해주세요.`,'none_req_con');
+				}
+			}
+		}
+        else{
+            navigation.navigate('RequestRouter',{
+                screen:'RequestMain'
+            });
+        }
     }
 
     const pilotCheckHandler = async () => {
@@ -137,7 +166,9 @@ export const Main = () => {
                     
                     listeners={{
                         tabPress : (e)=>{
-                            setTabIndex(2);
+                            // setTabIndex(2);
+                            e.preventDefault();
+                            erectionCheckHandler();
                         }
                     }}
                     options={{

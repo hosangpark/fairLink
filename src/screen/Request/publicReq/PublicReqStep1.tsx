@@ -12,7 +12,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
 import { MarginCom } from '../../../component/MarginCom';
 import { CustomSelectBox } from '../../../component/CustomSelectBox';
-import { accessoriesConvert, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, speciesList } from '../../../component/utils/list';
+import { accessoriesConvert, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, speciesList, yearList } from '../../../component/utils/list';
 import { CustomInputTextBox } from '../../../component/CustomInputTextBox';
 import { CustomWaveBox } from '../../../component/CustomWaveBox';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -21,6 +21,7 @@ import { SelectModal } from '../../../modal/SelectModal';
 import { CustomButton } from '../../../component/CustomButton';
 import { RequestRouterNavigatorParams } from '../../../../type/RequestRouterType';
 import { LastDispatchInfoModal } from '../../../modal/LastDispatchInfoModal';
+import { BackHandlerCom } from '../../../component/utils/BackHandlerCom';
 
 export type PublicReqStep1ItemType = {
     cot_species : string, //공종
@@ -50,12 +51,16 @@ export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //공개 배차요�
     // const {item} = route.params //item : 선택한 지인 정보
     const {mt_idx, mt_type} = useAppSelector(state => state.userInfo);
 
+
+
     //상단 정보 (내정보)
     const {data:myInfoData, isLoading : myInfoLoading, isError : myInfoError } = usePostQuery('getMyInfo',{mt_idx:mt_idx},'cons/cons_order_top.php');
     
     //담당자 불러오기
     const {data:myManData, isLoading : myManLoading, isError : myManError} = usePostQuery('getMyManData',{mt_idx:mt_idx},'cons/manager_list.php');
     const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php');//장비 타입 불러오기
+
+    const getPrevOrderInfoMutation = usePostMutation('getPrevOrderInfo','cons/cons_order_prev_info.php'); //최근 데이터 불러오기
     
     const [myInfo, setMyInfo] = React.useState<ReqTopInfo>();
     const [managerList, setMangetList] = React.useState<ObjArrayType[]>([]); //담당자 정보리스트
@@ -276,6 +281,28 @@ export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //공개 배차요�
         }
     }
 
+    const getPrevOrderDataHandler = async ( cot_idx:string ) => { //이전데이터 불러오기
+        dispatch(toggleLoading(true));
+        const params ={
+            mt_idx : '17',
+            type : 'open',
+            cot_idx : cot_idx,
+        }
+        const {data, result, msg} = await getPrevOrderInfoMutation.mutateAsync(params);
+        dispatch(toggleLoading(false));
+
+        // console.log(result,msg,data)
+
+        // const subList = 
+
+        setInputInfo({
+            ...inputInfo,
+            ...data.data,
+            cot_e_sub : data.data.cot_e_sub.split(','),
+        })
+
+    }
+
     const inputCheckHandler = () =>{
         if(inputInfo.cot_species === ''){
             alertModalOn('작업정보 공종을 선택해주세요.');
@@ -385,6 +412,7 @@ export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //공개 배차요�
     return(
         <View style={{flex:1}}>
             <BackHeader title={'공개 배차요청'}/>
+            <BackHandlerCom />
             {myInfoData &&
                 <ScrollView style={{flex:1}}>
                     <KeyboardAvoidingView>
@@ -605,7 +633,7 @@ export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //공개 배차요�
                             />
                             <MarginCom mt={20} />
                             <CustomSelectBox 
-                                strOptionList={['2023','2022','2021','2020']}
+                                strOptionList={yearList()}
                                 strSetOption={inputHandler}
                                 selOption={inputInfo.cot_e_year}
                                 buttonStyle={selectBoxStyle.btnStyle}
@@ -692,7 +720,8 @@ export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //공개 배차요�
             <LastDispatchInfoModal 
                 show={lastDisModal}
                 hide={()=>{setLastDisModal(false)}}
-                action={()=>{}}
+                action={getPrevOrderDataHandler}
+                type={'open'}
             />
             <DateTimePickerModal //공사기간 시작일 date picker
                 isVisible={startDateModal.show}

@@ -89,7 +89,9 @@ export const SignIn = () => {
                     }
                 }
                 else{
+                    console.log(profile.id);
                     navigation.navigate('Agreements',{token : profile.id});
+                    // navigation.navigate('Agreements',{token : profile.id});
                 }
             // }
         } catch(err) {
@@ -150,11 +152,11 @@ export const SignIn = () => {
                         </View>
                     </TouchableOpacity>
                     {/*** 임시 */}
-                    {/* <TouchableOpacity onPress={()=>{unlinkKakao();}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20,marginTop:40}}>
+                    <TouchableOpacity onPress={()=>{unlinkKakao();}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20,marginTop:40}}>
                         <View style={{flex:1,backgroundColor:colors.KAKAO_YELLOW,alignItems:'center',justifyContent:'center',borderRadius:8}}>
                             <Text style={[fontStyle.f_medium ,{ fontSize: 18, color: colors.FONT_COLOR_BLACK3 }]}>카카오로그아웃</Text>
                         </View>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
                     <View style={{flexDirection: 'row', marginTop:20}}>
                         <CheckBox
                             disabled={false}
@@ -163,7 +165,9 @@ export const SignIn = () => {
                             tintColors={{ true: colors.MAIN_COLOR }}
                             style={{ width: 24, height: 24 }}
                         />
-                        <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK, marginHorizontal: 10,}]}>자동로그인</Text>
+                        <TouchableOpacity onPress={()=>{setIsAutoLogin(!isAutoLogin)}}>
+                            <Text style={[fontStyle.f_medium, { fontSize: 18, color: colors.FONT_COLOR_BLACK, marginHorizontal: 10,}]}>자동로그인</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 20}}>

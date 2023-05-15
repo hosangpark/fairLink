@@ -22,9 +22,9 @@ export const LoginIntroModal = ({ //로그인시 나타나는 intro modal
             useNativeDriver={true}
             style={[{justifyContent:'center',alignItems:'center',flex:1,flexDirection : 'column', zIndex:999999999}]}
             onBackdropPress={()=>{
-                if(action){
-                    action();
-                }
+                // if(action){
+                //     action();
+                // }
                 hide();
             }}
         >

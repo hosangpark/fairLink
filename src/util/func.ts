@@ -113,7 +113,7 @@ export const phoneAutoHipone = (phone:string) => {
 }
 
 export const phoneCheck = (phone:string) => { //휴대폰 유효성 검사(-제외)
-    const phoneRule = /^(01[0]{1})[0-9]{3,4}[0-9]{4}$/
+    const phoneRule = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/
 
     if(phone === ''){
         return {
@@ -372,6 +372,12 @@ export function sliceArray(data:string[] = [] , size =1){
     }
     
     return arr;
+}
+
+export function checkCompanyNumber(comNumber : string){ //사업자 등록번호 정규식
+    const comNumberReg = /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/;
+
+    return comNumberReg.test(comNumber);
 }
 
 // export const downloadFile = (url:string,fileName:string) => { //파일 다운로드

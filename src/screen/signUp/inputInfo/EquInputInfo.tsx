@@ -16,9 +16,10 @@ import { EquInputInfoType } from '../../screenType';
 import { accessoriesConvert, bankList, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, locationList } from '../../../component/utils/list';
 import { usePostMutation } from '../../../util/reactQuery';
 import messaging from '@react-native-firebase/messaging';
-import { getProfile } from '@react-native-seoul/kakao-login';
+import { KakaoProfile, getProfile } from '@react-native-seoul/kakao-login';
 import { useAppDispatch } from '../../../redux/store';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
+import { checkCompanyNumber } from '../../../util/func';
 
 interface EquInputInfoItemType {
     mb_sex_m : boolean,
@@ -74,6 +75,34 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
     const [writeSelAcc, setWriteSelAcc] = React.useState(''); //부속장치 직접입력
 
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
+
+    const [profileInfo, setProfileInfo] = React.useState<KakaoProfile & {birthday:string}>();
+
+    const getProfileInfo = async () => { //카카오 정보 불러오기
+        const profile : KakaoProfile & {birthday:string} = await getProfile();
+        console.log(profile);
+        setProfileInfo(profile);
+
+        if(profile.gender === 'gender' || profile.gender === 'null'){
+            setInputInfo({
+                ...inputInfo,
+                mb_sex_m : true,
+                mb_sex_f : false,
+            })
+        }
+        else{
+            setInputInfo({
+                ...inputInfo,
+                mb_sex_m : true,
+                mb_sex_f : false,
+            })
+        }
+    }
+
+
+    React.useEffect(()=>{
+        getProfileInfo();
+    },[])
 
     const alertModalOff = () => {
         setAlertModal(()=>initialAlert);
@@ -161,53 +190,56 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
 
     const saveInfoHandler = async () => { //장비업체 회원가입
 
-        dispatch(toggleLoading(true));
-        let met_sub_string = '';
+        if(profileInfo){
+            let met_sub_string = '';
 
-        if(inputInfo.met_sub.length > 0){
-            inputInfo.met_sub.map((item,index) => {
-                met_sub_string += item+`${inputInfo.met_sub.length-1 !== index ? ',' : ''}`
-            })
-        }
-        const pushToken = await messaging().getToken();
-        const profile: any = await getProfile();
+            if(inputInfo.met_sub.length > 0){
+                inputInfo.met_sub.map((item,index) => {
+                    met_sub_string += item+`${inputInfo.met_sub.length-1 !== index ? ',' : ''}`
+                })
+            }
+            const pushToken = await messaging().getToken();
 
-        const signUpParams = {
-            mt_id : profile.email === 'null' ? 'aaa@aaa.com' : profile.email,
-            sns_id : sns_id,
-            app_token : pushToken,
-            sql_check : 'N',
-            mt_type : '2',
-            mt_name : profile.nickname === 'null' ? 'name' : profile.nickname,
-            mt_birth : profile.birthyear === 'null' || profile.birthday === 'null' ? '1998-01-06' : profile.birthyaer+'-'+profile.birthday,
-            // mt_gender : 'M'
-            mt_hp : profile.phoneNumber === 'null' ? '010-9793-9181' : profile.phoneNumber,
-            mt_gender : inputInfo.mb_sex_m ? 'M' : 'F',
-            met_company : inputInfo.met_company,
-            met_ceo : inputInfo.met_ceo,
-            met_busi_num : inputInfo.met_busi_num,
-            met_location:inputInfo.met_location,
-            met_type:inputInfo.isPilot ? 'all' : 'equip',
-            met_bank:inputInfo.met_bank,
-            met_bank_num:inputInfo.met_bank_num,
-            met_equip_type : inputInfo.met_equip_type,
-            met_equip_stand1 : inputInfo.met_equip_stand1,
-            met_equip_stand2 : inputInfo.met_equip_stand2,
-            met_sub:met_sub_string,
-        }
+            const birthDayYear = profileInfo.birthyear === 'null' ? '1998' : profileInfo.birthyear;
+            const birthDay = profileInfo.birthday === 'null' ? '01-06' : profileInfo.birthday.slice(0,2)+'-'+profileInfo.birthday.slice(2,4);
 
-        const {data,msg,result} = await signUpEquMutation.mutateAsync(signUpParams);
-        dispatch(toggleLoading(false))
-        if(result === 'true'){
-            navigation.replace('RegDocument',{
-                fileCheck:data.data.file_check,
-                memberType:memberType,
-                mt_idx:data.data.mt_idx,
-                mt_id:sns_id,
-            });
-        }
-        else{
-            alertModalOn(msg,'');
+            const signUpParams = {
+                mt_id : profileInfo.email === 'null' ? 'aaa@aaa.com' : profileInfo.email,
+                sns_id : sns_id,
+                app_token : pushToken,
+                sql_check : 'N',
+                mt_type : '2',
+                mt_name : profileInfo.nickname === 'null' ? '김경태' : profileInfo.nickname,
+                mt_birth : birthDayYear+'-'+birthDay,
+                mt_hp : profileInfo.phoneNumber === 'null' ? '010-9793-9181' : profileInfo.phoneNumber,
+                mt_gender : inputInfo.mb_sex_m ? 'M' : 'F',
+                met_company : inputInfo.met_company,
+                met_ceo : inputInfo.met_ceo,
+                met_busi_num : inputInfo.met_busi_num,
+                met_location:inputInfo.met_location,
+                met_type:inputInfo.isPilot ? 'all' : 'equip',
+                met_bank:inputInfo.met_bank,
+                met_bank_num:inputInfo.met_bank_num,
+                met_equip_type : inputInfo.met_equip_type,
+                met_equip_stand1 : inputInfo.met_equip_stand1,
+                met_equip_stand2 : inputInfo.met_equip_stand2,
+                met_sub:met_sub_string,
+            }
+
+            dispatch(toggleLoading(true));
+            const {data,msg,result} = await signUpEquMutation.mutateAsync(signUpParams);
+            dispatch(toggleLoading(false))
+            if(result === 'true'){
+                navigation.replace('RegDocument',{
+                    fileCheck:data.data.file_check,
+                    memberType:memberType,
+                    mt_idx:data.data.mt_idx,
+                    mt_id:sns_id,
+                });
+            }
+            else{
+                alertModalOn(msg,'');
+            }
         }
         
     }
@@ -215,6 +247,9 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
     const inputCheckHandler = () => {
         if(inputInfo.met_company === ''  || inputInfo.met_ceo === '' || inputInfo.met_busi_num === '' || inputInfo.met_location === '' || inputInfo.met_bank === '' || inputInfo.met_bank_num === '' || inputInfo.met_equip_type === ''){
             alertModalOn('필수항목을 모두 입력하세요.');
+        }
+        else if(!checkCompanyNumber(inputInfo.met_busi_num)){
+            alertModalOn(`올바른 사업자등록번호를 입력해주세요.\nex)123-12-12345`) 
         }
         else if(inputInfo.met_equip_type !== ''){
             if(inputInfo.met_equip_stand1 === ''){
@@ -262,7 +297,7 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
                 <View style={{flexDirection:'row'}}>
                     <View style={{flex:1,flexDirection:'row',alignItems:'center', marginTop:10}}>
                         <CheckBox
-                            disabled={inputInfo.mb_sex_m}
+                            disabled={true}
                             value={inputInfo.mb_sex_m}
                             onValueChange={(e) => setInputInfo({
                                 ...inputInfo,
@@ -277,7 +312,7 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
                     </View>
                     <View style={{flex:1,flexDirection:'row',alignItems:'center', marginTop:10}}>
                         <CheckBox
-                            disabled={inputInfo.mb_sex_f}
+                            disabled={true}
                             value={inputInfo.mb_sex_f}
                             onValueChange={(e) => setInputInfo({
                                 ...inputInfo,
@@ -323,7 +358,7 @@ export const EquInputInfo = ({memberType,sns_id}:EquInputInfoType) => {
                     action={()=>{}}
                     button=''
                     editable
-                    placeholder='사업자등록번호를 입력해주세요.'
+                    placeholder='ex)123-12-12345'
                     placeholderTextColor={colors.GRAY_COLOR}
                     input={inputInfo.met_busi_num}
                     setInput={inputInfoHandler}

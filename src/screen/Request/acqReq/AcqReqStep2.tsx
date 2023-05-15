@@ -33,6 +33,7 @@ export const AcqReqStep2 = ({route}:AcqReqStep2Type) => {
         cot_pay_etc : '',
         cot_pay_price : '',
         cot_memo : '',
+        ...firstInputInfo,
     })
     const [tempPrice , setTempPrice] = React.useState('');
 
@@ -222,12 +223,14 @@ export const AcqReqStep2 = ({route}:AcqReqStep2Type) => {
                                 style={{flex:1}} 
                                 input={`${pilotCareerList[Number(item.career)]}+`}
                                 title={'경력'}
+                                editable={false}
                             />
                             <CustomInputTextBox
                                 containerStyle={{flex:1,marginLeft:10}}
                                 style={{flex:1}} 
                                 input={item.score.toFixed(1)}
                                 title={'평점'}
+                                editable={false}
                             />
                         </View>
                         <MarginCom mt={20} />
@@ -237,12 +240,14 @@ export const AcqReqStep2 = ({route}:AcqReqStep2Type) => {
                                 style={{flex:1}} 
                                 input={`만 ${item.age}세`}
                                 title={'연령'}
+                                editable={false}
                             />
                             <CustomInputTextBox
                                 containerStyle={{flex:1,marginLeft:10}}
                                 style={{flex:1}} 
                                 input={`${item.score_count}`}
                                 title={'추천수'}
+                                editable={false}
                             />
                         </View>
                     </View>
@@ -257,6 +262,7 @@ export const AcqReqStep2 = ({route}:AcqReqStep2Type) => {
                             placeholder='ex) 열정적이고 매사에 적극적인 분 선호합니다.'
                             placeholderTextColor={colors.BORDER_GRAY_COLOR3}
                             onChangeText={(e)=>{inputHandler(e,'cot_memo')}}
+                            value={inputInfo.cot_memo}
                         />
                         <MarginCom mt={30} />
                         <CustomButton 

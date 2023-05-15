@@ -14,6 +14,7 @@ import { toggleLoading } from "../../../redux/actions/LoadingAction";
 import { AlertModal, initialAlert } from "../../../modal/AlertModal";
 import { FavoriteListItemType } from "../../screenType";
 import { RequestRouterNavigatorParams } from "../../../../type/RequestRouterType";
+import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
 
 export const AcquaintanceRequest = () => {
     const {mt_idx, mt_type} = useAppSelector(state => state.userInfo);
@@ -44,7 +45,7 @@ export const AcquaintanceRequest = () => {
         navigation.goBack();
       }
       else if(alertModal.type === 'sel_confirm'){
-        navigation.navigate('AcqReqStep1',{item:likeOrderList[0]});
+        navigation.navigate('AcqReqStep1',{item:likeOrderList[Number(check)]});
       }
     }
  
@@ -87,42 +88,57 @@ export const AcquaintanceRequest = () => {
     return (
       <SafeAreaView style={{flex:1}}>
         <BackHeader title="지인배차 회사선택" />
-        {/* <ScrollView style={{flex:1}}> */}
+        <BackHandlerCom/>
           <View style={{ backgroundColor: colors.WHITE_COLOR, paddingHorizontal: 40,paddingVertical:10,alignItems:'center'}}>
               <Text style={[fontStyle.f_regular,{color:colors.FONT_COLOR_BLACK,fontSize:16,lineHeight:25,textAlign:'center'}]}>등록된 즐겨찾기 장비회사 중에서 {"\n"}배차요청할 회사를 선택해주세요.</Text>
           </View>
           <View style={{flex:1,paddingHorizontal:20,paddingTop:20}}>
+
             <FlatList 
                 data={likeOrderList}
                 style={{marginBottom:20}}
                 showsVerticalScrollIndicator={false}
                 renderItem={({item,index})=>{
-                    return(
-                        <View style={{paddingVertical:15}}>
-                        <UserInfoCard 
-                            index={String(index)}
-                            item={item}
-                            isDelete={false}
-                            action={e=>Checkbridge(e)}
-                            isCheck={check}
-                            refetch={likeOrderRefetch}
-                        />
-                        </View>
-                    )
-                  }}
+                  return(
+                      <View style={{paddingVertical:15}}>
+                      <UserInfoCard 
+                          index={String(index)}
+                          item={item}
+                          isDelete={false}
+                          action={e=>Checkbridge(e)}
+                          isCheck={check}
+                          refetch={likeOrderRefetch}
+                      />
+                      </View>
+                  )
+                }}
+                ListEmptyComponent={()=>{
+                  return(
+                    <View style={{justifyContent:'center'}}>
+                      <Text style={[fontStyle.f_semibold,{fontSize:18,color:colors.FONT_COLOR_BLACK,textAlign:'center'}]}>즐겨찾기에 등록된 장비회사가{`\n`}존재하지 않습니다.</Text>
+                    </View>
+                  )
+                }}
               />
           </View>
-        <CustomButton
-          style={{height:60}}
-          label='선택완료'
-          action={()=>{
-            const selItem = likeOrderList[Number(check)]
+        {likeOrderList.length > 0 &&
+          <CustomButton
+            style={{height:60}}
+            label='선택완료'
+            action={()=>{
+              if(likeOrderList[Number(check)]){
+                const selItem = likeOrderList[Number(check)]
 
-            alertModalOn(`님을 선택하셨습니다.\n배차요청 페이지로 이동할까요?`,'sel_confirm',`[${selItem.name}]`);
+                alertModalOn(`님을 선택하셨습니다.\n배차요청 페이지로 이동할까요?`,'sel_confirm',`[${selItem.name}]`);
+              }
+              else{
+                return;
+              }
 
-            // alertModalOn()
-          }}
-        />
+              // alertModalOn()
+            }}
+          />
+        }
         <AlertModal
           show={alertModal.alert}
           msg={alertModal.msg}

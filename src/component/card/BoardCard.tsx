@@ -176,7 +176,7 @@ export const BoardCard = ({
                 action={alertAction}
                 type={alertModal.type}
             />
-            <TouchableOpacity style={{margin:20}} onPress={()=>
+            <TouchableOpacity style={{margin:20,zIndex:9}} onPress={()=>
             {
                 if(title=="배차 모집중"){
                     navigation.navigate('DetailField',{cot_idx:item.cot_idx,cat_idx:item.cat_idx})
@@ -270,7 +270,6 @@ export const BoardCard = ({
                         style={{}}
                         labelStyle={{fontSize:16}}
                         label={'모집취소'}
-                        disabled={true}
                         action={()=>{ alertModalOn('모집취소 하시겠습니까?','delete_confirm')}}
                         />
                     }

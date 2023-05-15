@@ -24,6 +24,7 @@ import cusToast from '../../util/toast/CusToast';
 import { ReqDispatchModal } from '../../modal/ReqDispatchModal';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
+import { emailCheck, phoneCheck } from '../../util/func';
 
 
 export const OpenConstruction = ({route}:OpenConstructionType) => {
@@ -47,7 +48,7 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         crt_m_cons_idx:'',
         crt_m_name : '',
         crt_m_num : '',
-        crt_email : '',
+        crt_m_mail : '',
         crt_start_date:'',
         crt_end_date :'',
         crt_location : '',
@@ -231,6 +232,15 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
         else if(consInputInfo.crt_m_num === ''){
             alertModalOn('담당자 연락처를 입력해주세요.','확인');
         }
+        else if(!phoneCheck(consInputInfo.crt_m_num).result){
+            alertModalOn('올바른 연락처를 입력해주세요.(-)포함','확인');
+        }
+        else if(consInputInfo.crt_m_mail === ''){
+            alertModalOn('이메일을 입력해주세요.','확인');
+        }
+        else if(!emailCheck(consInputInfo.crt_m_mail).result){
+            alertModalOn('올바른 이메일을 입력해주세요.','확인');
+        }
         else if(consInputInfo.crt_start_date === ''){
             alertModalOn('공사 시작날짜를 선택해주세요.','확인');
         }
@@ -380,9 +390,9 @@ export const OpenConstruction = ({route}:OpenConstructionType) => {
                 <CustomInputTextBox
                     title={'담당자 이메일'}
                     essential={true}
-                    input={consInputInfo.crt_email}
+                    input={consInputInfo.crt_m_mail}
                     setInput={inputHandler}
-                    type={'crt_email'}
+                    type={'crt_m_mail'}
                     containerStyle={styles.SubTitleText}
                     imgfile={editMode !== 'view' && require('../../assets/img/ic_modify2.png')}
                     editable={isEditEmail}

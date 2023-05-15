@@ -11,6 +11,7 @@ export interface BackHeaderType {
     backAction? : () => void;
     title : string;
     isPop? : boolean;
+    isBtnHide? : boolean;
 }
 
 export interface CustomButtonType {

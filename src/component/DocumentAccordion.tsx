@@ -226,30 +226,38 @@ export const DocumentAccordion = ({
                     </View>
                 :
                     <View style={[DocumnetStyle.documentBoxinBox]}>
-                        <TouchableOpacity onPress={()=>{
-                            const keyName = title === '장비(차량) 서류' ? 'document_equip' :
-                                title === '자격 및 기타 서류' ? 'document_qualification' : 
-                                title === '계약 서류' ? 'document_contract' : 
-                                'document_dailywork'
+                        {subList.length > 0 ?
+                            <>
+                                <TouchableOpacity onPress={()=>{
+                                    const keyName = title === '장비(차량) 서류' ? 'document_equip' :
+                                        title === '자격 및 기타 서류' ? 'document_qualification' : 
+                                        title === '계약 서류' ? 'document_contract' : 
+                                        'document_dailywork'
 
-                            allCheck(keyName,title)
-                        }}>
-                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.MAIN_COLOR,textAlign:'right'}]}>전체선택</Text>
-                        </TouchableOpacity>
-                        <MarginCom mb={5} />
-                        {subList.map((item,index)=>{
-                        return(
-                            <Sublistbox
-                                bigTitle={title}
-                                title={item.title}
-                                filecheck={item.file_check}
-                                fileuri={item.file_url}
-                                key={index}
-                                checkFileList={checkFileList}
-                                checkFileHandler={checkFileHandler}
-                            />
-                        )
-                        })}
+                                    allCheck(keyName,title)
+                                }}>
+                                    <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.MAIN_COLOR,textAlign:'right'}]}>전체선택</Text>
+                                </TouchableOpacity>
+                                <MarginCom mb={5} />
+                                {subList.map((item,index)=>{
+                                return(
+                                    <Sublistbox
+                                        bigTitle={title}
+                                        title={item.title}
+                                        filecheck={item.file_check}
+                                        fileuri={item.file_url}
+                                        key={index}
+                                        checkFileList={checkFileList}
+                                        checkFileHandler={checkFileHandler}
+                                    />
+                                )
+                                })}
+                            </>
+                        :
+                            // <View style={[DocumnetStyle.documentBoxinBox]}>
+                            <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>첨부된 서류가 존재하지 않습니다.</Text>
+                            // </View>
+                        }
                     </View>
                     
                     

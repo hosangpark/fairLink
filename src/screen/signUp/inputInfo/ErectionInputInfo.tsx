@@ -10,12 +10,13 @@ import { ErectionInputInfoType } from '../../screenType';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../../type/routerType';
-import { getProfile } from '@react-native-seoul/kakao-login';
+import { KakaoProfile, getProfile } from '@react-native-seoul/kakao-login';
 import CheckBox from '@react-native-community/checkbox';
 import messaging from '@react-native-firebase/messaging';
 import { usePostMutation } from '../../../util/reactQuery';
 import { useAppDispatch } from '../../../redux/store';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
+import { checkCompanyNumber } from '../../../util/func';
 
 
 export const ErectionInputInfo = ({
@@ -26,6 +27,8 @@ export const ErectionInputInfo = ({
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
+
+    
 
     const signupErecMutation = usePostMutation('signupErec','member/signup1.php');
 
@@ -59,9 +62,14 @@ export const ErectionInputInfo = ({
     }
 
     const saveInfoHandler = async () => {
+        
         if(inputInfo.mct_company === '' || inputInfo.mct_position === '' || inputInfo.mct_ceo === '' || inputInfo.mct_busi_num === ''){
             alertModalOn('필수항목을 모두 입력하세요.');
         }
+        else if(!checkCompanyNumber(inputInfo.mct_busi_num)){
+            alertModalOn(`올바른 사업자등록번호를 입력해주세요.\nex) 123-12-12345`);
+        }
+        // else 
         else{
             dispatch(toggleLoading(true));
             const pushToken = await messaging().getToken();
@@ -152,7 +160,7 @@ export const ErectionInputInfo = ({
                 action={()=>{}}
                 button=''
                 editable={true}
-                placeholder='사업자등록번호를 입력해주세요.'
+                placeholder='ex) 123-12-12345'
                 placeholderTextColor={colors.GRAY_COLOR}
                 input={inputInfo.mct_busi_num}
                 setInput={inputInfoHandler}

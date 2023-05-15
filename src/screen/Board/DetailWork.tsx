@@ -24,7 +24,7 @@ import * as RNFS from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 import { ImageModal } from '../../modal/ImageModal';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
-import { chunk } from '../../util/func';
+import { NumberComma, chunk } from '../../util/func';
 import { MarginCom } from '../../component/MarginCom';
 import { workList } from '../../component/utils/list';
 import cusToast from '../../util/toast/CusToast';
@@ -321,6 +321,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     document_contract : [{...DetailWorkData.data.data['서류관리-계약서류']}],
                     document_dailywork : DetailWorkData.data.data['서류관리-작업일보'] !== null ? [...DetailWorkData.data.data['서류관리-작업일보']] : [],
                 }
+                console.log(tempObj);
                 setDetailWorkInfo(tempObj);
 
                 if(mt_type === '1'){
@@ -686,7 +687,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>
                         대금</Text>
                     <Text style={[fontStyle.f_semibold,DetailWorkStyle.MaincolorText]}>
-                        총 {detailWorkInfo.price?.all_price} 만원</Text>
+                        총 {NumberComma(detailWorkInfo.price?.all_price)} 만원</Text>
                 </View>
                 <View style={DetailWorkStyle.paymentBox}>
                     <WorkLayoutbox
