@@ -330,7 +330,8 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 					<Text style={[fontStyle.k_bold, { color: colors.MAIN_COLOR, fontSize: 20, marginBottom: 10 }]}>주요 이벤트</Text>
 					{tempListDate.length === 0 ?
 						<Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>생성된 주요 이벤트가 없습니다.</Text>
-						tempListDate.slice(0, 5).map((item:TextBoxType,index:number) => {
+						:
+						tempListDate.map((item:TextBoxType,index:number) => {
 							return(
 								<View key={index}>
 									<TextBox 

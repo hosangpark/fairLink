@@ -37,6 +37,7 @@ const Sublistbox = ({
 }:SublistBoxType)=>{
     // const [check,setCheck] = useState(false)
     const [show,setshow] = useState<boolean>(false)
+    const {mt_type} = useAppSelector(state=>state.userInfo);
     return(
     <View key={index}>
         <View style={{flexDirection:'row',alignItems:'center'}}>
@@ -70,21 +71,21 @@ const Sublistbox = ({
                 </Text>
             }
         </View>
-        {title === '작업일보' ?
-        <CustomButton
-            action={()=>{console.log('작성하기')}}
-            label={'작성하기'}
-            style={{backgroundColor : colors.WHITE_COLOR,
-            borderRadius:4,
-            borderWidth:1,
-            borderColor:colors.MAIN_COLOR,
-            marginVertical:10,
-            height:38,
-            padding:0,
-            justifyContent:'center'
-            }}
-            labelStyle={{color : colors.MAIN_COLOR,fontSize:16}}
-        />
+        {(title === '작업일보' && mt_type !== '1') ?
+            <CustomButton
+                action={()=>{console.log('작성하기')}}
+                label={'작성하기'}
+                style={{backgroundColor : colors.WHITE_COLOR,
+                borderRadius:4,
+                borderWidth:1,
+                borderColor:colors.MAIN_COLOR,
+                marginVertical:10,
+                height:38,
+                padding:0,
+                justifyContent:'center'
+                }}
+                labelStyle={{color : colors.MAIN_COLOR,fontSize:16}}
+            />
         :
         <TouchableOpacity style={{width:92,height:92,marginVertical:20}} onPress={()=>{setshow(true)}}>
             <Image resizeMode={'cover'} style={{width:'100%',height:'100%'}} source={fileuri==""?
@@ -189,31 +190,35 @@ export const DocumentAccordion = ({
                             </TouchableOpacity>
                             {subList.map((item,index) => {
                                 return(
-                                    <View style={{flexDirection:'row',alignItems:'center', justifyContent:'space-between', marginBottom:20}} key={index}>
-                                        <View style={{flexDirection:'row',alignItems:'center'}}>
-                                            <TouchableOpacity onPress={()=>{
-                                                const isCheck = checkFileList.filter(el=>el === item.webview_url).length !== 0;
-                                                if(item.webview_url && title){
-                                                    if(isCheck){
-                                                        checkFileHandler(item.webview_url,'del',title);
+                                    <View key={index}>
+                                        {item.pdf_url !== '' &&
+                                            <View style={{flexDirection:'row',alignItems:'center', justifyContent:'space-between', marginBottom:20}} key={index}>
+                                                <View style={{flexDirection:'row',alignItems:'center'}}>
+                                                    <TouchableOpacity onPress={()=>{
+                                                        const isCheck = checkFileList.filter(el=>el === item.pdf_url).length !== 0;
+                                                        if(item.pdf_url && title){
+                                                            if(isCheck){
+                                                                checkFileHandler(item.pdf_url,'del',title);
+                                                            }
+                                                            else{
+                                                                checkFileHandler(item.pdf_url,'add',title)
+                                                            }
+                                                        }
+                                                    }}>
+                                                        <Image style={{width:20,height:20,marginRight:10}} source={checkFileList.filter(el=>el === item.pdf_url).length !== 0 ?require('../assets/img/ic_check_on.png'):require('../assets/img/ic_check_off.png')}/>
+                                                    </TouchableOpacity>
+                                                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{item.cdwt_date} 작업일지</Text>
+                                                </View>
+                                                <TouchableOpacity onPress={()=>{
+                                                    if(item.pdf_url){
+                                                        setSelPdfUrl(item.pdf_url);
+                                                        setPdfViewerModal(true);
                                                     }
-                                                    else{
-                                                        checkFileHandler(item.webview_url,'add',title)
-                                                    }
-                                                }
-                                            }}>
-                                                <Image style={{width:20,height:20,marginRight:10}} source={checkFileList.filter(el=>el === item.webview_url).length !== 0 ?require('../assets/img/ic_check_on.png'):require('../assets/img/ic_check_off.png')}/>
-                                            </TouchableOpacity>
-                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{item.cdwt_date} 작업일지</Text>
-                                        </View>
-                                        <TouchableOpacity onPress={()=>{
-                                            if(item.webview_url){
-                                                setSelPdfUrl(item.webview_url);
-                                                setPdfViewerModal(true);
-                                            }
-                                        }}>
-                                            <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.MAIN_COLOR}]}>보기</Text>
-                                        </TouchableOpacity>
+                                                }}>
+                                                    <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.MAIN_COLOR}]}>보기</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        }
                                     </View>
                                 )
                             })}
@@ -252,7 +257,7 @@ export const DocumentAccordion = ({
             </>
             :
             <View style={[DocumnetStyle.documentBoxinBox]}>
-                {subList[0].cont_idx === null ?
+                {subList[0].pdf_url === '' ?
                     <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>작성된 계약 서류가 존재하지 않습니다.</Text>
                 :   
                     <View>

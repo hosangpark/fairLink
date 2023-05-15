@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, Alert } from 'react-native'
 import { colors, fontStyle, styles } from '../style/style';
 import CheckBox from '@react-native-community/checkbox';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -73,7 +73,7 @@ export const SignIn = () => {
             // }
         } catch(err) {
             console.log(err);
-            
+            Alert.alert(`err ${err}`);
         }
     };
 
@@ -116,16 +116,17 @@ export const SignIn = () => {
                         <Image source={require('../assets/img/logo.png')} style={{width:270,resizeMode:'contain'}} />
                     </View>
                     <TouchableOpacity onPress={()=>{setIntroModal(true);}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20}}>
-                        <View style={{flex:1,backgroundColor:colors.KAKAO_YELLOW,alignItems:'center',justifyContent:'center',borderRadius:8}}>
-                            <Text style={[fontStyle.f_medium ,{ fontSize: 18, color: colors.FONT_COLOR_BLACK3 }]}>카카오로 시작하기</Text>
+                        <View style={{flex:1,backgroundColor:colors.KAKAO_YELLOW,alignItems:'center',justifyContent:'center',borderRadius:8, flexDirection:'row'}}>
+                            <Image source={require('../assets/img/ic_kakao.png')} style={{width:22,height:22}} />
+                            <Text style={[fontStyle.f_medium ,{ fontSize: 18, color: colors.FONT_COLOR_BLACK3,marginLeft:10 }]}>카카오로 시작하기</Text>
                         </View>
                     </TouchableOpacity>
                     {/*** 임시 */}
-                    <TouchableOpacity onPress={()=>{unlinkKakao();}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20,marginTop:40}}>
+                    {/* <TouchableOpacity onPress={()=>{unlinkKakao();}} style={{flexDirection : 'row',width:'100%',height:52,paddingHorizontal:20,marginTop:40}}>
                         <View style={{flex:1,backgroundColor:colors.KAKAO_YELLOW,alignItems:'center',justifyContent:'center',borderRadius:8}}>
                             <Text style={[fontStyle.f_medium ,{ fontSize: 18, color: colors.FONT_COLOR_BLACK3 }]}>카카오로그아웃</Text>
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <View style={{flexDirection: 'row', marginTop:20}}>
                         <CheckBox
                             disabled={false}

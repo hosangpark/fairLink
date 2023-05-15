@@ -18,6 +18,7 @@ export interface CustomButtonType {
     labelStyle ? : object,
     label : string,
     action : ()=>void,
+    disabled? : boolean,
 }
 export interface CustomPhoneCallType {
     phonenumber:string
