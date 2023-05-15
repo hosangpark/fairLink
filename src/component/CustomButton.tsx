@@ -9,6 +9,7 @@ export const CustomButton = ({
     labelStyle,
     label,
     action,
+    disabled,
 }:CustomButtonType) => {
     return(
         <TouchableOpacity 
@@ -16,6 +17,7 @@ export const CustomButton = ({
             onPress={()=>{
                 if(action)action();
             }}
+            disabled={disabled}
         >
             <Text style={[styles.buttonLabelStyle,fontStyle.f_medium,labelStyle]}>{label}</Text>
         </TouchableOpacity>
