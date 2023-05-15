@@ -21,6 +21,7 @@ import { usePostMutation, usePostQuery } from '../util/reactQuery';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import { updateUserInfo } from '../redux/actions/UserInfoReducer';
 import AsyncStorage from '@react-native-community/async-storage';
+import { AlertModal, initialAlert } from '../modal/AlertModal';
 
 export const SignIn = () => {
     const dispatch = useAppDispatch();
@@ -35,10 +36,27 @@ export const SignIn = () => {
 
     const [introModal, setIntroModal] = useState(false);
 
+    const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
+    
+    const alertModalOn = (msg:string, type? : string) => {
+        setAlertModal({
+            ...alertModal,
+            msg : msg,
+            type : type ? type : '',
+        })
+    }
+    const alertModalOff = () => {
+        setAlertModal(()=>initialAlert);
+    }
+    const alertAction = () => {
+
+    }
+
     const introAction = () => {
         setIntroModal(false);
         signInWithKakao();
     }
+
 
 
     const signInWithKakao = async (): Promise<void> => { //카카오 로그인
@@ -51,10 +69,13 @@ export const SignIn = () => {
             const profile: any = await getProfile();
 
             // if(profile.id){
-                console.log(profile.id);
+                if(!profile.id){
+                    alertModalOn('카카오 로그인 정보를 불러오는데 실패하였습니다.');
+                    return;
+                }
 
                 const signInParams = {
-                    sns_id : profile.id ? profile.id : '123',
+                    sns_id : profile.id,
                     app_token : pushToken,
                 }
                 const {result,data, msg} = await signInMutation.mutateAsync(signInParams);
@@ -104,6 +125,13 @@ export const SignIn = () => {
                 show={introModal}
                 hide={()=>{setIntroModal(false)}}
                 action={introAction}
+            />
+            <AlertModal 
+                show={alertModal.alert}
+                msg={alertModal.msg}
+                type={alertModal.type}
+                hide={alertModalOff}
+                action={alertAction}
             />
             <View style={{flex:1, alignItems:'center',justifyContent:'space-between'}}>
                 <View style={{flex:1}} />
