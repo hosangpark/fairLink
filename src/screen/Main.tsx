@@ -56,7 +56,6 @@ export const Main = () => {
     const pilotCheckHandler = async () => {
 		const {data,result,msg} = await pilotWorkCheckMutation.mutateAsync({
 			mt_idx : mt_idx
-			// mt_idx : '22'
 		});
 
 		if(result === 'true'){

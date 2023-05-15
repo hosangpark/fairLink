@@ -24,7 +24,7 @@ export const WorkReport = ({cdwt_idx}:{cdwt_idx:string}) => {
     const dispatch = useAppDispatch();
     const {data : WorkReportData, isLoading : WorkReportDataLoading, isError : WorkReportDataError} = 
     /** mt_idx 임의입력 수정필요 */
-    usePostQuery('getWorkReport',{mt_idx : "22",cdwt_idx:cdwt_idx},'pilot/pilot_work_info.php');
+    usePostQuery('getWorkReport',{mt_idx : mt_idx,cdwt_idx:cdwt_idx},'pilot/pilot_work_info.php');
 
     const writePilotWorkMutation = usePostMutation('writePilotWork' , 'pilot/pilot_work_write.php');
 

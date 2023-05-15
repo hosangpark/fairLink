@@ -30,8 +30,6 @@ export const MatchingEquipment = ({route}:MatchingEquipmentType) => {
     const {data : equipData, isLoading : equipLoading, isError : equipError} = usePostQuery('getEquipList' , {
         mt_idx : mt_idx,
         cot_idx : reqInfo.cot_idx,
-        // mt_idx : '22',
-        // cot_idx : '16',
     } , 'equip/equip_order_e_list.php');
 
     const getIsPilotMutation = usePostMutation('getIsPilot','equip/equip_order_p_list.php');

@@ -11,6 +11,7 @@ import { usePostMutation } from "../../../util/reactQuery";
 import { useAppSelector } from "../../../redux/store";
 import { MyInfoDataType, MypageDataType } from "../../../component/componentsType";
 import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
+import { birth_numeric, email_Check, phone_numeric } from "../../../component/utils/funcKt";
 
 export const MyInfo = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -48,18 +49,42 @@ export const MyInfo = () => {
         }
     };
     const handleInputCheck = () => {
-        if (mt_type=="1" && name == "" || position =="" || company =="" || ceo=="" || phoneNum=="" || email=="") {
-            alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
-        } else if(mt_type=="2" && name == "" || birth =="" || company =="" || ceo=="" || phoneNum=="" || email=="") {
-            alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
-        }  else if(mt_type=="3" && name == "" || birth =="" || phoneNum=="" || email==""){
-            alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
-        }  else {
-            scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true});
-            setIsEditable(false)
-            setBgColor(colors.BACKGROUND_COLOR_GRAY1)
-            ModyfiInform()
+        switch(mt_type){
+            case "1":
+                if(name == "" || position =="" || company =="" || ceo=="" || phoneNum=="" || email==""){
+                    alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
+                }else if(email_Check(email).result){
+                    alertModalOn('이메일 형식을 확인해주세요.')
+                } else {
+                    BackgroundEditable()
+                }
+            break;
+            case "2":
+                if(name == "" || birth =="" || company =="" || ceo=="" || phoneNum=="" ){
+                    alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
+                }
+                else if(email_Check(email).result){
+                    alertModalOn('이메일 형식을 확인해주세요.')
+                } else {
+                    BackgroundEditable()
+                }
+            break;
+            case "4":
+                if(name == "" || birth =="" || phoneNum=="" || email==""){
+                    alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
+                }else if(!email_Check(email).result){
+                    alertModalOn('이메일 형식을 확인해주세요.')
+                }else {
+                    BackgroundEditable()
+                }
+            break;
         }
+    }
+    const BackgroundEditable=()=>{
+        scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true});
+        setIsEditable(false)
+        setBgColor(colors.BACKGROUND_COLOR_GRAY1)
+        ModyfiInform()
     }
     const alertModalOn = ( msg : string, type? : string ) => {
         setAlertModal({
@@ -118,16 +143,37 @@ export const MyInfo = () => {
             
         }
     };
+
     const ModyfiInform = async (): Promise<void> => {
+        let idxParams:any = {
+            mt_idx : mt_idx,
+            mt_name : name,
+            mt_hp : phoneNum,
+            mt_email : email,
+        }
         try {
-            const idxParams = {
-                mt_idx : mt_idx,
-                mt_name: name,
+
+            mt_type =="1"?
+            idxParams = {
+                ...idxParams,
                 mct_position: position,
                 mct_ceo: ceo,
-                mt_hp: phoneNum,
-                mt_email: email,
+
             }
+            :
+            mt_type =="2"?
+            idxParams = {
+                ...idxParams,
+                mct_position: position,
+                mct_ceo: ceo,
+            }
+            :
+            idxParams = {
+                ...idxParams,
+                mt_birth: birth,
+            }
+            console.log(idxParams)
+
             const {result,data, msg} = 
             mt_type == '1'?  await consModifyMutation.mutateAsync(idxParams)
             :
@@ -139,12 +185,11 @@ export const MyInfo = () => {
                 console.log("result",result)
                 console.log("data",data.data)
                 console.log("msg",msg)
-                InfoInform()
             }
             else{
                 console.log("else",result)
             }
-        // }
+
         } catch(err) {
             console.log(err);
             
@@ -154,8 +199,7 @@ export const MyInfo = () => {
 
     React.useEffect(()=>{
         InfoInform()
-        console.log(mt_type)
-    },[])
+    },[isEditable])
     
     return (
         <>
@@ -183,7 +227,8 @@ export const MyInfo = () => {
                                 style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                                 editable={isEditable}
                                 value={birth}
-                                onChangeText={setBirth}
+                                onChangeText={e=>setBirth(birth_numeric(e))}
+                                keyboardType={"number-pad"}
                             />
                         </View>
                     } 
@@ -242,6 +287,7 @@ export const MyInfo = () => {
                                 editable={isEditable}
                                 value={businessNum}
                                 onChangeText={setBusinessNum}
+                                keyboardType={"number-pad"}
                             />
                         </View>
                     </View>
@@ -256,7 +302,8 @@ export const MyInfo = () => {
                             style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
                             value={phoneNum}
-                            onChangeText={setPhoneNum}
+                            onChangeText={e=>setPhoneNum(phone_numeric(e))}
+                            keyboardType={"number-pad"}
                         />
                     </View>
                     <View>
@@ -265,7 +312,7 @@ export const MyInfo = () => {
                             style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
                             editable={isEditable}
                             value={email}
-                            onChangeText={setEmail}
+                            onChangeText={e=>setEmail(e)}
                         />
                     </View>
                 </View>
