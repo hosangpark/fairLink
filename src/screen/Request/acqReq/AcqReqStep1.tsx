@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, KeyboardAvoidingView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { BackHeader } from '../../../component/header/BackHeader';
 import { AcqReqStep1Type, ManagerItemType, ObjArrayType, ReqTopInfo } from '../../screenType';
-import { usePostQuery } from '../../../util/reactQuery';
+import { usePostMutation, usePostQuery } from '../../../util/reactQuery';
 import { useAppDispatch, useAppSelector } from '../../../redux/store';
 import { AlertModal, initialAlert } from '../../../modal/AlertModal';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../../style/style';
@@ -50,7 +50,10 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
     
     //담당자 불러오기
     const {data:myManData, isLoading : myManLoading, isError : myManError} = usePostQuery('getMyManData',{mt_idx:mt_idx},'cons/manager_list.php');
-    
+
+    //최근배차내역 데이터 불러오기
+    const getPrevOrderInfoMutation = usePostMutation('getPrevOrderInfo','cons/cons_order_prev_info.php');
+
     const [myInfo, setMyInfo] = React.useState<ReqTopInfo>();
     const [managerList, setMangetList] = React.useState<ObjArrayType[]>([]); //담당자 정보리스트
     const [tempSelAcc , setTempSelAcc] = React.useState(''); //부속장치 선택값
@@ -179,7 +182,6 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
         })
     }
     const managerSelHandler = () => { //담당자 선택했을때 데이터 처리
-
         if(inputInfo.cot_m_idx === ''){
             setSelectModal(false);
         }
@@ -254,6 +256,24 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
                 cot_e_sub : [...tempArray]
             })
         }
+    }
+
+    const getPrevOrderDataHandler = async (cot_idx:string) => {
+        const params ={
+            mt_idx : '17',
+            type : 'like',
+            cot_idx : cot_idx,
+        }
+        const {data, result, msg} = await getPrevOrderInfoMutation.mutateAsync(params);
+        dispatch(toggleLoading(false));
+
+        console.log(data);
+
+        setInputInfo({
+            ...inputInfo,
+            ...data.data,
+            cot_e_sub : data.data.cot_e_sub.split(','),
+        }) 
     }
 
     const inputCheckHandler = () =>{
@@ -635,7 +655,9 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
             <LastDispatchInfoModal 
                 show={lastDisModal}
                 hide={()=>{setLastDisModal(false)}}
-                action={()=>{}}
+                action={getPrevOrderDataHandler}
+                type={'like'}
+                
             />
             <DateTimePickerModal //공사기간 시작일 date picker
                 isVisible={startDateModal.show}

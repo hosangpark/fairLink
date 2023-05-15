@@ -8,7 +8,9 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { AgreementsType } from '../screenType';
-
+import { AgreeModal } from '../../modal/AgreeModal';
+import { AlertModal, initialAlert } from '../../modal/AlertModal';
+import { KakaoProfile, getProfile as getKakaoProfile, unlink,} from '@react-native-seoul/kakao-login';
 
 
 export const Agreements = ({route}:AgreementsType) => {
@@ -17,6 +19,40 @@ export const Agreements = ({route}:AgreementsType) => {
 
     const [checkItems, setCheckItems] = useState<number[]>([]);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    const [agreeModal, setAgreeModal] = React.useState(false);
+    const [agreeType, setAgreeType] = React.useState('');
+
+    const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
+    const alertModalOn = (msg:string, type?:string) => {
+        setAlertModal({
+            ...alertModal,
+            alert:true,
+            msg:msg,
+            type : type ? type : '',
+        })
+    }
+
+    const alertModalOff = () => {
+        setAlertModal(()=>initialAlert);
+    }
+
+    const unlinkKakao = async (): Promise<void> => { //카카오 로그아웃
+        try {
+          
+          const message = await unlink();
+          console.log(message);
+        } catch(err) {
+          console.log(err);
+          
+        }
+    };
+
+    const alertAction = () => {
+        if(alertModal.type === 'email_none'){
+            unlinkKakao();
+            navigation.goBack();
+        }
+    }
     
     const agreementsData = [
         {id: 0, content: '[필수] 개인정보 수집 및 이용 동의'},
@@ -43,9 +79,36 @@ export const Agreements = ({route}:AgreementsType) => {
         }
     };
 
+    
+
+    const getProfileInfo = async () => { //카카오 정보 불러오기
+        const profile : KakaoProfile = await getKakaoProfile();
+        console.log(profile);
+        if(profile.email === 'null'){
+            alertModalOn('개인정보 제3자 제공동의\n카카오계정(이메일)항목은 반드시 동의해주세요.','email_none');
+        }
+    }
+
+
+    React.useEffect(()=>{
+        getProfileInfo();
+    },[])
+
     return (
         <View style={{ flex: 1, backgroundColor: colors.WHITE_COLOR, }}>
             <BackHeader title="간편 회원가입" />
+            <AgreeModal
+                show={agreeModal}
+                hide={()=>setAgreeModal(false)}
+                type={agreeType}
+            />
+            <AlertModal 
+                show={alertModal.alert}
+                msg={alertModal.msg}
+                hide={alertModalOff}
+                action={alertAction}
+                type={alertModal.type}
+            />
                 <View style={{ margin: 20 }}>
                     <Text style={[fontStyle.f_bold, {color: colors.FONT_COLOR_BLACK, fontSize: 24, marginBottom: 10 }]}>이용약관 동의</Text>
                 </View>
@@ -75,9 +138,18 @@ export const Agreements = ({route}:AgreementsType) => {
                                     tintColors={{ true: colors.MAIN_COLOR }}
                                     style={{ width: 24, height: 24 }}
                                 />
-                                <Text style={[fontStyle.f_semibold, {  fontSize: 16, color: colors.FONT_COLOR_BLACK, marginHorizontal: 10 }]}>{data.content}</Text>
+                                <TouchableOpacity onPress={()=>{
+                                    handleSingleCheck(!checkItems.includes(data.id),data.id)
+                                    // setAgreeModal(true);
+                                    // setAgreeType(String(key));
+                                }}>
+                                    <Text style={[fontStyle.f_semibold, {  fontSize: 16, color: colors.FONT_COLOR_BLACK, marginHorizontal: 10 }]}>{data.content}</Text>
+                                </TouchableOpacity>
                             </View>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={()=>{
+                                setAgreeModal(true);
+                                setAgreeType(String(key));
+                            }}>
                                 <Image style={{ width: 8, height: 13, marginRight: 2 }} source={require('../../assets/img/ic_right_lg.png')}/>
                             </TouchableOpacity>
                         </View>
@@ -85,7 +157,15 @@ export const Agreements = ({route}:AgreementsType) => {
                 </View>
                 <View style={{ margin: 20 }}>
                     <TouchableOpacity style={{ backgroundColor: colors.MAIN_COLOR, borderRadius: 4, padding: 12, }}
-                        onPress={() => navigation.navigate('MemberLine',{token:token})}>
+                        onPress={() => {
+                            console.log(checkItems);
+                            if(checkItems.some(el=>el === 0) && checkItems.some(el=>el === 1)){
+                                navigation.navigate('MemberLine',{token:token})
+                            }
+                            else{
+                                alertModalOn('필수 이용약관 동의를 해주세요.');
+                            }
+                        }}>
                         <Text style={[ fontStyle.f_semibold, { color: colors.WHITE_COLOR, fontSize: 18, textAlign: 'center', }]}>동의하고 계속하기</Text>
                     </TouchableOpacity>
                 </View>

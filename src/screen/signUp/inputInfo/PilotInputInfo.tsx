@@ -16,9 +16,10 @@ import { EquInputInfoType, PilotInputInfoType } from '../../screenType';
 import { accessoriesConvert, bankList, getEquStaDetailCon, getEquipListConverter, getEquipStandConverter, locationList } from '../../../component/utils/list';
 import { usePostMutation } from '../../../util/reactQuery';
 import messaging from '@react-native-firebase/messaging';
-import { getProfile } from '@react-native-seoul/kakao-login';
+import { KakaoProfile, getProfile } from '@react-native-seoul/kakao-login';
 import { useAppDispatch } from '../../../redux/store';
 import { toggleLoading } from '../../../redux/actions/LoadingAction';
+import { checkCompanyNumber } from '../../../util/func';
 
 interface PilotInputInfoItemType {
     mb_sex_m : boolean,
@@ -68,6 +69,10 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
 
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
 
+    const [profileInfo, setProfileInfo] = React.useState<KakaoProfile & {birthday:string}>();
+
+    
+
     const alertModalOff = () => {
         setAlertModal(()=>initialAlert);
     }
@@ -104,20 +109,23 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
 
     const saveInfoHandler = async () => { //장비업체 회원가입
 
-        dispatch(toggleLoading(true));
+        if(profileInfo){
         const pushToken = await messaging().getToken();
-        const profile: any = await getProfile();
+
+        const birthDayYear = profileInfo.birthyear === 'null' ? '1998' : profileInfo.birthyear;
+        const birthDay = profileInfo.birthday === 'null' ? '01-06' : profileInfo.birthday.slice(0,2)+'-'+profileInfo.birthday.slice(2,4);
+
 
         const signUpParams = {
-            mt_id : profile.email === 'null' ? 'aaa@aaa.com' : profile.email,
+            mt_id : profileInfo.email === 'null' ? 'aaa@aaa.com' : profileInfo.email,
             sns_id : sns_id,
             app_token : pushToken,
             sql_check : 'N',
             mt_type : '4',
-            mt_name : profile.nickname === 'null' ? 'name' : profile.nickname,
-            mt_birth : profile.birthyear === 'null' || profile.birthday === 'null' ? '1998-01-06' : profile.birthyaer+'-'+profile.birthday,
+            mt_name : profileInfo.nickname === 'null' ? 'name' : profileInfo.nickname,
+            mt_birth : birthDayYear+'-'+birthDay,
             // mt_gender : 'M'
-            mt_hp : profile.phoneNumber === 'null' ? '010-9793-9181' : profile.phoneNumber,
+            mt_hp : profileInfo.phoneNumber === 'null' ? '010-9793-9181' : profileInfo.phoneNumber,
             mt_gender : inputInfo.mb_sex_m ? 'M' : 'F',
             mpt_company : inputInfo.mpt_company,
             mpt_ceo : inputInfo.mpt_ceo,
@@ -130,7 +138,10 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
             mpt_equip_stand2 : inputInfo.mpt_equip_stand2,
         }
 
+        dispatch(toggleLoading(true));
         const {data,msg,result} = await signUpPilotMutation.mutateAsync(signUpParams);
+        dispatch(toggleLoading(false));
+
         console.log(data,msg,result);
 
         if(result === 'true'){
@@ -144,12 +155,15 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
         else{
 
         }
-        dispatch(toggleLoading(false));
+        }
     }
 
     const inputCheckHandler = () => {
         if(inputInfo.mpt_company === ''  || inputInfo.mpt_ceo === '' || inputInfo.mpt_busi_num === '' || inputInfo.mpt_location === '' || inputInfo.mpt_vank === '' || inputInfo.mpt_vank_num === '' || inputInfo.mpt_equip_type === ''){
             alertModalOn('필수항목을 모두 입력하세요.');
+        }
+        else if(!checkCompanyNumber(inputInfo.mpt_busi_num)){
+            alertModalOn(`올바른 사업자등록번호를 입력해주세요.\nex) 123-12-12345`);
         }
         else if(inputInfo.mpt_equip_type !== ''){
             if(inputInfo.mpt_equip_stand1 === ''){
@@ -165,6 +179,32 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
             }
         }   
     }
+
+    const getProfileInfo = async () => { //카카오 정보 불러오기
+        const profile : KakaoProfile & {birthday:string} = await getProfile();
+        console.log(profile);
+        setProfileInfo(profile);
+
+        if(profile.gender === 'gender' || profile.gender === 'null'){
+            setInputInfo({
+                ...inputInfo,
+                mb_sex_m : true,
+                mb_sex_f : false,
+            })
+        }
+        else{
+            setInputInfo({
+                ...inputInfo,
+                mb_sex_m : true,
+                mb_sex_f : false,
+            })
+        }
+    }
+
+
+    React.useEffect(()=>{
+        getProfileInfo();
+    },[])
 
     React.useEffect(()=>{
         getEquipList();
@@ -189,7 +229,7 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                 <View style={{flexDirection:'row'}}>
                     <View style={{flex:1,flexDirection:'row',alignItems:'center', marginTop:10}}>
                         <CheckBox
-                            disabled={inputInfo.mb_sex_m}
+                            disabled={true}
                             value={inputInfo.mb_sex_m}
                             onValueChange={(e) => setInputInfo({
                                 ...inputInfo,
@@ -204,7 +244,7 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                     </View>
                     <View style={{flex:1,flexDirection:'row',alignItems:'center', marginTop:10}}>
                         <CheckBox
-                            disabled={inputInfo.mb_sex_f}
+                            disabled={true}
                             value={inputInfo.mb_sex_f}
                             onValueChange={(e) => setInputInfo({
                                 ...inputInfo,
@@ -250,7 +290,7 @@ export const PilotInputInfo = ({memberType,sns_id}:PilotInputInfoType) => {
                     action={()=>{}}
                     button=''
                     editable
-                    placeholder='사업자등록번호를 입력해주세요.'
+                    placeholder='ex) 123-12-12345'
                     placeholderTextColor={colors.GRAY_COLOR}
                     input={inputInfo.mpt_busi_num}
                     setInput={inputInfoHandler}

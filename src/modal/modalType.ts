@@ -113,7 +113,8 @@ export interface LoginIntroModalType extends ModalType{ //로그인 시작할때
 }
 
 export interface LastDispatchModalType extends ModalType{ //최근 배차리스트 modal
-    action? : () => void;
+    action? : (cot_idx:string) => void;
+    type : 'like' | 'open';
 }
 
 export interface ReqDispatchModalType extends ModalType{ //배차요청 type 선택 modal

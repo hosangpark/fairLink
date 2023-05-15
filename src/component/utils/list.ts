@@ -1,5 +1,12 @@
 import { usePostMutation } from "../../util/reactQuery"
 
+export const yearList = ()=>{
+    let yearArray:string[] = [];
+    for(let i=2010; i<=new Date().getFullYear(); i++){
+        yearArray.push(String(i));
+    }
+    return yearArray;
+}
 export const monthList = () => {
     const tempArray = [];
 
@@ -105,6 +112,33 @@ export const bankList = [
     {key : '23', name : '케이뱅크'},
     {key : '24', name : '토스뱅크'}
 ]
+
+// export const deviceImgList = {
+//     "브레이커" : require('../../assets/img/device1'),
+//     "대바가지" : "device2",
+//     "채바가지" : 'device3',
+//     "쪽바가지" : "device4",
+//     "리퍼" : 'device5',
+//     "회전링크" : "device6",
+//     "틸트로테이트" : 'device7',
+//     "집게" : "device8",
+//     "지게발" : 'device9',
+//     "본크러셔" : "device10",
+
+// }
+export const deviceImgList = {
+    "브레이커" : require('../../assets/img/device1.png'),
+    "대바가지" : require('../../assets/img/device2.png'),
+    "채바가지" : require('../../assets/img/device3.png'),
+    "쪽바가지" : require('../../assets/img/device4.png'),
+    "리퍼" : require('../../assets/img/device5.png'),
+    "회전링크" : require('../../assets/img/device6.png'),
+    "틸트로테이트" : require('../../assets/img/device7.png'),
+    "집게" : require('../../assets/img/device8.png'),
+    "지게발" : require('../../assets/img/device9.png'),
+    "본크러셔" : require('../../assets/img/device10.png'),
+
+}
 
 export const speciesList = [ //공종 리스트
     '토공사',

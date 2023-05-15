@@ -64,7 +64,7 @@ const DetailFieldBox = ({
         }
         {title =='대금' &&
         <>
-        {cot_pay_type !== 'Y'?
+        {cot_pay_type === 'Y'?
         <Text style={[fontStyle.f_regular,{fontSize:15,color:colors.MAIN_COLOR,borderWidth:1,borderColor:colors.MAIN_COLOR,borderRadius:4,paddingHorizontal:10,marginLeft:10}]}>
             일대</Text>
             :

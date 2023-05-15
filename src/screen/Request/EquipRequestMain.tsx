@@ -14,6 +14,7 @@ import { AlertModal, initialAlert } from '../../modal/AlertModal';
 import { EquipOrderItemType } from '../screenType';
 import { useIsFocused } from '@react-navigation/native';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
+import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 
 export const EquipRequestMain = () => {
 
@@ -133,6 +134,7 @@ export const EquipRequestMain = () => {
     return(
         <View style={{flex:1}}>
             <BackHeader title="현장지원하기" />
+            <BackHandlerCom />
             <ScrollView style={{flex:1}}>
                 <View style={[styles.white_box_con]}>
                     <CustomSelectBox

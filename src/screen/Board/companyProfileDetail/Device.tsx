@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, Image} from 'react-native';
-import { colors } from '../../../style/style';
+import { colors, fontStyle } from '../../../style/style';
 import { conssubDataType } from '../../../component/componentsType';
 import { sliceArray } from '../../../util/func';
+import { deviceImgList } from '../../../component/utils/list';
 
 export const Device = (route:{subData : string[]}) => {
     const subDataList = sliceArray(route.subData,2);
@@ -13,12 +14,12 @@ export const Device = (route:{subData : string[]}) => {
         <View style={{ padding: 20,}}>
             {subDataList.map((item,index) => {
                 return(
-                    <View key={index} style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',flex:1}}>
+                    <View key={index} style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',flex:1,marginBottom:20}}>
                         {item.map((listItem,listIndex) => {
                             return(
                                 <View style={{justifyContent:'center',alignItems:'center',flex:1 }} key={listIndex}>
-                                    <Image style={{width:184,height:134, borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 8,}} source={require('../../../assets/img/ic_main1.png')} />
-                                    <Text>{listItem}</Text>
+                                    <Image style={{width:'90%',resizeMode:'cover',height:134, borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 8,}} source={deviceImgList[listItem]} />
+                                    <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK,marginTop:10}]}>{listItem}</Text>
                                 </View>
                             )
                         })}

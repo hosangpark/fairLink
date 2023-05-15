@@ -64,6 +64,8 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
     const getConsProfileMutation1 = usePostMutation('getConsProfile','cons/cons_like_list_info.php');
     const getConsProfileMutation2 = usePostMutation('getConsProfile2', 'cons/cons_order_apply_info.php');
 
+    const selOrderApplyMutation = usePostMutation('selOrderApply','cons/cons_order_apply_select.php'); //장비회사 선택
+
     const alertModalOn = ( msg : string, type? : string ) => {
         setAlertModal({
             alert: true,
@@ -82,7 +84,35 @@ export const CompanyProfile = ({route}:CompanyProfileType) => {
             navigation.goBack();
         }
         else if(alertModal.type === 'choice_confirm'){
-            navigation.navigate('ElectronicContract',{cat_idx:cat_idx,cot_idx:cot_idx,route_type:'Info'})
+            selOrderApplyHandler();
+            // navigation.navigate('ElectronicContract',{cat_idx:cat_idx,cot_idx:cot_idx,route_type:'Info'})
+        }
+        else if(alertModal.type === 'choice_success'){
+            navigation.navigate('Board');
+        }
+        else if(alertModal.type === 'choice_fail'){
+            navigation.goBack();
+        }
+    }
+
+    const selOrderApplyHandler = async () => { //지원자 장비회사 선택
+        const params = {
+            mt_idx : mt_idx,
+            cot_idx : cot_idx,
+            cat_idx : cat_idx,
+        }
+
+        console.log(params);
+
+        // dispatch(toggleLoading(true));
+        const {data,result,msg} = await selOrderApplyMutation.mutateAsync(params);
+        // dispatch(toggleLoading(false));
+
+        if(result === 'true'){
+            alertModalOn('지원자 선택이 완료되었습니다.','choice_success');
+        }
+        else{
+            alertModalOn(msg,'');
         }
     }
 

@@ -6,6 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { RequestRouterNavigatorParams } from '../../../type/RequestRouterType';
 import { BackHeader } from '../../component/header/BackHeader';
+import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 
 export const ErecRequstMain = () =>{
 
@@ -16,6 +17,7 @@ export const ErecRequstMain = () =>{
     return(
         <View style={{flex:1}}>
             <BackHeader title="현장지원" />
+            <BackHandlerCom />
             <View style={{flex:1,flexDirection:'row',justifyContent:'space-around',alignItems:'center',width:'100%'}}>
                 <TouchableOpacity style={{backgroundColor:colors.WHITE_COLOR,borderRadius:8,paddingVertical:20,paddingHorizontal:30, justifyContent:'center'}}
                 onPress={()=>{
