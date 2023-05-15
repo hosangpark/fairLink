@@ -18,34 +18,34 @@ export const PdfViewerModal = ({
         return(
             <>
                 {pdfUrl !== '' &&
-                <WebView 
-                    source={{uri:pdfUrl}}
-                    bounces={true}
+                // <WebView 
+                //     source={{uri:pdfUrl}}
+                //     bounces={true}
                     
-                />
-                    // <Pdf
-                    //     trustAllCerts={false}
-                    //     source={{uri:pdfUrl}}
-                    //     onLoadComplete={(numberOfPages,filePath) => {
-                    //         if(isError){
-                    //             setIsError(false);
-                    //         }
-                    //         console.log(`Number of pages: ${numberOfPages}`);
-                    //     }}
-                    //     key={pdfUrl}
-                    //     onPageChanged={(page,numberOfPages) => {
-                    //         console.log(`Current page: ${page}`);
-                    //     }}
-                    //     onError={(error) => {
-                    //         setIsError(true);
-                    //         console.log(error);
-                    //     }}
-                    //     onPressLink={(uri) => {
-                    //         console.log(`Link pressed: ${uri}`);
-                    //     }}
+                // />
+                    <Pdf
+                        trustAllCerts={false}
+                        source={{uri:pdfUrl}}
+                        onLoadComplete={(numberOfPages,filePath) => {
+                            if(isError){
+                                setIsError(false);
+                            }
+                            console.log(`Number of pages: ${numberOfPages}`);
+                        }}
+                        key={pdfUrl}
+                        onPageChanged={(page,numberOfPages) => {
+                            console.log(`Current page: ${page}`);
+                        }}
+                        onError={(error) => {
+                            setIsError(true);
+                            console.log(error);
+                        }}
+                        onPressLink={(uri) => {
+                            console.log(`Link pressed: ${uri}`);
+                        }}
 
-                    //     style={{flex:9,backgroundColor:colors.WHITE_COLOR}}
-                    // />
+                        style={{flex:9,backgroundColor:colors.WHITE_COLOR}}
+                    />
                 }
             </>
         )

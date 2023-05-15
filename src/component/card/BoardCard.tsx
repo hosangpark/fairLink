@@ -261,21 +261,25 @@ export const BoardCard = ({
                                 }
                                 {}
                             </TouchableOpacity>
-                            {(mt_type === '2' && 
-                                (title === '조종사 모집중' || title === '현장지원 완료')) &&
-                            <TouchableOpacity onPress={()=>{
-                                alertModalOn('모집취소 하시겠습니까?','delete_confirm');
-                            }} style={{backgroundColor:colors.RED_COLOR2,height:30,justifyContent:'center',alignItems:'center',borderRadius:8,marginTop:10}}>
-                                <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.RED_COLOR4}]}>모집취소</Text>
-                            </TouchableOpacity>
-                            }
+                            
                         </View>
                     </View>
+                    {(mt_type === '2' && 
+                        (title === '조종사 모집중' || title === '현장지원 완료')) &&
+                        <CustomButton
+                        style={{}}
+                        labelStyle={{fontSize:16}}
+                        label={'모집취소'}
+                        disabled={true}
+                        action={()=>{ alertModalOn('모집취소 하시겠습니까?','delete_confirm')}}
+                        />
+                    }
                     {mt_type !=="4" && title == "작업완료" &&
                         <CustomButton
                             style={{}}
                             labelStyle={{fontSize:16}}
                             label={'작업일보 승인대기'}
+                            disabled={true}
                             action={()=>{navigation.navigate('Document',{cdwt_idx:''})}}
                         />
                     }

@@ -79,7 +79,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
 
     const {data : DetailWorkData, isLoading : DetailWorkDataLoading, isError : DetailWorkDataError ,refetch : DetailRefetch} = 
     usePostQuery('getConsDetailWorkData',
-        {mt_idx : '17', cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx}, 
+        {mt_idx : mt_idx, cot_idx:route.params.cot_idx, cat_idx:route.params.cat_idx}, 
         mt_type === '1' ? 'cons/cons_order_info2.php' : mt_type === '2' ?'equip/equip_order_info2.php' : 'pilot/pilot_order_info2.php' 
     )
 
@@ -138,7 +138,7 @@ export const DetailWork = ({route}:DetailWorkType) => {
         console.log(dayStatusCode);
 
         const params = {
-            mt_idx : '17',
+            mt_idx : mt_idx,
             cwt_idx : selectDayItem?.cwt_idx,
             status : dayStatusCode === 0 ? 'Y' : 'N',
             reason : dayStatusCode === 0 ? '' : String(dayStatusCode),
@@ -204,9 +204,6 @@ export const DetailWork = ({route}:DetailWorkType) => {
                 if(item.file_url && item.file_url !== ''){
                     allFileArray.push(item.file_url);
                 }
-                else if(item.webview_url && item.webview_url !== ''){
-                    allFileArray.push(item.webview_url);
-                }
                 else if(item.pdf_url && item.pdf_url !== ''){
                     allFileArray.push(item.pdf_url);
                 }
@@ -266,8 +263,8 @@ export const DetailWork = ({route}:DetailWorkType) => {
                 if(shareFileUrlInfo[key].length > 0) {
                     shareFileUrlInfo[key].forEach((item) => {
                         console.log(item);
-                        const nameFilter = detailWorkInfo.document_dailywork.filter((el:{cdwt_date:string,webview_url:string,file_check:string}) => el.webview_url === item);
-                        shareInfo['작업일보'] = [...shareInfo['작업일보'], {name : nameFilter[0].cdwt_date+' 작업일보' , url : nameFilter[0].webview_url}];
+                        const nameFilter = detailWorkInfo.document_dailywork.filter((el:{cdwt_date:string,pdf_url:string,file_check:string}) => el.pdf_url === item);
+                        shareInfo['작업일보'] = [...shareInfo['작업일보'], {name : nameFilter[0].cdwt_date+' 작업일보' , url : nameFilter[0].pdf_url}];
                         flag = true;
                     })
                 }
