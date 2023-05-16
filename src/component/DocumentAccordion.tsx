@@ -132,6 +132,15 @@ export const DocumentAccordion = ({
   
     return(
       <View style={[DocumnetStyle.documentBox,]}>
+        {PdfViewerModal &&
+            <PdfViewerModal 
+                show={pdfViewerModal}
+                hide={()=>{setPdfViewerModal(false)}}
+                action={()=>{}}
+                pdfUrl={selPdfUrl}
+                setSelPdfUrl={setSelPdfUrl}
+            />
+        }
         <TouchableOpacity style={[DocumnetStyle.documentBoxinTop]} onPress={()=>setOpenbox(!openbox)}>
             <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
                 {title}</Text>
@@ -145,7 +154,7 @@ export const DocumentAccordion = ({
             <>
             {title !== '계약 서류' ? 
             <>
-                {subList.length === 0 && title === '작업일보' ? 
+                {subList.length === 0 && title === '작업일보' ? //작업일보가 없을때
                     <View style={{padding:20, alignItems:'center',justifyContent:'center'}}>
                         <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{`작성된 작업일보가 없습니다.\n 작업일보를 작성해주세요.`}</Text>
                         <CustomButton
@@ -168,22 +177,14 @@ export const DocumentAccordion = ({
                             labelStyle={{color : colors.MAIN_COLOR,fontSize:16}}
                         />
                     </View>
-                : mt_type === '1' && title === '작업일보' ? 
+                : mt_type === '1' && title === '작업일보' ? //건설회사 작업일보 리스트
                     subList.length === 0 ? 
                         <View style={[DocumnetStyle.documentBoxinBox]}>
                             <Text>작성된 작업일보가 존재하지 않습니다.</Text>
                         </View>
                     :
                     <View>
-                        {PdfViewerModal &&
-                            <PdfViewerModal 
-                                show={pdfViewerModal}
-                                hide={()=>{setPdfViewerModal(false)}}
-                                action={()=>{}}
-                                pdfUrl={selPdfUrl}
-                                setSelPdfUrl={setSelPdfUrl}
-                            />
-                        }
+                        
                         <View style={[DocumnetStyle.documentBoxinBox]}>
                             <TouchableOpacity 
                             onPress={()=>{
@@ -231,7 +232,7 @@ export const DocumentAccordion = ({
                             })}
                         </View>
                     </View>
-                :
+                : //서류 리스트
                     <View style={[DocumnetStyle.documentBoxinBox]}>
                         {subList.length !== 0 ? 
                         <>
@@ -267,19 +268,51 @@ export const DocumentAccordion = ({
                     </View>
                 }
             </>
-            :
+            : //계약서류 리스트
             <View style={[DocumnetStyle.documentBoxinBox]}>
-                {subList[0].pdf_url === '' ?
+                {subList[0].pdf_url !== '' ?
                     <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>작성된 계약 서류가 존재하지 않습니다.</Text>
                 :   
-                    <View>
+                <>
+                    {/* <View>
                         <TouchableOpacity>
                             <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.MAIN_COLOR,textAlign:'right'}]}>전체선택</Text>
                         </TouchableOpacity>
                         <MarginCom mb={5} />
 
-                        <Text>{subList[0].pdf_url}</Text>
+                         <Text>{subList[0].pdf_url}</Text>
                     </View>
+                    <MarginCom mt={20} /> */}
+                    <View>
+                        <View style={{flexDirection:'row',alignItems:'center', justifyContent:'space-between', marginBottom:20}}>
+                            <View style={{flexDirection:'row',alignItems:'center'}}>
+                                <TouchableOpacity onPress={()=>{
+                                    console.log(title);
+                                    const isCheck = checkFileList.filter(el=>el === subList[0].pdf_url).length !== 0;
+                                    if(subList[0].pdf_url && title){
+                                        if(isCheck){
+                                            checkFileHandler(subList[0].pdf_url,'del',title);
+                                        }
+                                        else{
+                                            checkFileHandler(subList[0].pdf_url,'add',title)
+                                        }
+                                    }
+                                }}>
+                                    <Image style={{width:20,height:20,marginRight:10}} source={checkFileList.filter(el=>el === subList[0].pdf_url).length !== 0 ?require('../assets/img/ic_check_on.png'):require('../assets/img/ic_check_off.png')}/>
+                                </TouchableOpacity>
+                                <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{subList[0].cdwt_date} 계약서류</Text>
+                            </View>
+                            <TouchableOpacity onPress={()=>{
+                                if(subList[0].pdf_url){
+                                    setSelPdfUrl(subList[0].pdf_url);
+                                    setPdfViewerModal(true);
+                                }
+                            }}>
+                                <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.MAIN_COLOR}]}>보기</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </>
                 }
             </View>
             }

@@ -208,15 +208,22 @@ export const MyInfoEqu = () => {
     },[beforeBankImg,beforeBusiImg])
     const ModyfiInform = async (): Promise<void> => {
         try {
-            let idxParams = {
+            let idxParams : {
+                mt_idx : string,
+                mt_birth : string,
+                mt_hp : string,
+                met_location : string,
+                met_bank : string,
+                met_bank_num : string,
+                met_busi_file? : object,
+                met_bank_file? : object,
+            } = {
                 mt_idx : mt_idx,
                 mt_birth : birth,
                 mt_hp : phoneNum,
                 met_location : location,
                 met_bank : metBank,
                 met_bank_num : metBankNum,
-                met_busi_file : {},
-                met_bank_file : {},
             }   
 
             const busiFilterData = uploadList.filter(el => el.key === '1');
@@ -252,7 +259,8 @@ export const MyInfoEqu = () => {
                 console.log("result",result)
                 console.log("data",data.data)
                 console.log("msg",msg)
-
+                setUploadList([]);
+                InfoInform();
                 alertModalOn('정보 수정이 완료되었습니다.','edit_success');
             }
             else{
