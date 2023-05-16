@@ -175,14 +175,19 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
         if(result === 'true'){
             alertModalOn('현장지원이 완료되었습니다.','sup_success');
             
-            let params:any = {
-                location:sel_location,
-                type:sel_type,
-                stand1:sel_stand1,
-                stand2:sel_stand2,
-                price_type:sel_price_type
-            }
-            AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
+            // let params:any = {
+            //     location:sel_location,
+            //     type:sel_type,
+            //     stand1:sel_stand1,
+            //     stand2:sel_stand2,
+            //     price_type:sel_price_type
+            // }
+            // location:inputInfo.location,
+            // type:inputInfo.type,
+            // stand1:inputInfo.stand1,
+            // stand2:inputInfo.stand2,
+            // price_type:inputInfo.price_type,
+            // AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
         }
         else{
             alertModalOn(msg,'');

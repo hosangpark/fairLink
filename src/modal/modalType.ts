@@ -149,6 +149,8 @@ export type PdfViewerModalType = {
     action:()=>void
     hide:()=>void,
     pdfUrl : string,
+    webviewUrl : string
+    contract_idx:string
     setSelPdfUrl : (url:string) =>void;
 }
 

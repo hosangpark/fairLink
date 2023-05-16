@@ -17,7 +17,6 @@ import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 import AsyncStorage from '@react-native-community/async-storage';
 import { updateUserInfo } from '../../redux/actions/UserInfoReducer';
-import { Filter } from '../../redux/actions/FilterReducer';
 
 interface Inputtype {
     sel_location : string,
@@ -154,19 +153,26 @@ export const EquipRequestMain = () => {
     },[inputInfo.stand2,inputInfo.price_type])
 
     React.useEffect(()=>{
-        let params:Inputtype = {
-            sel_location:inputInfo.location,
-            sel_type:inputInfo.type,
-            sel_stand1:inputInfo.stand1,
-            sel_stand2:inputInfo.stand2,
-            sel_price_type:inputInfo.price_type
-        }
+        let params:any = {
+                location:inputInfo.location,
+                type:inputInfo.type,
+                stand1:inputInfo.stand1,
+                stand2:inputInfo.stand2,
+                price_type:inputInfo.price_type,
+            }
+        // let params:any = {
+        //     ...userInfo,
+        //     sel_location:inputInfo.location,
+        //     sel_type:inputInfo.type,
+        //     sel_stand1:inputInfo.stand1,
+        //     sel_stand2:inputInfo.stand2,
+        //     sel_price_type:inputInfo.price_type
+        // }
         
-        dispatch(Filter({
-            params}));
-
-        console.log(params)
-        // AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
+        // dispatch(updateUserInfo({
+        //     ...userInfo,
+        //     params}));
+        AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
     },[inputInfo.location,inputInfo.type,inputInfo.stand1,inputInfo.stand2,inputInfo.price_type])
 
     return(

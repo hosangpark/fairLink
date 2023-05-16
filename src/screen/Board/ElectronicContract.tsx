@@ -159,6 +159,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
             setEditMode('view')
         }
         dispatch(toggleLoading(ElectronicDataLoading));
+        console.log(ElectronicData)
         if(ElectronicData){
             if(ElectronicData.result == 'true'){
                 setElectronic(ElectronicData.data);
@@ -530,7 +531,7 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                         text={'주소없음'}
                     />
                 </View>
-                {route_type == 'Info2'?
+                {mt_type == "2" && route_type == 'Info2'?
                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                     <CustomButton
                         style={{flex:1,marginRight:10}}
