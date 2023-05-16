@@ -14,7 +14,6 @@ import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
 import { CustomSelectBox } from "../../../component/CustomSelectBox";
 import { locationList } from "../../../component/utils/list";
 import { birth_numeric, email_Check, phone_numeric } from "../../../component/utils/funcKt";
-import { CustomSelectBox } from "../../../component/CustomSelectBox";
 import { bankList } from "../../../component/utils/list";
 import { toggleLoading } from "../../../redux/actions/LoadingAction";
 
