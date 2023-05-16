@@ -11,6 +11,8 @@ import { usePostMutation } from "../../../util/reactQuery";
 import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { MyInfoDataType, MypageDataType } from "../../../component/componentsType";
 import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
+import { CustomSelectBox } from "../../../component/CustomSelectBox";
+import { locationList } from "../../../component/utils/list";
 import { birth_numeric, email_Check, phone_numeric } from "../../../component/utils/funcKt";
 import { CustomSelectBox } from "../../../component/CustomSelectBox";
 import { bankList } from "../../../component/utils/list";
@@ -277,12 +279,18 @@ export const MyInfo = () => {
                             />
                         </View>
                         <View>
-                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>활동 지역</Text>
-                            <TextInput 
-                                style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
-                                editable={isEditable}
-                                value={location}
-                                onChangeText={setLocation}
+                            <CustomSelectBox 
+                                strOptionList={locationList}
+                                strSetOption={setLocation}
+                                selOption={location}
+                                buttonStyle={selectBoxStyle.btnStyle}
+                                buttonTextStyle={selectBoxStyle.btnTextStyle}
+                                rowStyle={selectBoxStyle.rowStyle}
+                                rowTextStyle={selectBoxStyle.rowTextStyle}
+                                defaultText='활동지역을 선택해주세요.'
+                                title={'활동지역'}
+                                isDisable={!isEditable}
+                                essential
                             />
                         </View>
                         <View>

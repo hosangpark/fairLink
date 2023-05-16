@@ -120,7 +120,7 @@ export const LastDispatchInfoModal = ({ //최근 배차목록 modal
 
 
 
-    const {data: disData, isLoading : disLoading , isError : disError, refetch : disRefetch} = usePostQuery('getLastOrder',{type:type,mt_idx:'17'},'cons/cons_order_prev_list.php')
+    const {data: disData, isLoading : disLoading , isError : disError, refetch : disRefetch} = usePostQuery('getLastOrder',{type:type,mt_idx:mt_idx},'cons/cons_order_prev_list.php')
 
 
     const handleSingleCheck = (checked:boolean, id:string) => {

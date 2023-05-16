@@ -42,6 +42,7 @@ import { RequestRouter } from './src/screen/Request/RequestRouter';
 import { Board } from './src/screen/Board/Board';
 import { ScaneDetailField } from './src/screen/Request/ScaneDetailField';
 import { RequestPilot } from './src/screen/Board/RequestPilot';
+import { MyInfoEqu } from './src/screen/mypage/myInfo/MyInfoEqu';
 //navigator router ;;
 // type ToastRef = Toast | null;
 
@@ -250,6 +251,11 @@ export const Router = () => {
                 <Stack.Screen // (건설, 조종사) 나의 정보,
                     name={'MyInfo'}
                     component={MyInfo}
+                    options={{headerShown:false}}
+                />
+                <Stack.Screen // (장비회사) 나의 정보,
+                    name={'MyInfoEqu'}
+                    component={MyInfoEqu}
                     options={{headerShown:false}}
                 />
                 <Stack.Screen // (장비) 프로필 설정하기

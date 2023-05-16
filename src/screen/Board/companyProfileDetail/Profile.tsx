@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { colors, fontStyle } from '../../../style/style';
 import { consProfileDataType } from '../../../component/componentsType';
+import { pilotCareerList } from '../../../component/utils/list';
 
 export const Profile = (route:consProfileDataType) => {
 
@@ -11,7 +12,7 @@ export const Profile = (route:consProfileDataType) => {
             <Text style={[ fontStyle.f_semibold, { fontSize: 20, color:colors.FONT_COLOR_BLACK}]}>경력사항</Text>
             <View style={{ marginVertical: 10 }}>
                 <Text style={[ fontStyle.f_medium, { fontSize: 16, color: colors.FONT_COLOR_BLACK}]}>
-                    {route.profileData.mpt_career} 년
+                    {pilotCareerList[Number(route.profileData.mpt_career)] }
                 </Text>
                 <Text style={[ fontStyle.f_regular, { fontSize: 15, color: colors.FONT_COLOR_BLACK2}]}>
                     {route.profileData.mpt_licence} {'\n'}

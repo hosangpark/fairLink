@@ -31,6 +31,8 @@ export const fetchPostData = async (postData:any, apiUrl : string, formData? :bo
                 formData.append(key,postData[key]);
             }
         }
+
+        console.log(formData);
         
         const {data} = await axiosInstance.post(apiUrl,formData,config)
     
