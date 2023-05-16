@@ -337,7 +337,7 @@ export const styles = StyleSheet.create({
         borderWidth: 1, 
         borderColor: colors.BORDER_GRAY_COLOR, 
         height: 46, 
-        paddingHorizontal: 20, 
+        paddingHorizontal: 15, 
         borderRadius: 4
     },
     // docImage: {

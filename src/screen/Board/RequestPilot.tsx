@@ -8,7 +8,7 @@ import { MarginCom } from '../../component/MarginCom';
 import CheckBox from '@react-native-community/checkbox';
 import { TouchableOpacity } from 'react-native';
 import { CustomSelectBox } from '../../component/CustomSelectBox';
-import { payDateList } from '../../component/utils/list';
+import { ageList, goodsList, payDateList, pilotCarrerKeyList, scoreList } from '../../component/utils/list';
 import { CustomInputTextBox } from '../../component/CustomInputTextBox';
 import { NumberComma } from '../../util/func';
 import { CustomButton } from '../../component/CustomButton';
@@ -25,6 +25,7 @@ export const RequestPilot = ({route}:ReqeustPilotType) => {
 
     const dispatch = useAppDispatch();
     const {item:reqInfo,selEquip} = route.params;
+
 
     const {mt_idx} = useAppSelector(state => state.userInfo);
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -122,6 +123,9 @@ export const RequestPilot = ({route}:ReqeustPilotType) => {
         setTempPrice(String(NumberComma(Number(noneCommaPrice))));        
     },[inputInfo.pay_price])
 
+    React.useEffect(()=>{
+        console.log('reqInfo ??? ' , reqInfo);
+    },[])
 
     return(
         <View style={{flex:1}}>
@@ -273,22 +277,22 @@ export const RequestPilot = ({route}:ReqeustPilotType) => {
                     <MarginCom mt={30} />
                     <CustomInputTextBox
                         title={'최소경력'}
-                        input={'해당없음'}
+                        input={pilotCarrerKeyList.filter(el=>el.key === reqInfo.apply_info[0])[0].name}
                     />
                     <MarginCom mt={20} />
                     <CustomInputTextBox
                         title={'연령제한'}
-                        input={'60세 이하'}
+                        input={ageList.filter(el=>el.key === reqInfo.apply_info[1])[0].name}
                     />
                     <MarginCom mt={20} />
                     <CustomInputTextBox
                         title={'최소평점'}
-                        input={'4점 이상'}
+                        input={scoreList.filter(el=>el.key === reqInfo.apply_info[2])[0].name}
                     />
                     <MarginCom mt={20} />
                     <CustomInputTextBox
                         title={'최소추천수'}
-                        input={'1개 이상'}
+                        input={goodsList.filter(el=>el.key === reqInfo.apply_info[3])[0].name}
                     />
                     <MarginCom mt={30} />
                     <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>

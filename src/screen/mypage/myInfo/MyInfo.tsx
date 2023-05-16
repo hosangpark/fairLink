@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react"
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { BackHeader } from "../../../component/header/BackHeader"
-import { colors, fontStyle, styles } from '../../../style/style';
+import { colors, fontStyle, selectBoxStyle, styles } from '../../../style/style';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouterNavigatorParams } from "../../../../type/routerType";
@@ -11,6 +11,8 @@ import { usePostMutation } from "../../../util/reactQuery";
 import { useAppSelector } from "../../../redux/store";
 import { MyInfoDataType, MypageDataType } from "../../../component/componentsType";
 import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
+import { CustomSelectBox } from "../../../component/CustomSelectBox";
+import { locationList } from "../../../component/utils/list";
 
 export const MyInfo = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
@@ -218,12 +220,18 @@ export const MyInfo = () => {
                             />
                         </View>
                         <View>
-                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>활동 지역</Text>
-                            <TextInput 
-                                style={[ styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
-                                editable={isEditable}
-                                value={location}
-                                onChangeText={setLocation}
+                            <CustomSelectBox 
+                                strOptionList={locationList}
+                                strSetOption={setLocation}
+                                selOption={location}
+                                buttonStyle={selectBoxStyle.btnStyle}
+                                buttonTextStyle={selectBoxStyle.btnTextStyle}
+                                rowStyle={selectBoxStyle.rowStyle}
+                                rowTextStyle={selectBoxStyle.rowTextStyle}
+                                defaultText='활동지역을 선택해주세요.'
+                                title={'활동지역'}
+                                isDisable={!isEditable}
+                                essential
                             />
                         </View>
                         <View>

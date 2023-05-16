@@ -177,7 +177,14 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 조종사 관리</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => {navigation.navigate('MyInfo') }}>
+                    <TouchableOpacity onPress={() => {
+                        if(mt_type !== '2'){
+                            navigation.navigate('MyInfo')
+                        } 
+                        else{
+                            navigation.navigate('MyInfoEqu');
+                        }
+                    }}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>
@@ -199,7 +206,14 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
                         <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 프로필</Text>  
                     </TouchableOpacity>
                     {/* <TouchableOpacity onPress={() => {navigation.navigate('MyInfo', {userType:'3'}) }}> */}
-                    <TouchableOpacity onPress={() => { navigation.navigate('MyInfo') }}>
+                    <TouchableOpacity onPress={() => { 
+                        if(mt_type !== '2'){
+                            navigation.navigate('MyInfo')
+                        } 
+                        else{
+                            navigation.navigate('MyInfoEqu');
+                        }
+                    }}>
                         <View style={[styles.deepBottomBorder,{padding:20,flexDirection:'row',justifyContent:'space-between',alignItems:'center'}]}>
                             <Text style={[fontStyle.f_medium,{fontSize:18,color:colors.FONT_COLOR_BLACK}]}>나의 정보</Text>
                         </View>
