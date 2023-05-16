@@ -260,7 +260,7 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
 
     const getPrevOrderDataHandler = async (cot_idx:string) => {
         const params ={
-            mt_idx : '17',
+            mt_idx : mt_idx,
             type : 'like',
             cot_idx : cot_idx,
         }

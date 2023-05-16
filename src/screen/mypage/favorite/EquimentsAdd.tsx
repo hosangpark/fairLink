@@ -437,8 +437,8 @@ export const EquimentsAdd = () => {
                 <View style={{marginBottom:40}}>
                 {  //서류업로드 체크
                     fileCheck ? equProfileUploadList.map((data, index) => { //typeerror 고치기
-                        const fileName:string = 'mpt_file'+String(index+1);
-                        const keyName:string = 'mpt_file'+String(index+1)+'_check';
+                        // const fileName:string = 'mpt_file'+String(index+1);
+                        // const keyName:string = 'mpt_file'+String(index+1)+'_check';
                         return(
                             <View key={index}>
                                 {Object.values(fileCheck)[index] === 'Y' &&

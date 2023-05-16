@@ -219,7 +219,7 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                     />
                     <DetailFieldBox
                         title={'부속장치'}
-                        text={detailFieldInfo.sub_text}
+                        text={detailFieldInfo.sub_text === '' ? '-' : detailFieldInfo.sub_text}
                     />
                     <DetailFieldBox
                         title={'작업내용'}
@@ -241,7 +241,7 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
                     />
                     <DetailFieldBox
                         title={'회사명'}
-                        text={detailFieldInfo.mct_company}
+                        text={detailFieldInfo.mct_company === null || detailFieldInfo.mct_company === '' ? '-' : detailFieldInfo.mct_company}
                     />
                     <DetailFieldBox
                         title={'대금'}

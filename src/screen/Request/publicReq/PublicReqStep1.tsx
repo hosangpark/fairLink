@@ -284,7 +284,7 @@ export const PublicReqStep1 = ({route}:AcqReqStep1Type) => { //공개 배차요�
     const getPrevOrderDataHandler = async ( cot_idx:string ) => { //이전데이터 불러오기
         dispatch(toggleLoading(true));
         const params ={
-            mt_idx : '17',
+            mt_idx : mt_idx,
             type : 'open',
             cot_idx : cot_idx,
         }

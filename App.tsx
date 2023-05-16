@@ -22,6 +22,8 @@ import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 import PushNotification from 'react-native-push-notification'; //push...noti
 import { useNavigationState } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+// import PushNotificationIOS from '@react-native-community/push-notification-ios';
+
 /**
  * react-native 버전 및 sdk 버전은 git hub readme 참조해주세요. 
  *
@@ -222,6 +224,15 @@ const fcmSetting = () => {
         })
         .catch(console.error);
     }
+  },[])
+
+  React.useEffect(()=>{
+    // if(Platform.OS == 'ios'){
+    //   PushNotificationIOS.setApplicationIconBadgeNumber(0);
+    //   PushNotificationIOS.removeAllDeliveredNotifications();
+    // }
+    PushNotification.setApplicationIconBadgeNumber(0);
+    PushNotification.cancelAllLocalNotifications();
   },[])
 
   return (

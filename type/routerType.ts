@@ -49,7 +49,8 @@ export type RouterNavigatorParams = {
     ApplicantStatus:undefined;
     
     /** mypage */
-    MyInfo:undefined;
+    MyInfo:undefined; //건설, 조종사 나의정보
+    MyInfoEqu : undefined; //장비회사 나의 정보
     FavoriteList:undefined;
     FavoriteAdd:{
         equFavType? : string
