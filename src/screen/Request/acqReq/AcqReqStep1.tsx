@@ -383,9 +383,9 @@ export const AcqReqStep1 = ({route}:AcqReqStep1Type) => { //지인 배차요청 
                                     </View>
                                     <MarginCom mt={15} />
                                     <View>
-                                        <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                                        <View style={{flexDirection:'row',justifyContent:'space-between',flex:1}}>
                                             <Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>현장주소</Text>
-                                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{myInfo?.detail_location}</Text>
+                                            <Text style={[fontStyle.f_regular,{fontSize:16,color:colors.FONT_COLOR_BLACK,flexShrink:1}]}>{myInfo?.detail_location}</Text>
                                         </View>
                                     </View>
                                 </View>

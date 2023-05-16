@@ -75,7 +75,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
 
             if(result === 'true'){
                 setMypageData(data.data)
-                console.log(data.data)
+                console.log(data.data,"mt_idx :",mt_idx,"mt_type:",mt_type)
             }
             else{
             }

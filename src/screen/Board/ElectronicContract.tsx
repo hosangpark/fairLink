@@ -160,11 +160,8 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
         }
         dispatch(toggleLoading(ElectronicDataLoading));
         if(ElectronicData){
-            console.log(ElectronicData.data)
-            if(ElectronicData.data.result == 'true'){
+            if(ElectronicData.result == 'true'){
                 setElectronic(ElectronicData.data);
-            } else {
-                
             }
         }
     },[ElectronicData])
@@ -481,11 +478,11 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                 <View style={ElectronicContractstyle.WhiteBox}>
                 <View style={[styles.TitleText]}>
                 <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK}]}>
-                    임차인</Text>
+                    임대인</Text>
                 </View>
                 <View>
                     <ElectronicLayoutbox
-                        title={'현장명'}
+                        title={'상호'}
                         text={Electronic.data1.company}
                     />
                     <ElectronicLayoutbox
@@ -552,7 +549,8 @@ export const ElectronicContract = ({route}:ElectronicContractType) => {
                 style={{}}
                 labelStyle={{}}
                 label={'임대계약서 전송'}
-                action={()=>{alertModalOn('임대계약서를 전송하시겠습니까?', 'confirm');}}
+                action={()=>{
+                    alertModalOn('임대계약서를 전송하시겠습니까?', 'confirm');}}
                 />
                 }
                 </View>

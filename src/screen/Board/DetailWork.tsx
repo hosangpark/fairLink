@@ -28,6 +28,7 @@ import { NumberComma, chunk } from '../../util/func';
 import { MarginCom } from '../../component/MarginCom';
 import { workList } from '../../component/utils/list';
 import cusToast from '../../util/toast/CusToast';
+import { phone_numeric } from '../../component/utils/funcKt';
 
 type shareFileList = {
     document_equip : string[],
@@ -381,10 +382,10 @@ export const DetailWork = ({route}:DetailWorkType) => {
                         <Text style={[fontStyle.f_regular,DetailWorkStyle.boxText2]}>{detailWorkInfo.info?.crt_m_name}</Text>
                     </View>
                     <CustomPhoneCall
-                        phonenumber={detailWorkInfo.info?.crt_m_num}
+                        phonenumber={phone_numeric(detailWorkInfo.info?.crt_m_num)}
                         alertModalOn={()=>{
                             setTempCallNumber(detailWorkInfo.info?.crt_m_num);
-                            alertModalOn(`로\n전화연결하시겠습니까?`,'call_confirm',`${detailWorkInfo.info?.crt_m_num}`)
+                            alertModalOn(`로\n전화연결하시겠습니까?`,'call_confirm',`${phone_numeric(detailWorkInfo.info?.crt_m_num)}`)
                         }}
                     />
                 </View>
@@ -612,7 +613,10 @@ export const DetailWork = ({route}:DetailWorkType) => {
                         phonenumber={detailWorkInfo.equip?.met_hp}
                         alertModalOn={()=>{
                             setTempCallNumber(detailWorkInfo.equip?.met_hp);
+                            detailWorkInfo.equip?.met_hp?
                             alertModalOn(`로\n 전화연결하시겠습니까?`,'call_confirm',detailWorkInfo.equip?.met_hp)
+                            :
+                            alertModalOn(`등록된 번호가 없습니다.`)
                         }}
                     />
                 </View>
