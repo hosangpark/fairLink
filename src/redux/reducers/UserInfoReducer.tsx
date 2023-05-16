@@ -9,11 +9,6 @@ const defaultState: userInfoType = {
     mt_type : '',
     location : '',
     equip_pilot : '',
-    sel_location: '',
-    sel_type: '',
-    sel_stand1: '',
-    sel_stand2: '',
-    sel_price_type: '',
 };
 
 export const UserInfo = (state = defaultState, action: any) => {
@@ -28,11 +23,6 @@ export const UserInfo = (state = defaultState, action: any) => {
                 mt_type : action.mt_type,
                 location : action.location,
                 equip_pilot : action.equip_pilot ? action.equip_pilot : '',
-                sel_location: action.sel_location,
-                sel_type: action.sel_type,
-                sel_stand1: action.sel_stand1,
-                sel_stand2: action.sel_stand2,
-                sel_price_type: action.sel_price_type,
             };
         default:
             return state;

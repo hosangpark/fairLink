@@ -17,6 +17,7 @@ import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 import AsyncStorage from '@react-native-community/async-storage';
 import { updateUserInfo } from '../../redux/actions/UserInfoReducer';
+import { Filter } from '../../redux/actions/FilterReducer';
 
 interface Inputtype {
     sel_location : string,
@@ -153,8 +154,7 @@ export const EquipRequestMain = () => {
     },[inputInfo.stand2,inputInfo.price_type])
 
     React.useEffect(()=>{
-        let params:any = {
-            ...userInfo,
+        let params:Inputtype = {
             sel_location:inputInfo.location,
             sel_type:inputInfo.type,
             sel_stand1:inputInfo.stand1,
@@ -162,9 +162,10 @@ export const EquipRequestMain = () => {
             sel_price_type:inputInfo.price_type
         }
         
-        dispatch(updateUserInfo({
-            ...userInfo,
+        dispatch(Filter({
             params}));
+
+        console.log(params)
         // AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
     },[inputInfo.location,inputInfo.type,inputInfo.stand1,inputInfo.stand2,inputInfo.price_type])
 

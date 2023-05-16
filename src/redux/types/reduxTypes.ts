@@ -16,6 +16,8 @@ export type userInfoType = {
     mt_type : string //1 : 건설 2 : 장비업체 4 : 조종사
     location : string,
     equip_pilot : string,
+}
+export type FilterType = {
     sel_location: string,
     sel_type: string,
     sel_stand1: string,

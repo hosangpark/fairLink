@@ -98,7 +98,8 @@ const DetailFieldBox = ({
 export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const {mt_idx,mt_type,sel_location,sel_price_type,sel_stand1,sel_stand2,sel_type} = useAppSelector(state => state.userInfo);
+    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
+    const {sel_location,sel_price_type,sel_stand1,sel_stand2,sel_type} = useAppSelector(state => state.Filter);
     const {cot_idx,cat_idx} = route.params;
 
     const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
