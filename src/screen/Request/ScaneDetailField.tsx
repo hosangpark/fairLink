@@ -18,6 +18,7 @@ import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 import { NumberComma } from '../../util/func';
 import { pilotCareerList } from '../../component/utils/list';
 import { phone_numeric } from '../../component/utils/funcKt';
+import AsyncStorage from '@react-native-community/async-storage';
 
 type DetailFieldBoxType = {
     title ? : string,
@@ -97,7 +98,7 @@ const DetailFieldBox = ({
 export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-    const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
+    const {mt_idx,mt_type,sel_location,sel_price_type,sel_stand1,sel_stand2,sel_type} = useAppSelector(state => state.userInfo);
     const {cot_idx,cat_idx} = route.params;
 
     const {data : DetailFieldData, isLoading : DetailFieldDataLoading, isError : DetailFieldDataError} = 
@@ -172,6 +173,15 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
 
         if(result === 'true'){
             alertModalOn('현장지원이 완료되었습니다.','sup_success');
+            
+            let params:any = {
+                location:sel_location,
+                type:sel_type,
+                stand1:sel_stand1,
+                stand2:sel_stand2,
+                price_type:sel_price_type
+            }
+            AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
         }
         else{
             alertModalOn(msg,'');

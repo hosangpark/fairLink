@@ -15,12 +15,23 @@ import { EquipOrderItemType } from '../screenType';
 import { useIsFocused } from '@react-navigation/native';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
 import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
+import AsyncStorage from '@react-native-community/async-storage';
+import { updateUserInfo } from '../../redux/actions/UserInfoReducer';
+
+interface Inputtype {
+    sel_location : string,
+    sel_type : string,
+    sel_stand1 : string,
+    sel_stand2 : string,
+    sel_price_type : string
+}
 
 export const EquipRequestMain = () => {
 
     const dispatch = useAppDispatch();
 
     const {mt_idx, mt_type,location:mt_location} = useAppSelector(state => state.userInfo);
+    const userInfo = useAppSelector(state => state.userInfo)
 
     const getEquOrderListMutation = usePostMutation('getEquOrderList',mt_type === '2' ? 'equip/equip_order_list.php' : 'pilot/pilot_order_list.php');
     const getEquipListMutation = usePostMutation('getEquipList','/equip_filter.php');
@@ -100,6 +111,16 @@ export const EquipRequestMain = () => {
     }
 
     React.useEffect(()=>{
+        AsyncStorage.getItem('Supprtinfo').then(item=> {
+            // console.log('item',JSON.parse(item))
+            // console.log('item',(item))
+            if(item){
+                setInputInfo(JSON.parse(item))
+            }
+        })
+    },[])
+
+    React.useEffect(()=>{
         if(isFocused){
             getEquipList();
             if(inputInfo.stand2 !== ''){
@@ -130,6 +151,22 @@ export const EquipRequestMain = () => {
             getEquipOrderList();
         }
     },[inputInfo.stand2,inputInfo.price_type])
+
+    React.useEffect(()=>{
+        let params:any = {
+            ...userInfo,
+            sel_location:inputInfo.location,
+            sel_type:inputInfo.type,
+            sel_stand1:inputInfo.stand1,
+            sel_stand2:inputInfo.stand2,
+            sel_price_type:inputInfo.price_type
+        }
+        
+        dispatch(updateUserInfo({
+            ...userInfo,
+            params}));
+        // AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
+    },[inputInfo.location,inputInfo.type,inputInfo.stand1,inputInfo.stand2,inputInfo.price_type])
 
     return(
         <View style={{flex:1}}>

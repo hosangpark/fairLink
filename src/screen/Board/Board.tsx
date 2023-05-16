@@ -1,5 +1,5 @@
 import React,{useState,useEffect, SetStateAction} from 'react';
-import {SafeAreaView,View,Text,FlatList, ScrollView, TouchableOpacity} from 'react-native';
+import {SafeAreaView,View,Text,FlatList, ScrollView, BackHandler} from 'react-native';
 import { BoardIndexType } from '../screenType';
 import { BackHeader } from '../../component/header/BackHeader';
 import { colors, fontStyle, selectBoxStyle, selectBoxStyle2, styles } from '../../style/style';
@@ -16,18 +16,19 @@ import { dateConverter } from '../../util/func';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouterNavigatorParams } from '../../../type/routerType';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
+import cusToast from '../../util/toast/CusToast';
 
 
 export const Board = ({setTabIndex}:BoardIndexType) => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
-
+    const [exitApp , setExitApp] = React.useState(false);
     const {mt_idx,mt_type} = useAppSelector(state => state.userInfo);
     const [strOption,setStrOption] = useState<string>('전체');
     const [year,setYear] = useState<string>(String(new Date().getFullYear()));
     const [month,setMonth] = useState<string>(String(new Date().getMonth()+1));
     const [listData,setListData] = useState<any>([])
     const dispatch = useAppDispatch();
-
+	const isFocused = useIsFocused();
     const consBoardListMutation = usePostMutation('consBoardList','cons/cons_order_list.php')
     const equipBoardListMutation = usePostMutation('equipBoardList','equip/equip_request_list.php')
     const pilotBoardListMutation = usePostMutation('pilotBoardList','pilot/pilot_request_list.php')
@@ -80,6 +81,39 @@ export const Board = ({setTabIndex}:BoardIndexType) => {
             alertModalOn(`예기치 못한 오류가 발생하였습니다. 고객센터에 문의해주세요.\n error_code : ${err}`,'api_error');
         }
     };
+
+    const backAction = () => {
+		var timeout;
+		let tmp = 0;
+            if(tmp==0){
+                if ((exitApp == undefined || !exitApp) && isFocused) {
+                    cusToast("한번 더 누르시면 종료됩니다");
+                    setExitApp(true);
+                    timeout = setTimeout(
+                        () => {
+                        setExitApp(false);
+                        },
+                        4000
+                    );
+                } else {
+                    // appTimeSave();
+		if(timeout) clearTimeout(timeout);
+				BackHandler.exitApp();  // 앱 종료
+			}
+			return true;
+		}
+	}
+
+	React.useEffect(()=>{
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+        if(!isFocused){
+                backHandler.remove();
+        }
+	},[isFocused,exitApp])
+
     useFocusEffect(
         React.useCallback(() => {
             if(setTabIndex)setTabIndex(3);

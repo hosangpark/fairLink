@@ -8,15 +8,18 @@ import { RouterNavigatorParams } from "../../../../type/routerType";
 import { AlertClearType } from "../../../modal/modalType";
 import { AlertModal, initialAlert } from "../../../modal/AlertModal";
 import { usePostMutation } from "../../../util/reactQuery";
-import { useAppSelector } from "../../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../../redux/store";
 import { MyInfoDataType, MypageDataType } from "../../../component/componentsType";
 import { BackHandlerCom } from "../../../component/utils/BackHandlerCom";
 import { CustomSelectBox } from "../../../component/CustomSelectBox";
 import { locationList } from "../../../component/utils/list";
 import { birth_numeric, email_Check, phone_numeric } from "../../../component/utils/funcKt";
+import { bankList } from "../../../component/utils/list";
+import { toggleLoading } from "../../../redux/actions/LoadingAction";
 
 export const MyInfo = () => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
+    const dispatch = useAppDispatch();
     const {mt_type,mt_idx} = useAppSelector(state => state.userInfo);
     const [isEditable, setIsEditable] = useState(false);
     const [bgColor, setBgColor] = useState(colors.BACKGROUND_COLOR_GRAY1)
@@ -27,6 +30,8 @@ export const MyInfo = () => {
     const [position,setPosition] = useState<string>('')
     const [company,setCompany] = useState<string>('')
     const [location, setLocation] = useState<string>('');
+    const [bank, setBank] = useState<string>('');
+    const [banknum, setBanknum] = useState<string>('');
     const [ceo,setCeo] = useState<string>('')
     const [businessNum,setBusinessNum] = useState<string>('')
     const [phoneNum,setPhoneNum] = useState<string>('')
@@ -55,17 +60,17 @@ export const MyInfo = () => {
             case "1":
                 if(name == "" || position =="" || company =="" || ceo=="" || phoneNum=="" || email==""){
                     alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
-                }else if(email_Check(email).result){
+                }else if(!email_Check(email).result){
                     alertModalOn('이메일 형식을 확인해주세요.')
                 } else {
                     BackgroundEditable()
                 }
             break;
             case "2":
-                if(name == "" || birth =="" || company =="" || ceo=="" || phoneNum=="" ){
+                if(name == "" || birth =="" || company =="" || ceo=="" || phoneNum=="" || banknum ==""){
                     alertModalOn('미작성항목이 있는 경우 사용기능이 제한됩니다.')
                 }
-                else if(email_Check(email).result){
+                else if(!email_Check(email).result){
                     alertModalOn('이메일 형식을 확인해주세요.')
                 } else {
                     BackgroundEditable()
@@ -107,6 +112,7 @@ export const MyInfo = () => {
             const idxParams = {
                 mt_idx : mt_idx,
             }
+            dispatch(toggleLoading(true));
             const {result,data, msg} = 
             mt_type == '1'?  await consInfoMutation.mutateAsync(idxParams)
             :
@@ -123,9 +129,6 @@ export const MyInfo = () => {
                 setPosition(data.data.mct_position)
                 setPhoneNum(data.data.mt_hp)
                 setEmail(data.data.mt_email)
-                if(mt_type === '2'){
-                    setLocation(data.data.met_location);
-                }
                 if(mt_type === '1'){
                     setCompany(data.data.mct_company)
                     setCeo(data.data.mct_ceo)
@@ -134,11 +137,15 @@ export const MyInfo = () => {
                     setCompany(data.data.met_company)
                     setCeo(data.data.met_ceo)
                     setBusinessNum(data.data.met_busi_num)
+                    setLocation(data.data.met_location);
+                    setBank(data.data.mt_bank);
+                    setBanknum(data.data.mt_bank_num);
                 }
             }
             else{
                 console.log("else",result)
             }
+            dispatch(toggleLoading(false));
         // }
         } catch(err) {
             console.log(err);
@@ -149,30 +156,36 @@ export const MyInfo = () => {
     const ModyfiInform = async (): Promise<void> => {
         let idxParams:any = {
             mt_idx : mt_idx,
-            mt_name : name,
+            // mt_name : name,
             mt_hp : phoneNum,
-            mt_email : email,
+            // mt_email : email,
         }
         try {
-
             mt_type =="1"?
             idxParams = {
                 ...idxParams,
                 mct_position: position,
                 mct_ceo: ceo,
-
+                mt_name : name,
+                mt_email : email,
             }
             :
             mt_type =="2"?
             idxParams = {
                 ...idxParams,
-                mct_position: position,
-                mct_ceo: ceo,
+                mt_birth: birth,
+                // mct_ceo: ceo,
+                met_location:location,
+                met_bank:bank,
+                met_bank_num:banknum,
+                met_busi_file:"",
+                met_bank_file:""
             }
             :
             idxParams = {
                 ...idxParams,
                 mt_birth: birth,
+                mt_email : email,
             }
             console.log(idxParams)
 
@@ -296,6 +309,40 @@ export const MyInfo = () => {
                                 value={businessNum}
                                 onChangeText={setBusinessNum}
                                 keyboardType={"number-pad"}
+                            />
+                        </View>
+                    </View>
+                </View>
+            }
+            { /* 건설, 장비 */
+                mt_type == '2'
+                &&
+                <View style={{ padding: 20, backgroundColor: colors.WHITE_COLOR, marginBottom: 10 }}>
+                    <Text style={[ fontStyle.f_semibold, {color: colors.FONT_COLOR_BLACK, fontSize: 20, marginVertical: 10} ]}>계좌 정보</Text>
+                    <View style={{ paddingVertical: 10 }}>
+                        <View>
+                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>은행명</Text>
+                            <CustomSelectBox
+                                objOptionList={bankList}
+                                objSetOption={setBank}
+                                selOption={bankList.filter(el=>el.key === bank)[0] ? bankList.filter(el=>el.key === bank)[0].name : ''}
+                                buttonStyle={selectBoxStyle.btnStyle}
+                                buttonTextStyle={selectBoxStyle.btnTextStyle}
+                                rowStyle={selectBoxStyle.rowStyle}
+                                rowTextStyle={selectBoxStyle.rowTextStyle}
+                                defaultText='주거래은행을 선택해주세요.'
+                                title={'주거래은행'}
+                                isDisable={!isEditable}
+                                essential
+                            />
+                        </View>
+                        <View>
+                            <Text style={[ styles.textLabel, fontStyle.f_semibold ]}>계좌번호</Text>
+                            <TextInput 
+                                style={[styles.textInput, fontStyle.f_regular, {backgroundColor:bgColor} ]}
+                                editable={isEditable}
+                                value={banknum}
+                                onChangeText={setBanknum}
                             />
                         </View>
                     </View>

@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View ,BackHandler } from 'react-native';
 import { colors, fontStyle, styles } from '../../style/style';
 import { BackHeader } from '../../component/header/BackHeader';
 import { MyPageIndexType } from '../screenType';
@@ -12,6 +12,7 @@ import { usePostMutation, usePostQuery } from '../../util/reactQuery';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { MypageDataType } from '../../component/componentsType';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
+import cusToast from '../../util/toast/CusToast';
 
 export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     const dispatch = useAppDispatch();
@@ -20,6 +21,7 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
     const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
     const [alertModal, setAlertModal] = React.useState<AlertClearType>(()=>initialAlert);
     const [mypageData, setMypageData] = React.useState<MypageDataType[]>([]);
+    const [exitApp , setExitApp] = React.useState(false);
 
 
     const consmyPageMutation = usePostMutation('consmyPage','cons/mypage_info.php')
@@ -85,7 +87,38 @@ export const MyPageIndex = ({setTabIndex}:MyPageIndexType) => {
         }
     };
 
-    /**TODO */
+    const backAction = () => {
+		var timeout;
+		let tmp = 0;
+            if(tmp==0){
+                if ((exitApp == undefined || !exitApp) && isFocused) {
+                    cusToast("한번 더 누르시면 종료됩니다");
+                    setExitApp(true);
+                    timeout = setTimeout(
+                        () => {
+                        setExitApp(false);
+                        },
+                        4000
+                    );
+                } else {
+                    // appTimeSave();
+		if(timeout) clearTimeout(timeout);
+				BackHandler.exitApp();  // 앱 종료
+			}
+			return true;
+		}
+	}
+
+	React.useEffect(()=>{
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+        if(!isFocused){
+                backHandler.remove();
+        }
+	},[isFocused,exitApp])
+
     const alertModalOff = () =>{ //modal 종료
         setAlertModal(initialAlert)
     }
