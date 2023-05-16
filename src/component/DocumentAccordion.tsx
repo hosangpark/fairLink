@@ -233,6 +233,8 @@ export const DocumentAccordion = ({
                     </View>
                 :
                     <View style={[DocumnetStyle.documentBoxinBox]}>
+                        {subList.length !== 0 ? 
+                        <>
                         <TouchableOpacity onPress={()=>{
                             const keyName = title === '장비(차량) 서류' ? 'document_equip' :
                                 title === '자격 및 기타 서류' ? 'document_qualification' : 
@@ -257,9 +259,12 @@ export const DocumentAccordion = ({
                             />
                         )
                         })}
+                    </>
+                    :
+                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>첨부된 서류가 존재하지 않습니다.</Text>
+                    }
+                    
                     </View>
-                    
-                    
                 }
             </>
             :
