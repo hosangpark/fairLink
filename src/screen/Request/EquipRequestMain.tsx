@@ -19,11 +19,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { updateUserInfo } from '../../redux/actions/UserInfoReducer';
 
 interface Inputtype {
-    location : string,
-    type : string,
-    stand1 : string,
-    stand2 : string,
-    price_type : string
+    sel_location : string,
+    sel_type : string,
+    sel_stand1 : string,
+    sel_stand2 : string,
+    sel_price_type : string
 }
 
 export const EquipRequestMain = () => {
@@ -149,23 +149,19 @@ export const EquipRequestMain = () => {
     },[inputInfo.stand2,inputInfo.price_type])
 
     React.useEffect(()=>{
-        // dispatch(updateUserInfo({
-        //     ...userInfo,
-        //     sel_location:inputInfo.location,
-        //     sel_type:inputInfo.type,
-        //     sel_stand1:inputInfo.stand1,
-        //     sel_stand2:inputInfo.stand2,
-        //     sel_price_type:inputInfo.price_type
-        // }));
-        //     console.log(userInfo)
-        let params:Inputtype = {
-            location:inputInfo.location,
-            type:inputInfo.type,
-            stand1:inputInfo.stand1,
-            stand2:inputInfo.stand2,
-            price_type:inputInfo.price_type
+        let params:any = {
+            ...userInfo,
+            sel_location:inputInfo.location,
+            sel_type:inputInfo.type,
+            sel_stand1:inputInfo.stand1,
+            sel_stand2:inputInfo.stand2,
+            sel_price_type:inputInfo.price_type
         }
-        AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
+        
+        dispatch(updateUserInfo({
+            ...userInfo,
+            params}));
+        // AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
     },[inputInfo.location,inputInfo.type,inputInfo.stand1,inputInfo.stand2,inputInfo.price_type])
 
     return(
