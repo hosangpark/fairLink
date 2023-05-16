@@ -37,7 +37,6 @@ export const Auth = () => {
                         });
                     }
                     else{
-                        console.log(data.data)
                         dispatch(updateUserInfo(data.data));
                         // dispatch(updateUserInfo({"file_check": [], "file_upload": "Y", "location": "영흥", "mt_idx": "17", "mt_name": "name", "mt_type": "1"})); // 건설업자 로그인
                         // dispatch(updateUserInfo({"file_check": [], "file_upload": "Y", "location": "영흥", "mt_idx": "21", "mt_name": "name", "mt_type": "2"})); // 장비업체 로그인
