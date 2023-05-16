@@ -670,6 +670,7 @@ export const SettingProfile = () => {
                                                 onChangeText={setSearchText}
                                                 onSubmitEditing={searchCompanyHandler} 
                                                 style={[fontStyle.f_light, { fontSize: 16 , borderWidth: 1, borderColor: colors.BORDER_GRAY_COLOR, borderRadius: 4, paddingLeft: 15, paddingRight: 45}]}
+                                                keyboardType={"number-pad"}
                                             />
                                             <TouchableOpacity onPress={searchCompanyHandler} style={{position: 'absolute', width: 20, height: 20, top: 15, right: 15,}}>
                                                 <Image

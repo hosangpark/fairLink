@@ -13,6 +13,7 @@ import { DocumentRouterNavigatorParams } from '../../type/DocumentRouterType';
 import { MarginCom } from './MarginCom';
 import { useAppSelector } from '../redux/store';
 import { PdfViewerModal } from '../modal/PdfViewerModal';
+import { AlertModal } from '../modal/AlertModal';
 
 type SublistBoxType = {
     bigTitle : string,
@@ -121,6 +122,7 @@ export const DocumentAccordion = ({
     const [openbox,setOpenbox] = useState(false);
     const [pdfViewerModal, setPdfViewerModal] =React.useState(false);
     const [selPdfUrl, setSelPdfUrl] = React.useState('');
+    const [alertModal, setAlertModal] = React.useState(false);
 
     React.useEffect(()=>{
         if(title === '계약 서류' || title === '작업일보'){
@@ -145,9 +147,15 @@ export const DocumentAccordion = ({
             <>
                 {subList.length === 0 && title === '작업일보' ? 
                     <View style={{padding:20, alignItems:'center',justifyContent:'center'}}>
-                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>{`작성된 작업일보가 없습니다.\n 작업일보를 작성해주세요.`}</Text>
+                        <Text style={[fontStyle.f_medium,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>
+                            {`작성된 작업일보가 없습니다.\n 작업일보를 작성해주세요.`}</Text>
                         <CustomButton
-                            action={()=>{navigation.navigate('Document',{cdwt_idx : ''})}}
+                            action={()=>{
+                                subList.length == 0?
+                                setAlertModal(true)
+                                :
+                                navigation.navigate('Document',{cdwt_idx : subList[0].cdwt_idx})
+                            }}
                             label={'작성하기'}
                             style={{backgroundColor : colors.WHITE_COLOR,
                             borderRadius:4,
@@ -281,6 +289,11 @@ export const DocumentAccordion = ({
             }
             </>
         }
+        <AlertModal
+            show={alertModal}
+            msg={'작성가능한 작업일보가 없습니다.'}
+            hide={()=>setAlertModal(false)}
+        />
     </View>
     )
 }

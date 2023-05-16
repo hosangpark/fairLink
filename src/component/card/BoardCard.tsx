@@ -98,7 +98,6 @@ export const BoardCard = ({
     const FlowEvent = () =>{
         if(mt_type=='1' ){
             if(title=="배차 모집중"){
-                console.log('dd');
                 navigation.navigate('Volunteer',{cot_idx : item?.cot_idx, cat_idx:item?.cat_idx,isBtn:true})
             }
             else if(title === '계약진행중'){
