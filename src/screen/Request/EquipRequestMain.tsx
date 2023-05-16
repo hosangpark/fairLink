@@ -111,9 +111,13 @@ export const EquipRequestMain = () => {
     }
 
     React.useEffect(()=>{
-        // AsyncStorage.getItem('Supprtinfo').then(item=> {
-        //     setInputInfo(JSON.parse(item))
-        // })
+        AsyncStorage.getItem('Supprtinfo').then(item=> {
+            // console.log('item',JSON.parse(item))
+            // console.log('item',(item))
+            if(item){
+                setInputInfo(JSON.parse(item))
+            }
+        })
     },[])
 
     React.useEffect(()=>{
