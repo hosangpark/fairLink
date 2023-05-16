@@ -28,7 +28,7 @@ export const PilotInfoCard = ({
                                 <Text style={[fontStyle.f_semibold,{fontSize: 18, color:colors.FONT_COLOR_BLACK}]}>{item.name}</Text>
                                 <Text style={[fontStyle.f_semibold,{fontSize: 16, color:colors.FONT_COLOR_BLACK2}]}> / {item.age}세</Text>
                             </View>
-                            <Text style={[fontStyle.f_regular,{fontSize: 15, color:colors.FONT_COLOR_BLACK2}]}>경력 {pilotCareerList[Number(item.career)]}년</Text>
+                            <Text style={[fontStyle.f_regular,{fontSize: 15, color:colors.FONT_COLOR_BLACK2}]}>경력 {pilotCareerList[Number(item.career)]}</Text>
                             <View style={{flexDirection:'row',marginTop:8,alignItems:'center'}}>
                                 <View style={{flexDirection:'row',alignItems:'center'}}>
                                     <Image source={require('../../assets/img/ic_star_sm.png')} style={{width:13,height:13}} />
