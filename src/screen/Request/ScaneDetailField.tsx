@@ -18,6 +18,7 @@ import { BackHandlerCom } from '../../component/utils/BackHandlerCom';
 import { NumberComma } from '../../util/func';
 import { pilotCareerList } from '../../component/utils/list';
 import { phone_numeric } from '../../component/utils/funcKt';
+import AsyncStorage from '@react-native-community/async-storage';
 
 type DetailFieldBoxType = {
     title ? : string,
@@ -172,6 +173,14 @@ export const ScaneDetailField = ({route}:ScaneDetailFieldType) => {
 
         if(result === 'true'){
             alertModalOn('현장지원이 완료되었습니다.','sup_success');
+            // let params:Inputtype = {
+            //     location:inputInfo.location,
+            //     type:inputInfo.type,
+            //     stand1:inputInfo.stand1,
+            //     stand2:inputInfo.stand2,
+            //     price_type:inputInfo.price_type
+            // }
+            // AsyncStorage.setItem('Supprtinfo',JSON.stringify(params))
         }
         else{
             alertModalOn(msg,'');

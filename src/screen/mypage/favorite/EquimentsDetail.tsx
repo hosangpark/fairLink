@@ -178,15 +178,15 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
                     type : item.type,
                 }
             }
-            if(equDetail?.file_list[index].link == "" && item.tmp_name ==""){
+            if(equDetail?.file_list[index].link !== "" && item.tmp_name !==""){
                 aaa = true
-                return
+                return 
             }
-            // if(item.key == docList[docList.findIndex(i=>i.key === item.key)].key){
-            //     return aaa
-            // }
         })
-        console.log(uploadList)
+        // console.log(equDetail?.file_check)
+        // console.log('uploadList',uploadList)
+        // console.log(equDetail?.file_list)
+        console.log('1')
 
         let tempEquArray:string[] = []
         for (let i = 0; i<subList.length; i++){
@@ -199,19 +199,23 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
             eit_file_del : "",
         }
 
+        console.log('2')
+
+        JSON.stringify(equDetail?.sub) !== JSON.stringify(tempEquArray)? aaa = true : false
+            
         if(aaa){
             dispatch(toggleLoading(true))
             const {data , msg, result} = await EquipDetailModify.mutateAsync(uploadParams);
             dispatch(toggleLoading(false))
 
             if(result === 'true'){
-                alertModalOn('프로필 설정이 완료되었습니다.','edit_success')
+                alertModalOn('프로필 수정이 완료되었습니다.','edit_success')
             }
             else{
                 alertModalOn(msg);
             }
         } else {
-            alertModalOn('필수 서류를 등록해주세요.');
+            alertModalOn('수정사항이 없습니다.','edit_success');
         }
     }
     const newArr = ()=>{
@@ -235,24 +239,24 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
             <BackHandlerCom />
             <ScrollView style={{ flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY1}}>
                 <View style={EquimentsDetailstyle.WhiteBox}>
-                <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:20}]}>
-                    {equDetail?.device}
-                </Text>
-                <View style={{flexDirection:'row'}}>
-                    <Image style={{width:130,height:130,borderRadius:4,marginRight:20}}
-                    source={equDetail?.img? {uri:equDetail?.img} :require('../../../assets/img/no_image.png') }
-                    />
-                    <View style={{justifyContent:'center',flexShrink:1}}>
-                        <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>제작연도</Text>
-                        <Text style={[fontStyle.f_light,EquimentsDetailstyle.boxText2,{marginBottom:20}]}>
-                            {equDetail?.year}
-                        </Text>
-                        <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>차량번호</Text>
-                        <Text style={[fontStyle.f_light,EquimentsDetailstyle.boxText2]}>
-                            {equDetail?.reg_no}
-                        </Text>
+                    <Text style={[fontStyle.f_bold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:20}]}>
+                        {equDetail?.device}
+                    </Text>
+                    <View style={{flexDirection:'row'}}>
+                        <Image style={{width:130,height:130,borderRadius:4,marginRight:20}}
+                        source={equDetail?.img? {uri:equDetail?.img} :require('../../../assets/img/no_image.png') }
+                        />
+                        <View style={{justifyContent:'center',flexShrink:1}}>
+                            <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>제작연도</Text>
+                            <Text style={[fontStyle.f_light,EquimentsDetailstyle.boxText2,{marginBottom:20}]}>
+                                {equDetail?.year}
+                            </Text>
+                            <Text style={[fontStyle.f_medium,EquimentsDetailstyle.boxText1]}>차량번호</Text>
+                            <Text style={[fontStyle.f_light,EquimentsDetailstyle.boxText2]}>
+                                {equDetail?.reg_no}
+                            </Text>
+                        </View>
                     </View>
-                </View>
                 </View>
                 <View style={EquimentsDetailstyle.WhiteBox}>
                     <Text style={[fontStyle.f_semibold,{fontSize:20,color:colors.FONT_COLOR_BLACK,marginBottom:30}]}>세부정보</Text>
@@ -460,7 +464,7 @@ export const EquimentsDetail = ({route}:EquimentsDetailType) => {
 }
 
 const EquimentsDetailstyle = StyleSheet.create({
-    WhiteBox:{paddingHorizontal:20,paddingVertical:30,backgroundColor:colors.WHITE_COLOR,marginBottom:10},
+    WhiteBox:{paddingHorizontal:20,paddingVertical:20,backgroundColor:colors.WHITE_COLOR,marginBottom:10},
     cardbox :{backgroundColor:colors.BACKGROUND_COLOR_GRAY1,paddingHorizontal:20,paddingVertical:10,borderRadius:8,borderWidth:1,borderColor:colors.BORDER_GRAY_COLOR,marginBottom:30},
     DefaultBlackText:{fontSize:16,color:colors.FONT_COLOR_BLACK,marginBottom:10},
     cardInbox:{flexDirection:'row',justifyContent:'space-between',marginVertical:7},

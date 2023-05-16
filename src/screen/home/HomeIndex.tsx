@@ -34,10 +34,11 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	const navigation = useNavigation<StackNavigationProp<RouterNavigatorParams>>();
 	const {data : reqCheckData , refetch:reqCheckRefetch} = usePostQuery('getConsReqCheck',{mt_idx:mt_idx},'cons/cons_require_check.php');
 	const {data : myProfileData, refetch:myProfileRefetch} = usePostQuery('getMyProfileData' , {mt_idx:mt_idx}, 'equip/mypage_info.php');
-	const {data : PilotProfileData, refetch:PilotProfileRefetch} = usePostQuery('getPilotProfileData' , {mt_idx:mt_idx}, 'pilot/mypage_info.php');
 	
 	const pilotWorkCheckMutation = usePostMutation('pilotWorkCheck','pilot/pilot_work_check.php');
 	const pilotWorkListMutation = usePostMutation('pilotWorkList' , 'pilot/pilot_work_list.php');
+	const getProfileInfo = usePostMutation('getProfileInfo' , 'pilot/pilot_profile_info.php'); //프로필 정보 불러오기
+	 const [inputInfo, setInputInfo] = React.useState({})
 
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
@@ -99,8 +100,11 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 		console.log('d')
 	}
 
-	const reqConHandler = () => {
-		console.log(mt_type);
+	const reqConHandler = async() => {
+		const {data,result,msg} = await getProfileInfo.mutateAsync({
+			mt_idx : mt_idx,
+		});
+
 		if(mt_type === '1'){
 			if(reqCheckData){
 				const reqCheck = reqCheckData.data.data.require_check;
@@ -129,16 +133,22 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 			}
 		}
 		else if(mt_type === '4'){
-			console.log(PilotProfileData.data.data)
-			if(PilotProfileData){
-
-				const profileCheck = PilotProfileData.data.data.profile_check;
-
+			let Check = false
+			for(let i =0; i<7; i++){
+				if(data.data['mpt_file'+String(i+1)+'_check'] === '1'){
+					Check = true;
+					break;
+				}
+			}
+			if(myProfileData){
+				const profileCheck = myProfileData.data.data.profile_check;
 				if(profileCheck === 'Y'){
 					if(setTabIndex)setTabIndex(2);
 					navigation.navigate('Request');
 				}
-				else{
+				else if(Check){
+					alertModalOn('필수서류 승인중입니다.\n승인완료 후 현장지원이 가능합니다.');
+				} else {
 					alertModalOn('작성된 프로필 정보가 없습니다.\n프로필 작성을 먼저해주세요.','none_profile');
 				}
 			}
@@ -152,7 +162,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 
 		if(result === 'true'){
 			if(data.data.work_check === 'N'){
-				alertModalOn('작성가능한 작업일보가 없습니다.');
+				alertModalOn('조종사 또는 차주 및 장비업체만 이용가능한 메뉴입니다.');
 			}
 			else if(data.data.work_check === 'Y'){
 				if(setTabIndex)setTabIndex(5);
@@ -176,25 +186,25 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	}
 
 	const backAction = () => {
-        var timeout;
-        let tmp = 0;
-           if(tmp==0){
-              if ((exitApp == undefined || !exitApp) && isFocused) {
-                 cusToast("한번 더 누르시면 종료됩니다");
-                 setExitApp(true);
-                 timeout = setTimeout(
-                       () => {
-                       setExitApp(false);
-                       },
-                       4000
-                 );
-              } else {
-                // appTimeSave();
-				if(timeout) clearTimeout(timeout);
-                BackHandler.exitApp();  // 앱 종료
-              }
-              return true;
-           }
+		var timeout;
+		let tmp = 0;
+				if(tmp==0){
+					if ((exitApp == undefined || !exitApp) && isFocused) {
+							cusToast("한번 더 누르시면 종료됩니다");
+							setExitApp(true);
+							timeout = setTimeout(
+										() => {
+										setExitApp(false);
+										},
+										4000
+							);
+					} else {
+						// appTimeSave();
+		if(timeout) clearTimeout(timeout);
+				BackHandler.exitApp();  // 앱 종료
+			}
+			return true;
+		}
 	}
 
 	React.useEffect(()=>{
@@ -330,25 +340,25 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 				<View style={[{flex:1,backgroundColor:colors.BACKGROUND_COLOR_GRAY2,padding:20}]}>
 					<Text style={[fontStyle.k_bold, { color: colors.MAIN_COLOR, fontSize: 20, marginBottom: 10 }]}>주요 이벤트</Text>
 						{tempListDate.length === 0 ?
-						<Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>생성된 주요 이벤트가 없습니다.</Text>
-						:
-						tempListDate.map((item:TextBoxType,index:number) => {
-							return(
-								<View key={index}>
-									<TextBox 
-										push_idx={item.push_idx}
-										type={item.type}
-										date={item.date}
-										title={item.title}
-										content={item.content}
-										link1={item.link1}
-										link2={item.link2}
-										link3={item.link3}
-									/>
-								</View>
-							)
-						})
-					}
+							<Text style={[fontStyle.f_semibold,{fontSize:16,color:colors.FONT_COLOR_BLACK}]}>생성된 주요 이벤트가 없습니다.</Text>
+							:
+							tempListDate.map((item:TextBoxType,index:number) => {
+									return(
+										<View key={index}>
+												<TextBox 
+													push_idx={item.push_idx}
+													type={item.type}
+													date={item.date}
+													title={item.title}
+													content={item.content}
+													link1={item.link1}
+													link2={item.link2}
+													link3={item.link3}
+												/>
+										</View>
+									)
+							})
+						}
 					{/* <TextBox 
 						type={2}
 						boldText = '03.03'
