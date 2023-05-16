@@ -10,6 +10,8 @@ import { usePostMutation } from '../../util/reactQuery';
 import { pilotCareerList } from '../utils/list';
 import { AlertModal, initialAlert } from '../../modal/AlertModal';
 import { toggleLoading } from '../../redux/actions/LoadingAction';
+import { PdfViewerModal } from '../../modal/PdfViewerModal';
+import { PdfViewerModal2 } from '../../modal/PdfViewerModal2';
 
 export interface BoardCardItemType {
     apply_count? : number, //지원자수
@@ -32,6 +34,8 @@ export interface BoardCardItemType {
     mpt_idx? : string,
     match_type? : string //장비&건설 검토상태
     cdwt_idx?:string,
+    cont_pdf?:string,
+    cont_webview?:string
 }
 
 type BoardCardType = {
@@ -52,6 +56,10 @@ export const BoardCard = ({
     const deleteOrderMutation = usePostMutation('deleteOrder' , mt_type === '2' ? 'equip/equip_request_cancel.php' : 'pilot/pilot_request_cancel.php');
 
     const [alertModal, setAlertModal] = React.useState(()=>initialAlert);
+    const [pdfViewerModal, setPdfViewerModal] =React.useState(false);
+    const [selPdfUrl, setSelPdfUrl] = React.useState('');
+    const [selWebUrl, setselWebUrl] = React.useState('');
+    const [contIdx, setContIdx] = React.useState('');
 
     const alertModalOn = (msg : string, type? : string) => {
         if(type){
@@ -281,9 +289,9 @@ export const BoardCard = ({
                             action={()=>{navigation.navigate('Document',{cdwt_idx:''})}}
                         />
                     }
-                    {mt_type !=="4" && title == "계약진행중" &&
+                    {mt_type =="1" && title == "계약진행중" &&
                     <>
-                        {item.contract_check == "Y"?
+                        {item.contract_idx !== ""?
                         <CustomButton
                         style={{}}
                         labelStyle={{fontSize:16}}
@@ -296,9 +304,32 @@ export const BoardCard = ({
                         style={{}}
                         labelStyle={{fontSize:16}}
                         label={'계약서 작성'}
-                        action={()=>{navigation.navigate('ElectronicContract',{cot_idx:item.cot_idx,cat_idx:item.cat_idx,
-                        contract_idx:item.contract_idx,route_type:'Info2'})}}
+                        action={()=>{
+                            navigation.navigate('ElectronicContract',{cot_idx:item.cot_idx,cat_idx:item.cat_idx,
+                        contract_idx:item.contract_idx,route_type:'Info'})
+                    }}
                         />
+                        }
+                    </>
+                    }
+                    {mt_type =="2" && title == "계약진행중" &&
+                    <>
+                        {item.contract_idx !== ""?
+                        <CustomButton
+                        style={{}}
+                        labelStyle={{fontSize:16}}
+                        label={'계약서 확인'}
+                        action={()=>{
+                            console.log(item.cont_pdf)
+                            console.log(item.cont_webview)
+                            setSelPdfUrl(item.cont_pdf);
+                            setselWebUrl(item.cont_webview);
+                            setContIdx(item.contract_idx);
+                            setPdfViewerModal(true);
+                        }}
+                        />
+                        :
+                        null
                         }
                     </>
                     }
@@ -328,6 +359,17 @@ export const BoardCard = ({
                     }
                 </View>
             </TouchableOpacity>
+            {PdfViewerModal2 &&
+                <PdfViewerModal2
+                    show={pdfViewerModal}
+                    hide={()=>{setPdfViewerModal(false)}}
+                    action={()=>{}}
+                    pdfUrl={selPdfUrl}
+                    webviewUrl={selWebUrl}
+                    contract_idx={contIdx}
+                    setSelPdfUrl={setSelPdfUrl}
+                />
+            }
         </View>
     )
 }

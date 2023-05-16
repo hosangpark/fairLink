@@ -38,7 +38,7 @@ export const HomeIndex = ({setTabIndex}:HomeIndexType) => {
 	const pilotWorkCheckMutation = usePostMutation('pilotWorkCheck','pilot/pilot_work_check.php');
 	const pilotWorkListMutation = usePostMutation('pilotWorkList' , 'pilot/pilot_work_list.php');
 	const getProfileInfo = usePostMutation('getProfileInfo' , 'pilot/pilot_profile_info.php'); //프로필 정보 불러오기
-	 const [inputInfo, setInputInfo] = React.useState({})
+	const [inputInfo, setInputInfo] = React.useState({})
 
 	const isFocused = useIsFocused();
 	const { width } = Dimensions.get('window');
